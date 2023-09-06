@@ -1,4 +1,4 @@
-package br.unitins.tp1;
+package br.unitins.tp1.hardstop;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;

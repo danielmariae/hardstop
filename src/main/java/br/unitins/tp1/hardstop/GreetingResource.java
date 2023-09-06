@@ -1,4 +1,4 @@
-package br.unitins.tp1;
+package br.unitins.tp1.hardstop;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
