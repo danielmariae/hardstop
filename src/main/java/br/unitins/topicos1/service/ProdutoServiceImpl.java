@@ -113,9 +113,9 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Transactional
     public void delete(Long id) {
         Produto pd = repository.findById(id);
-        for (Classificacao clf : pd.getListaClassificacao()){
-            repository.deleteById(clf.getId());
-        }
+        
+    //repository.deleteById(pd.getClassificacao().getId());
+        
         repository.deleteById(id);
     }
 
