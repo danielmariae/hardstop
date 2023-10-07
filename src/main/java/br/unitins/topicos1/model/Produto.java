@@ -1,13 +1,13 @@
 package br.unitins.topicos1.model;
 
-import java.util.List;
+// import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Entity;
+// import jakarta.persistence.CascadeType;
+// import jakarta.persistence.JoinColumn;
+// import jakarta.persistence.JoinTable;
+// import jakarta.persistence.OneToMany;
 
 @Entity
 public class Produto extends DefaultEntity {
@@ -23,16 +23,17 @@ public class Produto extends DefaultEntity {
     private Double valorVenda;
     private Integer quantidade;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(
-        name = "produto_lote",
-        joinColumns = @JoinColumn(name = "id_produto"),
-        inverseJoinColumns = @JoinColumn(name = "id_lote")
-    )
-    private List<Lote> listaLote;
+    // IMPLEMENTAÇÃO NA PROVA A2:
+    // @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    // @JoinTable(
+    //     name = "produto_lote",
+    //     joinColumns = @JoinColumn(name = "id_produto"),
+    //     inverseJoinColumns = @JoinColumn(name = "id_lote")
+    // )
+    // private List<Lote> listaLote;
 
-  @ManyToOne
-    Classificacao classificacao;
+    @ManyToOne
+    private Classificacao classificacao;
 
     public Classificacao getClassificacao() {
         return classificacao;
@@ -106,10 +107,11 @@ public class Produto extends DefaultEntity {
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
-    public List<Lote> getListaLote() {
-        return listaLote;
-    }
-    public void setListaLote(List<Lote> listaLote) {
-        this.listaLote = listaLote;
-    }
+    // public List<Lote> getListaLote() {
+    //     return listaLote;
+    // }
+    // public void setListaLote(List<Lote> listaLote) {
+    //     this.listaLote = listaLote;
+    // }
+
 }
