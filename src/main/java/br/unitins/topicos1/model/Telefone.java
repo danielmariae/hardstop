@@ -44,4 +44,8 @@ public TipoTelefone getTipoTelefone() {
   public void setNumeroTelefone(String numeroTelefone) {
     this.numeroTelefone = numeroTelefone;
   }
+
+public static Object valueOf(Telefone t) {
+    return null;
+}
 }
