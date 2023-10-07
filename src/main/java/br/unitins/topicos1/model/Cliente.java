@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.List;
@@ -42,6 +43,22 @@ public class Cliente extends DefaultEntity {
     inverseJoinColumns = @JoinColumn(name = "id_pedido")
   )
   private List<Pedido> listaPedido;
+
+  @ManyToMany(cascade = CascadeType.ALL)
+  @JoinTable(
+    name = "lista_de_desejos",
+    joinColumns = @JoinColumn(name = "id_cliente"),
+    inverseJoinColumns = @JoinColumn(name = "id_produto")
+  )
+  private List<Produto> listaProduto;
+
+  public List<Produto> getListaProduto() {
+    return listaProduto;
+  }
+
+  public void setListaProduto(List<Produto> listaProduto) {
+    this.listaProduto = listaProduto;
+  }
 
   public List<Pedido> getListaPedido() {
     return listaPedido;
