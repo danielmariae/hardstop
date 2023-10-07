@@ -38,6 +38,9 @@ public class PedidoServiceImpl implements PedidoService {
   @Inject
   PedidoRepository repositoryPedido;
 
+  @Inject
+  FornecedorRepository repositoryFornecedor;
+
   @Override
   public PedidoResponseDTO insert(PedidoDTO dto, @PathParam("id") Long id) {
     Cliente cliente = repository.findById(id);
@@ -77,36 +80,47 @@ public class PedidoServiceImpl implements PedidoService {
       produto.setValorVenda(idv.produto().valorVenda());
       produto.setQuantidade(idv.produto().quantidade());
       produto.setListaLote(new ArrayList<Lote>());
-      for(LoteDTO dll : idv.produto().listaLote()) {
-        Lote lote = new Lote();
-        lote.setLote(dll.lote());
-        Fornecedor fornecedor = new Fornecedor();
-        fornecedor.setCnpj(dll.fornecedor().cnpj());
-        fornecedor.setNomeFantasia(dll.fornecedor().nomeFantasia());
-        fornecedor.setEndSite(dll.fornecedor().endSite());
-        for(EnderecoDTO endf : dll.fornecedor().listaEndereco()) {
-          Endereco endereco1 = new Endereco();
-          endereco1.setNome(endf.nome());
-          endereco1.setRua(endf.rua());
-          endereco1.setNumero(endf.numero());
-          endereco1.setLote(endf.lote());
-          endereco1.setBairro(endf.bairro());
-          endereco1.setComplemento(endf.complemento());
-          endereco1.setCep(endf.cep());
-          endereco1.setMunicipio(endf.municipio());
-          endereco1.setEstado(endf.estado());
-          endereco1.setPais(endf.pais());
-          fornecedor.getListaEndereco().add(endereco1);
+
+      if (idv.produto().listaLote() != null && (!idv.produto().listaLote().isEmpty())) {
+        for (LoteDTO dll : idv.produto().listaLote()) {
+          Lote lote = new Lote();
+          lote.setLote(dll.lote());
+          Fornecedor fornecedor = new Fornecedor();
+          fornecedor.setCnpj(dll.fornecedor().cnpj());
+          fornecedor.setNomeFantasia(dll.fornecedor().nomeFantasia());
+          fornecedor.setEndSite(dll.fornecedor().endSite());
+
+          if (dll.fornecedor().listaEndereco() != null && (!dll.fornecedor().listaEndereco().isEmpty())) {
+            fornecedor.setListaEndereco(new ArrayList<Endereco>());
+            for (EnderecoDTO endf : dll.fornecedor().listaEndereco()) {
+              Endereco endereco1 = new Endereco();
+              endereco1.setNome(endf.nome());
+              endereco1.setRua(endf.rua());
+              endereco1.setNumero(endf.numero());
+              endereco1.setLote(endf.lote());
+              endereco1.setBairro(endf.bairro());
+              endereco1.setComplemento(endf.complemento());
+              endereco1.setCep(endf.cep());
+              endereco1.setMunicipio(endf.municipio());
+              endereco1.setEstado(endf.estado());
+              endereco1.setPais(endf.pais());
+              fornecedor.getListaEndereco().add(endereco1);
+            }
+          }
+
+          if (dll.fornecedor().listaTelefone() != null && (!dll.fornecedor().listaTelefone().isEmpty())) {
+            fornecedor.setListaTelefone(new ArrayList<Telefone>());
+            for (TelefoneDTO telf : dll.fornecedor().listaTelefone()) {
+              Telefone telefone = new Telefone();
+              telefone.setNumeroTelefone(telf.numeroTelefone());
+              telefone.setDdd(telf.ddd());
+              telefone.setTipoTelefone(TipoTelefone.valueOf(telf.tipo()));
+              fornecedor.getListaTelefone().add(telefone);
+            }
+          }
+          lote.setFornecedor(fornecedor);
+          produto.getListaLote().add(lote);
         }
-        for(TelefoneDTO telf : dll.fornecedor().listaTelefone()){
-          Telefone telefone = new Telefone();
-          telefone.setNumeroTelefone(telf.numeroTelefone());
-          telefone.setDdd(telf.ddd());
-          telefone.setTipoTelefone(TipoTelefone.valueOf(telf.tipo()));
-          fornecedor.getListaTelefone().add(telefone);
-        }
-        lote.setFornecedor(fornecedor);
-        produto.getListaLote().add(lote);
       }
       item.setProduto(produto);
       pedido.getItemDaVenda().add(item);
@@ -118,7 +132,10 @@ public class PedidoServiceImpl implements PedidoService {
     status.setStatus(Status.valueOf(0));
     pedido.getStatusDoPedido().add(status);
 
+    cliente.setListaPedido(new ArrayList<Pedido>());
     cliente.getListaPedido().add(pedido);
+    //repositoryPedido.persist(pedido);
+    //repository.persist(cliente);
     return PedidoResponseDTO.valueOf(pedido);
   }
 
