@@ -112,10 +112,6 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Override
     @Transactional
     public void delete(Long id) {
-        Produto pd = repository.findById(id);
-        for (Classificacao clf : pd.getListaClassificacao()){
-            repository.deleteById(clf.getId());
-        }
         repository.deleteById(id);
     }
 
