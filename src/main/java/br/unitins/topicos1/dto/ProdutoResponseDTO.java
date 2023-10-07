@@ -3,7 +3,6 @@ package br.unitins.topicos1.dto;
 // import java.util.List;
 
 import br.unitins.topicos1.model.Classificacao;
-// import br.unitins.topicos1.model.Lote;
 import br.unitins.topicos1.model.Produto;
 
 public record ProdutoResponseDTO(     
@@ -20,6 +19,7 @@ public record ProdutoResponseDTO(
     Double valorVenda,
     Integer quantidade,
     // List<Lote> listaLote,
+
     Classificacao classificacao) {
         public static ProdutoResponseDTO valueOf(Produto produto){
             return new ProdutoResponseDTO(
@@ -36,7 +36,7 @@ public record ProdutoResponseDTO(
                 produto.getValorVenda(), 
                 produto.getQuantidade(),
                 // produto.getListaLote(),
-                produto.getClassificacao()      
+              produto.getClassificacao()      
             );
         }
     }
