@@ -3,9 +3,10 @@ package br.unitins.topicos1.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
-@Entity
-public class Lote extends DefaultEntity {
-    private String lote;
+
+   @Entity
+   public class Lote extends DefaultEntity {
+       private String lote;
 
     @ManyToOne
     private Fornecedor fornecedor;

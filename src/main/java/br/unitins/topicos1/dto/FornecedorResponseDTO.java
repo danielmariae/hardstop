@@ -10,6 +10,7 @@ public record FornecedorResponseDTO(
   List<EnderecoResponseDTO> listaEndereco,
   List<TelefoneResponseDTO> listaTelefone 
   ) {
+
   public static FornecedorResponseDTO valueOf(Fornecedor fornecedor) {
       return new FornecedorResponseDTO(
         fornecedor.getNomeFantasia(),

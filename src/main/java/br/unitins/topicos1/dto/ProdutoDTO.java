@@ -17,7 +17,6 @@ public record ProdutoDTO(
     Integer quantidade,
     List<LoteDTO> listaLote,
     ClassificacaoDTO classificacao) {
-
         public static ProdutoDTO valueOf(Produto produto) {
             return new ProdutoDTO(
                 produto.getNome(),
@@ -36,7 +35,7 @@ public record ProdutoDTO(
                 .stream()
                 .map(p -> LoteDTO.valueOf(p))
                 .toList(),
-                ClassificacaoDTO.valueOf(produto.getClassificacao())
+                ClassificacaoDTO.valueOf(produto.getClassificacao())              
             );
         }
     }

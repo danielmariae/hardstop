@@ -30,8 +30,8 @@ public class Produto extends DefaultEntity {
         inverseJoinColumns = @JoinColumn(name = "id_lote")
     )
     private List<Lote> listaLote;
-    
-    @ManyToOne
+
+  @ManyToOne
     Classificacao classificacao;
 
     public Classificacao getClassificacao() {
