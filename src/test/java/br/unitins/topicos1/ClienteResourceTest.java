@@ -9,8 +9,6 @@ import br.unitins.topicos1.service.ClienteService;
 
 import static io.restassured.RestAssured.given;
 
-import br.unitins.topicos1.dto.ClienteResponseDTO;
-
 
 @QuarkusTest
 public class ClienteResourceTest {
