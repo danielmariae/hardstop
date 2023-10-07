@@ -4,8 +4,6 @@ import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
-import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
-import br.unitins.topicos1.dto.PedidoResponseDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import java.util.List;
 
@@ -40,12 +38,4 @@ public interface ClienteService {
   // Retorna uma lista com os dados de todos os clientes
   public List<ClienteResponseDTO> findByAll();
 
-  // Altera o status de um pedido
-  public ClienteResponseDTO updateStatusDoPedido(
-    PedidoPatchStatusDTO ppsdto,
-    Long idcliente
-  );
-
-  // Retorna todos os pedidos relacionados a um cliente específico
-  public List<PedidoResponseDTO> findPedidoByCliente(Long idcliente);
 }

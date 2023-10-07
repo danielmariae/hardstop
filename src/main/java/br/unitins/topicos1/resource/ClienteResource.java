@@ -4,7 +4,6 @@ import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
-import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.service.ClienteService;
 import jakarta.inject.Inject;
@@ -80,22 +79,6 @@ public class ClienteResource {
   public Response delete(@PathParam("id") Long id) {
     service.delete(id);
     return Response.status(Status.NO_CONTENT).build();
-  }
-
-  @PATCH
-  @Transactional
-  @Path("/patch/pedido/id/{id}")
-  public Response updateStatusDoPedido(PedidoPatchStatusDTO ppsdto, @PathParam("id") Long id) {
-    return Response
-      .status(200)
-      .entity(service.updateStatusDoPedido(ppsdto, id))
-      .build();
-  }
-
-  @GET
-  @Path("/search/pedidos/id/{id}")
-  public Response findPedidoByCliente(@PathParam("id") Long id) {
-    return Response.ok(service.findPedidoByCliente(id)).build();
   }
 
   @GET

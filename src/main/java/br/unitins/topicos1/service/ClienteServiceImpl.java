@@ -9,8 +9,6 @@ import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
-import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
-import br.unitins.topicos1.dto.PedidoResponseDTO;
 import br.unitins.topicos1.dto.StatusDoPedidoDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.model.Cliente;
@@ -214,6 +212,7 @@ public class ClienteServiceImpl implements ClienteService {
     return ClienteDTO.valueOf(cliente);
   }
 
+
   @Override
   @Transactional
   public ClienteResponseDTO updateTelefone(List<TelefoneDTO> tel, Long id) {
@@ -262,35 +261,6 @@ public class ClienteServiceImpl implements ClienteService {
     }
     repository.persist(cliente);
     return ClienteResponseDTO.valueOf(cliente);
-  }
-
-  public ClienteResponseDTO updateStatusDoPedido(
-    PedidoPatchStatusDTO ppsdto,
-    Long idcliente
-  ) {
-    Cliente cliente = repository.findById(idcliente);
-
-    for (Pedido pedido : cliente.getListaPedido()) {
-      if (pedido.getId() == ppsdto.idPedido()) {
-        StatusDoPedido statusVenda = new StatusDoPedido();
-        statusVenda.setDataHora(LocalDateTime.now());
-        statusVenda.setStatus(Status.valueOf(ppsdto.idStatus()));
-        pedido.getStatusDoPedido().add(statusVenda);
-        repositoryPedido.persist(pedido);
-        return ClienteResponseDTO.valueOf(cliente);
-      }
-    }
-    return null;
-  }
-
-  @Override
-  public List<PedidoResponseDTO> findPedidoByCliente(Long idcliente) {
-    Cliente cliente = repository.findById(idcliente);
-    return cliente
-      .getListaPedido()
-      .stream()
-      .map(p -> PedidoResponseDTO.valueOf(p))
-      .toList();
   }
 
   @Override

@@ -1,13 +1,16 @@
 package br.unitins.topicos1;
 
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+
 import org.junit.jupiter.api.Test;
 
-import com.google.inject.Inject;
-
 import br.unitins.topicos1.service.ClienteService;
-import io.quarkus.test.junit.QuarkusTest;
 
 import static io.restassured.RestAssured.given;
+
+import br.unitins.topicos1.dto.ClienteResponseDTO;
+
 
 @QuarkusTest
 public class ClienteResourceTest {

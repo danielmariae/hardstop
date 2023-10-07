@@ -29,11 +29,11 @@ public class Pedido extends DefaultEntity {
     )
     private List<ItemDaVenda> itemDaVenda;
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_endereco")
     private Endereco endereco;
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_formaDepagamento")
     private FormaDePagamento formaDePagamento;
 
