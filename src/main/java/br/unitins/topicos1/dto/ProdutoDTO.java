@@ -1,5 +1,7 @@
 package br.unitins.topicos1.dto;
 
+import java.util.List;
+
 // import java.util.List;
 import br.unitins.topicos1.model.Produto;
 
@@ -15,7 +17,7 @@ public record ProdutoDTO(
     Double custoCompra,
     Double valorVenda,
     Integer quantidade,
-    // List<LoteDTO> listaLote,
+    List<LoteDTO> listaLote,
     ClassificacaoDTO classificacao) {
         public static ProdutoDTO valueOf(Produto produto) {
             return new ProdutoDTO(
@@ -30,6 +32,12 @@ public record ProdutoDTO(
                 produto.getCustoCompra(),
                 produto.getValorVenda(),
                 produto.getQuantidade(),
-                ClassificacaoDTO.valueOf(produto.getClassificacao()));
+                produto
+                .getListaLote()
+                .stream()
+                .map(l -> LoteDTO.valueOf(l))
+                .toList(),
+                ClassificacaoDTO.valueOf(produto.getClassificacao())
+                );
         }
     }

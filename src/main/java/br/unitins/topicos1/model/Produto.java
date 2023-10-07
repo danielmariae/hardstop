@@ -32,6 +32,12 @@ public class Produto extends DefaultEntity {
      )
      private List<Lote> listaLote;
 
+    public List<Lote> getListaLote() {
+        return listaLote;
+    }
+    public void setListaLote(List<Lote> listaLote) {
+        this.listaLote = listaLote;
+    }
     @ManyToOne
     private Classificacao classificacao;
 
