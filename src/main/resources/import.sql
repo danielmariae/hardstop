@@ -18,13 +18,28 @@ insert into cliente_telefone (id_cliente, id_telefone) values(1,2);
 
 insert into statusDoPedido (dataHora, status) values('2023-10-01 16:11:26', 0);
 insert into statusDoPedido (dataHora, status) values('2023-10-04 20:23:35', 1);
-insert into itemDaVenda (preco, quantidade) values(50.3, 3);
-insert into itemDaVenda (preco, quantidade) values(20.0, 1);
-insert into itemDaVenda (preco, quantidade) values(15.43, 2);
-insert into formaDePagamento (nome) values('Marta');
+insert into classificacao (nome) values('Processadores');
+
+insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, custoCompra, valorVenda, quantidade, classificacao_id) values('Processador Intel Core i7 11 gen', 'Processador Intel Core i7 11 gen', 'PICI711gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 500.0, 1000.0, 10, 1);
+
+insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, custoCompra, valorVenda, quantidade, classificacao_id) values('Processador Intel Core i5 12 gen', 'Processador Intel Core i5 12 gen', 'PICI512gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 600.0, 1200.0, 5, 1);
+
+insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, custoCompra, valorVenda, quantidade, classificacao_id) values('Processador AMD Xeon7 11 gen', 'Processador AMD Xeon7 11 gen', 'PAMDX711gen07102023', 'AMD', 0.5, 0.5, 0.5, 0.25, 500.0, 1000.0, 4, 1);
+
+
+insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '2022/34539382', 'www.netcom.br');
+insert into lote (lote, fornecedor_id) values('f1_p1_lt15', 1);
+
+
+
+insert into itemDaVenda (preco, quantidade, produto_id) values(900.0, 3, 1);
+insert into itemDaVenda (preco, quantidade, produto_id) values(1200.0, 1, 2);
+insert into itemDaVenda (preco, quantidade, produto_id) values(1000.0, 2, 3);
+insert into formaDePagamento (nome) values('Cartão de Crédito');
 insert into pedido (codigoDeRastreamento, id_formaDePagamento, id_endereco) values('Der34ewww', 1, 1);
 
 insert into cliente_pedido (id_cliente, id_pedido) values(1,1);
+insert into produto_lote (id_produto, id_lote) values(1,1);
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,1);
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,2);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,1);

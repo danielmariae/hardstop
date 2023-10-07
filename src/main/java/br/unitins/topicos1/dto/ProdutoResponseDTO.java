@@ -18,9 +18,9 @@ public record ProdutoResponseDTO(
     Double peso,
     Double custoCompra,
     Double valorVenda,
-    Long quantidade,
-    // List<Lote> listaLote,
-    List<Classificacao> listaClassificacao) {
+    Integer quantidade,
+    List<Lote> listaLote,
+    Classificacao classificacao) {
         public static ProdutoResponseDTO valueOf(Produto produto){
             return new ProdutoResponseDTO(
                 produto.getId(), 
@@ -35,8 +35,8 @@ public record ProdutoResponseDTO(
                 produto.getCustoCompra(), 
                 produto.getValorVenda(), 
                 produto.getQuantidade(),
-                // produto.getListaLote(),
-                produto.getListaClassificacao()
+                produto.getListaLote(),
+                produto.getClassificacao()      
             );
         }
     }

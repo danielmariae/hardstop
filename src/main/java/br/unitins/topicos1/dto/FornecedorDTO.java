@@ -4,9 +4,8 @@ import java.util.List;
 
 public record FornecedorDTO(
   String nomeFantasia,
-  String nomeRegistro,
+  String cnpj,
   String endSite,
   List<EnderecoDTO> listaEndereco,
   List<TelefoneDTO> listaTelefone
-  //, List<LoteDTO> listaLote)
 ) {}
