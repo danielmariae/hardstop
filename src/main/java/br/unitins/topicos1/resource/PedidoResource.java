@@ -36,8 +36,8 @@ public class PedidoResource {
   @DELETE
   @Transactional
   @Path("/delete/{id}")
-  public Response deletePedidoByCliente(@PathParam("id") Long id) {
-    service.deletePedidoByCliente(id);
+  public Response deletePedidoByCliente(@PathParam("id") Long id, Long idProduto) {
+    service.deletePedidoByCliente(id, idProduto);
     return Response.status(Status.NO_CONTENT).build();
   }
 

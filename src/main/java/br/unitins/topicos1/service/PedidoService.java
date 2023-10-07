@@ -13,7 +13,7 @@ public interface PedidoService {
 public PedidoResponseDTO insert(PedidoDTO dto, @PathParam("id") Long id);
 
 // Apaga todos os pedidos de um determinado cliente
-public void deletePedidoByCliente(Long idCliente);
+public void deletePedidoByCliente(Long idCliente, Long idProduto);
 
     // Altera o status de um pedido
   public PedidoResponseDTO updateStatusDoPedido(PedidoPatchStatusDTO ppsdto);

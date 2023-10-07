@@ -1,13 +1,13 @@
 package br.unitins.topicos1.model;
 
-// import java.util.List;
+ import java.util.List;
 
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Entity;
-// import jakarta.persistence.CascadeType;
-// import jakarta.persistence.JoinColumn;
-// import jakarta.persistence.JoinTable;
-// import jakarta.persistence.OneToMany;
+ import jakarta.persistence.CascadeType;
+ import jakarta.persistence.JoinColumn;
+ import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Produto extends DefaultEntity {
@@ -24,13 +24,13 @@ public class Produto extends DefaultEntity {
     private Integer quantidade;
 
     // IMPLEMENTAÇÃO NA PROVA A2:
-    // @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    // @JoinTable(
-    //     name = "produto_lote",
-    //     joinColumns = @JoinColumn(name = "id_produto"),
-    //     inverseJoinColumns = @JoinColumn(name = "id_lote")
-    // )
-    // private List<Lote> listaLote;
+     @ManyToMany(cascade = CascadeType.ALL)
+     @JoinTable(
+         name = "produto_lote",
+         joinColumns = @JoinColumn(name = "id_produto"),
+         inverseJoinColumns = @JoinColumn(name = "id_lote")
+     )
+     private List<Lote> listaLote;
 
     @ManyToOne
     private Classificacao classificacao;

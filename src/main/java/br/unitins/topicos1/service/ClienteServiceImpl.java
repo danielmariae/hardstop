@@ -83,10 +83,9 @@ public class ClienteServiceImpl implements ClienteService {
       for (ItemDaVenda item : pedido.getItemDaVenda()) {
         repositoryPedido.deleteById(item.getId());
       }
-
       repositoryPedido.deleteById(pedido.getFormaDePagamento().getId());
-
       repositoryPedido.deleteById(pedido.getEndereco().getId());
+      repository.deleteById(pedido.getId());
     }
     repository.deleteById(id);
   }
