@@ -1,0 +1,170 @@
+@startuml Desenho
+
+class Endereco {
+    - id: Long
+    - rua: String
+    - numero: String
+    - lote: String
+    - bairro: String
+    - complemento: String
+    - cep: String
+    - municipio: String
+    - estado: String
+    - pais: String
+}
+
+class Telefone {
+    - id: Long
+    - ddd: String
+    - numero: String
+}
+
+class Cliente {
+    - id: Long
+    - nome: String
+    - dataNascimento: LocalDate
+    - cpf: String
+    - sexo: String
+    - login: String
+    - senha: String
+    - email: String
+}
+
+class Funcionario {
+    - id: Long
+    - nome: String
+    - dataNascimento: date
+    - cpf: String
+    - sexo: String
+    - login: String
+    - senha: String
+    - email: String
+}
+
+class Produto {
+    - id: Long
+    - nome: String
+    - descricao: String
+    - codigoDeBarra: String
+    - marca: String
+    - imagem: String
+    - altura: Double
+    - largura: Double
+    - comprimento: Double
+    - peso: Double
+    - custoCompra: Double
+    - valorVenda: Double
+    - quantidade: Long
+}
+
+class Lote {
+    - id : Long
+    - Lote : String
+}
+
+class Pedido {
+    - id: Long
+    - codigoDeRastreamento : String
+}
+
+class ItemDaVenda {
+    - preco: Double
+    - quantidade: Long
+}
+
+class Pix {
+    - id: Long
+    - nomeCliente: String
+    - nomeRecebedor: String
+    - chaveRecebedor: String
+    - valor: Double
+}
+
+class CartaoDeCredito {
+    - id: Long
+    - numeroCartao: String
+    - mesValidade: Long
+    - anoValidade: Long
+    - codSeguranca : Long
+    - valor: Double
+}
+
+class Boleto {
+    - id: Long
+    - nomeBanco: String
+    - dataHoraGeracao: LocalDateTime
+    - dataHoraLimite: LocalDateTime
+    - valor: Double
+}
+
+class FormaDePagamento {
+    - id : Long
+    - nomeCliente : String
+}
+
+enum Status {
+    + Aguardando Pagamento : String
+    + Pago : String
+    + Retirado do Estoque : String
+    + Recebido pela transportadora : String
+    + Entregue : String
+}
+
+enum TipoTelefone {
+    + Fixo Residencial : String
+    + Fixo Comercial : String
+    + Celular Particular : String
+    + Celular Comercial : String
+    + Telefone De Outra Pessoa : String
+}
+
+class StatusDoPedido {
+    - id : Long
+    - dataHora: LocalDateTime
+}
+
+class Logistica {
+    - id : Long
+    - nomeFantasia : String
+    - nomeRegistro : String
+    - endSite : String
+}
+
+class Fornecedor {
+    - id : Long
+    - nomeFantasia : String
+    - nomeRegistro : String
+    - endSite : String
+}
+
+class Classificacao {
+    - id : Long
+    - nome : String
+}
+
+Cliente "1" *--> "*" Endereco
+Cliente "1" *--> "*" Telefone
+Funcionario "1" *--> "1" Endereco
+Funcionario "1" *--> "1" Telefone
+Pedido "1" *--> "1" Endereco
+Pedido "1" *--> "*" ItemDaVenda
+ItemDaVenda "1" o--> "1" Produto
+Cliente "*" --> "*" Produto : ListaDesejos
+Pix  --|> FormaDePagamento
+CartaoDeCredito --|> FormaDePagamento
+Boleto --|> FormaDePagamento
+Pedido "1" *--> "*" StatusDoPedido
+StatusDoPedido "*" o--> "1" Status
+Telefone "1" o--> "1" TipoTelefone
+Cliente "1" o--> "*" Pedido
+Produto "*" o--> "1" Classificacao
+Pedido "1" *--> "1" FormaDePagamento
+Pedido "1" o--> "1" Logistica
+Produto "*" *--> "1" Lote
+Fornecedor "1" --> "*" Lote
+Logistica "1" *--> "1" Endereco
+Logistica "1" *--> "1" Telefone
+Fornecedor "1" *--> "1" Endereco
+Fornecedor "1" *--> "1" Telefone
+
+@enduml

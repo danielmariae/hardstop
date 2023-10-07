@@ -1,6 +1,7 @@
 package br.unitins.topicos1.resource;
 
 import br.unitins.topicos1.dto.FuncionarioDTO;
+import br.unitins.topicos1.dto.FuncionarioPatchSenhaDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
@@ -48,9 +49,9 @@ public class FuncionarioResource {
 
   @PATCH
   @Transactional
-  @Path("patch/senha/{id}")
-  public Response updateSenha(@Valid String senha, @PathParam("id") Long id) {
-    return Response.status(200).entity(service.updateSenha(senha, id)).build();
+  @Path("patch/senha/")
+  public Response updateSenha(@Valid FuncionarioPatchSenhaDTO senha) {
+    return Response.status(200).entity(service.updateSenha(senha)).build();
   }
 
   @PATCH

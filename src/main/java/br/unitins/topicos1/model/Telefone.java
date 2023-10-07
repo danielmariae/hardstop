@@ -45,11 +45,7 @@ public TipoTelefone getTipoTelefone() {
     this.numeroTelefone = numeroTelefone;
   }
 
-  public static Telefone valueOf(Telefone telefone) {
-    return new Telefone(
-      telefone.getDdd(),
-      telefone.getNumeroTelefone(),
-      telefone.getTipoTelefone()
-    );
-  }
+public static Object valueOf(Telefone t) {
+    return null;
+}
 }

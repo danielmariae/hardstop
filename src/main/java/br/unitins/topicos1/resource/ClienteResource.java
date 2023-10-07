@@ -1,6 +1,7 @@
 package br.unitins.topicos1.resource;
 
 import br.unitins.topicos1.dto.ClienteDTO;
+import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
@@ -20,7 +21,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
-
 import java.util.List;
 
 @Path("/clientes")
@@ -34,7 +34,7 @@ public class ClienteResource {
   @POST
   @Transactional
   public Response insert(@Valid ClienteDTO dto) {
-    ClienteResponseDTO retorno =  service.insert(dto);
+    ClienteResponseDTO retorno = service.insert(dto);
     return Response.status(201).entity(retorno).build();
   }
 
@@ -48,22 +48,28 @@ public class ClienteResource {
 
   @PATCH
   @Transactional
-  @Path("patch/senha/{id}")
-  public Response updateSenha(@Valid String senha, @PathParam("id") Long id) {
-    return Response.status(200).entity(service.updateSenha(senha, id)).build();
+  @Path("patch/senha/")
+  public Response updateSenha(@Valid ClientePatchSenhaDTO senha) {
+    return Response.status(200).entity(service.updateSenha(senha)).build();
   }
 
   @PATCH
   @Transactional
   @Path("patch/telefone/{id}")
-  public Response updateTelefone(@Valid List<TelefoneDTO> tel, @PathParam("id") Long id) {
+  public Response updateTelefone(
+    @Valid List<TelefoneDTO> tel,
+    @PathParam("id") Long id
+  ) {
     return Response.status(200).entity(service.updateTelefone(tel, id)).build();
   }
 
   @PATCH
   @Transactional
   @Path("patch/endereco/{id}")
-  public Response updateEndereco(@Valid List<EnderecoDTO> end,@PathParam("id") Long id) {
+  public Response updateEndereco(
+    @Valid List<EnderecoDTO> end,
+    @PathParam("id") Long id
+  ) {
     return Response.status(200).entity(service.updateEndereco(end, id)).build();
   }
 
@@ -97,5 +103,4 @@ public class ClienteResource {
   public Response findByCpf(@PathParam("cpf") String cpf) {
     return Response.ok(service.findByCpf(cpf)).build();
   }
-
 }
