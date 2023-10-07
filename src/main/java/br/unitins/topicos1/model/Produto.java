@@ -3,10 +3,12 @@ package br.unitins.topicos1.model;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
 
+@Entity
 public class Produto extends DefaultEntity {
     private String nome;
     private String descricao;
@@ -22,12 +24,20 @@ public class Produto extends DefaultEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
-        name = "fornecedor_produto",
-        joinColumns = @JoinColumn(name = "id_fornecedor"),
-        inverseJoinColumns = @JoinColumn(name = "id_produto")
+        name = "produto_fornecedor",
+        joinColumns = @JoinColumn(name = "id_produto"),
+        inverseJoinColumns = @JoinColumn(name = "id_fornecedor")
     )
-    private List<Fornecedor> fornecedor;
+    private List<Lote> listaLote;
     
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(
+        name = "produto_classificacao",
+        joinColumns = @JoinColumn(name = "id_produto"),
+        inverseJoinColumns = @JoinColumn(name = "id_classificacao")
+    )
+    private List<Classificacao> listaClassificacao;
+
     public String getNome() {
         return nome;
     }

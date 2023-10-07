@@ -29,6 +29,14 @@ public class Fornecedor extends DefaultEntity{
     inverseJoinColumns = @JoinColumn(name = "id_telefone")
   )
   private List<Telefone> listaTelefone;
+  
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinTable(
+    name = "fornecedor_lote",
+    joinColumns = @JoinColumn(name = "id_fornecedor"),
+    inverseJoinColumns = @JoinColumn(name = "id_lote")
+  )
+  private List<Lote> listaLote;
 
   public String getNomeFantasia() {
     return nomeFantasia;
@@ -68,5 +76,11 @@ public class Fornecedor extends DefaultEntity{
 
   public void setListaTelefone(List<Telefone> listaTelefone) {
     this.listaTelefone = listaTelefone;
+  }
+  public List<Lote> getListaLote() {
+    return listaLote;
+  }
+  public void setListaLote(List<Lote> listaLote) {
+    this.listaLote = listaLote;
   }
 }
