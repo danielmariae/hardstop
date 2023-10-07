@@ -160,8 +160,8 @@ Cliente "1" o--> "*" Pedido
 Produto "*" o--> "1" Classificacao
 Pedido "1" *--> "1" FormaDePagamento
 Pedido "1" o--> "1" Logistica
-Produto "*" *--> "1" Lote
-Fornecedor "1" --> "*" Lote
+Produto "1" --> "*" Lote
+Lote "*" *--> "1" Fornecedor
 Logistica "1" *--> "1" Endereco
 Logistica "1" *--> "1" Telefone
 Fornecedor "1" *--> "1" Endereco
