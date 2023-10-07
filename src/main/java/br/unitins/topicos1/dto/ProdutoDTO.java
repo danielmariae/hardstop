@@ -1,5 +1,10 @@
 package br.unitins.topicos1.dto;
 
+import java.util.List;
+
+import br.unitins.topicos1.model.Classificacao;
+import br.unitins.topicos1.model.Lote;
+
 public record ProdutoDTO(     
     String nome,
     String descricao,
@@ -11,4 +16,6 @@ public record ProdutoDTO(
     Double peso,
     Double custoCompra,
     Double valorVenda,
-    Long quantidade) {}
+    Long quantidade,
+    List<Lote> listaLote,
+    List<Classificacao> listaClassificacao) {}
