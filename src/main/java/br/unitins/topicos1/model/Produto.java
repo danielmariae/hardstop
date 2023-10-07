@@ -6,6 +6,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -20,24 +21,25 @@ public class Produto extends DefaultEntity {
     private Double peso;
     private Double custoCompra;
     private Double valorVenda;
-    private Long quantidade;
+    private Integer quantidade;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
-        name = "produto_fornecedor",
+        name = "produto_lote",
         joinColumns = @JoinColumn(name = "id_produto"),
-        inverseJoinColumns = @JoinColumn(name = "id_fornecedor")
+        inverseJoinColumns = @JoinColumn(name = "id_lote")
     )
     private List<Lote> listaLote;
     
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(
-        name = "produto_classificacao",
-        joinColumns = @JoinColumn(name = "id_produto"),
-        inverseJoinColumns = @JoinColumn(name = "id_classificacao")
-    )
-    private List<Classificacao> listaClassificacao;
+    @ManyToOne
+    Classificacao classificacao;
 
+    public Classificacao getClassificacao() {
+        return classificacao;
+    }
+    public void setClassificacao(Classificacao classificacao) {
+        this.classificacao = classificacao;
+    }
     public String getNome() {
         return nome;
     }
@@ -98,10 +100,10 @@ public class Produto extends DefaultEntity {
     public void setValorVenda(Double valorVenda) {
         this.valorVenda = valorVenda;
     }
-    public Long getQuantidade() {
+    public Integer getQuantidade() {
         return quantidade;
     }
-    public void setQuantidade(Long quantidade) {
+    public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
     public List<Lote> getListaLote() {
@@ -109,11 +111,5 @@ public class Produto extends DefaultEntity {
     }
     public void setListaLote(List<Lote> listaLote) {
         this.listaLote = listaLote;
-    }
-    public List<Classificacao> getListaClassificacao() {
-        return listaClassificacao;
-    }
-    public void setListaClassificacao(List<Classificacao> listaClassificacao) {
-        this.listaClassificacao = listaClassificacao;
     }
 }

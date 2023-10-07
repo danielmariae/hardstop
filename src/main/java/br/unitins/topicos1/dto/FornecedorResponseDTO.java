@@ -5,15 +5,15 @@ import br.unitins.topicos1.model.Fornecedor;
 
 public record FornecedorResponseDTO(
   String nomeFantasia,
-  String nomeRegistro,
+  String cnpj,
   String endSite,
   List<EnderecoResponseDTO> listaEndereco,
-  List<TelefoneResponseDTO> listaTelefone, 
-  List<LoteResponseDTO> listaLote) {
+  List<TelefoneResponseDTO> listaTelefone 
+  ) {
   public static FornecedorResponseDTO valueOf(Fornecedor fornecedor) {
       return new FornecedorResponseDTO(
         fornecedor.getNomeFantasia(),
-        fornecedor.getNomeRegistro(),
+        fornecedor.getCnpj(),
         fornecedor.getEndSite(),
         fornecedor
           .getListaEndereco()
@@ -24,12 +24,7 @@ public record FornecedorResponseDTO(
           .getListaTelefone()
           .stream()
           .map(t -> TelefoneResponseDTO.valueOf(t))
-          .toList(),
-        fornecedor
-          .getListaLote()
-          .stream()
-          .map(l -> LoteResponseDTO.valueOf(l))
           .toList()
-        );
+             );
   }
 }
