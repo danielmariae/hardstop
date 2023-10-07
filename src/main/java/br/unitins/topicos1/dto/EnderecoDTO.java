@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public record EnderecoDTO(
+
   @NotBlank(message = "O campo nome não pode ser nulo.")
   String nome,
   @NotBlank(message = "O campo rua não pode ser nulo.")
