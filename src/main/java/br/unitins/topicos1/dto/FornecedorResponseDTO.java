@@ -1,16 +1,15 @@
 package br.unitins.topicos1.dto;
 
-import br.unitins.topicos1.model.Endereco;
+
 import br.unitins.topicos1.model.Fornecedor;
-import br.unitins.topicos1.model.Telefone;
 import java.util.List;
 
 public record FornecedorResponseDTO(
   String nomeFantasia,
   String nomeRegistro,
   String endSite,
-  List<Endereco> listaEndereco,
-  List<Telefone> listaTelefone
+  List<EnderecoResponseDTO> listaEndereco,
+  List<TelefoneResponseDTO> listaTelefone
 ) {
 
 public static FornecedorResponseDTO valueOf(Fornecedor fornecedor) {
@@ -21,12 +20,12 @@ public static FornecedorResponseDTO valueOf(Fornecedor fornecedor) {
       fornecedor
         .getListaEndereco()
         .stream()
-        .map(e -> Endereco.valueOf(e))
+        .map(e -> EnderecoResponseDTO.valueOf(e))
         .toList(),
       fornecedor
         .getListaTelefone()
         .stream()
-        .map(t -> Telefone.valueOf(t))
+        .map(t -> TelefoneResponseDTO.valueOf(t))
         .toList()
     );
   }

@@ -44,12 +44,4 @@ public TipoTelefone getTipoTelefone() {
   public void setNumeroTelefone(String numeroTelefone) {
     this.numeroTelefone = numeroTelefone;
   }
-
-  public static Telefone valueOf(Telefone telefone) {
-    return new Telefone(
-      telefone.getDdd(),
-      telefone.getNumeroTelefone(),
-      telefone.getTipoTelefone()
-    );
-  }
 }

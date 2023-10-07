@@ -17,30 +17,6 @@ public class Endereco extends DefaultEntity {
   private String estado;
   private String pais;
 
-  public Endereco(
-    String nome,
-    String rua,
-    String numero,
-    String lote,
-    String bairro,
-    String complemento,
-    String cep,
-    String municipio,
-    String estado,
-    String pais
-  ) {
-    setNome(nome);
-    setRua(rua);
-    setNumero(numero);
-    setLote(lote);
-    setBairro(bairro);
-    setComplemento(complemento);
-    setCep(cep);
-    setMunicipio(municipio);
-    setEstado(estado);
-    setPais(pais);
-  }
-
   public Endereco() {}
 
   public String getNome() {
@@ -123,18 +99,4 @@ public class Endereco extends DefaultEntity {
     this.pais = pais;
   }
 
-  public static Endereco valueOf(Endereco endereco) {
-    return new Endereco(
-      endereco.getNome(),
-      endereco.getRua(),
-      endereco.getNumero(),
-      endereco.getLote(),
-      endereco.getBairro(),
-      endereco.getComplemento(),
-      endereco.getCep(),
-      endereco.getMunicipio(),
-      endereco.getEstado(),
-      endereco.getPais()
-    );
-  }
 }

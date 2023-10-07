@@ -35,6 +35,22 @@ public class Cliente extends DefaultEntity {
   )
   private List<Telefone> listaTelefone;
 
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinTable(
+    name = "cliente_pedido",
+    joinColumns = @JoinColumn(name = "id_cliente"),
+    inverseJoinColumns = @JoinColumn(name = "id_pedido")
+  )
+  private List<Pedido> listaPedido;
+
+  public List<Pedido> getListaPedido() {
+    return listaPedido;
+  }
+
+  public void setListaPedido(List<Pedido> listaPedido) {
+    this.listaPedido = listaPedido;
+  }
+
   public String getNome() {
     return nome;
   }

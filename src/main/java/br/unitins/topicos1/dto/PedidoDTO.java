@@ -6,11 +6,11 @@ import br.unitins.topicos1.model.Pedido;
 
 public record PedidoDTO(
     Long id,
-    String cdr,
-    FormaDePagamentoDTO fdp,
-    List<ItemDaVendaDTO> idv,
-    EnderecoDTO end,
-    List<StatusDoPedidoResponseDTO> sdp
+    String codigoDeRastreamento,
+    FormaDePagamentoDTO formaDePagamento,
+    List<ItemDaVendaDTO> itemDaVenda,
+    EnderecoDTO endereco,
+    List<StatusDoPedidoDTO> statusDoPedido
 ) {
     public static PedidoDTO valueOf(Pedido pdd) {
         return new PedidoDTO(
@@ -26,7 +26,7 @@ public record PedidoDTO(
             pdd
             .getStatusDoPedido()
             .stream()
-            .map(s -> StatusDoPedidoResponseDTO.valueOf(s))
+            .map(s -> StatusDoPedidoDTO.valueOf(s))
             .toList()
         );
     }
