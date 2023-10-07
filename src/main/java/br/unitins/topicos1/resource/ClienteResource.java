@@ -3,8 +3,8 @@ package br.unitins.topicos1.resource;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.EnderecoDTO;
-import br.unitins.topicos1.dto.TelefoneDTO;
+import br.unitins.topicos1.dto.EnderecoPatchDTO;
+import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.service.ClienteService;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -57,7 +57,7 @@ public class ClienteResource {
   @Transactional
   @Path("patch/telefone/{id}")
   public Response updateTelefone(
-    @Valid List<TelefoneDTO> tel,
+    @Valid List<TelefonePatchDTO> tel,
     @PathParam("id") Long id
   ) {
     return Response.status(200).entity(service.updateTelefone(tel, id)).build();
@@ -67,7 +67,7 @@ public class ClienteResource {
   @Transactional
   @Path("patch/endereco/{id}")
   public Response updateEndereco(
-    @Valid List<EnderecoDTO> end,
+    @Valid List<EnderecoPatchDTO> end,
     @PathParam("id") Long id
   ) {
     return Response.status(200).entity(service.updateEndereco(end, id)).build();
@@ -102,5 +102,11 @@ public class ClienteResource {
   @Path("/search/cpf/{cpf}")
   public Response findByCpf(@PathParam("cpf") String cpf) {
     return Response.ok(service.findByCpf(cpf)).build();
+  }
+
+  @GET
+  @Path("/search/listaDesejos/{id}")
+  public Response findListaDesejos(@PathParam("id") Long id) {
+    return Response.ok(service.findListaDesejos(id)).build();
   }
 }

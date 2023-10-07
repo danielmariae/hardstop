@@ -16,6 +16,8 @@ insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municip
 
 insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municipio, estado, pais) values('Marta de Cesare', 'dos Potiguares', '567', 's/l', 'Anhangabaú', 'Centro', '70987213', 'São Paulo', 'São Paulo', 'Brasil');
 
+insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municipio, estado, pais) values('Mãe da Katia de Ruim', 'Sermão de mãe', 's/n', '58', 'Oeste', 'Ao lado da igreja do Véu', '73245787', 'Araraquara', 'São Paulo', 'Brasil');
+
 insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email) values('Katia de Ruim', '2010-08-08', '45390821398', 'F', 'katiaflavia', '123VaA_', 'katiaflavia@gmail.com');
 
 insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email) values('Flávio de Boa', '2007-10-02', '15499833200', 'M', 'flavio1234', '1a2B3!', 'flavio1234@gmail.com');
@@ -34,6 +36,7 @@ insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '11', '964531
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '11', '988885432');
 
 insert into cliente_endereco (id_cliente, id_endereco) values(1,1);
+insert into cliente_endereco (id_cliente, id_endereco) values(1,6);
 insert into cliente_telefone (id_cliente, id_telefone) values(1,1);
 insert into cliente_telefone (id_cliente, id_telefone) values(1,2);
 

@@ -6,7 +6,7 @@ import br.unitins.topicos1.model.Pedido;
 import jakarta.validation.constraints.NotBlank;
 
 public record PedidoDTO(
-    Long id,
+    
     String codigoDeRastreamento,
     @NotBlank(message = "O campo Forma de Pagamento não pode ser nulo.")
     FormaDePagamentoDTO formaDePagamento,
@@ -18,7 +18,6 @@ public record PedidoDTO(
 ) {
     public static PedidoDTO valueOf(Pedido pdd) {
         return new PedidoDTO(
-            pdd.getId(),
             pdd.getCodigoDeRastreamento(),
             FormaDePagamentoDTO.valueOf(pdd.getFormaDePagamento()),
             pdd

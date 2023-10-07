@@ -3,8 +3,10 @@ package br.unitins.topicos1.service;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.EnderecoDTO;
-import br.unitins.topicos1.dto.TelefoneDTO;
+import br.unitins.topicos1.dto.EnderecoPatchDTO;
+import br.unitins.topicos1.dto.ProdutoResponseDTO;
+import br.unitins.topicos1.dto.TelefonePatchDTO;
+
 import java.util.List;
 
 public interface ClienteService {
@@ -15,10 +17,10 @@ public interface ClienteService {
   public ClienteResponseDTO update(ClienteDTO dto, Long id);
 
   // Substitui um telefone ou insere um novo telefone
-  public ClienteResponseDTO updateTelefone(List<TelefoneDTO> tel, Long id);
+  public ClienteResponseDTO updateTelefone(List<TelefonePatchDTO> tel, Long id);
 
   // Substitui um endereco ou insere um novo endereco
-  public ClienteResponseDTO updateEndereco(List<EnderecoDTO> end, Long id);
+  public ClienteResponseDTO updateEndereco(List<EnderecoPatchDTO> end, Long id);
 
   // Altera a senha do cliente
   public ClienteDTO updateSenha(ClientePatchSenhaDTO senha);
@@ -37,5 +39,8 @@ public interface ClienteService {
 
   // Retorna uma lista com os dados de todos os clientes
   public List<ClienteResponseDTO> findByAll();
+
+  // Retorna a lista de desejos de um dado usuário
+  public List<ProdutoResponseDTO> findListaDesejos(Long id);
 
 }

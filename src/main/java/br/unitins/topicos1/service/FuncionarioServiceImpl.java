@@ -6,8 +6,9 @@ import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.Formatadores.FuncionarioFormatador;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
-import br.unitins.topicos1.dto.EnderecoDTO;
+import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
+import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Funcionario;
 import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.Telefone;
@@ -119,7 +120,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Override
   @Transactional
-  public FuncionarioResponseDTO updateTelefone(List<TelefoneDTO> tel, Long id) {
+  public FuncionarioResponseDTO updateTelefone(List<TelefonePatchDTO> tel, Long id) {
     Funcionario funcionario = repository.findById(id);
 
     List<Long> id1 = new ArrayList<Long>();
@@ -134,12 +135,12 @@ public class FuncionarioServiceImpl implements FuncionarioService {
       }
     }
 
-    for (TelefoneDTO tele1 : tel) {
+    for (TelefonePatchDTO tele1 : tel) {
       id2.add(tele1.id());
     }
 
     for (Telefone tele1 : funcionario.getListaTelefone()) {
-      for (TelefoneDTO tele : tel) {
+      for (TelefonePatchDTO tele : tel) {
         if (tele1.getId() == tele.id()) {
           tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
           tele1.setDdd(tele.ddd());
@@ -151,7 +152,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     for (int i = 0; i < id2.size(); i++) {
-      for (TelefoneDTO tele : tel) {
+      for (TelefonePatchDTO tele : tel) {
         Telefone telefone = new Telefone();
         telefone.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
         telefone.setDdd(tele.ddd());
@@ -165,7 +166,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Override
   @Transactional
-  public FuncionarioResponseDTO updateEndereco(EnderecoDTO end, Long id) {
+  public FuncionarioResponseDTO updateEndereco(EnderecoPatchDTO end, Long id) {
     Funcionario funcionario = repository.findById(id);
 
         funcionario.getEndereco().setNome(end.nome());

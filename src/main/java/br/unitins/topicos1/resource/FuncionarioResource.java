@@ -3,8 +3,8 @@ package br.unitins.topicos1.resource;
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioPatchSenhaDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
-import br.unitins.topicos1.dto.EnderecoDTO;
-import br.unitins.topicos1.dto.TelefoneDTO;
+import br.unitins.topicos1.dto.EnderecoPatchDTO;
+import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.service.FuncionarioService;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -57,14 +57,14 @@ public class FuncionarioResource {
   @PATCH
   @Transactional
   @Path("patch/telefone/{id}")
-  public Response updateTelefone(@Valid List<TelefoneDTO> tel, @PathParam("id") Long id) {
+  public Response updateTelefone(@Valid List<TelefonePatchDTO> tel, @PathParam("id") Long id) {
     return Response.status(200).entity(service.updateTelefone(tel, id)).build();
   }
 
   @PATCH
   @Transactional
   @Path("patch/endereco/{id}")
-  public Response updateEndereco(@Valid EnderecoDTO end,@PathParam("id") Long id) {
+  public Response updateEndereco(@Valid EnderecoPatchDTO end,@PathParam("id") Long id) {
     return Response.status(200).entity(service.updateEndereco(end, id)).build();
   }
 

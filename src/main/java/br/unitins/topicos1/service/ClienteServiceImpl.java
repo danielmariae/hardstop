@@ -7,15 +7,19 @@ import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
+import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
+import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.StatusDoPedidoDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
+import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.FormaDePagamento;
 import br.unitins.topicos1.model.ItemDaVenda;
 import br.unitins.topicos1.model.Pedido;
+import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.Status;
 import br.unitins.topicos1.model.StatusDoPedido;
 import br.unitins.topicos1.model.Telefone;
@@ -214,7 +218,7 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Override
   @Transactional
-  public ClienteResponseDTO updateTelefone(List<TelefoneDTO> tel, Long id) {
+  public ClienteResponseDTO updateTelefone(List<TelefonePatchDTO> tel, Long id) {
     Cliente cliente = repository.findById(id);
 
     List<Long> id1 = new ArrayList<Long>();
@@ -229,12 +233,12 @@ public class ClienteServiceImpl implements ClienteService {
       }
     }
 
-    for (TelefoneDTO tele1 : tel) {
+    for (TelefonePatchDTO tele1 : tel) {
       id2.add(tele1.id());
     }
 
     for (Telefone tele1 : cliente.getListaTelefone()) {
-      for (TelefoneDTO tele : tel) {
+      for (TelefonePatchDTO tele : tel) {
         if (tele1.getId() == tele.id()) {
           tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
           tele1.setDdd(tele.ddd());
@@ -248,7 +252,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     for (int i = 0; i < id2.size(); i++) {
-      for (TelefoneDTO tele : tel) {
+      for (TelefonePatchDTO tele : tel) {
         Telefone telefone = new Telefone();
         telefone.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
         telefone.setDdd(tele.ddd());
@@ -264,7 +268,7 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Override
   @Transactional
-  public ClienteResponseDTO updateEndereco(List<EnderecoDTO> end, Long id) {
+  public ClienteResponseDTO updateEndereco(List<EnderecoPatchDTO> end, Long id) {
     Cliente cliente = repository.findById(id);
 
     List<Long> d1 = new ArrayList<Long>();
@@ -279,12 +283,12 @@ public class ClienteServiceImpl implements ClienteService {
       }
     }
 
-    for (EnderecoDTO end2 : end) {
+    for (EnderecoPatchDTO end2 : end) {
       d2.add(end2.id());
     }
 
     for (Endereco endereco : cliente.getListaEndereco()) {
-      for (EnderecoDTO end1 : end) {
+      for (EnderecoPatchDTO end1 : end) {
         if (end1.id() == endereco.getId()) {
           endereco.setNome(end1.nome());
           endereco.setRua(end1.rua());
@@ -303,7 +307,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     for (int i = 0; i < d2.size(); i++) {
-      for (EnderecoDTO end1 : end) {
+      for (EnderecoPatchDTO end1 : end) {
         Endereco endereco = new Endereco();
         endereco.setNome(end1.nome());
         endereco.setRua(end1.rua());
@@ -410,4 +414,20 @@ public class ClienteServiceImpl implements ClienteService {
     repository.persist(cliente);
     return ClienteResponseDTO.valueOf(cliente);
   }
+
+  public List<ProdutoResponseDTO> findListaDesejos(Long id) {
+    Cliente cliente = repository.findById(id);
+
+    List<ProdutoResponseDTO> lista = new ArrayList<ProdutoResponseDTO>();
+
+    for(Produto produto : cliente.getListaProduto()) {
+      lista.add(ProdutoResponseDTO.valueOf(produto));
+    }
+
+    return lista;
+  }
+
+
+
+
 }

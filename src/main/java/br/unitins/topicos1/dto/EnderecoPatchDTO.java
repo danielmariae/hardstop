@@ -4,7 +4,8 @@ import br.unitins.topicos1.model.Endereco;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record EnderecoDTO(
+public record EnderecoPatchDTO(
+  Long id,
   @NotBlank(message = "O campo nome não pode ser nulo.")
   String nome,
   @NotBlank(message = "O campo rua não pode ser nulo.")
@@ -27,8 +28,9 @@ public record EnderecoDTO(
   @NotBlank(message = "O campo País não pode ser nulo.")
   String pais
 ) {
-  public static EnderecoDTO valueOf(Endereco endereco) {
-    return new EnderecoDTO(
+  public static EnderecoPatchDTO valueOf(Endereco endereco) {
+    return new EnderecoPatchDTO(
+      endereco.getId(),
       endereco.getNome(),
       endereco.getRua(),
       endereco.getNumero(),
@@ -42,3 +44,4 @@ public record EnderecoDTO(
     );
   }
 }
+
