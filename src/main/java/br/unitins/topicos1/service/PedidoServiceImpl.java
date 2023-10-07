@@ -134,8 +134,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     cliente.setListaPedido(new ArrayList<Pedido>());
     cliente.getListaPedido().add(pedido);
-    //repositoryPedido.persist(pedido);
-    //repository.persist(cliente);
+    repository.persist(cliente);
     return PedidoResponseDTO.valueOf(pedido);
   }
 
