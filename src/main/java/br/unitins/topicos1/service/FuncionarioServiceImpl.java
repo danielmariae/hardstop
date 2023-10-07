@@ -1,6 +1,7 @@
 package br.unitins.topicos1.service;
 
 import br.unitins.topicos1.dto.FuncionarioDTO;
+import br.unitins.topicos1.dto.FuncionarioPatchSenhaDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.Formatadores.FuncionarioFormatador;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
@@ -109,9 +110,9 @@ public class FuncionarioServiceImpl implements FuncionarioService {
   // FuncionarioResponseDTO não tem senha, por isso trabalhamos com FuncionarioDTO
   @Override
   @Transactional
-  public FuncionarioDTO updateSenha(String senha, Long id) {
-    Funcionario funcionario = repository.findById(id);
-    funcionario.setSenha(senha);
+  public FuncionarioDTO updateSenha(FuncionarioPatchSenhaDTO senha) {
+    Funcionario funcionario = repository.findById(senha.id());
+    funcionario.setSenha(senha.senha());
     repository.persist(funcionario);
     return FuncionarioDTO.valueOf(funcionario);
   }
