@@ -2,7 +2,10 @@ package br.unitins.topicos1.dto;
 
 import java.util.List;
 
+import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.Fornecedor;
+import br.unitins.topicos1.model.Lote;
+import br.unitins.topicos1.model.Telefone;
 
 public record FornecedorResponseDTO(
   String nomeFantasia,
