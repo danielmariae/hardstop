@@ -7,6 +7,6 @@ public record FornecedorDTO(
   String nomeRegistro,
   String endSite,
   List<EnderecoDTO> listaEndereco,
-  List<TelefoneDTO> listaTelefone,
-  List<LoteDTO> listaLote
+  List<TelefoneDTO> listaTelefone
+  //, List<LoteDTO> listaLote)
 ) {}

@@ -8,8 +8,9 @@ public record FornecedorResponseDTO(
   String nomeRegistro,
   String endSite,
   List<EnderecoResponseDTO> listaEndereco,
-  List<TelefoneResponseDTO> listaTelefone, 
-  List<LoteResponseDTO> listaLote) {
+  List<TelefoneResponseDTO> listaTelefone)
+  // , List<LoteResponseDTO> listaLote)
+  {
   public static FornecedorResponseDTO valueOf(Fornecedor fornecedor) {
       return new FornecedorResponseDTO(
         fornecedor.getNomeFantasia(),
@@ -24,12 +25,13 @@ public record FornecedorResponseDTO(
           .getListaTelefone()
           .stream()
           .map(t -> TelefoneResponseDTO.valueOf(t))
-          .toList(),
+          .toList());
+        /*
         fornecedor
-          .getListaLote()
-          .stream()
-          .map(l -> LoteResponseDTO.valueOf(l))
-          .toList()
-        );
+            .getListaLote()
+            .stream()
+            .map(l -> LoteResponseDTO.valueof(l))
+            .toList());
+         */
   }
 }

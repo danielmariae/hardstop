@@ -15,7 +15,7 @@ public record ProdutoDTO(
     Double custoCompra,
     Double valorVenda,
     Long quantidade,
-    List<LoteDTO> listaLote,
+    // List<LoteDTO> listaLote,
     List<ClassificacaoDTO> listaClassificacao) {
 
         public static ProdutoDTO valueOf(Produto produto) {
@@ -31,11 +31,11 @@ public record ProdutoDTO(
                 produto.getCustoCompra(),
                 produto.getValorVenda(),
                 produto.getQuantidade(),
-                produto
-                .getListaLote()
-                .stream()
-                .map(p -> LoteDTO.valueOf(p))
-                .toList(),
+                // produto
+                // .getListaLote()
+                // .stream()
+                // .map(p -> LoteDTO.valueOf(p))
+                // .toList(),
                 produto
                 .getListaClassificacao()
                 .stream()

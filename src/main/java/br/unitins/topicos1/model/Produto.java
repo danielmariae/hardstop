@@ -22,13 +22,14 @@ public class Produto extends DefaultEntity {
     private Double valorVenda;
     private Long quantidade;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(
-        name = "produto_fornecedor",
-        joinColumns = @JoinColumn(name = "id_produto"),
-        inverseJoinColumns = @JoinColumn(name = "id_fornecedor")
-    )
-    private List<Lote> listaLote;
+    //   IMPLEMENTAÇÃO SERÁ FEITA NA PROVA A2:
+    // @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    // @JoinTable(
+    //     name = "produto_fornecedor",
+    //     joinColumns = @JoinColumn(name = "id_produto"),
+    //     inverseJoinColumns = @JoinColumn(name = "id_fornecedor")
+    // )
+    // private List<Lote> listaLote;
     
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
@@ -104,12 +105,12 @@ public class Produto extends DefaultEntity {
     public void setQuantidade(Long quantidade) {
         this.quantidade = quantidade;
     }
-    public List<Lote> getListaLote() {
-        return listaLote;
-    }
-    public void setListaLote(List<Lote> listaLote) {
-        this.listaLote = listaLote;
-    }
+    // public List<Lote> getListaLote() {
+    //     return listaLote;
+    // }
+    // public void setListaLote(List<Lote> listaLote) {
+    //     this.listaLote = listaLote;
+    // }
     public List<Classificacao> getListaClassificacao() {
         return listaClassificacao;
     }

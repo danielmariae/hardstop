@@ -3,7 +3,7 @@ package br.unitins.topicos1.service;
 import java.util.List;
 
 import br.unitins.topicos1.dto.EnderecoDTO;
-import br.unitins.topicos1.dto.LoteDTO;
+// import br.unitins.topicos1.dto.LoteDTO;
 import br.unitins.topicos1.dto.ProdutoDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
@@ -13,7 +13,7 @@ public interface ProdutoService {
 
     public ProdutoResponseDTO update(ProdutoDTO dto, Long id);
 
-    public ProdutoResponseDTO updateLote(List<LoteDTO> lt, Long id);
+    // public ProdutoResponseDTO updateLote(List<LoteDTO> lt, Long id);
 
     public ProdutoResponseDTO updateTelefone(List<TelefoneDTO> tel, Long id);
 
