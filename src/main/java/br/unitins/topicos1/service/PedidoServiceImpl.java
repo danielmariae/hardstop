@@ -1,14 +1,24 @@
 package br.unitins.topicos1.service;
 
+import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
+import br.unitins.topicos1.dto.LoteDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
 import br.unitins.topicos1.dto.PedidoResponseDTO;
+import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.model.Cliente;
+import br.unitins.topicos1.model.Endereco;
+import br.unitins.topicos1.model.FormaDePagamento;
+import br.unitins.topicos1.model.Fornecedor;
 import br.unitins.topicos1.model.ItemDaVenda;
+import br.unitins.topicos1.model.Lote;
 import br.unitins.topicos1.model.Pedido;
+import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.Status;
 import br.unitins.topicos1.model.StatusDoPedido;
+import br.unitins.topicos1.model.Telefone;
+import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,23 +44,71 @@ public class PedidoServiceImpl implements PedidoService {
     Pedido pedido = new Pedido();
 
     pedido.setCodigoDeRastreamento(dto.codigoDeRastreamento());
-    pedido.getFormaDePagamento().setNome(dto.formaDePagamento().nome());
-    pedido.getEndereco().setNome(dto.endereco().nome());
-    pedido.getEndereco().setRua(dto.endereco().rua());
-    pedido.getEndereco().setNumero(dto.endereco().numero());
-    pedido.getEndereco().setLote(dto.endereco().lote());
-    pedido.getEndereco().setBairro(dto.endereco().bairro());
-    pedido.getEndereco().setComplemento(dto.endereco().complemento());
-    pedido.getEndereco().setCep(dto.endereco().cep());
-    pedido.getEndereco().setMunicipio(dto.endereco().municipio());
-    pedido.getEndereco().setEstado(dto.endereco().estado());
-    pedido.getEndereco().setPais(dto.endereco().pais());
+    FormaDePagamento pagamento = new FormaDePagamento();
+    pagamento.setNome(dto.formaDePagamento().nome());
+    pedido.setFormaDePagamento(pagamento);
+    Endereco endereco = new Endereco();
+    endereco.setNome(dto.endereco().nome());
+    endereco.setRua(dto.endereco().rua());
+    endereco.setNumero(dto.endereco().numero());
+    endereco.setLote(dto.endereco().lote());
+    endereco.setBairro(dto.endereco().bairro());
+    endereco.setComplemento(dto.endereco().complemento());
+    endereco.setCep(dto.endereco().cep());
+    endereco.setMunicipio(dto.endereco().municipio());
+    endereco.setEstado(dto.endereco().estado());
+    endereco.setPais(dto.endereco().pais());
+    pedido.setEndereco(endereco);
 
     pedido.setItemDaVenda(new ArrayList<ItemDaVenda>());
     for (ItemDaVendaDTO idv : dto.itemDaVenda()) {
       ItemDaVenda item = new ItemDaVenda();
       item.setPreco(idv.preco());
       item.setQuantidade(idv.quantidade());
+      Produto produto = new Produto();
+      produto.setDescricao(idv.produto().descricao());
+      produto.setCodigoBarras(idv.produto().codigoBarras());
+      produto.setMarca(idv.produto().marca());
+      produto.setAltura(idv.produto().altura());
+      produto.setLargura(idv.produto().largura());
+      produto.setComprimento(idv.produto().comprimento());
+      produto.setPeso(idv.produto().peso());
+      produto.setCustoCompra(idv.produto().custoCompra());
+      produto.setValorVenda(idv.produto().valorVenda());
+      produto.setQuantidade(idv.produto().quantidade());
+      produto.setListaLote(new ArrayList<Lote>());
+      for(LoteDTO dll : idv.produto().listaLote()) {
+        Lote lote = new Lote();
+        lote.setLote(dll.lote());
+        Fornecedor fornecedor = new Fornecedor();
+        fornecedor.setCnpj(dll.fornecedor().cnpj());
+        fornecedor.setNomeFantasia(dll.fornecedor().nomeFantasia());
+        fornecedor.setEndSite(dll.fornecedor().endSite());
+        for(EnderecoDTO endf : dll.fornecedor().listaEndereco()) {
+          Endereco endereco1 = new Endereco();
+          endereco1.setNome(endf.nome());
+          endereco1.setRua(endf.rua());
+          endereco1.setNumero(endf.numero());
+          endereco1.setLote(endf.lote());
+          endereco1.setBairro(endf.bairro());
+          endereco1.setComplemento(endf.complemento());
+          endereco1.setCep(endf.cep());
+          endereco1.setMunicipio(endf.municipio());
+          endereco1.setEstado(endf.estado());
+          endereco1.setPais(endf.pais());
+          fornecedor.getListaEndereco().add(endereco1);
+        }
+        for(TelefoneDTO telf : dll.fornecedor().listaTelefone()){
+          Telefone telefone = new Telefone();
+          telefone.setNumeroTelefone(telf.numeroTelefone());
+          telefone.setDdd(telf.ddd());
+          telefone.setTipoTelefone(TipoTelefone.valueOf(telf.tipo()));
+          fornecedor.getListaTelefone().add(telefone);
+        }
+        lote.setFornecedor(fornecedor);
+        produto.getListaLote().add(lote);
+      }
+      item.setProduto(produto);
       pedido.getItemDaVenda().add(item);
     }
 

@@ -7,12 +7,10 @@ import jakarta.validation.constraints.NotBlank;
 
 public record PedidoDTO(
     
+    @NotBlank(message = "O campo nome não pode ser nulo.")
     String codigoDeRastreamento,
-    @NotBlank(message = "O campo Forma de Pagamento não pode ser nulo.")
     FormaDePagamentoDTO formaDePagamento,
-    @NotBlank(message = "O campo ItemDaVenda não pode ser nulo.")
     List<ItemDaVendaDTO> itemDaVenda,
-    @NotBlank(message = "O campo endereco não pode ser nulo.")
     EnderecoDTO endereco,
     List<StatusDoPedidoDTO> statusDoPedido
 ) {
