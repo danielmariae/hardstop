@@ -34,13 +34,10 @@ public class ProdutoServiceImpl implements ProdutoService {
         produto.setQuantidade(dto.quantidade());
     
 
-        if (dto.listaClassificacao() != null && !dto.listaClassificacao().isEmpty()) {
-        produto.setListaClassificacao(new ArrayList<Classificacao>());
-        for (ClassificacaoDTO cla : dto.listaClassificacao()) {
+        if (dto.classificacao() != null) {
             Classificacao classificacao = new Classificacao();
-            classificacao.setNome(cla.nome());
-            produto.getListaClassificacao().add(classificacao);
-        }
+            classificacao.setNome(dto.classificacao().nome());
+            produto.setClassificacao(classificacao);
         }
         
     repository.persist(produto);
@@ -62,20 +59,13 @@ public class ProdutoServiceImpl implements ProdutoService {
         produto.setCustoCompra(dto.custoCompra());
         produto.setValorVenda(dto.valorVenda());
         produto.setQuantidade(dto.quantidade());
-        
-        int i = 0;
-        int j = 0;
 
-        for(Classificacao c : produto.getListaClassificacao()){
-            i++;
-            j=0;
-            for(ClassificacaoDTO cDTO : dto.listaClassificacao()){
-                j++;
-                if(i==j){
-                    c.setNome(cDTO.nome());
-                }
-            }
+         if (dto.classificacao() != null) {
+            Classificacao classificacao = new Classificacao();
+            classificacao.setNome(dto.classificacao().nome());
+            produto.setClassificacao(classificacao);
         }
+        
 
         repository.persist(produto);
         return ProdutoResponseDTO.valueOf(produto);
