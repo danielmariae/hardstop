@@ -1,6 +1,6 @@
 package br.unitins.topicos1.dto;
 
-import java.util.List;
+// import java.util.List;
 
 import br.unitins.topicos1.model.Classificacao;
 // import br.unitins.topicos1.model.Lote;
@@ -19,7 +19,7 @@ public record ProdutoResponseDTO(
     Double custoCompra,
     Double valorVenda,
     Integer quantidade,
-    List<Lote> listaLote,
+    // List<Lote> listaLote,
     Classificacao classificacao) {
         public static ProdutoResponseDTO valueOf(Produto produto){
             return new ProdutoResponseDTO(
@@ -35,7 +35,7 @@ public record ProdutoResponseDTO(
                 produto.getCustoCompra(), 
                 produto.getValorVenda(), 
                 produto.getQuantidade(),
-                produto.getListaLote(),
+                // produto.getListaLote(),
                 produto.getClassificacao()      
             );
         }

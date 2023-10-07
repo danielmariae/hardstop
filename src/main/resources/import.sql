@@ -39,7 +39,7 @@ insert into formaDePagamento (nome) values('Cartão de Crédito');
 insert into pedido (codigoDeRastreamento, id_formaDePagamento, id_endereco) values('Der34ewww', 1, 1);
 
 insert into cliente_pedido (id_cliente, id_pedido) values(1,1);
-insert into produto_lote (id_produto, id_lote) values(1,1);
+-- insert into produto_lote (id_produto, id_lote) values(1,1);
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,1);
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,2);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,1);
