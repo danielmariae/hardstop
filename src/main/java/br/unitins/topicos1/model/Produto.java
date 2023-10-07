@@ -104,4 +104,16 @@ public class Produto extends DefaultEntity {
     public void setQuantidade(Long quantidade) {
         this.quantidade = quantidade;
     }
+    public List<Lote> getListaLote() {
+        return listaLote;
+    }
+    public void setListaLote(List<Lote> listaLote) {
+        this.listaLote = listaLote;
+    }
+    public List<Classificacao> getListaClassificacao() {
+        return listaClassificacao;
+    }
+    public void setListaClassificacao(List<Classificacao> listaClassificacao) {
+        this.listaClassificacao = listaClassificacao;
+    }
 }
