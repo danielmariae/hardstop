@@ -20,7 +20,6 @@ public class Produto extends DefaultEntity {
     private Double valorVenda;
     private Long quantidade;
 
-    
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
         name = "fornecedor_produto",
