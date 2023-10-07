@@ -26,7 +26,7 @@ insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comp
 
 
 insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '2022/34539382', 'www.netcom.br');
-insert into lote (lote, fornecedor_id) values('f1_p1_lt15', 1);
+-- insert into lote (lote, fornecedor_id) values('f1_p1_lt15', 1);
 
 
 
