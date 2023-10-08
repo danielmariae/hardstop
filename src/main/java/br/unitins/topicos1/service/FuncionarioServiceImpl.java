@@ -184,7 +184,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     return FuncionarioResponseDTO.valueOf(funcionario);
   }
 
-  public FuncionarioResponseDTO insert(FuncionarioDTO dto) {
+  public FuncionarioDTO insert(FuncionarioDTO dto) {
     Funcionario funcionario = new Funcionario();
     funcionario.setNome(dto.nome());
     funcionario.setDataNascimento(FuncionarioFormatador.validaDataNascimento(dto.dataNascimento()));
@@ -193,6 +193,8 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     funcionario.setLogin(dto.login());
     funcionario.setSenha(dto.senha());
     funcionario.setEmail(dto.email());
+    funcionario.setListaTelefone(new ArrayList<Telefone>());
+    funcionario.setEndereco(new Endereco());
 
     if (dto.listaTelefone() != null && !dto.listaTelefone().isEmpty()) {
       funcionario.setListaTelefone(new ArrayList<Telefone>());
@@ -220,7 +222,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         funcionario.setEndereco(endereco);
   
     repository.persist(funcionario);
-    return FuncionarioResponseDTO.valueOf(funcionario);
+    return FuncionarioDTO.valueOf(funcionario);
   }
 }
 

@@ -10,7 +10,7 @@ import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
-import br.unitins.topicos1.dto.ProdutoResponseDTO;
+// import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.StatusDoPedidoDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
@@ -19,7 +19,7 @@ import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.FormaDePagamento;
 import br.unitins.topicos1.model.ItemDaVenda;
 import br.unitins.topicos1.model.Pedido;
-import br.unitins.topicos1.model.Produto;
+// import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.Status;
 import br.unitins.topicos1.model.StatusDoPedido;
 import br.unitins.topicos1.model.Telefone;
@@ -199,7 +199,7 @@ public class ClienteServiceImpl implements ClienteService {
           }
         }
       }
-    }
+    } 
 
     repository.persist(cliente);
     return ClienteResponseDTO.valueOf(cliente);
@@ -369,7 +369,7 @@ public class ClienteServiceImpl implements ClienteService {
       }
     }
 
-    if (dto.listaPedido() != null && !dto.listaPedido().isEmpty()) {
+     if (dto.listaPedido() != null && !dto.listaPedido().isEmpty()) {
       cliente.setListaPedido(new ArrayList<Pedido>());
 
       for (PedidoDTO pdd : dto.listaPedido()) {
@@ -409,13 +409,13 @@ public class ClienteServiceImpl implements ClienteService {
 
         cliente.getListaPedido().add(pedido);
       }
-    }
+    } 
 
     repository.persist(cliente);
     return ClienteResponseDTO.valueOf(cliente);
   }
 
-  public List<ProdutoResponseDTO> findListaDesejos(Long id) {
+  /* public List<ProdutoResponseDTO> findListaDesejos(Long id) {
     Cliente cliente = repository.findById(id);
 
     List<ProdutoResponseDTO> lista = new ArrayList<ProdutoResponseDTO>();
@@ -425,7 +425,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     return lista;
-  }
+  } */
 
 
 

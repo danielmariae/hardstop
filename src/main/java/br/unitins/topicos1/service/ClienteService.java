@@ -4,7 +4,7 @@ import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
-import br.unitins.topicos1.dto.ProdutoResponseDTO;
+// import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 
 import java.util.List;
@@ -41,6 +41,6 @@ public interface ClienteService {
   public List<ClienteResponseDTO> findByAll();
 
   // Retorna a lista de desejos de um dado usuário
-  public List<ProdutoResponseDTO> findListaDesejos(Long id);
+  // public List<ProdutoResponseDTO> findListaDesejos(Long id);
 
 }

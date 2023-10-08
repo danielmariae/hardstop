@@ -35,7 +35,7 @@ public record ClienteResponseDTO(
         .stream()
         .map(t -> TelefoneResponseDTO.valueOf(t))
         .toList(),
-        cliente
+      cliente
         .getListaPedido()
         .stream()
         .map(t -> PedidoResponseDTO.valueOf(t))

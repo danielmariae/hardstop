@@ -2,7 +2,7 @@ package br.unitins.topicos1.resource;
 
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioPatchSenhaDTO;
-import br.unitins.topicos1.dto.FuncionarioResponseDTO;
+//import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.service.FuncionarioService;
@@ -35,7 +35,7 @@ public class FuncionarioResource {
   @POST
   @Transactional
   public Response insert(@Valid FuncionarioDTO dto) {
-    FuncionarioResponseDTO retorno =  service.insert(dto);
+    FuncionarioDTO retorno =  service.insert(dto);
     return Response.status(201).entity(retorno).build();
   }
 

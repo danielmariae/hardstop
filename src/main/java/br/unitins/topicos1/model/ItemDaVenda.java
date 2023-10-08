@@ -1,7 +1,7 @@
 package br.unitins.topicos1.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
+// import jakarta.persistence.OneToOne;
 
 @Entity
 public class ItemDaVenda extends DefaultEntity {
@@ -9,7 +9,7 @@ public class ItemDaVenda extends DefaultEntity {
     private Double preco;
     private Long quantidade;
 
-    @OneToOne
+   /* @OneToOne
     private Produto produto;
 
     public Produto getProduto() {
@@ -17,7 +17,7 @@ public class ItemDaVenda extends DefaultEntity {
     }
     public void setProduto(Produto produto) {
         this.produto = produto;
-    }
+    } */
     public Double getPreco() {
         return preco;
     }

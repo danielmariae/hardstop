@@ -14,7 +14,7 @@ import java.util.List;
 public interface FuncionarioService {
 
   // Cadastra um funcionário
-  public FuncionarioResponseDTO insert(FuncionarioDTO dto);
+  public FuncionarioDTO insert(FuncionarioDTO dto);
 
   // Altera todas as informações de funcionário em um dado id
   public FuncionarioResponseDTO update(FuncionarioDTO dto, Long id);

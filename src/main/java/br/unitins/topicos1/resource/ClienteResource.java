@@ -104,9 +104,9 @@ public class ClienteResource {
     return Response.ok(service.findByCpf(cpf)).build();
   }
 
-  @GET
+ /*  @GET
   @Path("/search/listaDesejos/{id}")
   public Response findListaDesejos(@PathParam("id") Long id) {
     return Response.ok(service.findListaDesejos(id)).build();
-  }
+  } */
 }
