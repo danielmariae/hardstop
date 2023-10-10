@@ -6,13 +6,15 @@ import br.unitins.topicos1.model.ItemDaVenda;
 public record ItemDaVendaDTO(
 
     Double preco,
-    Long quantidade
+    Integer quantidade,
+    Long idProduto
     /* ProdutoDTO produto */
 ) {
     public static ItemDaVendaDTO valueOf(ItemDaVenda idv) {
         return new ItemDaVendaDTO(
             idv.getPreco(),
-            idv.getQuantidade()
+            idv.getQuantidade(),
+            idv.getIdProduto()
             /* ProdutoDTO.valueOf(idv.getProduto()) */
         );
     }

@@ -6,10 +6,12 @@ import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
+import br.unitins.topicos1.dto.ClienteResponseNPDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
+import br.unitins.topicos1.dto.ProdutoResponseDTO;
 // import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.StatusDoPedidoDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
@@ -19,6 +21,7 @@ import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.FormaDePagamento;
 import br.unitins.topicos1.model.ItemDaVenda;
 import br.unitins.topicos1.model.Pedido;
+import br.unitins.topicos1.model.Produto;
 // import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.Status;
 import br.unitins.topicos1.model.StatusDoPedido;
@@ -149,7 +152,7 @@ public class ClienteServiceImpl implements ClienteService {
       }
     }
 
-    int ia = 0;
+    /* int ia = 0;
     int ja = 0;
     for (Pedido pedido : cliente.getListaPedido()) {
       ia++;
@@ -199,7 +202,7 @@ public class ClienteServiceImpl implements ClienteService {
           }
         }
       }
-    } 
+    } */
 
     repository.persist(cliente);
     return ClienteResponseDTO.valueOf(cliente);
@@ -326,7 +329,7 @@ public class ClienteServiceImpl implements ClienteService {
     return ClienteResponseDTO.valueOf(cliente);
   }
 
-  public ClienteResponseDTO insert(ClienteDTO dto) {
+  public ClienteResponseNPDTO insert(ClienteDTO dto) {
     Cliente cliente = new Cliente();
     cliente.setNome(dto.nome());
     cliente.setDataNascimento(
@@ -369,7 +372,7 @@ public class ClienteServiceImpl implements ClienteService {
       }
     }
 
-     if (dto.listaPedido() != null && !dto.listaPedido().isEmpty()) {
+     /* if (dto.listaPedido() != null && !dto.listaPedido().isEmpty()) {
       cliente.setListaPedido(new ArrayList<Pedido>());
 
       for (PedidoDTO pdd : dto.listaPedido()) {
@@ -409,13 +412,13 @@ public class ClienteServiceImpl implements ClienteService {
 
         cliente.getListaPedido().add(pedido);
       }
-    } 
+    } */
 
     repository.persist(cliente);
-    return ClienteResponseDTO.valueOf(cliente);
+    return ClienteResponseNPDTO.valueOf(cliente);
   }
 
-  /* public List<ProdutoResponseDTO> findListaDesejos(Long id) {
+  public List<ProdutoResponseDTO> findListaDesejos(Long id) {
     Cliente cliente = repository.findById(id);
 
     List<ProdutoResponseDTO> lista = new ArrayList<ProdutoResponseDTO>();
@@ -425,7 +428,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     return lista;
-  } */
+  }
 
 
 

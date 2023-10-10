@@ -18,6 +18,7 @@ import br.unitins.topicos1.model.FormaDePagamento;
 import br.unitins.topicos1.model.ItemDaVenda;
 // import br.unitins.topicos1.model.Lote;
 import br.unitins.topicos1.model.Pedido;
+import br.unitins.topicos1.model.Produto;
 // import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.Status;
 import br.unitins.topicos1.model.StatusDoPedido;
@@ -25,6 +26,7 @@ import br.unitins.topicos1.model.StatusDoPedido;
 // import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
+import br.unitins.topicos1.repository.ProdutoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -39,12 +41,15 @@ public class PedidoServiceImpl implements PedidoService {
   @Inject
   PedidoRepository repositoryPedido;
 
+  @Inject
+  ProdutoRepository repositoryProduto;
+
   @Override
   public PedidoResponseDTO insert(PedidoDTO dto, @PathParam("id") Long id) {
     Cliente cliente = repository.findById(id);
     Pedido pedido = new Pedido();
 
-    pedido.setCodigoDeRastreamento(dto.codigoDeRastreamento());
+    //pedido.setCodigoDeRastreamento(dto.codigoDeRastreamento());
     FormaDePagamento pagamento = new FormaDePagamento();
     pagamento.setNome(dto.formaDePagamento().nome());
     pedido.setFormaDePagamento(pagamento);
@@ -66,6 +71,12 @@ public class PedidoServiceImpl implements PedidoService {
       ItemDaVenda item = new ItemDaVenda();
       item.setPreco(idv.preco());
       item.setQuantidade(idv.quantidade());
+      Produto produto = repositoryProduto.findById((Long)idv.idProduto());
+      produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
+      repositoryProduto.persist(produto);
+      item.setProduto(produto);
+      pedido.getItemDaVenda().add(item);
+    }
       /* Produto produto = new Produto();
       produto.setDescricao(idv.produto().descricao());
       produto.setCodigoBarras(idv.produto().codigoBarras());
@@ -118,11 +129,8 @@ public class PedidoServiceImpl implements PedidoService {
           }
           lote.setFornecedor(fornecedor);
           produto.getListaLote().add(lote);
-        }
-      }
-      item.setProduto(produto); */
-      pedido.getItemDaVenda().add(item);
-    }
+        } */
+    
 
     pedido.setStatusDoPedido(new ArrayList<StatusDoPedido>());
     StatusDoPedido status = new StatusDoPedido();
@@ -130,7 +138,6 @@ public class PedidoServiceImpl implements PedidoService {
     status.setStatus(Status.valueOf(0));
     pedido.getStatusDoPedido().add(status);
 
-    cliente.setListaPedido(new ArrayList<Pedido>());
     cliente.getListaPedido().add(pedido);
     repository.persist(cliente);
     return PedidoResponseDTO.valueOf(pedido);

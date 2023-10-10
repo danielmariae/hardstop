@@ -23,10 +23,11 @@ public class Produto extends DefaultEntity {
     private Double valorVenda;
     private Integer quantidade;
 
-    // IMPLEMENTAÇÃO NA PROVA A2:
+    public Produto() {}
+
      @ManyToMany(cascade = CascadeType.ALL)
      @JoinTable(
-         name = "produto_lote",
+         name = "produto_fornecedor",
          joinColumns = @JoinColumn(name = "id_produto"),
          inverseJoinColumns = @JoinColumn(name = "id_lote")
      )
@@ -113,11 +114,5 @@ public class Produto extends DefaultEntity {
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
     }
-    // public List<Lote> getListaLote() {
-    //     return listaLote;
-    // }
-    // public void setListaLote(List<Lote> listaLote) {
-    //     this.listaLote = listaLote;
-    // }
 
 }

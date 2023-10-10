@@ -148,7 +148,7 @@ Funcionario "1" *--> "1" Endereco
 Funcionario "1" *--> "1" Telefone
 Pedido "1" *--> "1" Endereco
 Pedido "1" *--> "*" ItemDaVenda
-ItemDaVenda "1" o--> "1" Produto
+ItemDaVenda "*" o--> "1" Produto
 Cliente "*" --> "*" Produto : ListaDesejos
 Pix  --|> FormaDePagamento
 CartaoDeCredito --|> FormaDePagamento

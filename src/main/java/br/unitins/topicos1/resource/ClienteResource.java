@@ -34,8 +34,7 @@ public class ClienteResource {
   @POST
   @Transactional
   public Response insert(@Valid ClienteDTO dto) {
-    ClienteResponseDTO retorno = service.insert(dto);
-    return Response.status(201).entity(retorno).build();
+    return Response.status(201).entity(service.insert(dto)).build();
   }
 
   @PUT
@@ -104,9 +103,9 @@ public class ClienteResource {
     return Response.ok(service.findByCpf(cpf)).build();
   }
 
- /*  @GET
+ @GET
   @Path("/search/listaDesejos/{id}")
   public Response findListaDesejos(@PathParam("id") Long id) {
     return Response.ok(service.findListaDesejos(id)).build();
-  } */
+  }
 }

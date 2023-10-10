@@ -65,6 +65,7 @@ insert into lote (lote, fornecedor_id) values('f1_p1_lt15', 1);
 insert into itemDaVenda (preco, quantidade, produto_id) values(900.0, 3, 1);
 insert into itemDaVenda (preco, quantidade, produto_id) values(1200.0, 1, 2);
 insert into itemDaVenda (preco, quantidade, produto_id) values(1000.0, 2, 3);
+
 insert into formaDePagamento (nome) values('Cartão de Crédito');
 insert into pedido (codigoDeRastreamento, id_formaDePagamento, id_endereco) values('Der34ewww', 1, 1);
 
