@@ -145,22 +145,13 @@ public class PedidoServiceImpl implements PedidoService {
 
   @Override
   @Transactional
-  public void deletePedidoByCliente(Long idCliente, Long idProduto) {
+  public void deletePedidoByCliente(Long idCliente, Long idPedido) {
     Cliente cliente = repository.findById(idCliente);
-    for (Pedido pedido : cliente.getListaPedido()) {
-      if (pedido.getId() == idProduto) {
-        for (StatusDoPedido status : pedido.getStatusDoPedido()) {
-          repositoryPedido.deleteById(status.getId());
-        }
-        for (ItemDaVenda item : pedido.getItemDaVenda()) {
-          repositoryPedido.deleteById(item.getId());
-        }
-
-        repositoryPedido.deleteById(pedido.getFormaDePagamento().getId());
-        repositoryPedido.deleteById(pedido.getEndereco().getId());
-        repositoryPedido.deleteById(pedido.getId());
-      }
-    }
+    Pedido pedido = repositoryPedido.findById(idPedido);
+    // Primeiro removo o pedido da lista de pedidos do cliente
+    cliente.getListaPedido().remove(pedido);
+    // Depois persito a alteração no banco
+    repositoryPedido.delete(pedido);
   }
 
   @Override
