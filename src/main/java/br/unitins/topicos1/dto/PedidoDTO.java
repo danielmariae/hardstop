@@ -3,7 +3,7 @@ package br.unitins.topicos1.dto;
 import java.util.List;
 
 import br.unitins.topicos1.model.Pedido;
-import jakarta.validation.constraints.NotBlank;
+// import jakarta.validation.constraints.NotBlank;
 
 public record PedidoDTO(
     
