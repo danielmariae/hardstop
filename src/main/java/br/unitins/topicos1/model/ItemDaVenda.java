@@ -1,6 +1,4 @@
 package br.unitins.topicos1.model;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
@@ -12,7 +10,7 @@ public class ItemDaVenda extends DefaultEntity {
     private Integer quantidade;
     private Long idProduto;
 
-@ManyToOne(cascade = CascadeType.ALL)
+@ManyToOne
     private Produto produto;
 
 

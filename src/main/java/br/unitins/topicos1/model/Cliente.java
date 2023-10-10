@@ -52,6 +52,10 @@ public class Cliente extends DefaultEntity {
   )
   private List<Produto> listaProduto;
 
+
+
+
+  
   public List<Produto> getListaProduto() {
     return listaProduto;
   }

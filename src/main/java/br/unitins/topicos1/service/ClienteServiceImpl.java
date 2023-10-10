@@ -76,25 +76,50 @@ public class ClienteServiceImpl implements ClienteService {
   @Override
   @Transactional
   public void delete(Long id) {
-    Cliente clt = repository.findById(id);
+    Cliente cliente = repository.findById(id);
+    
+    
+    /* if(clt.getListaEndereco() != null && !clt.getListaEndereco().isEmpty()) {
     for (Endereco end : clt.getListaEndereco()) {
       repository.deleteById(end.getId());
     }
+  }
+  if(clt.getListaTelefone() != null && !clt.getListaTelefone().isEmpty()) {
     for (Telefone tel : clt.getListaTelefone()) {
       repository.deleteById(tel.getId());
     }
+  }
+   if(clt.getListaPedido() != null && !clt.getListaPedido().isEmpty()) {
     for (Pedido pedido : clt.getListaPedido()) {
+      if(pedido.getStatusDoPedido() != null && !pedido.getStatusDoPedido().isEmpty()) {
       for (StatusDoPedido status : pedido.getStatusDoPedido()) {
         repositoryPedido.deleteById(status.getId());
       }
+    }
+    if(pedido.getItemDaVenda() != null && !pedido.getItemDaVenda().isEmpty()) {
       for (ItemDaVenda item : pedido.getItemDaVenda()) {
         repositoryPedido.deleteById(item.getId());
       }
+    }
       repositoryPedido.deleteById(pedido.getFormaDePagamento().getId());
       repositoryPedido.deleteById(pedido.getEndereco().getId());
+      pedido.setCodigoDeRastreamento(null);
+      repositoryPedido.deleteById(pedido.getId());
       repository.deleteById(pedido.getId());
     }
-    repository.deleteById(id);
+  } */
+
+  if(cliente.getListaProduto() != null && !cliente.getListaProduto().isEmpty()) {
+      for (Produto produto : cliente.getListaProduto()) {
+        repository.deleteById(produto.getId());
+      }
+  }
+
+    // repository.deleteById(clt.getId());
+    repository.delete(cliente);
+    //session.beginTransaction();
+    //delete(session.get(Cliente.class, id));
+    
   }
 
   @Override
