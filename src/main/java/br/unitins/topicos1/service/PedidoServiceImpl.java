@@ -4,10 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 // import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
 // import br.unitins.topicos1.dto.LoteDTO;
@@ -28,7 +24,6 @@ import br.unitins.topicos1.model.StatusDoPedido;
 // import br.unitins.topicos1.model.Telefone;
 // import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
-import br.unitins.topicos1.repository.FornecedorRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
