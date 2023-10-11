@@ -2,6 +2,7 @@ package br.unitins.topicos1.model;
 
 import java.util.List;
 
+import br.unitins.topicos1.TrataErro.CriaPedido;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -13,6 +14,16 @@ import jakarta.persistence.OneToOne;
 public class Pedido extends DefaultEntity {
     private String codigoDeRastreamento;
     private Long idEndereco;
+    private CriaPedido trataErroPedido;
+
+
+    public CriaPedido getTrataErroPedido() {
+        return trataErroPedido;
+    }
+
+    public void setTrataErroPedido(CriaPedido trataErroPedido) {
+        this.trataErroPedido = trataErroPedido;
+    }
 
     public Long getIdEndereco() {
         return idEndereco;

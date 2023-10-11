@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.unitins.topicos1.TrataErro.CriaPedido;
 import br.unitins.topicos1.TrataErro.DeletePedido;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
@@ -43,16 +44,22 @@ public class PedidoServiceImpl implements PedidoService {
 
   @Override
   public PedidoResponseDTO insert(PedidoDTO dto, @PathParam("id") Long id) {
+
+    // Falta validar o id para o cliente.
     Cliente cliente = repository.findById(id);
     Pedido pedido = new Pedido();
+    
 
     //pedido.setCodigoDeRastreamento(dto.codigoDeRastreamento());
     FormaDePagamento pagamento = new FormaDePagamento();
     pagamento.setNome(dto.formaDePagamento().nome());
     pedido.setFormaDePagamento(pagamento);
 
-    // Caso não queira utilizar um endereço já cadastrado no banco de dados do cliente é necessário fixar a variável idEndereco para um valor negativo. Caso contrário, precisa fixar o valor da variável idEndereco com o id de algum endereço válido vinculado ao cliente. 
-    if(dto.idEndereco() < 0) {
+
+    // Verifica se o id fornecido para o endereço de entrega do pedido é nulo
+    if(dto.endereco() != null) {
+    // Caso não queira utilizar um endereço já cadastrado no banco de dados do cliente é necessário fixar a variável idEndereco para um valor abaixo de 1. Caso contrário, precisa fixar o valor da variável idEndereco com o id de algum endereço válido vinculado ao cliente. 
+    if(dto.idEndereco() < 1) {
     Endereco endereco = new Endereco();
     endereco.setNome(dto.endereco().nome());
     endereco.setRua(dto.endereco().rua());
@@ -67,8 +74,20 @@ public class PedidoServiceImpl implements PedidoService {
     pedido.setEndereco(endereco);
     } else {
       Endereco endereco = repositoryEndereco.findById(dto.idEndereco());
+      CriaPedido trataErro = CriaPedido.verificaEnderecoCliente(cliente, endereco);
+      // Retorna true se o dto.idEndereco() é de um endereço que pertença ao cliente.
+      if(trataErro.isCriou()) {
       pedido.setEndereco(endereco);
+      } else {
+        pedido.setTrataErroPedido(trataErro);
+        return PedidoResponseDTO.valueOf(pedido);
+      }
     }
+  } else {
+    CriaPedido trataErro = new CriaPedido(false, "Id do Endereço é nulo!");
+    pedido.setTrataErroPedido(trataErro);
+    return PedidoResponseDTO.valueOf(pedido);
+  }
 
     pedido.setItemDaVenda(new ArrayList<ItemDaVenda>());
     for (ItemDaVendaDTO idv : dto.itemDaVenda()) {
@@ -76,10 +95,16 @@ public class PedidoServiceImpl implements PedidoService {
       item.setPreco(idv.preco());
       item.setQuantidade(idv.quantidade());
       Produto produto = repositoryProduto.findById((Long)idv.idProduto());
-      produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
-      repositoryProduto.persist(produto);
-      item.setProduto(produto);
-      pedido.getItemDaVenda().add(item);
+      CriaPedido trataErro = CriaPedido.temEmEstoque(produto.getQuantidade(), idv.quantidade());
+      if(trataErro.isCriou()) {
+        produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
+        repositoryProduto.persist(produto);
+        item.setProduto(produto);
+        pedido.getItemDaVenda().add(item);
+      } else {
+        pedido.setTrataErroPedido(trataErro);
+        return PedidoResponseDTO.valueOf(pedido);
+      }
     }
       /* Produto produto = new Produto();
       produto.setDescricao(idv.produto().descricao());
@@ -143,7 +168,16 @@ public class PedidoServiceImpl implements PedidoService {
     pedido.getStatusDoPedido().add(status);
 
     cliente.getListaPedido().add(pedido);
-    repository.persist(cliente);
+    try {
+      repository.persist(cliente);
+    } catch (Exception e) {
+      CriaPedido trataErro = new CriaPedido(false, "Erro ao gravar o pedido no banco de dados: " + e.getMessage());
+      pedido.setTrataErroPedido(trataErro);
+      return PedidoResponseDTO.valueOf(pedido);
+    }
+
+    CriaPedido trataErro = new CriaPedido(true, "Pedido realizado com sucesso!");
+    pedido.setTrataErroPedido(trataErro);
     return PedidoResponseDTO.valueOf(pedido);
   }
 
