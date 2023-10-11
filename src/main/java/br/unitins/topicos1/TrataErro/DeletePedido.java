@@ -46,7 +46,7 @@ public class DeletePedido {
         if (chaveDelecao == 0) {
           return new DeletePedido(
             true,
-            "Pedido AGUARDANDO_PAGAMENTO foi excluído com sucesso!"
+            "Pedido AGUARDANDO_PAGAMENTO foi excluído com sucesso! Em caso do pagamento escolhido tiver sido cartão de crédito é necessária comunicação com a financeira para concluir esta operação."
           );
         } else if (chaveDelecao == 1) {
           return new DeletePedido(
