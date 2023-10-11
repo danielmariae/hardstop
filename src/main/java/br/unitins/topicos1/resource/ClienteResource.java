@@ -1,5 +1,6 @@
 package br.unitins.topicos1.resource;
 
+import br.unitins.topicos1.TrataErro.DeleteCliente;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
@@ -77,7 +78,13 @@ public class ClienteResource {
   public Response delete(@PathParam("id") Long id) {
     //service.delete(id);
     //return Response.status(Status.NO_CONTENT).build();
-    return Response.ok(service.delete(id)).build();
+    //return Response.ok(service.delete(id)).build();
+    DeleteCliente deletou = service.delete(id);
+    if(deletou.isDeletou()) {
+      return Response.ok(deletou.getMensagem()).build();
+    } else {
+      return Response.status(Response.Status.FORBIDDEN).entity(deletou.getMensagem()).build();
+    }
   }
 
   @GET

@@ -1,12 +1,12 @@
 package br.unitins.topicos1.service;
 
+import br.unitins.topicos1.TrataErro.DeleteCliente;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.ClienteResponseNPDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
-// import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public interface ClienteService {
   public ClienteDTO updateSenha(ClientePatchSenhaDTO senha);
 
   // Apaga um cliente inteiro
-  public String delete(Long id);
+  public DeleteCliente delete(Long id);
 
   // Encontra um cliente usando seu id
   public ClienteResponseDTO findById(Long id);

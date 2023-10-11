@@ -3,6 +3,7 @@ package br.unitins.topicos1.service;
 import br.unitins.topicos1.Formatadores.ClienteFormatador;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
+import br.unitins.topicos1.TrataErro.DeleteCliente;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
@@ -14,9 +15,7 @@ import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Endereco;
-import br.unitins.topicos1.model.Pedido;
 import br.unitins.topicos1.model.Produto;
-import br.unitins.topicos1.model.StatusDoPedido;
 import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
@@ -67,37 +66,22 @@ public class ClienteServiceImpl implements ClienteService {
   @Override
   @Transactional
   // Método para deletar o cliente junto com todos os seus relacionamentos.
-  public String delete(Long id) {
+  public DeleteCliente delete(Long id) {
 
     try {
       Cliente cliente = repository.findById(id);
-
       cliente.getListaProduto().clear();
 
-    // Todos os pedidos feitos pelo cliente já foram finalizados (Status.getId() == 4)?
-    Integer chaveDelecao = 0;
-    for(Pedido pedido : cliente.getListaPedido()) {
-      for(StatusDoPedido statusPedido : pedido.getStatusDoPedido()) {
-      if(statusPedido.getStatus().getId() == 4) {
-        chaveDelecao++;
+  // podeDeletar verifica se todos os pedidos foram finalizados, retornando true ou false.
+      if(DeleteCliente.podeDeletar(cliente.getListaPedido())) {
+        repository.delete(cliente);
+        return new DeleteCliente(true, "O Cliente foi excluído com sucesso!");
+      } else {
+        return new DeleteCliente(false, "Nada foi excluído porque este cliente possui pedidos ainda não finalizados!");
       }
-    }
-  }
-
-  // Caso a igualdade seja verdadeira, significa que todos os pedidos do cliente foram finalizados. Deste modo poderemos deletar o cliente do banco de dados junto com todos os seus endereços.
-    if(chaveDelecao == cliente.getListaPedido().size()) {
-    repository.delete(cliente);
-    return "Cliente deletado com sucesso.";
-    } else {
-    return "Não poderemos deletar o cliente por enquanto, pois ainda existem pedidos pendentes.";
-    }
     } catch (Exception e) {
-      return "Cliente not Found!";
-    }
-    
-
-
-    
+      return new DeleteCliente(false, "O Cliente não existe: " + e.getMessage());
+    }   
   }
 
   @Override
