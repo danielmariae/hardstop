@@ -25,6 +25,7 @@ import br.unitins.topicos1.model.StatusDoPedido;
 // import br.unitins.topicos1.model.Telefone;
 // import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
+import br.unitins.topicos1.repository.EnderecoRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
 import br.unitins.topicos1.repository.ProdutoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -44,6 +45,9 @@ public class PedidoServiceImpl implements PedidoService {
   @Inject
   ProdutoRepository repositoryProduto;
 
+  @Inject
+  EnderecoRepository repositoryEndereco;
+
   @Override
   public PedidoResponseDTO insert(PedidoDTO dto, @PathParam("id") Long id) {
     Cliente cliente = repository.findById(id);
@@ -53,6 +57,9 @@ public class PedidoServiceImpl implements PedidoService {
     FormaDePagamento pagamento = new FormaDePagamento();
     pagamento.setNome(dto.formaDePagamento().nome());
     pedido.setFormaDePagamento(pagamento);
+
+    // Caso não queira utilizar um endereço já cadastrado no banco de dados do cliente é necessário fixar a variável idEndereco para um valor negativo. Caso contrário, precisa fixar o valor da variável idEndereco com o id de algum endereço válido vinculado ao cliente. 
+    if(dto.idEndereco() < 0) {
     Endereco endereco = new Endereco();
     endereco.setNome(dto.endereco().nome());
     endereco.setRua(dto.endereco().rua());
@@ -65,6 +72,10 @@ public class PedidoServiceImpl implements PedidoService {
     endereco.setEstado(dto.endereco().estado());
     endereco.setPais(dto.endereco().pais());
     pedido.setEndereco(endereco);
+    } else {
+      Endereco endereco = repositoryEndereco.findById(dto.idEndereco());
+      pedido.setEndereco(endereco);
+    }
 
     pedido.setItemDaVenda(new ArrayList<ItemDaVenda>());
     for (ItemDaVendaDTO idv : dto.itemDaVenda()) {
@@ -155,6 +166,7 @@ public class PedidoServiceImpl implements PedidoService {
   }
 
   @Override
+  @Transactional
   public PedidoResponseDTO updateStatusDoPedido(PedidoPatchStatusDTO ppsdto) {
     Pedido pedido = repositoryPedido.findById(ppsdto.idPedido());
 

@@ -28,7 +28,7 @@ public interface ClienteService {
   public ClienteDTO updateSenha(ClientePatchSenhaDTO senha);
 
   // Apaga um cliente inteiro
-  public void delete(Long id);
+  public String delete(Long id);
 
   // Encontra um cliente usando seu id
   public ClienteResponseDTO findById(Long id);

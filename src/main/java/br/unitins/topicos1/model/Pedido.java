@@ -12,6 +12,15 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Pedido extends DefaultEntity {
     private String codigoDeRastreamento;
+    private Long idEndereco;
+
+    public Long getIdEndereco() {
+        return idEndereco;
+    }
+
+    public void setIdEndereco(Long idEndereco) {
+        this.idEndereco = idEndereco;
+    }
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(

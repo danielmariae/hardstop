@@ -75,8 +75,9 @@ public class ClienteResource {
   @Transactional
   @Path("/delete/{id}")
   public Response delete(@PathParam("id") Long id) {
-    service.delete(id);
-    return Response.status(Status.NO_CONTENT).build();
+    //service.delete(id);
+    //return Response.status(Status.NO_CONTENT).build();
+    return Response.ok(service.delete(id)).build();
   }
 
   @GET

@@ -14,7 +14,9 @@ import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Endereco;
+import br.unitins.topicos1.model.Pedido;
 import br.unitins.topicos1.model.Produto;
+import br.unitins.topicos1.model.StatusDoPedido;
 import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
@@ -64,10 +66,38 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Override
   @Transactional
-  public void delete(Long id) {
-    Cliente cliente = repository.findById(id);
-    cliente.getListaProduto().clear();
+  // Método para deletar o cliente junto com todos os seus relacionamentos.
+  public String delete(Long id) {
+
+    try {
+      Cliente cliente = repository.findById(id);
+
+      cliente.getListaProduto().clear();
+
+    // Todos os pedidos feitos pelo cliente já foram finalizados (Status.getId() == 4)?
+    Integer chaveDelecao = 0;
+    for(Pedido pedido : cliente.getListaPedido()) {
+      for(StatusDoPedido statusPedido : pedido.getStatusDoPedido()) {
+      if(statusPedido.getStatus().getId() == 4) {
+        chaveDelecao++;
+      }
+    }
+  }
+
+  // Caso a igualdade seja verdadeira, significa que todos os pedidos do cliente foram finalizados. Deste modo poderemos deletar o cliente do banco de dados junto com todos os seus endereços.
+    if(chaveDelecao == cliente.getListaPedido().size()) {
     repository.delete(cliente);
+    return "Cliente deletado com sucesso.";
+    } else {
+    return "Não poderemos deletar o cliente por enquanto, pois ainda existem pedidos pendentes.";
+    }
+    } catch (Exception e) {
+      return "Cliente not Found!";
+    }
+    
+
+
+    
   }
 
   @Override
