@@ -1,5 +1,6 @@
 package br.unitins.topicos1.resource;
 
+import br.unitins.topicos1.TrataErro.DeletePedido;
 import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
 import br.unitins.topicos1.service.PedidoService;
@@ -16,7 +17,6 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
 
 @Path("/clientes/pedidos")
 @Produces(MediaType.APPLICATION_JSON)
@@ -36,9 +36,13 @@ public class PedidoResource {
   @DELETE
   @Transactional
   @Path("/delete/{id}")
-  public Response deletePedidoByCliente(@PathParam("id") Long id, Long idProduto) {
-    service.deletePedidoByCliente(id, idProduto);
-    return Response.status(Status.NO_CONTENT).build();
+  public Response deletePedidoByCliente(@PathParam("id") Long id, Long idPedido) {
+    DeletePedido deletou = service.deletePedidoByCliente(id, idPedido);
+    if(deletou.isDeletou()) {
+      return Response.ok(deletou.getMensagem()).build();
+    } else {
+      return Response.status(Response.Status.FORBIDDEN).entity(deletou.getMensagem()).build();
+    }
   }
 
   @PATCH

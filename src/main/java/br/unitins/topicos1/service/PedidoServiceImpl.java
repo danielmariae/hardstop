@@ -4,26 +4,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-// import br.unitins.topicos1.dto.EnderecoDTO;
+import br.unitins.topicos1.TrataErro.DeletePedido;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
-// import br.unitins.topicos1.dto.LoteDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
 import br.unitins.topicos1.dto.PedidoResponseDTO;
-// import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.FormaDePagamento;
-// import br.unitins.topicos1.model.Fornecedor;
 import br.unitins.topicos1.model.ItemDaVenda;
-// import br.unitins.topicos1.model.Lote;
 import br.unitins.topicos1.model.Pedido;
 import br.unitins.topicos1.model.Produto;
-// import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.Status;
 import br.unitins.topicos1.model.StatusDoPedido;
-// import br.unitins.topicos1.model.Telefone;
-// import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.EnderecoRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
@@ -156,13 +149,24 @@ public class PedidoServiceImpl implements PedidoService {
 
   @Override
   @Transactional
-  public void deletePedidoByCliente(Long idCliente, Long idPedido) {
+  public DeletePedido deletePedidoByCliente(Long idCliente, Long idPedido) {
     Cliente cliente = repository.findById(idCliente);
     Pedido pedido = repositoryPedido.findById(idPedido);
-    // Primeiro removo o pedido da lista de pedidos do cliente
-    cliente.getListaPedido().remove(pedido);
-    // Depois persito a alteração no banco
-    repositoryPedido.delete(pedido);
+
+    if(pedido != null) {
+      DeletePedido deletaPedido = DeletePedido.podeDeletar(cliente, pedido);
+      if(deletaPedido.isDeletou()) {
+        // Primeiro removo o pedido da lista de pedidos do cliente
+        cliente.getListaPedido().remove(pedido);
+        // Depois persito a alteração no banco
+        repositoryPedido.delete(pedido);
+        return deletaPedido;
+      } else {
+        return deletaPedido;
+      }
+      } else {
+        return new DeletePedido(false, "Este cliente não possui nenhum pedido para excluir!");
+    }
   }
 
   @Override
