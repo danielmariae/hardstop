@@ -1,5 +1,6 @@
 package br.unitins.topicos1.resource;
 
+import br.unitins.topicos1.TrataErro.CriaPedido;
 import br.unitins.topicos1.TrataErro.DeletePedido;
 import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
@@ -30,7 +31,13 @@ public class PedidoResource {
   @Transactional
   @Path("/insert/{id}")
   public Response insert(@Valid PedidoDTO dto, @PathParam("id") Long id) {
-    return Response.status(201).entity(service.insert(dto, id)).build();
+    CriaPedido criapedido = service.insert(dto, id);
+    if(criapedido.isCriou()) {
+      //return Response.ok(criapedido.getPedido()).build();
+      return Response.status(Response.Status.FORBIDDEN).entity(criapedido.getMensagem()).build();
+    } else {
+      return Response.status(Response.Status.FORBIDDEN).entity(criapedido.getMensagem()).build();
+    }
   }
 
   @DELETE

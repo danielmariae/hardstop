@@ -2,28 +2,18 @@ package br.unitins.topicos1.model;
 
 import java.util.List;
 
-import br.unitins.topicos1.TrataErro.CriaPedido;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Pedido extends DefaultEntity {
     private String codigoDeRastreamento;
     private Long idEndereco;
-    private CriaPedido trataErroPedido;
-
-
-    public CriaPedido getTrataErroPedido() {
-        return trataErroPedido;
-    }
-
-    public void setTrataErroPedido(CriaPedido trataErroPedido) {
-        this.trataErroPedido = trataErroPedido;
-    }
 
     public Long getIdEndereco() {
         return idEndereco;
@@ -50,13 +40,25 @@ public class Pedido extends DefaultEntity {
     private List<ItemDaVenda> itemDaVenda;
 
     // Não posso usar CascadeType.REMOVE porque endereço é uma entidade compartilhada com outras várias outras entidades como Cliente, Funcionário, Fornecedor e Logística
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "id_endereco")
     private Endereco endereco;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_formaDepagamento")
     private FormaDePagamento formaDePagamento;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_logistica")
+    private Logistica logistica;
+
+    public Logistica getLogistica() {
+        return logistica;
+    }
+
+    public void setLogistica(Logistica logistica) {
+        this.logistica = logistica;
+    }
 
     public FormaDePagamento getFormaDePagamento() {
         return formaDePagamento;

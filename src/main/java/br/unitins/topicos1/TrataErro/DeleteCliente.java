@@ -33,17 +33,17 @@ public class DeleteCliente {
             return true;
         }
 
-    // Todos os pedidos feitos pelo cliente já foram finalizados (Status.getId() == 4)?    
+    // Todos os pedidos feitos pelo cliente já foram finalizados (Status.getId() == 5) ou tiveram pagamento não autorizado (Status.getId() == 1)? 
         Integer chaveDelecao = 0;
         for(Pedido pedido : listaPedidos) {
             for(StatusDoPedido statusPedido : pedido.getStatusDoPedido()) {
-                if(statusPedido.getStatus().getId() == 5) {
+                if(statusPedido.getStatus().getId() == 5 || statusPedido.getStatus().getId() == 1) {
                     chaveDelecao++;
                 }
             }
         }
 
-  // Caso a igualdade seja verdadeira, significa que todos os pedidos do cliente foram finalizados. Deste modo poderemos deletar o cliente do banco de dados junto com todos os seus endereços.
+  // Caso a igualdade seja verdadeira, significa que todos os pedidos do cliente foram finalizados ou tiverem pagamento não autorizado. Deste modo, poderemos deletar o cliente do banco de dados junto com todos os seus endereços.
         if(chaveDelecao == listaPedidos.size()) {
             return true;
         } else {

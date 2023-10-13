@@ -1,17 +1,37 @@
 package br.unitins.topicos1.TrataErro;
 
+import br.unitins.topicos1.dto.PedidoResponseDTO;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Endereco;
+
 
 public class CriaPedido {
 
     private boolean criou;
     private String mensagem;
+    private PedidoResponseDTO pedido;
+
+    public CriaPedido() {}
 
     public CriaPedido(boolean criou, String mensagem) {
         setCriou(criou);
         setMensagem(mensagem);
     }
+
+    public CriaPedido(boolean criou, String mensagem, PedidoResponseDTO pedido) {
+        setCriou(criou);
+        setMensagem(mensagem);
+        setPedido(pedido);
+    }
+
+    public PedidoResponseDTO getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(PedidoResponseDTO pedido) {
+        this.pedido = pedido;
+    }
+
     public boolean isCriou() {
         return criou;
     }
@@ -48,4 +68,35 @@ public class CriaPedido {
             return new CriaPedido(false, "Não existem produtos em quantidade suficiente no banco de dados! Operação não realizada!");
         }
     }
+
+    public void verificaUsuario1(Long id) {
+
+        if(id == null) {
+            setCriou(false);
+            setMensagem("O id informado é nulo! Operação não realizada!");
+            return;
+        }
+
+        if(id < 1) {
+            setCriou(false);
+            setMensagem("O id informado é menor que 1! Operação não realizada!");
+            return;
+        }
+
+        setCriou(true);
+        setMensagem("O cliente com o id especificado existe no banco de dados.");
+    }
+
+    public void verificaUsuario2(Cliente cliente) {
+
+        if(cliente == null) {
+            setCriou(false);
+            setMensagem("O id informado não corresponde a nenhum cliente no banco de dados! Operação não realizada!");
+            return;
+        } else {
+            setCriou(true);
+            setMensagem("O cliente com o id especificado existe no banco de dados.");
+        }
+    }
+
 }

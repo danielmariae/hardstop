@@ -146,7 +146,7 @@ Cliente "1" *--> "*" Endereco
 Cliente "1" *--> "*" Telefone
 Funcionario "1" *--> "1" Endereco
 Funcionario "1" *--> "1" Telefone
-Pedido "1" *--> "1" Endereco
+Pedido "*" *--> "1" Endereco
 Pedido "1" *--> "*" ItemDaVenda
 ItemDaVenda "*" o--> "1" Produto
 Cliente "*" --> "*" Produto : ListaDesejos
@@ -158,8 +158,8 @@ StatusDoPedido "*" o--> "1" Status
 Telefone "1" o--> "1" TipoTelefone
 Cliente "1" o--> "*" Pedido
 Produto "*" o--> "1" Classificacao
-Pedido "1" *--> "1" FormaDePagamento
-Pedido "1" o--> "1" Logistica
+Pedido "*" *--> "1" FormaDePagamento
+Pedido "*" o--> "1" Logistica
 Produto "*" --> "*" Lote
 Lote "*" *--> "1" Fornecedor
 Logistica "1" *--> "1" Endereco

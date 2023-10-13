@@ -44,10 +44,16 @@ public class DeletePedido {
 
         // Pedidos com status do tipo: AGUARDANDO_PAGAMENTO ou PAGAMENTO_NÃO_AUTORIZADO podem ser deletados
         if (chaveDelecao == 0) {
-          return new DeletePedido(
+
+          //Em caso de compras no cartão de crédito precisa primeiro comunicar a financeira antes de permitir essa deleção! Caso a financeira desfaça a ordem de pagamento, aí essa deleção será permitida. Caso a compra seja na forma de boleto ou pix o pedido poderá ser deletado imediatamente.
+          if(!pedido.getFormaDePagamento().getNome().equals("CREDITO")) {
+            return new DeletePedido(
             true,
             "Pedido AGUARDANDO_PAGAMENTO foi excluído com sucesso! Em caso do pagamento escolhido tiver sido cartão de crédito é necessária comunicação com a financeira para concluir esta operação."
           );
+          } else {
+            //Chama função que comunica a financeira o desfazimento da negociação e aguarda a confirmação da financeira para deletar o pedido.
+          }
         } else if (chaveDelecao == 1) {
           return new DeletePedido(
             true,

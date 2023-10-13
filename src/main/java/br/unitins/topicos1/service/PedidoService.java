@@ -2,6 +2,7 @@ package br.unitins.topicos1.service;
 
 import java.util.List;
 
+import br.unitins.topicos1.TrataErro.CriaPedido;
 import br.unitins.topicos1.TrataErro.DeletePedido;
 import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
@@ -11,7 +12,7 @@ import jakarta.ws.rs.PathParam;
 public interface PedidoService {
 
 // Cria um novo pedido atrelado a um dado cliente
-public PedidoResponseDTO insert(PedidoDTO dto, @PathParam("id") Long id);
+public CriaPedido insert(PedidoDTO dto, @PathParam("id") Long id);
 
 // Apaga todos os pedidos de um determinado cliente
 public DeletePedido deletePedidoByCliente(Long idCliente, Long idPedido);

@@ -10,7 +10,6 @@ public record PedidoDTO(
     
     FormaDePagamentoDTO formaDePagamento,
     List<ItemDaVendaDTO> itemDaVenda,
-    EnderecoDTO endereco,
     Long idEndereco
 ) {
     public static PedidoDTO valueOf(Pedido pdd) {
@@ -22,7 +21,6 @@ public record PedidoDTO(
             .stream()
             .map(i -> ItemDaVendaDTO.valueOf(i))
             .toList(),
-            EnderecoDTO.valueOf(pdd.getEndereco()),
             pdd.getIdEndereco()
         );
     }

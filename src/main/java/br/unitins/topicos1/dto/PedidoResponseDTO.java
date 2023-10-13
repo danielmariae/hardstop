@@ -1,8 +1,6 @@
 package br.unitins.topicos1.dto;
 
 import java.util.List;
-
-import br.unitins.topicos1.TrataErro.CriaPedido;
 import br.unitins.topicos1.model.Pedido;
 
 public record PedidoResponseDTO(
@@ -11,8 +9,7 @@ public record PedidoResponseDTO(
     FormaDePagamentoResponseDTO formaDePagamento,
     List<ItemDaVendaResponseDTO> itemDaVenda,
     EnderecoResponseDTO endereco,
-    List<StatusDoPedidoResponseDTO> statusDoPedido,
-    CriaPedido trataErroPedido
+    List<StatusDoPedidoResponseDTO> statusDoPedido
 ) {
     public static PedidoResponseDTO valueOf(Pedido pdd) {
         return new PedidoResponseDTO(
@@ -29,8 +26,7 @@ public record PedidoResponseDTO(
             .getStatusDoPedido()
             .stream()
             .map(s -> StatusDoPedidoResponseDTO.valueOf(s))
-            .toList(),
-            pdd.getTrataErroPedido()
+            .toList()
         );
     }
 }
