@@ -8,6 +8,7 @@ import br.unitins.topicos1.TrataErro.CriaPedido;
 import br.unitins.topicos1.TrataErro.DeletePedido;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
+import br.unitins.topicos1.dto.PedidoPatchEnderecoDTO;
 import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
 import br.unitins.topicos1.dto.PedidoResponseDTO;
 import br.unitins.topicos1.model.Cliente;
@@ -226,4 +227,43 @@ public class PedidoServiceImpl implements PedidoService {
       .map(p -> PedidoResponseDTO.valueOf(p))
       .toList();
   }
+
+  public CriaPedido updateEndereco(PedidoPatchEnderecoDTO dto, Long id){
+    Cliente cliente = repository.findById(id);
+    Pedido pedido = repositoryPedido.findById(dto.idPedido());
+    CriaPedido cp = new CriaPedido();
+
+    Integer chave = 0;
+    for(Pedido pedidot : cliente.getListaPedido()) {
+      if(pedidot.getId() == pedido.getId()) {
+        chave = 1;
+      }
+    }
+
+    Integer chave2 = 0;
+    pedido.setId(dto.idEndereco());
+    if(chave == 1) {
+      for(Endereco end : cliente.getListaEndereco()) {
+        if(end.getId() == pedido.getEndereco().getId()){
+          chave2 = 1;
+        }
+      }
+    } else {
+      cp.setCriou(false);
+      cp.setMensagem("O pedido em questão não é do Cliente!");
+      return cp;
+    }
+    
+    if(chave2 == 1) {
+      cp.setPedido(PedidoResponseDTO.valueOf(pedido));
+      return cp;
+    } else {
+      cp.setCriou(false);
+      cp.setMensagem("O endereço escolhido não pertence do Cliente!");
+      return cp;
+    }
+  }
+
+
+
 }

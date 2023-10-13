@@ -3,6 +3,7 @@ package br.unitins.topicos1.resource;
 import br.unitins.topicos1.TrataErro.CriaPedido;
 import br.unitins.topicos1.TrataErro.DeletePedido;
 import br.unitins.topicos1.dto.PedidoDTO;
+import br.unitins.topicos1.dto.PedidoPatchEnderecoDTO;
 import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
 import br.unitins.topicos1.service.PedidoService;
 import jakarta.inject.Inject;
@@ -60,6 +61,19 @@ public class PedidoResource {
       .status(200)
       .entity(service.updateStatusDoPedido(ppsdto))
       .build();
+  }
+
+  @PATCH
+  @Transactional
+  @Path("patch/endereco/{id}")
+  public Response updateEndereco(PedidoPatchEnderecoDTO dto, @PathParam("id") Long id) {
+    CriaPedido criapedido = service.updateEndereco(dto, id);
+    if(criapedido.isCriou()) {
+      //return Response.ok(criapedido.getPedido()).build();
+      return Response.status(Response.Status.FORBIDDEN).entity(criapedido.getMensagem()).build();
+    } else {
+      return Response.status(Response.Status.FORBIDDEN).entity(criapedido.getMensagem()).build();
+    }
   }
 
   @GET
