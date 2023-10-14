@@ -67,6 +67,7 @@ insert into itemDaVenda (preco, quantidade, produto_id) values(1200.0, 1, 2);
 insert into itemDaVenda (preco, quantidade, produto_id) values(1000.0, 2, 3);
 
 insert into formaDePagamento (modalidade, nome) values('cartaoDeCredito','Cartão de Crédito');
+insert into cartaodecredito (id, anovalidade, codseguranca, mesvalidade, valorpago, datahorapagamento, numerocartao) values(1, 24, 237, 3, 5900.0, '2023-10-01 16:11:26', '345690872106');
 insert into pedido (codigoDeRastreamento, id_formaDePagamento, id_endereco) values('Der34ewww', 1, 1);
 
 insert into cliente_pedido (id_cliente, id_pedido) values(1,1);
