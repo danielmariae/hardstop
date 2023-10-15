@@ -4,6 +4,7 @@ import br.unitins.topicos1.Formatadores.ClienteFormatador;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.TrataErro.DeleteCliente;
+import br.unitins.topicos1.application.AllocationMemoryException;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
@@ -20,6 +21,8 @@ import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
+import br.unitins.topicos1.repository.RepositoryException;
+import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -321,33 +324,53 @@ public class ClienteServiceImpl implements ClienteService {
     return ClienteResponseDTO.valueOf(cliente);
   }
 
+  @Override
+  @Transactional
   public ClienteResponseNPDTO insert(ClienteDTO dto) {
-    Cliente cliente = new Cliente();
+
+    Cliente cliente = null;
+
+    try {
+      cliente = new Cliente();
+    } catch (Exception e) {
+      throw new AllocationMemoryException("500", "ClienteServiceImpl(insert), não consegui alocarmemória para o novo usuário. Tente novamente mais tarde! " +  e.getCause());
+    }
+
     cliente.setNome(dto.nome());
     cliente.setDataNascimento(
-      ClienteFormatador.validaDataNascimento(dto.dataNascimento())
-    );
+    ClienteFormatador.validaDataNascimento(dto.dataNascimento()));
+    verificaCpf(ClienteFormatador.validaCpf(dto.cpf()));
     cliente.setCpf(ClienteFormatador.validaCpf(dto.cpf()));
     cliente.setSexo(dto.sexo());
+    verificaLogin(dto.login());
     cliente.setLogin(dto.login());
     cliente.setSenha(dto.senha());
     cliente.setEmail(dto.email());
 
     if (dto.listaTelefone() != null && !dto.listaTelefone().isEmpty()) {
-      cliente.setListaTelefone(new ArrayList<Telefone>());
+      try {
+        cliente.setListaTelefone(new ArrayList<Telefone>());
+      } catch (Exception e) {
+        throw new AllocationMemoryException("500", "ClienteServiceImpl(insert), não consegui alocar memória para a lista telefônica do novo usuário. Tente novamente mais tarde! " +  e.getCause());
+      }
+      
       for (TelefoneDTO tel : dto.listaTelefone()) {
         Telefone telefone = new Telefone();
         telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
         telefone.setDdd(tel.ddd());
         telefone.setNumeroTelefone(
-          TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone())
-        );
+        TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
         cliente.getListaTelefone().add(telefone);
       }
     }
 
     if (dto.listaEndereco() != null && !dto.listaEndereco().isEmpty()) {
-      cliente.setListaEndereco(new ArrayList<Endereco>());
+      try {
+        cliente.setListaEndereco(new ArrayList<Endereco>());
+      } catch (Exception e) {
+        throw new AllocationMemoryException("500", "ClienteServiceImpl(insert), não consegui alocar memória para a lista de endereços do novo usuário. Tente novamente mais tarde! " +  e.getCause());
+      }
+      
       for (EnderecoDTO end : dto.listaEndereco()) {
         Endereco endereco = new Endereco();
         endereco.setNome(end.nome());
@@ -406,7 +429,12 @@ public class ClienteServiceImpl implements ClienteService {
       }
     } */
 
-    repository.persist(cliente);
+    try {
+      repository.persist(cliente);
+    } catch (Exception e) {
+      throw new RepositoryException("500", "Em ClienteServiceImpl(insert), não consegui gravar os dados de novo usuário no repositório. Tente novamente mais tarde! " +  e.getCause());
+    }
+    
     return ClienteResponseNPDTO.valueOf(cliente);
   }
 
@@ -421,4 +449,22 @@ public class ClienteServiceImpl implements ClienteService {
 
     return lista;
   }
+
+// Métodos de validação
+
+ private void verificaLogin(String login) {
+  if(repository.findByLogin(login) != null) {
+    throw new ValidationException("login", "Login já existe no sistema. Favor escolher outro.");
+  }
+ }
+
+private void verificaCpf(String cpf) {
+  if(repository.findByCpf(cpf) != null) {
+    throw new ValidationException("cpf", "Este cpf já existe no sistema. Usuário já está cadastrado no sistema.");
+  }
+}
+
+
+
+
 }

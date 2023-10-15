@@ -4,6 +4,8 @@ import br.unitins.topicos1.model.Cliente;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.NoResultException;
+
 import java.util.List;
 
 @ApplicationScoped
@@ -24,4 +26,25 @@ public class ClienteRepository implements PanacheRepository<Cliente> {
     }
     return find("cpf = :cpf", Parameters.with("cpf", cpf)).firstResult();
   }
+
+ public Cliente findByLogin(String login) {
+        try {
+            return find("login = ?1 ", login ).singleResult();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+            return null;
+        }
+        
+    }
+
+    public Cliente findByLoginAndSenha(String login, String senha) {
+        try {
+            return find("login = ?1 AND senha = ?2 ", login, senha).singleResult();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+            return null;
+        }
+        
+    }
+
 }
