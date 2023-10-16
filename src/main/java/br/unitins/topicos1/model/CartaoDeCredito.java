@@ -6,7 +6,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("cartaoDeCredito")
+@DiscriminatorValue("CARTAO_DE_CREDITO")
 public class CartaoDeCredito extends FormaDePagamento{
 
     private String numeroCartao;

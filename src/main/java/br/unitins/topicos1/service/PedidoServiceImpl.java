@@ -15,6 +15,7 @@ import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.FormaDePagamento;
 import br.unitins.topicos1.model.ItemDaVenda;
+import br.unitins.topicos1.model.ModalidadePagamento;
 import br.unitins.topicos1.model.Pedido;
 import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.Status;
@@ -65,7 +66,7 @@ public class PedidoServiceImpl implements PedidoService {
     //pedido.setCodigoDeRastreamento(dto.codigoDeRastreamento());
 
     FormaDePagamento pagamento = new FormaDePagamento();
-    pagamento.setModalidade(dto.formaDePagamento().modalidade());
+    pagamento.setModalidade(ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade()));
     pedido.setFormaDePagamento(pagamento);
 
 

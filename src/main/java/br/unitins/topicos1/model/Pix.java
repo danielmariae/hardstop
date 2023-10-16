@@ -6,7 +6,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("pix")
+@DiscriminatorValue("PIX")
 public class Pix extends FormaDePagamento{
     private String nomeCliente;
     private String nomeRecebedor;

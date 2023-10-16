@@ -1,8 +1,8 @@
 package br.unitins.topicos1.model;
 
 public enum ModalidadePagamento {
-  CARTÃO_DE_CRÉDITO(0, "Aguardando confirmação do pagamento"),
-  BOLETO_BANCÁRIO(1, "Pagamento não autorizado pela financeira"),
+  CARTAO_DE_CREDITO(0, "Aguardando confirmação do pagamento"),
+  BOLETO_BANCARIO(1, "Pagamento não autorizado pela financeira"),
   PIX(2, "Pagamento recebido");
  
 
@@ -30,12 +30,12 @@ public enum ModalidadePagamento {
     this.descricao = descricao;
   }
 
-  public static Status valueOf(Integer id) {
+  public static ModalidadePagamento valueOf(Integer id) {
     if (id == null) return null;
 
-    for (Status status : Status.values()) {
-      if (status.getId() == id) {
-        return status;
+    for (ModalidadePagamento modalidade : ModalidadePagamento.values()) {
+      if (modalidade.getId() == id) {
+        return modalidade;
       }
     }
     return null;
