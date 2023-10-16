@@ -2,9 +2,11 @@ package br.unitins.topicos1.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
+@DiscriminatorValue("boleto")
 public class Boleto extends FormaDePagamento{
     private String nomeBanco;
     private LocalDateTime dataHoraGeracao;

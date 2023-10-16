@@ -65,7 +65,7 @@ public class PedidoServiceImpl implements PedidoService {
     //pedido.setCodigoDeRastreamento(dto.codigoDeRastreamento());
 
     FormaDePagamento pagamento = new FormaDePagamento();
-    pagamento.setNome(dto.formaDePagamento().nome());
+    pagamento.setModalidade(dto.formaDePagamento().modalidade());
     pedido.setFormaDePagamento(pagamento);
 
 

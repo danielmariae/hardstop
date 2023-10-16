@@ -9,14 +9,13 @@ import jakarta.persistence.InheritanceType;
 @Inheritance(strategy=InheritanceType.JOINED)
 @DiscriminatorColumn(name = "modalidade")
 public class FormaDePagamento extends DefaultEntity {
-    private String nome;
+    private String modalidade;
 
-    public String getNome() {
-        return nome;
+    public String getModalidade() {
+        return modalidade;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    
+    public void setModalidade(String modalidade) {
+        this.modalidade = modalidade;
+    } 
 }

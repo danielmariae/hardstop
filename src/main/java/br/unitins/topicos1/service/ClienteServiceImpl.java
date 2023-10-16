@@ -16,6 +16,7 @@ import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Endereco;
+import br.unitins.topicos1.model.Pedido;
 import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
@@ -77,6 +78,9 @@ public class ClienteServiceImpl implements ClienteService {
 
   // podeDeletar verifica se todos os pedidos foram finalizados, retornando true ou false.
       if(DeleteCliente.podeDeletar(cliente.getListaPedido())) {
+        for(Pedido pedido : cliente.getListaPedido()) {
+          repositoryPedido.delete(pedido);
+        }
         repository.delete(cliente);
         return new DeleteCliente(true, "O Cliente foi excluído com sucesso!");
       } else {

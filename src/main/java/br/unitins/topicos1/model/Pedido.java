@@ -44,7 +44,7 @@ public class Pedido extends DefaultEntity {
     @JoinColumn(name = "id_endereco")
     private Endereco endereco;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "id_formaDepagamento")
     private FormaDePagamento formaDePagamento;
 

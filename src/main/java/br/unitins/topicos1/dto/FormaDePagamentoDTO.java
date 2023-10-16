@@ -6,12 +6,11 @@ import jakarta.validation.constraints.NotBlank;
 public record FormaDePagamentoDTO(
     
     @NotBlank(message = "O campo nome não pode ser nulo.")
-    String nome
+    String modalidade
 ) {
     public static FormaDePagamentoDTO valueOf(FormaDePagamento fdp) {
         return new FormaDePagamentoDTO(
-            fdp.getNome()
+            fdp.getModalidade()
         );
     }
-    
 }
