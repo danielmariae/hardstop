@@ -12,7 +12,6 @@ public class Boleto extends FormaDePagamento{
     private LocalDateTime dataHoraGeracao;
     private LocalDateTime dataHoraLimitePag;
     private LocalDateTime dataHoraEfetivadoPagamento;
-    private Double valorPago;
 
     public LocalDateTime getDataHoraEfetivadoPagamento() {
         return dataHoraEfetivadoPagamento;
@@ -42,11 +41,5 @@ public class Boleto extends FormaDePagamento{
     }
     public void setDataHoraLimitePag(LocalDateTime dataHoraLimitePag) {
         this.dataHoraLimitePag = dataHoraLimitePag;
-    }
-    public Double getValorPago() {
-        return valorPago;
-    }
-    public void setValorPago(Double valorPago) {
-        this.valorPago = valorPago;
     }
 }

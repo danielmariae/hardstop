@@ -69,20 +69,44 @@ public class PedidoServiceImpl implements PedidoService {
     Pedido pedido = new Pedido();
     //pedido.setCodigoDeRastreamento(dto.codigoDeRastreamento());
 
-    
+    pedido.setItemDaVenda(new ArrayList<ItemDaVenda>());
+    Double valorCompra = 0.0;
+    for (ItemDaVendaDTO idv : dto.itemDaVenda()) {
+      ItemDaVenda item = new ItemDaVenda();
+      item.setPreco(idv.preco());
+      item.setQuantidade(idv.quantidade());
+      Produto produto = repositoryProduto.findById((Long)idv.idProduto());
+      CriaPedido trataErro = CriaPedido.temEmEstoque(produto.getQuantidade(), idv.quantidade());
+      if(trataErro.isCriou()) {
+        produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
+        try {
+          repositoryProduto.persist(produto);
+        } catch (Exception e) {
+          CriaPedido trataErroPedido = new CriaPedido(false, "Erro ao alterar o produto no banco de dados! " + e.getMessage());
+          return trataErroPedido;
+        }
+        
+        item.setProduto(produto);
+        pedido.getItemDaVenda().add(item);
+        valorCompra = valorCompra + idv.quantidade() * idv.preco();
+      } else {
+        return trataErro;
+      }
+    }
 
     if(dto.formaDePagamento().modalidade() == 0) {
       CartaoDeCredito pagamento = new CartaoDeCredito();
       pagamento.setModalidade(ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade()));
+      pagamento.setValorPago(valorCompra);
       pagamento.setNumeroCartao(dto.formaDePagamento().numeroCartao());
       pagamento.setMesValidade(dto.formaDePagamento().mesValidade());
       pagamento.setAnoValidade(dto.formaDePagamento().anoValidade());
       pagamento.setCodSeguranca(dto.formaDePagamento().codSeguranca());
-      pagamento.setValorPago(dto.formaDePagamento().valorPagoCartao());
       pagamento.setDataHoraPagamento(LocalDateTime.now());
       pedido.setFormaDePagamento(pagamento);
     }else if(dto.formaDePagamento().modalidade() == 1) {
       Boleto pagamento = new Boleto();
+      pagamento.setValorPago(valorCompra);
       pagamento.setModalidade(ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade()));
       pagamento.setNomeBanco(dto.formaDePagamento().nomeBanco());
       pagamento.setDataHoraGeracao(LocalDateTime.now());
@@ -90,15 +114,14 @@ public class PedidoServiceImpl implements PedidoService {
       LocalDateTime limite = pegDateTime.plusDays(15);
       limite = limite.with(LocalTime.of(23,59,59));
       pagamento.setDataHoraLimitePag(limite);
-      pagamento.setValorPago(dto.formaDePagamento().valorPagoBoleto());
       pedido.setFormaDePagamento(pagamento);
     } else if(dto.formaDePagamento().modalidade() == 2) {
       Pix pagamento = new Pix();
       pagamento.setModalidade(ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade()));
+      pagamento.setValorPago(valorCompra);
       pagamento.setNomeCliente(dto.formaDePagamento().nomeCliente());
       pagamento.setNomeRecebedor(dto.formaDePagamento().nomeRecebedor());
       pagamento.setChaveRecebedor(dto.formaDePagamento().chaveRecebedor());
-      pagamento.setValorPago(dto.formaDePagamento().valorPagoPix());
       pagamento.setDataHoraGeracao(LocalDateTime.now());
       pedido.setFormaDePagamento(pagamento);
     } else {
@@ -122,29 +145,6 @@ public class PedidoServiceImpl implements PedidoService {
       CriaPedido trataErro = new CriaPedido(false, "Id do Endereço é nulo ou possui valor menor que 1!");
     return trataErro;
   }
-
-    pedido.setItemDaVenda(new ArrayList<ItemDaVenda>());
-    for (ItemDaVendaDTO idv : dto.itemDaVenda()) {
-      ItemDaVenda item = new ItemDaVenda();
-      item.setPreco(idv.preco());
-      item.setQuantidade(idv.quantidade());
-      Produto produto = repositoryProduto.findById((Long)idv.idProduto());
-      CriaPedido trataErro = CriaPedido.temEmEstoque(produto.getQuantidade(), idv.quantidade());
-      if(trataErro.isCriou()) {
-        produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
-        try {
-          repositoryProduto.persist(produto);
-        } catch (Exception e) {
-          CriaPedido trataErroPedido = new CriaPedido(false, "Erro ao alterar o produto no banco de dados! " + e.getMessage());
-          return trataErroPedido;
-        }
-        
-        item.setProduto(produto);
-        pedido.getItemDaVenda().add(item);
-      } else {
-        return trataErro;
-      }
-    }
 
     pedido.setStatusDoPedido(new ArrayList<StatusDoPedido>());
     StatusDoPedido status = new StatusDoPedido();

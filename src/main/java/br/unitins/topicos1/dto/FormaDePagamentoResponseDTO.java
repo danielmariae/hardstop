@@ -6,13 +6,15 @@ import br.unitins.topicos1.model.ModalidadePagamento;
 
 public record FormaDePagamentoResponseDTO(
     Long id,
-    ModalidadePagamento modalidade
+    ModalidadePagamento modalidade,
+    Double valorPago
     
 ) {
     public static FormaDePagamentoResponseDTO valueOf(FormaDePagamento fdp) {
         return new FormaDePagamentoResponseDTO(
             fdp.getId(),
-            fdp.getModalidade()
+            fdp.getModalidade(),
+            fdp.getValorPago()
         );
     }
     

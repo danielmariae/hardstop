@@ -12,8 +12,18 @@ import jakarta.persistence.InheritanceType;
 @DiscriminatorColumn(name = "forma_de_pagamento")
 public class FormaDePagamento extends DefaultEntity {
 
-     @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.ORDINAL)
     private ModalidadePagamento modalidade;
+
+    Double valorPago;
+
+    public Double getValorPago() {
+        return valorPago;
+    }
+
+    public void setValorPago(Double valorPago) {
+        this.valorPago = valorPago;
+    }
 
     public ModalidadePagamento getModalidade() {
         return modalidade;

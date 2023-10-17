@@ -13,7 +13,6 @@ public class CartaoDeCredito extends FormaDePagamento{
     private Integer mesValidade;
     private Integer anoValidade;
     private Integer codSeguranca;
-    private Double valorPago;
     private LocalDateTime dataHoraPagamento;
     private LocalDateTime dataHoraEfetivadoPagamento;
     
@@ -53,11 +52,4 @@ public class CartaoDeCredito extends FormaDePagamento{
     public void setCodSeguranca(Integer codSeguranca) {
         this.codSeguranca = codSeguranca;
     }
-    public Double getValorPago() {
-        return valorPago;
-    }
-    public void setValorPago(Double valorPago) {
-        this.valorPago = valorPago;
-    }
-    
 }

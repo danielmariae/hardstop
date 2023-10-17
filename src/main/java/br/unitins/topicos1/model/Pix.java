@@ -11,7 +11,6 @@ public class Pix extends FormaDePagamento{
     private String nomeCliente;
     private String nomeRecebedor;
     private String chaveRecebedor;
-    private Double valorPago;
     private LocalDateTime dataHoraGeracao;
     private LocalDateTime dataHoraEfetivadoPagamento;
 
@@ -45,11 +44,4 @@ public class Pix extends FormaDePagamento{
     public void setChaveRecebedor(String chaveRecebedor) {
         this.chaveRecebedor = chaveRecebedor;
     }
-    public Double getValorPago() {
-        return valorPago;
-    }
-    public void setValorPago(Double valorPago) {
-        this.valorPago = valorPago;
-    }
-    
 }

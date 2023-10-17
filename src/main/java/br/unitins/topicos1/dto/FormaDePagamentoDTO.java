@@ -10,15 +10,12 @@ public record FormaDePagamentoDTO(
     Integer mesValidade,
     Integer anoValidade,
     Integer codSeguranca,
-    Double valorPagoCartao,
     // Dados para Boleto
     String nomeBanco,
     LocalDateTime dataHoraLimitePag,
-    Double valorPagoBoleto,
     // Dados para Pix
     String nomeCliente,
     String nomeRecebedor,
-    String chaveRecebedor,
-    Double valorPagoPix
+    String chaveRecebedor
 ) {
     }
