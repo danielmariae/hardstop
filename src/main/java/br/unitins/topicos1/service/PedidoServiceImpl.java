@@ -1,22 +1,26 @@
 package br.unitins.topicos1.service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.unitins.topicos1.TrataErro.CriaPedido;
 import br.unitins.topicos1.TrataErro.DeletePedido;
+import br.unitins.topicos1.application.AllocationMemoryException;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.dto.PedidoPatchEnderecoDTO;
 import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
 import br.unitins.topicos1.dto.PedidoResponseDTO;
+import br.unitins.topicos1.model.Boleto;
+import br.unitins.topicos1.model.CartaoDeCredito;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Endereco;
-import br.unitins.topicos1.model.FormaDePagamento;
 import br.unitins.topicos1.model.ItemDaVenda;
 import br.unitins.topicos1.model.ModalidadePagamento;
 import br.unitins.topicos1.model.Pedido;
+import br.unitins.topicos1.model.Pix;
 import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.Status;
 import br.unitins.topicos1.model.StatusDoPedido;
@@ -65,13 +69,45 @@ public class PedidoServiceImpl implements PedidoService {
     Pedido pedido = new Pedido();
     //pedido.setCodigoDeRastreamento(dto.codigoDeRastreamento());
 
-    FormaDePagamento pagamento = new FormaDePagamento();
-    pagamento.setModalidade(ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade()));
-    pedido.setFormaDePagamento(pagamento);
+    
 
-
+    if(dto.formaDePagamento().modalidade() == 0) {
+      CartaoDeCredito pagamento = new CartaoDeCredito();
+      pagamento.setModalidade(ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade()));
+      pagamento.setNumeroCartao(dto.formaDePagamento().numeroCartao());
+      pagamento.setMesValidade(dto.formaDePagamento().mesValidade());
+      pagamento.setAnoValidade(dto.formaDePagamento().anoValidade());
+      pagamento.setCodSeguranca(dto.formaDePagamento().codSeguranca());
+      pagamento.setValorPago(dto.formaDePagamento().valorPagoCartao());
+      pagamento.setDataHoraPagamento(LocalDateTime.now());
+      pedido.setFormaDePagamento(pagamento);
+    }else if(dto.formaDePagamento().modalidade() == 1) {
+      Boleto pagamento = new Boleto();
+      pagamento.setModalidade(ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade()));
+      pagamento.setNomeBanco(dto.formaDePagamento().nomeBanco());
+      pagamento.setDataHoraGeracao(LocalDateTime.now());
+      LocalDateTime pegDateTime = LocalDateTime.now();
+      LocalDateTime limite = pegDateTime.plusDays(15);
+      limite = limite.with(LocalTime.of(23,59,59));
+      pagamento.setDataHoraLimitePag(limite);
+      pagamento.setValorPago(dto.formaDePagamento().valorPagoBoleto());
+      pedido.setFormaDePagamento(pagamento);
+    } else if(dto.formaDePagamento().modalidade() == 2) {
+      Pix pagamento = new Pix();
+      pagamento.setModalidade(ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade()));
+      pagamento.setNomeCliente(dto.formaDePagamento().nomeCliente());
+      pagamento.setNomeRecebedor(dto.formaDePagamento().nomeRecebedor());
+      pagamento.setChaveRecebedor(dto.formaDePagamento().chaveRecebedor());
+      pagamento.setValorPago(dto.formaDePagamento().valorPagoPix());
+      pagamento.setDataHoraGeracao(LocalDateTime.now());
+      pedido.setFormaDePagamento(pagamento);
+    } else {
+      throw new AllocationMemoryException("Forma de Pagamento", "Essa forma de pagamento não existe!");
+    }
+    
+    
     // Verifica se o id fornecido para o endereço de entrega do pedido é nulo
-    if(dto.idEndereco() != null || dto.idEndereco() < 1) {
+    if(dto.idEndereco() != null || dto.idEndereco() > 1) {
     // Caso não queira utilizar um endereço já cadastrado no banco de dados do cliente é necessário fixar a variável idEndereco para um valor abaixo de 1. Caso contrário, precisa fixar o valor da variável idEndereco com o id de algum endereço válido vinculado ao cliente. 
    
       Endereco endereco = repositoryEndereco.findById(dto.idEndereco());

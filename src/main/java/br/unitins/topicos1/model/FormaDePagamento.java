@@ -9,10 +9,10 @@ import jakarta.persistence.InheritanceType;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
-@DiscriminatorColumn(name = "modalidade")
+@DiscriminatorColumn(name = "forma_de_pagamento")
 public class FormaDePagamento extends DefaultEntity {
 
-    @Enumerated(EnumType.ORDINAL)
+     @Enumerated(EnumType.ORDINAL)
     private ModalidadePagamento modalidade;
 
     public ModalidadePagamento getModalidade() {

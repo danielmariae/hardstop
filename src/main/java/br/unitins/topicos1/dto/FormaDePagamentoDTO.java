@@ -1,16 +1,24 @@
 package br.unitins.topicos1.dto;
 
-import br.unitins.topicos1.model.FormaDePagamento;
-import br.unitins.topicos1.model.ModalidadePagamento;
-import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 public record FormaDePagamentoDTO(
-    
-   Integer modalidade
+    // Modalidade (1 para CartaoDeCredito, 2 para Boleto e 3 para Pix)
+    Integer modalidade,
+    // Dados para Cartao de Credito
+    String numeroCartao,
+    Integer mesValidade,
+    Integer anoValidade,
+    Integer codSeguranca,
+    Double valorPagoCartao,
+    // Dados para Boleto
+    String nomeBanco,
+    LocalDateTime dataHoraLimitePag,
+    Double valorPagoBoleto,
+    // Dados para Pix
+    String nomeCliente,
+    String nomeRecebedor,
+    String chaveRecebedor,
+    Double valorPagoPix
 ) {
-    public static FormaDePagamentoDTO valueOf(FormaDePagamento fdp) {
-        return new FormaDePagamentoDTO(
-            fdp.getModalidade().getId()
-        );
     }
-}

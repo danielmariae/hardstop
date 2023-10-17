@@ -6,14 +6,14 @@ public record ItemDaVendaResponseDTO(
     Long id,
     Double preco,
     Integer quantidade,
-    ProdutoResponseDTO produto
+    String nome
 ) {
     public static ItemDaVendaResponseDTO valueOf(ItemDaVenda idv) {
         return new ItemDaVendaResponseDTO(
             idv.getId(),
             idv.getPreco(),
             idv.getQuantidade(),
-            ProdutoResponseDTO.valueOf(idv.getProduto())
+            idv.getProduto().getNome()
         );
     }
     
