@@ -4,7 +4,7 @@ import br.unitins.topicos1.Formatadores.ClienteFormatador;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.TrataErro.DeleteCliente;
-import br.unitins.topicos1.application.AllocationMemoryException;
+import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
@@ -22,7 +22,6 @@ import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
-import br.unitins.topicos1.repository.RepositoryException;
 import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -337,7 +336,7 @@ public class ClienteServiceImpl implements ClienteService {
     try {
       cliente = new Cliente();
     } catch (Exception e) {
-      throw new AllocationMemoryException("500", "ClienteServiceImpl(insert), não consegui alocarmemória para o novo usuário. Tente novamente mais tarde! " +  e.getCause());
+      throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui alocar memória para o novo Cliente. Tente novamente mais tarde! " +  e.getCause());
     }
 
     cliente.setNome(dto.nome());
@@ -355,7 +354,7 @@ public class ClienteServiceImpl implements ClienteService {
       try {
         cliente.setListaTelefone(new ArrayList<Telefone>());
       } catch (Exception e) {
-        throw new AllocationMemoryException("500", "ClienteServiceImpl(insert), não consegui alocar memória para a lista telefônica do novo usuário. Tente novamente mais tarde! " +  e.getCause());
+        throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui alocar memória para a lista telefônica do novo Cliente. Tente novamente mais tarde! " +  e.getCause());
       }
       
       for (TelefoneDTO tel : dto.listaTelefone()) {
@@ -372,7 +371,7 @@ public class ClienteServiceImpl implements ClienteService {
       try {
         cliente.setListaEndereco(new ArrayList<Endereco>());
       } catch (Exception e) {
-        throw new AllocationMemoryException("500", "ClienteServiceImpl(insert), não consegui alocar memória para a lista de endereços do novo usuário. Tente novamente mais tarde! " +  e.getCause());
+        throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui alocar memória para a lista de endereços do novo Cliente. Tente novamente mais tarde! " +  e.getCause());
       }
       
       for (EnderecoDTO end : dto.listaEndereco()) {
@@ -436,7 +435,7 @@ public class ClienteServiceImpl implements ClienteService {
     try {
       repository.persist(cliente);
     } catch (Exception e) {
-      throw new RepositoryException("500", "Em ClienteServiceImpl(insert), não consegui gravar os dados de novo usuário no repositório. Tente novamente mais tarde! " +  e.getCause());
+      throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui persistir os dados do cliente no repositório " + e.getCause());
     }
     
     return ClienteResponseNPDTO.valueOf(cliente);

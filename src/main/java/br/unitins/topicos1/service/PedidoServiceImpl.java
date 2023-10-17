@@ -7,7 +7,7 @@ import java.util.List;
 
 import br.unitins.topicos1.TrataErro.CriaPedido;
 import br.unitins.topicos1.TrataErro.DeletePedido;
-import br.unitins.topicos1.application.AllocationMemoryException;
+import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.dto.PedidoPatchEnderecoDTO;
@@ -102,7 +102,7 @@ public class PedidoServiceImpl implements PedidoService {
       pagamento.setDataHoraGeracao(LocalDateTime.now());
       pedido.setFormaDePagamento(pagamento);
     } else {
-      throw new AllocationMemoryException("Forma de Pagamento", "Essa forma de pagamento não existe!");
+      throw new GeneralErrorException("400", "Bad Request", "PedidoServiceImpl(insert)", "O id passado como índice de forma de pagamento não existe! Os ids válidos são 0,1 ou 2.");
     }
     
     
