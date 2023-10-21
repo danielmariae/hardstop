@@ -1,7 +1,5 @@
 package br.unitins.topicos1.resource;
 
-import br.unitins.topicos1.TrataErro.CriaPedido;
-import br.unitins.topicos1.TrataErro.DeletePedido;
 import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.dto.PedidoPatchEnderecoDTO;
 import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
@@ -39,12 +37,7 @@ public class PedidoResource {
   @Transactional
   @Path("/delete/{id}")
   public Response deletePedidoByCliente(@PathParam("id") Long id, Long idPedido) {
-    DeletePedido deletou = service.deletePedidoByCliente(id, idPedido);
-    if(deletou.isDeletou()) {
-      return Response.ok(deletou.getMensagem()).build();
-    } else {
-      return Response.status(Response.Status.FORBIDDEN).entity(deletou.getMensagem()).build();
-    }
+    return Response.ok().build();
   }
 
   @PATCH
@@ -61,13 +54,7 @@ public class PedidoResource {
   @Transactional
   @Path("patch/endereco/{id}")
   public Response updateEndereco(PedidoPatchEnderecoDTO dto, @PathParam("id") Long id) {
-    CriaPedido criapedido = service.updateEndereco(dto, id);
-    if(criapedido.isCriou()) {
-      //return Response.ok(criapedido.getPedido()).build();
-      return Response.status(Response.Status.FORBIDDEN).entity(criapedido.getMensagem()).build();
-    } else {
-      return Response.status(Response.Status.FORBIDDEN).entity(criapedido.getMensagem()).build();
-    }
+    return Response.ok(service.updateEndereco(dto, id)).build();
   }
 
   @GET
