@@ -13,7 +13,7 @@ import jakarta.ws.rs.PathParam;
 public interface PedidoService {
 
 // Cria um novo pedido atrelado a um dado cliente
-public CriaPedido insert(PedidoDTO dto, @PathParam("id") Long id);
+public PedidoResponseDTO insert(PedidoDTO dto, @PathParam("id") Long id);
 
 // Apaga todos os pedidos de um determinado cliente
 public DeletePedido deletePedidoByCliente(Long idCliente, Long idPedido);
