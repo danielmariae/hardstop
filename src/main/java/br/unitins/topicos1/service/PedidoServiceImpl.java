@@ -76,21 +76,19 @@ public class PedidoServiceImpl implements PedidoService {
       item.setPreco(idv.preco());
       item.setQuantidade(idv.quantidade());
       Produto produto = repositoryProduto.findById((Long)idv.idProduto());
-      CriaPedido trataErro = CriaPedido.temEmEstoque(produto.getQuantidade(), idv.quantidade());
-      if(trataErro.isCriou()) {
+      if(temEmEstoque(produto.getQuantidade(), idv.quantidade())) {
         produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
         try {
           repositoryProduto.persist(produto);
         } catch (Exception e) {
-          CriaPedido trataErroPedido = new CriaPedido(false, "Erro ao alterar o produto no banco de dados! " + e.getMessage());
-          return trataErroPedido;
+          throw new GeneralErrorException("500", "Server Error", "PedidoServiceImpl(insert)", "Erro ao alterar o produto no banco de dados! " + e.getMessage());
         }
         
         item.setProduto(produto);
         pedido.getItemDaVenda().add(item);
         valorCompra = valorCompra + idv.quantidade() * idv.preco();
       } else {
-        return trataErro;
+        throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "Quantidade de produto indisponível!");
       }
     }
 
@@ -134,16 +132,15 @@ public class PedidoServiceImpl implements PedidoService {
     // Caso não queira utilizar um endereço já cadastrado no banco de dados do cliente é necessário fixar a variável idEndereco para um valor abaixo de 1. Caso contrário, precisa fixar o valor da variável idEndereco com o id de algum endereço válido vinculado ao cliente. 
    
       Endereco endereco = repositoryEndereco.findById(dto.idEndereco());
-      CriaPedido trataErro = CriaPedido.verificaEnderecoCliente(cliente, endereco);
+      
       // Retorna true se o dto.idEndereco() é de um endereço que pertença ao cliente.
-      if(trataErro.isCriou()) { 
+      if(verificaEnderecoCliente(cliente, endereco)) { 
       pedido.setEndereco(endereco);
       } else {
-        return trataErro;
+        throw new GeneralErrorException("400", "Bad Request", "PedidoServiceImpl(insert)", "O id passado como índice de endereço não pertence ao cliente!");
       } 
     } else {
-      CriaPedido trataErro = new CriaPedido(false, "Id do Endereço é nulo ou possui valor menor que 1!");
-    return trataErro;
+      throw new GeneralErrorException("400", "Bad Request", "PedidoServiceImpl(insert)", "id do Endereço é nulo ou possui valor menor que 1!");
   }
 
     pedido.setStatusDoPedido(new ArrayList<StatusDoPedido>());
@@ -246,6 +243,30 @@ public class PedidoServiceImpl implements PedidoService {
       return cp;
     }
   }
+
+  private Boolean verificaEnderecoCliente(Cliente cliente, Endereco endereco) {
+    for (Endereco end : cliente.getListaEndereco()) {
+        // O pedido repassado ao método pertence ao Cliente repassado ao método.
+        if (end.getId() == endereco.getId()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+private Boolean temEmEstoque(Integer num_produtos_banco, Integer num_produtos_pedido) {
+  Integer sub;
+  sub = num_produtos_banco - num_produtos_pedido;
+  // Existem produtos em quantidade adequada no banco
+  if(sub >= 0){
+     
+      return true;
+  // Não existem produtos em quantidade adequada no banco
+  } else {
+     
+      return false;
+  }
+}
 
 
 
