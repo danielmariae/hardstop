@@ -31,7 +31,7 @@ public class PedidoResource {
   @POST
   @Transactional
   @Path("/insert/{id}")
-  public PedidoResponseDTO insert(@Valid PedidoDTO dto, @PathParam("id") Long id) {
+  public Response insert(@Valid PedidoDTO dto, @PathParam("id") Long id) {
     return Response.ok(service.insert(dto, id)).build();
   }
 

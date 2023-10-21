@@ -52,13 +52,13 @@ public class PedidoServiceImpl implements PedidoService {
     
     // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
     if(!verificaUsuario1(id)) {
-      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do usuário é nulo ou tem valor inferior a 1. " + e.getMessage());
+      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do usuário é nulo ou tem valor inferior a 1.");
     }
     
     // Verifica o cliente. Caso o id inexista no banco de dados, o sistema não realiza a operação.
     Cliente cliente = repository.findById(id);
     if(!verificaUsuario2(cliente)) {
-      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do usuário não existe no banco de dados. " + e.getMessage());
+      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do usuário não existe no banco de dados.");
     }
 
     Pedido pedido = new Pedido();
@@ -124,14 +124,14 @@ public class PedidoServiceImpl implements PedidoService {
     
     // Verifica se o id fornecido para o endereço de entrega do pedido é nulo
     if(!verificaEndereco1(id)) {
-      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do endereço é nulo ou tem valor inferior a 1. " + e.getMessage());
+      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do endereço é nulo ou tem valor inferior a 1.");
     }
    
       Endereco endereco = repositoryEndereco.findById(dto.idEndereco());
 
       // Verifica se o id fornecido aponta para um endereço que existe no banco de dados.
       if(!verificaEndereco2(endereco)) {
-        throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do endereço não existe no banco de dados. " + e.getMessage());
+        throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do endereço não existe no banco de dados.");
       }
       
       // Retorna true se o dto.idEndereco() é de um endereço que pertença ao cliente.
