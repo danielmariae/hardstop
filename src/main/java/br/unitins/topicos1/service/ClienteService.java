@@ -1,6 +1,6 @@
 package br.unitins.topicos1.service;
 
-import br.unitins.topicos1.TrataErro.DeleteCliente;
+
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
@@ -28,7 +28,7 @@ public interface ClienteService {
   public ClienteDTO updateSenha(ClientePatchSenhaDTO senha);
 
   // Apaga um cliente inteiro
-  public DeleteCliente delete(Long id);
+  public void delete(Long id);
 
   // Encontra um cliente usando seu id
   public ClienteResponseDTO findById(Long id);

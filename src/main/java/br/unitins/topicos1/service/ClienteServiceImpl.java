@@ -3,7 +3,6 @@ package br.unitins.topicos1.service;
 import br.unitins.topicos1.Formatadores.ClienteFormatador;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
-import br.unitins.topicos1.TrataErro.DeleteCliente;
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
@@ -18,6 +17,7 @@ import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.Pedido;
 import br.unitins.topicos1.model.Produto;
+import br.unitins.topicos1.model.StatusDoPedido;
 import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
@@ -69,25 +69,40 @@ public class ClienteServiceImpl implements ClienteService {
   @Override
   @Transactional
   // Método para deletar o cliente junto com todos os seus relacionamentos.
-  public DeleteCliente delete(Long id) {
+  public void delete(Long id) {
 
-    try {
-      Cliente cliente = repository.findById(id);
-      cliente.getListaProduto().clear();
+// Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+if(!verificaUsuario1(id)) {
+  throw new GeneralErrorException("400", "Bad Resquest", "ClienteServiceImpl(delete)", "id do usuário é nulo ou tem valor inferior a 1.");
+}
+
+// Verifica o cliente. Caso o id inexista no banco de dados, o sistema não realiza a operação.
+Cliente cliente = repository.findById(id);
+if(!verificaUsuario2(cliente)) {
+  throw new GeneralErrorException("400", "Bad Resquest", "ClienteServiceImpl(delete)", "id do usuário não existe no banco de dados.");
+}
+
+// Desconecta o cliente da lista de desejos de produtos.
+cliente.getListaProduto().clear();
 
   // podeDeletar verifica se todos os pedidos foram finalizados, retornando true ou false.
-      if(DeleteCliente.podeDeletar(cliente.getListaPedido())) {
-        for(Pedido pedido : cliente.getListaPedido()) {
-          repositoryPedido.delete(pedido);
-        }
-        repository.delete(cliente);
-        return new DeleteCliente(true, "O Cliente foi excluído com sucesso!");
-      } else {
-        return new DeleteCliente(false, "Nada foi excluído porque este cliente possui pedidos ainda não finalizados!");
+      if(!podeDeletar(cliente.getListaPedido())) {
+        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(delete)", "Nada foi excluído porque este cliente possui pedidos ainda não finalizados!");
       }
-    } catch (Exception e) {
-      return new DeleteCliente(false, "O Cliente não existe: " + e.getMessage());
-    }   
+
+        for(Pedido pedido : cliente.getListaPedido()) {
+          try {
+            repositoryPedido.delete(pedido);
+          } catch (Exception e) {
+            throw new GeneralErrorException("500", "Server Error", "ClienteServiceImpl(delete)", "Erro ao tentar apagar os pedidos deste cliente no banco de dados!");
+          }
+          
+        }
+        try {
+          repository.delete(cliente);
+        } catch (Exception e) {
+          throw new GeneralErrorException("500", "Server Error", "ClienteServiceImpl(delete)", "Erro ao tentar apagar o cliente no banco de dados!");
+        }
   }
 
   @Override
@@ -467,7 +482,51 @@ private void verificaCpf(String cpf) {
   }
 }
 
+ private boolean podeDeletar(List<Pedido> listaPedidos) {
 
+    // Dá permissão para deletar o cliente que nunca fez um pedido
+        if(listaPedidos == null || listaPedidos.isEmpty()) {
+            return true;
+        }
 
+    // Todos os pedidos feitos pelo cliente já foram finalizados (Status.getId() == 5) ou tiveram pagamento não autorizado (Status.getId() == 1)? 
+        Integer chaveDelecao = 0;
+        for(Pedido pedido : listaPedidos) {
+            for(StatusDoPedido statusPedido : pedido.getStatusDoPedido()) {
+                if(statusPedido.getStatus().getId() == 5 || statusPedido.getStatus().getId() == 1) {
+                    chaveDelecao++;
+                }
+            }
+        }
+
+  // Caso a igualdade seja verdadeira, significa que todos os pedidos do cliente foram finalizados ou tiverem pagamento não autorizado. Deste modo, poderemos deletar o cliente do banco de dados junto com todos os seus endereços.
+        if(chaveDelecao == listaPedidos.size()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private Boolean verificaUsuario1(Long id) {
+
+      if(id == null) {
+          return false;
+      }
+    
+      if(id < 1) {
+          return false;
+      }
+    
+      return true;
+    }
+    
+    private Boolean verificaUsuario2(Cliente cliente) {
+    
+      if(cliente == null) {
+          return false;
+      } else {
+          return true;
+      }
+    }
 
 }
