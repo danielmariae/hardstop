@@ -31,14 +31,8 @@ public class PedidoResource {
   @POST
   @Transactional
   @Path("/insert/{id}")
-  public Response insert(@Valid PedidoDTO dto, @PathParam("id") Long id) {
-    CriaPedido criapedido = service.insert(dto, id);
-    if(criapedido.isCriou()) {
-      //return Response.ok(criapedido.getPedido()).build();
-      return Response.status(Response.Status.FORBIDDEN).entity(criapedido.getMensagem()).build();
-    } else {
-      return Response.status(Response.Status.FORBIDDEN).entity(criapedido.getMensagem()).build();
-    }
+  public PedidoResponseDTO insert(@Valid PedidoDTO dto, @PathParam("id") Long id) {
+    return Response.ok(service.insert(dto, id)).build();
   }
 
   @DELETE
