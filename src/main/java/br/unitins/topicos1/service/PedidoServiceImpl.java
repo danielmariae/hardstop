@@ -48,22 +48,17 @@ public class PedidoServiceImpl implements PedidoService {
   EnderecoRepository repositoryEndereco;
 
   @Override
-  public CriaPedido insert(PedidoDTO dto, Long id) {
-
-   
-    CriaPedido trataErroId = new CriaPedido();
+  public PedidoResponseDTO insert(PedidoDTO dto, Long id) {
     
     // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
-    trataErroId.verificaUsuario1(id);
-    if(!trataErroId.isCriou()) {
-      return(trataErroId);
+    if(!verificaUsuario1(id)) {
+      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do usuário é nulo ou tem valor inferior a 1. " + e.getMessage());
     }
     
     // Verifica o cliente. Caso o id inexista no banco de dados, o sistema não realiza a operação.
     Cliente cliente = repository.findById(id);
-    trataErroId.verificaUsuario2(cliente);
-    if(!trataErroId.isCriou()) {
-      return(trataErroId);
+    if(!verificaUsuario2(cliente)) {
+      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do usuário não existe no banco de dados. " + e.getMessage());
     }
 
     Pedido pedido = new Pedido();
@@ -128,10 +123,16 @@ public class PedidoServiceImpl implements PedidoService {
     
     
     // Verifica se o id fornecido para o endereço de entrega do pedido é nulo
-    if(dto.idEndereco() != null || dto.idEndereco() > 1) {
-    // Caso não queira utilizar um endereço já cadastrado no banco de dados do cliente é necessário fixar a variável idEndereco para um valor abaixo de 1. Caso contrário, precisa fixar o valor da variável idEndereco com o id de algum endereço válido vinculado ao cliente. 
+    if(!verificaEndereco1(id)) {
+      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do endereço é nulo ou tem valor inferior a 1. " + e.getMessage());
+    }
    
       Endereco endereco = repositoryEndereco.findById(dto.idEndereco());
+
+      // Verifica se o id fornecido aponta para um endereço que existe no banco de dados.
+      if(!verificaEndereco2(endereco)) {
+        throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do endereço não existe no banco de dados. " + e.getMessage());
+      }
       
       // Retorna true se o dto.idEndereco() é de um endereço que pertença ao cliente.
       if(verificaEnderecoCliente(cliente, endereco)) { 
@@ -139,9 +140,6 @@ public class PedidoServiceImpl implements PedidoService {
       } else {
         throw new GeneralErrorException("400", "Bad Request", "PedidoServiceImpl(insert)", "O id passado como índice de endereço não pertence ao cliente!");
       } 
-    } else {
-      throw new GeneralErrorException("400", "Bad Request", "PedidoServiceImpl(insert)", "id do Endereço é nulo ou possui valor menor que 1!");
-  }
 
     pedido.setStatusDoPedido(new ArrayList<StatusDoPedido>());
     StatusDoPedido status = new StatusDoPedido();
@@ -155,12 +153,10 @@ public class PedidoServiceImpl implements PedidoService {
     try {
       repository.persist(cliente);
     } catch (Exception e) {
-      CriaPedido trataErro = new CriaPedido(false, "Erro ao gravar o pedido no banco de dados! " + e.getMessage());
-      return trataErro;
+    throw new GeneralErrorException("500", "Server error", "PedidoServiceImpl(insert)", "Não consegui gravar o pedido para este cliente no banco de dados!");
     }
 
-    CriaPedido trataErro = new CriaPedido(true, "Pedido realizado com sucesso!");
-    return trataErro;
+    return PedidoResponseDTO.valueOf(pedido);
   }
 
   @Override
@@ -268,6 +264,48 @@ private Boolean temEmEstoque(Integer num_produtos_banco, Integer num_produtos_pe
   }
 }
 
+private Boolean verificaUsuario1(Long id) {
 
+  if(id == null) {
+      return false;
+  }
+
+  if(id < 1) {
+      return false;
+  }
+
+  return true;
+}
+
+private Boolean verificaUsuario2(Cliente cliente) {
+
+  if(cliente == null) {
+      return false;
+  } else {
+      return true;
+  }
+}
+
+private Boolean verificaEndereco1(Long id) {
+
+  if(id == null) {
+      return false;
+  }
+
+  if(id < 1) {
+      return false;
+  }
+
+  return true;
+}
+
+private Boolean verificaEndereco2(Endereco endereco) {
+
+  if(endereco == null) {
+      return false;
+  } else {
+      return true;
+  }
+}
 
 }
