@@ -1,9 +1,5 @@
 package br.unitins.topicos1.service;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.EnderecoResponseDTO;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
@@ -29,6 +25,10 @@ import br.unitins.topicos1.repository.ProdutoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @ApplicationScoped
 public class PedidoServiceImpl implements PedidoService {
@@ -47,16 +47,25 @@ public class PedidoServiceImpl implements PedidoService {
 
   @Override
   public PedidoResponseDTO insert(PedidoDTO dto, Long id) {
-    
     // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
-    if(!verificaUsuario1(id)) {
-      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do usuário é nulo ou tem valor inferior a 1.");
+    if (!verificaUsuario1(id)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(insert)",
+        "id do usuário é nulo ou tem valor inferior a 1."
+      );
     }
-    
+
     // Verifica o cliente. Caso o id inexista no banco de dados, o sistema não realiza a operação.
     Cliente cliente = repository.findById(id);
-    if(!verificaUsuario2(cliente)) {
-      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do usuário não existe no banco de dados.");
+    if (!verificaUsuario2(cliente)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(insert)",
+        "id do usuário não existe no banco de dados."
+      );
     }
 
     Pedido pedido = new Pedido();
@@ -68,26 +77,38 @@ public class PedidoServiceImpl implements PedidoService {
       ItemDaVenda item = new ItemDaVenda();
       item.setPreco(idv.preco());
       item.setQuantidade(idv.quantidade());
-      Produto produto = repositoryProduto.findById((Long)idv.idProduto());
-      if(temEmEstoque(produto.getQuantidade(), idv.quantidade())) {
+      Produto produto = repositoryProduto.findById((Long) idv.idProduto());
+      if (temEmEstoque(produto.getQuantidade(), idv.quantidade())) {
         produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
         try {
           repositoryProduto.persist(produto);
         } catch (Exception e) {
-          throw new GeneralErrorException("500", "Server Error", "PedidoServiceImpl(insert)", "Erro ao alterar o produto no banco de dados! " + e.getMessage());
+          throw new GeneralErrorException(
+            "500",
+            "Server Error",
+            "PedidoServiceImpl(insert)",
+            "Erro ao alterar o produto no banco de dados! " + e.getMessage()
+          );
         }
-        
+
         item.setProduto(produto);
         pedido.getItemDaVenda().add(item);
         valorCompra = valorCompra + idv.quantidade() * idv.preco();
       } else {
-        throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "Quantidade de produto indisponível!");
+        throw new GeneralErrorException(
+          "400",
+          "Bad Resquest",
+          "PedidoServiceImpl(insert)",
+          "Quantidade de produto indisponível!"
+        );
       }
     }
 
-    if(dto.formaDePagamento().modalidade() == 0) {
+    if (dto.formaDePagamento().modalidade() == 0) {
       CartaoDeCredito pagamento = new CartaoDeCredito();
-      pagamento.setModalidade(ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade()));
+      pagamento.setModalidade(
+        ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade())
+      );
       pagamento.setValorPago(valorCompra);
       pagamento.setNumeroCartao(dto.formaDePagamento().numeroCartao());
       pagamento.setMesValidade(dto.formaDePagamento().mesValidade());
@@ -95,20 +116,24 @@ public class PedidoServiceImpl implements PedidoService {
       pagamento.setCodSeguranca(dto.formaDePagamento().codSeguranca());
       pagamento.setDataHoraPagamento(LocalDateTime.now());
       pedido.setFormaDePagamento(pagamento);
-    }else if(dto.formaDePagamento().modalidade() == 1) {
+    } else if (dto.formaDePagamento().modalidade() == 1) {
       Boleto pagamento = new Boleto();
       pagamento.setValorPago(valorCompra);
-      pagamento.setModalidade(ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade()));
+      pagamento.setModalidade(
+        ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade())
+      );
       pagamento.setNomeBanco(dto.formaDePagamento().nomeBanco());
       pagamento.setDataHoraGeracao(LocalDateTime.now());
       LocalDateTime pegDateTime = LocalDateTime.now();
       LocalDateTime limite = pegDateTime.plusDays(15);
-      limite = limite.with(LocalTime.of(23,59,59));
+      limite = limite.with(LocalTime.of(23, 59, 59));
       pagamento.setDataHoraLimitePag(limite);
       pedido.setFormaDePagamento(pagamento);
-    } else if(dto.formaDePagamento().modalidade() == 2) {
+    } else if (dto.formaDePagamento().modalidade() == 2) {
       Pix pagamento = new Pix();
-      pagamento.setModalidade(ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade()));
+      pagamento.setModalidade(
+        ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade())
+      );
       pagamento.setValorPago(valorCompra);
       pagamento.setNomeCliente(dto.formaDePagamento().nomeCliente());
       pagamento.setNomeRecebedor(dto.formaDePagamento().nomeRecebedor());
@@ -116,28 +141,47 @@ public class PedidoServiceImpl implements PedidoService {
       pagamento.setDataHoraGeracao(LocalDateTime.now());
       pedido.setFormaDePagamento(pagamento);
     } else {
-      throw new GeneralErrorException("400", "Bad Request", "PedidoServiceImpl(insert)", "O id passado como índice de forma de pagamento não existe! Os ids válidos são 0,1 ou 2.");
+      throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "PedidoServiceImpl(insert)",
+        "O id passado como índice de forma de pagamento não existe! Os ids válidos são 0,1 ou 2."
+      );
     }
-    
-    
-    // Verifica se o id fornecido para o endereço de entrega do pedido é nulo
-    if(!verificaEndereco1(id)) {
-      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do endereço é nulo ou tem valor inferior a 1.");
-    }
-   
-      Endereco endereco = repositoryEndereco.findById(dto.idEndereco());
 
-      // Verifica se o id fornecido aponta para um endereço que existe no banco de dados.
-      if(!verificaEndereco2(endereco)) {
-        throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(insert)", "id do endereço não existe no banco de dados.");
-      }
-      
-      // Retorna true se o dto.idEndereco() é de um endereço que pertença ao cliente.
-      if(verificaEnderecoCliente(cliente, endereco)) { 
+    // Verifica se o id fornecido para o endereço de entrega do pedido é nulo
+    if (!verificaEndereco1(id)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(insert)",
+        "id do endereço é nulo ou tem valor inferior a 1."
+      );
+    }
+
+    Endereco endereco = repositoryEndereco.findById(dto.idEndereco());
+
+    // Verifica se o id fornecido aponta para um endereço que existe no banco de dados.
+    if (!verificaEndereco2(endereco)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(insert)",
+        "id do endereço não existe no banco de dados."
+      );
+    }
+
+    // Retorna true se o dto.idEndereco() é de um endereço que pertença ao cliente.
+    if (verificaEnderecoCliente(cliente, endereco)) {
       pedido.setEndereco(endereco);
-      } else {
-        throw new GeneralErrorException("400", "Bad Request", "PedidoServiceImpl(insert)", "O id passado como índice de endereço não pertence ao cliente!");
-      } 
+    } else {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "PedidoServiceImpl(insert)",
+        "O id passado como índice de endereço não pertence ao cliente!"
+      );
+    }
 
     pedido.setStatusDoPedido(new ArrayList<StatusDoPedido>());
     StatusDoPedido status = new StatusDoPedido();
@@ -151,7 +195,12 @@ public class PedidoServiceImpl implements PedidoService {
     try {
       repository.persist(cliente);
     } catch (Exception e) {
-    throw new GeneralErrorException("500", "Server error", "PedidoServiceImpl(insert)", "Não consegui gravar o pedido para este cliente no banco de dados!");
+      throw new GeneralErrorException(
+        "500",
+        "Server error",
+        "PedidoServiceImpl(insert)",
+        "Não consegui gravar o pedido para este cliente no banco de dados!"
+      );
     }
 
     return PedidoResponseDTO.valueOf(pedido);
@@ -160,41 +209,70 @@ public class PedidoServiceImpl implements PedidoService {
   @Override
   @Transactional
   public void deletePedidoByCliente(Long idCliente, Long idPedido) {
-
-// Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
-    if(!verificaUsuario1(idCliente)) {
-      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(deletePedidoByCliente)", "id do usuário é nulo ou tem valor inferior a 1.");
+    // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+    if (!verificaUsuario1(idCliente)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(deletePedidoByCliente)",
+        "id do usuário é nulo ou tem valor inferior a 1."
+      );
     }
-    
+
     // Verifica o cliente. Caso o id inexista no banco de dados, o sistema não realiza a operação.
     Cliente cliente = repository.findById(idCliente);
-    if(!verificaUsuario2(cliente)) {
-      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(deletePedidoByCliente)", "id do usuário não existe no banco de dados.");
+    if (!verificaUsuario2(cliente)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(deletePedidoByCliente)",
+        "id do usuário não existe no banco de dados."
+      );
     }
 
     // Verifica o id do pedido. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
-    if(!verificaPedido1(idPedido)) {
-      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(deletePedidoByCliente)", "id do pedido é nulo ou tem valor inferior a 1.");
+    if (!verificaPedido1(idPedido)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(deletePedidoByCliente)",
+        "id do pedido é nulo ou tem valor inferior a 1."
+      );
     }
-    
+
     // Verifica o pedido. Caso o id inexista no banco de dados, o sistema não realiza a operação.
     Pedido pedido = repositoryPedido.findById(idPedido);
-    if(!verificaPedido2(pedido)) {
-      throw new GeneralErrorException("400", "Bad Resquest", "PedidoServiceImpl(deletePedidoByCliente)", "id do pedido não existe no banco de dados.");
+    if (!verificaPedido2(pedido)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(deletePedidoByCliente)",
+        "id do pedido não existe no banco de dados."
+      );
     }
-    
-      if(podeDeletar(cliente, pedido)) {
-        throw new GeneralErrorException("400", "Bad Request", "PedidoServiceImpl(deletePedidoByCliente)", "O pedido não pode ser desfeito!");
-      }
-        // Primeiro removo o pedido da lista de pedidos do cliente
-        cliente.getListaPedido().remove(pedido);
-      
-        try {
-        // Persito a alteração no banco
-        repositoryPedido.delete(pedido);
-        } catch (Exception e) {
-          throw new GeneralErrorException("500", "Server Error", "PedidoServiceImpl(deletePedidoByCliente)", "Não consegui apagar o pedido no banco de dados!");
-        }    
+
+    if (podeDeletar(cliente, pedido)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "PedidoServiceImpl(deletePedidoByCliente)",
+        "O pedido não pode ser desfeito!"
+      );
+    }
+    // Primeiro removo o pedido da lista de pedidos do cliente
+    cliente.getListaPedido().remove(pedido);
+
+    try {
+      // Persito a alteração no banco
+      repositoryPedido.delete(pedido);
+    } catch (Exception e) {
+      throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "PedidoServiceImpl(deletePedidoByCliente)",
+        "Não consegui apagar o pedido no banco de dados!"
+      );
+    }
   }
 
   @Override
@@ -220,175 +298,263 @@ public class PedidoServiceImpl implements PedidoService {
       .toList();
   }
 
-  public EnderecoResponseDTO updateEndereco(PedidoPatchEnderecoDTO dto, Long id){
+  public EnderecoResponseDTO updateEndereco(
+    PedidoPatchEnderecoDTO dto,
+    Long id
+  ) {
+    // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+    if (!verificaUsuario1(id)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(updateEndereco)",
+        "id do usuário é nulo ou tem valor inferior a 1."
+      );
+    }
+
+    // Verifica o cliente. Caso o id inexista no banco de dados, o sistema não realiza a operação.
     Cliente cliente = repository.findById(id);
+    if (!verificaUsuario2(cliente)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(updateEndereco)",
+        "id do usuário não existe no banco de dados."
+      );
+    }
+
+    // Verifica o id do pedido. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+    if (!verificaPedido1(dto.idPedido())) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(updateEndereco)",
+        "id do pedido é nulo ou tem valor inferior a 1."
+      );
+    }
+
+    // Verifica o pedido. Caso o id inexista no banco de dados, o sistema não realiza a operação.
     Pedido pedido = repositoryPedido.findById(dto.idPedido());
-
-    Integer chave = 0;
-    for(Pedido pedidot : cliente.getListaPedido()) {
-      if(pedidot.getId() == pedido.getId()) {
-        chave = 1;
-      }
+    if (!verificaPedido2(pedido)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(updateEndereco)",
+        "id do pedido não existe no banco de dados."
+      );
     }
 
-    Integer chave2 = 0;
-    if(chave == 1) {
-      for(Endereco end : cliente.getListaEndereco()) {
-        if(end.getId() == dto.idEndereco()){
-          chave2 = 1;
-        }
-      }
-    } else {
-      throw new GeneralErrorException("400", "Bad Request", "PedidoServiceImpl(insert)", "O pedido em questão não é do Cliente!");
+    // Verifica se o pedido pertence ao cliente. Caso o pedido não pertença ao cliente, o sistema não realiza a operação.
+    if (!verificaPedido3(cliente, pedido)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(updateEndereco)",
+        "Este pedido não pertence a este cliente."
+      );
     }
-    
-    if(chave2 == 1) {
-      pedido.setEndereco(repositoryEndereco.findById(dto.idEndereco()));
+
+    // Verifica se o endereço pertence ao cliente. Caso o endereço não pertença ao cliente, o sistema não realiza a operação.
+    if (!verificaEndereco3(cliente, dto.idEndereco())) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(updateEndereco)",
+        "O novo endereço não pertence a este cliente."
+      );
+    }
+
+    // Verifica se o endereço pode ser alterado de acordo com o status do pedido.
+    if (!podeTrocarEndereco(pedido)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(updateEndereco)",
+        "O pedido não pode ter seu endereço alterado porque já foi entregue a transportadora ou teve seu pagamento recusado."
+      );
+    }
+
+    pedido.setEndereco(repositoryEndereco.findById(dto.idEndereco()));
+
+    try {
       repositoryPedido.persist(pedido);
-      return EnderecoResponseDTO.valueOf(pedido.getEndereco());
-    } else {
-      throw new GeneralErrorException("400", "Bad Request", "PedidoServiceImpl(insert)", "O endereço escolhido não pertence do Cliente!");
+    } catch (Exception e) {
+      throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "PedidoServiceImpl(updateEndereco)",
+        "O pedido não pôde ser persistido no banco de dados."
+      );
     }
+    return EnderecoResponseDTO.valueOf(pedido.getEndereco());
   }
 
   private Boolean verificaEnderecoCliente(Cliente cliente, Endereco endereco) {
     for (Endereco end : cliente.getListaEndereco()) {
-        // O pedido repassado ao método pertence ao Cliente repassado ao método.
-        if (end.getId() == endereco.getId()) {
-            return true;
-        }
+      // O pedido repassado ao método pertence ao Cliente repassado ao método.
+      if (end.getId() == endereco.getId()) {
+        return true;
+      }
     }
     return false;
-}
+  }
 
-private Boolean temEmEstoque(Integer num_produtos_banco, Integer num_produtos_pedido) {
-  Integer sub;
-  sub = num_produtos_banco - num_produtos_pedido;
-  // Existem produtos em quantidade adequada no banco
-  if(sub >= 0){
-     
+  private Boolean temEmEstoque(
+    Integer num_produtos_banco,
+    Integer num_produtos_pedido
+  ) {
+    Integer sub;
+    sub = num_produtos_banco - num_produtos_pedido;
+    // Existem produtos em quantidade adequada no banco
+    if (sub >= 0) {
       return true;
-  // Não existem produtos em quantidade adequada no banco
-  } else {
-     
+      // Não existem produtos em quantidade adequada no banco
+    } else {
       return false;
-  }
-}
-
-private Boolean verificaUsuario1(Long id) {
-
-  if(id == null) {
-      return false;
+    }
   }
 
-  if(id < 1) {
+  private Boolean verificaUsuario1(Long id) {
+    if (id == null) {
       return false;
+    }
+
+    if (id < 1) {
+      return false;
+    }
+
+    return true;
   }
 
-  return true;
-}
-
-private Boolean verificaUsuario2(Cliente cliente) {
-
-  if(cliente == null) {
+  private Boolean verificaUsuario2(Cliente cliente) {
+    if (cliente == null) {
       return false;
-  } else {
+    } else {
       return true;
-  }
-}
-
-private Boolean verificaEndereco1(Long id) {
-
-  if(id == null) {
-      return false;
+    }
   }
 
-  if(id < 1) {
+  private Boolean verificaEndereco1(Long id) {
+    if (id == null) {
       return false;
+    }
+
+    if (id < 1) {
+      return false;
+    }
+
+    return true;
   }
 
-  return true;
-}
-
-private Boolean verificaEndereco2(Endereco endereco) {
-
-  if(endereco == null) {
+  private Boolean verificaEndereco2(Endereco endereco) {
+    if (endereco == null) {
       return false;
-  } else {
+    } else {
       return true;
-  }
-}
-
-private Boolean verificaPedido1(Long id) {
-
-  if(id == null) {
-      return false;
+    }
   }
 
-  if(id < 1) {
-      return false;
-  }
-
-  return true;
-}
-
-private Boolean verificaPedido2(Pedido pedido) {
-
-  if(pedido == null) {
-      return false;
-  } else {
-      return true;
-  }
-}
-
-
-
-private Boolean podeDeletar(Cliente cliente, Pedido pedido) {
-  for (Pedido pedidoteste : cliente.getListaPedido()) {
-    // O pedido repassado ao método pertence ao Cliente repassado ao método.
-    if (pedidoteste.getId() == pedido.getId()) {
-      // Coletando o Status de número mais elevado neste pedido
-      Integer chaveDelecao = 0;
-      for (StatusDoPedido statusPedido : pedido.getStatusDoPedido()) {
-        if (chaveDelecao < statusPedido.getStatus().getId()) {
-          chaveDelecao = statusPedido.getStatus().getId();
-        }
-      }
-
-      // Pedidos com status do tipo: AGUARDANDO_PAGAMENTO ou PAGAMENTO_NÃO_AUTORIZADO podem ser deletados
-      if (chaveDelecao == 0) {
-
-        //Em caso de compras no cartão de crédito precisa primeiro comunicar a financeira antes de permitir essa deleção! Caso a financeira desfaça a ordem de pagamento, aí essa deleção será permitida. Caso a compra seja na forma de boleto ou pix o pedido poderá ser deletado imediatamente.
-        if(pedido.getFormaDePagamento().getModalidade().getId() != 0) {
-          // Pedido AGUARDANDO_PAGAMENTO foi excluído com sucesso! Em caso do pagamento escolhido tiver sido cartão de crédito é necessária comunicação com a financeira para concluir esta operação.
-          return true;
-        
-        } else {
-          // IMPORTANTE!!!!! Chama função que comunica a financeira o desfazimento da negociação e aguarda a confirmação da financeira para deletar o pedido.
-          return true;
-      
-        }
-      } else if (chaveDelecao == 1) {
-        // Pedido PAGAMENTO_NÃO_AUTORIZADO foi excluído com sucesso!
+  private Boolean verificaEndereco3(Cliente cliente, Long idEndereco) {
+    for (Endereco end : cliente.getListaEndereco()) {
+      if (end.getId() == idEndereco) {
         return true;
-          
-        // Pedidos com status do tipo: PAGO, SEPARADO_DO_ESTOQUE, ENTREGUE_A_TRANSPORTADORA e ENTREGUE não podem ser deletados
-      } else if (chaveDelecao == 2) {
-        return false;
-      } else if (chaveDelecao == 3) {
-        return false;
-      } else if (chaveDelecao == 4) {
-        return false;
-      } else if (chaveDelecao == 5) {
-        return false;
       }
-    } 
+    }
+    return false;
   }
-  // O pedido repassado ao método não pertence ao Cliente repassado ao método.
-  return false;
-}
 
+  private Boolean verificaPedido1(Long id) {
+    if (id == null) {
+      return false;
+    }
 
+    if (id < 1) {
+      return false;
+    }
 
+    return true;
+  }
 
+  private Boolean verificaPedido2(Pedido pedido) {
+    if (pedido == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private Boolean verificaPedido3(Cliente cliente, Pedido pedido) {
+    for (Pedido pedidoteste : cliente.getListaPedido()) {
+      // O pedido repassado ao método pertence ao Cliente repassado ao método.
+      if (pedidoteste.getId() == pedido.getId()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private Boolean podeTrocarEndereco(Pedido pedido) {
+    // Coletando o Status de número mais elevado neste pedido
+    Integer status = 0;
+    for (StatusDoPedido statusPedido : pedido.getStatusDoPedido()) {
+      if (status < statusPedido.getStatus().getId()) {
+        status = statusPedido.getStatus().getId();
+      }
+    }
+    // Pedidos com status do tipo: AGUARDANDO_PAGAMENTO (0), PAGO (2), SEPARADO_DO_ESTOQUE (3), podem ter seus endereços mudados. Pedidos com status do tipo: ENTREGUE_A_TRANSPORTADORA (4) e ENTREGUE (5) não podem ter seus endereços mudados.
+    if (status == 0) {
+      return true;
+    } else if (status == 2) {
+      return true;
+    } else if (status == 3) {
+      return true;
+    } else if (status == 4) {
+      return false;
+    } else if (status == 5) {
+      return false;
+    }
+    // Pedido com status do tipo: PAGAMENTO_NÃO_AUTORIZADO (1) não podem ter seu endereço alterado. Pedidos com outros status, não existentes no ENUM do sistema, não podem ter seus endereços alterados.
+    return false;
+  }
+
+  private Boolean podeDeletar(Cliente cliente, Pedido pedido) {
+    for (Pedido pedidoteste : cliente.getListaPedido()) {
+      // O pedido repassado ao método pertence ao Cliente repassado ao método.
+      if (pedidoteste.getId() == pedido.getId()) {
+        // Coletando o Status de número mais elevado neste pedido
+        Integer chaveDelecao = 0;
+        for (StatusDoPedido statusPedido : pedido.getStatusDoPedido()) {
+          if (chaveDelecao < statusPedido.getStatus().getId()) {
+            chaveDelecao = statusPedido.getStatus().getId();
+          }
+        }
+
+        // Pedidos com status do tipo: AGUARDANDO_PAGAMENTO ou PAGAMENTO_NÃO_AUTORIZADO podem ser deletados
+        if (chaveDelecao == 0) {
+          //Em caso de compras no cartão de crédito precisa primeiro comunicar a financeira antes de permitir essa deleção! Caso a financeira desfaça a ordem de pagamento, aí essa deleção será permitida. Caso a compra seja na forma de boleto ou pix o pedido poderá ser deletado imediatamente.
+          if (pedido.getFormaDePagamento().getModalidade().getId() != 0) {
+            // Pedido AGUARDANDO_PAGAMENTO foi excluído com sucesso! Em caso do pagamento escolhido tiver sido cartão de crédito é necessária comunicação com a financeira para concluir esta operação.
+            return true;
+          } else {
+            // IMPORTANTE!!!!! Chama função que comunica a financeira o desfazimento da negociação e aguarda a confirmação da financeira para deletar o pedido.
+            return true;
+          }
+        } else if (chaveDelecao == 1) {
+          // Pedido PAGAMENTO_NÃO_AUTORIZADO foi excluído com sucesso!
+          return true;
+          // Pedidos com status do tipo: PAGO, SEPARADO_DO_ESTOQUE, ENTREGUE_A_TRANSPORTADORA e ENTREGUE não podem ser deletados
+        } else if (chaveDelecao == 2) {
+          return false;
+        } else if (chaveDelecao == 3) {
+          return false;
+        } else if (chaveDelecao == 4) {
+          return false;
+        } else if (chaveDelecao == 5) {
+          return false;
+        }
+      }
+    }
+    // O pedido repassado ao método não pertence ao Cliente repassado ao método.
+    return false;
+  }
 }
