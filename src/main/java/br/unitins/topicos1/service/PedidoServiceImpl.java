@@ -234,7 +234,7 @@ public class PedidoServiceImpl implements PedidoService {
     Integer chave2 = 0;
     if(chave == 1) {
       for(Endereco end : cliente.getListaEndereco()) {
-        if(end.getId() == pedido.getEndereco().getId()){
+        if(end.getId() == dto.idEndereco()){
           chave2 = 1;
         }
       }
@@ -243,7 +243,8 @@ public class PedidoServiceImpl implements PedidoService {
     }
     
     if(chave2 == 1) {
-      pedido.getEndereco().setId(dto.idEndereco());
+      pedido.setEndereco(repositoryEndereco.findById(dto.idEndereco()));
+      repositoryPedido.persist(pedido);
       return EnderecoResponseDTO.valueOf(pedido.getEndereco());
     } else {
       throw new GeneralErrorException("400", "Bad Request", "PedidoServiceImpl(insert)", "O endereço escolhido não pertence do Cliente!");

@@ -98,5 +98,4 @@ public class Endereco extends DefaultEntity {
   public void setPais(String pais) {
     this.pais = pais;
   }
-
 }
