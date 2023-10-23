@@ -29,10 +29,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-/* import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.PersistenceUnit; */
+import jakarta.persistence.PersistenceUnit;
 
 
 
@@ -52,8 +52,8 @@ public class PedidoServiceImpl implements PedidoService {
   EnderecoRepository repositoryEndereco;
 
   
-  /* @PersistenceUnit
-  EntityManagerFactory emf; */
+  @PersistenceUnit
+  EntityManagerFactory emf;
   
   
   @Override
@@ -119,32 +119,35 @@ public class PedidoServiceImpl implements PedidoService {
       );
       }
         
-      /* EntityManager em = emf.createEntityManager();
+      EntityManager em = emf.createEntityManager();
       EntityTransaction transaction = em.getTransaction();
 
       try {
         transaction.begin();
 
-        // Defina o valor da variável quantidade_a_subtrair antes da operação de atualização
-    String sql = "SELECT atualizar_quantidade_produto(:produtoId, :quantidadeSubtrair)";
+        // Chamando um PROCEDURE que foi criado no PostgreSQL na mão
+        String sql = "CALL atualizar_quantidade_produto(:produtoid, :quantidadesubtrair)";
 
         em.createNativeQuery(sql)
-            .setParameter("produtoId", idv.idProduto()) 
-            .setParameter("quantidadeSubtrair", idv.quantidade()) 
+            .setParameter("produtoid", idv.idProduto()) 
+            .setParameter("quantidadesubtrair", idv.quantidade()) 
             .executeUpdate();
-
         transaction.commit();
     } catch (Exception e) {
         if (transaction != null && transaction.isActive()) {
             transaction.rollback();
-            // Capture a exceção aqui se NEW.quantidade < 0
-            System.err.println("Erro: " + e.getMessage());
+            // Capture a exceção aqui
+            throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(insert)",
+        "Não consegui gravar no banco. " +  e.getMessage());
         }
     } finally {
         em.close();
-    } */
+    }
 
-        produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
+        /*  produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
         try {
           repositoryProduto.persist(produto);
         } catch (Exception e) {
@@ -154,7 +157,7 @@ public class PedidoServiceImpl implements PedidoService {
             "PedidoServiceImpl(insert)",
             "Erro ao alterar o produto no banco de dados! " + e.getMessage()
           );
-        } 
+        } */
       
 
       item.setProduto(produto);
