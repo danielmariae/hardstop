@@ -5,6 +5,28 @@
 -- insert into myentity (id, field) values(3, 'field-3');
 -- alter sequence myentity_seq restart with 4;
 
+/* CREATE OR REPLACE FUNCTION public.atualizar_quantidade_produto(produto_id INT, quantidade_subtrair INT)
+RETURNS VOID
+LANGUAGE 'plpgsql'
+AS $atualizar_quantidade_produto$
+BEGIN
+    DECLARE quant INT;
+    SET quant = (SELECT quantidade - quantidade_subtrair FROM produto WHERE id = produto_id);
+    IF quant >=0 THEN
+    UPDATE produto SET quantidade = quantidade - quantidade_subtrair WHERE id = produto_id;
+    ELSE
+    RAISE EXCEPTION 'A quantidade resultante é negativa';
+    END IF;
+END;
+$atualizar_quantidade_produto$
+
+
+-- Cria a trigger que usa a função e define o argumento (quantidade_a_subtrair)
+CREATE OR REPLACE TRIGGER subtrair_estoque
+    BEFORE UPDATE OF quantidade
+    ON public.produto
+    FOR EACH ROW
+    EXECUTE FUNCTION public.atualizar_quantidade_produto(produto_id, quantidade_subtrair); */
 
 insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municipio, estado, pais) values('Katia de Ruim', 'Barão de Cotegipe', '15', 's/l', 'Sul', 'Perto da igreja Assembléia', '64532098', 'Rialma', 'Goiás', 'Brasil');
 
