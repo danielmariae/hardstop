@@ -45,4 +45,7 @@ public interface ClienteService {
   // Retorna a lista de desejos de um dado usuário
   public List<ProdutoResponseDTO> findListaDesejos(Long id);
 
+  //Autenticação de usuário
+  public ClienteResponseDTO findByLoginAndSenha(String login, String senha);
+
 }

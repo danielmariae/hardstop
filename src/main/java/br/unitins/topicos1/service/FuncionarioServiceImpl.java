@@ -14,6 +14,7 @@ import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.FuncionarioRepository;
+import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -223,6 +224,14 @@ public class FuncionarioServiceImpl implements FuncionarioService {
   
     repository.persist(funcionario);
     return FuncionarioDTO.valueOf(funcionario);
+  }
+
+  public FuncionarioResponseDTO findByLoginAndSenha(String login, String senha) {
+    Funcionario funcionario = repository.findByLoginAndSenha(login, senha);
+    if(funcionario == null) {
+      throw new ValidationException("Login", "Login e/ou Senha incorretos");
+    }
+    return FuncionarioResponseDTO.valueOf(funcionario);
   }
 }
 

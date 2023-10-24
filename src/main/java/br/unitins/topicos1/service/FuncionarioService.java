@@ -1,13 +1,11 @@
 package br.unitins.topicos1.service;
 
 
-
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioPatchSenhaDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
-
 import java.util.List;
 
 
@@ -42,4 +40,7 @@ public interface FuncionarioService {
 
   // Retorna uma lista com os dados de todos os funcionários
   public List<FuncionarioResponseDTO> findByAll();
+
+  //Autenticação de usuário
+  public FuncionarioResponseDTO findByLoginAndSenha(String login, String senha);
 }

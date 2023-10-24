@@ -4,6 +4,8 @@ import br.unitins.topicos1.model.Funcionario;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.NoResultException;
+
 import java.util.List;
 
 @ApplicationScoped
@@ -24,5 +26,25 @@ public class FuncionarioRepository implements PanacheRepository<Funcionario> {
     }
     return find("cpf = :cpf", Parameters.with("cpf", cpf)).firstResult();
   }
+
+  public Funcionario findByLogin(String login) {
+        try {
+            return find("login = ?1 ", login ).singleResult();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+            return null;
+        }
+        
+    }
+
+    public Funcionario findByLoginAndSenha(String login, String senha) {
+        try {
+            return find("login = ?1 AND senha = ?2 ", login, senha).singleResult();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+            return null;
+        }
+        
+    }
 }
 

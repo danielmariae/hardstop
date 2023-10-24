@@ -529,4 +529,16 @@ private void verificaCpf(String cpf) {
       }
     }
 
+    @Override
+    public ClienteResponseDTO findByLoginAndSenha(String login, String senha) {
+      Cliente cliente = repository.findByLoginAndSenha(login, senha);
+      if(!verificaUsuario2(cliente)) {
+        throw new ValidationException("login", "Login ou senha inválido");
+      }
+      return ClienteResponseDTO.valueOf(cliente);
+    }
+
+
+
+
 }
