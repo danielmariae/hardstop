@@ -26,12 +26,14 @@ ClienteService serviceC;
 FuncionarioService serviceF;
 
 @POST
+@Path("cliente/")
 public Response loginC(@Valid LoginDTO dto) {
     ClienteResponseDTO result = serviceC.findByLoginAndSenha(dto.login(), dto.senha());
     return Response.ok().entity(result).build();
 }
 
 @POST
+@Path("funcionario/")
 public Response loginF(@Valid LoginDTO dto) {
     FuncionarioResponseDTO result = serviceF.findByLoginAndSenha(dto.login(), dto.senha());
     return Response.ok().entity(result).build();
