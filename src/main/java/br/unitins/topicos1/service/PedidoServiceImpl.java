@@ -24,17 +24,16 @@ import br.unitins.topicos1.repository.PedidoRepository;
 import br.unitins.topicos1.repository.ProdutoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.PersistenceUnit;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.PersistenceUnit;
-
-
 
 @ApplicationScoped
 public class PedidoServiceImpl implements PedidoService {
@@ -51,11 +50,9 @@ public class PedidoServiceImpl implements PedidoService {
   @Inject
   EnderecoRepository repositoryEndereco;
 
-  
   @PersistenceUnit
   EntityManagerFactory emf;
-  
-  
+
   @Override
   public PedidoResponseDTO insert(PedidoDTO dto, Long id) {
     // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
@@ -90,79 +87,88 @@ public class PedidoServiceImpl implements PedidoService {
       item.setQuantidade(idv.quantidade());
 
       // Verifica o id do prduto. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
-    if (!verificaProduto1(idv.idProduto())) {
-      throw new GeneralErrorException(
-        "400",
-        "Bad Resquest",
-        "PedidoServiceImpl(insert)",
-        "id do produto é nulo ou tem valor inferior a 1."
-      );
-    }
+      if (!verificaProduto1(idv.idProduto())) {
+        throw new GeneralErrorException(
+          "400",
+          "Bad Resquest",
+          "PedidoServiceImpl(insert)",
+          "id do produto é nulo ou tem valor inferior a 1."
+        );
+      }
 
-    // Verifica o pedido. Caso o id inexista no banco de dados, o sistema não realiza a operação.
-    Produto produto = repositoryProduto.findById(idv.idProduto());
-    if (!verificaProduto2(produto)) {
-      throw new GeneralErrorException(
-        "400",
-        "Bad Resquest",
-        "PedidoServiceImpl(insert)",
-        "id do produto não existe no banco de dados."
-      );
-    }
+      // Verifica o pedido. Caso o id inexista no banco de dados, o sistema não realiza a operação.
+      Produto produto = repositoryProduto.findById(idv.idProduto());
+      if (!verificaProduto2(produto)) {
+        throw new GeneralErrorException(
+          "400",
+          "Bad Resquest",
+          "PedidoServiceImpl(insert)",
+          "id do produto não existe no banco de dados."
+        );
+      }
 
       if (!temEmEstoque(produto.getQuantidade(), idv.quantidade())) {
         throw new GeneralErrorException(
-        "400",
-        "Bad Resquest",
-        "PedidoServiceImpl(insert)",
-        "Inexiste esta quantidade de produto em estoque."
-      );
+          "400",
+          "Bad Resquest",
+          "PedidoServiceImpl(insert)",
+          "Inexiste esta quantidade de produto em estoque."
+        );
       }
-        
+
+      // Analisa se tem o produto em estoque e 
       EntityManager em = emf.createEntityManager();
       EntityTransaction transaction = em.getTransaction();
 
       try {
         transaction.begin();
-
-        // Chamando um PROCEDURE que foi criado no PostgreSQL na mão
-        String sql = "CALL atualizar_quantidade_produto(:produtoid, :quantidadesubtrair)";
-
-        em.createNativeQuery(sql)
-            .setParameter("produtoid", idv.idProduto()) 
-            .setParameter("quantidadesubtrair", idv.quantidade()) 
+        String sql1 = "SELECT quantidade FROM produto WHERE id = ?1 FOR UPDATE";
+        Query query = em
+          .createNativeQuery(sql1)
+          .setParameter(1, idv.idProduto());
+        Integer quantidade = (Integer) query.getSingleResult();
+        Integer quantFinal = quantidade - idv.quantidade();
+        if (quantFinal >= 0) {
+          /* String sql3 =
+            "INSERT INTO itemDaVenda (preco, quantidade, produto_id) VALUES (?1, ?2, ?3)";
+          em
+            .createNativeQuery(sql3)
+            .setParameter(1, idv.preco())
+            .setParameter(2, idv.quantidade())
+            .setParameter(3, idv.idProduto())
+            .executeUpdate(); */
+          String sql4 = "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
+          em
+            .createNativeQuery(sql4)
+            .setParameter(1, quantFinal)
+            .setParameter(2, idv.idProduto())
             .executeUpdate();
-        transaction.commit();
-    } catch (Exception e) {
-        if (transaction != null && transaction.isActive()) {
-            transaction.rollback();
-            // Capture a exceção aqui
-            throw new GeneralErrorException(
-        "400",
-        "Bad Resquest",
-        "PedidoServiceImpl(insert)",
-        "Não consegui gravar no banco. " +  e.getMessage());
-        }
-    } finally {
-        em.close();
-    }
-
-        /*  produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
-        try {
-          repositoryProduto.persist(produto);
-        } catch (Exception e) {
+          transaction.commit();
+          item.setProduto(produto);
+          pedido.getItemDaVenda().add(item);
+          valorCompra = valorCompra + idv.quantidade() * idv.preco();
+        } else {
+          transaction.rollback();
           throw new GeneralErrorException(
-            "500",
-            "Server Error",
+            "400",
+            "Bad Resquest",
             "PedidoServiceImpl(insert)",
-            "Erro ao alterar o produto no banco de dados! " + e.getMessage()
+            "Não existe quantidade suficiente deste produto em estoque."
           );
-        } */
-      
-
-      item.setProduto(produto);
-      pedido.getItemDaVenda().add(item);
-      valorCompra = valorCompra + idv.quantidade() * idv.preco();
+        }
+      } catch (Exception e) {
+        if (transaction != null && transaction.isActive()) {
+          transaction.rollback();
+          throw new GeneralErrorException(
+            "400",
+            "Bad Resquest",
+            "PedidoServiceImpl(insert)",
+            "Não consegui gravar no banco. " + e.getMessage()
+          );
+        }
+      } finally {
+        em.close();
+      }
     }
 
     if (dto.formaDePagamento().modalidade() == 0) {
@@ -339,7 +345,6 @@ public class PedidoServiceImpl implements PedidoService {
   @Override
   @Transactional
   public PedidoResponseDTO updateStatusDoPedido(PedidoPatchStatusDTO ppsdto) {
-
     // Verifica o id do pedido. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
     if (!verificaPedido1(ppsdto.idPedido())) {
       throw new GeneralErrorException(
@@ -372,7 +377,7 @@ public class PedidoServiceImpl implements PedidoService {
       }
     }
 
-    if(ppsdto.idStatus() <= status) {
+    if (ppsdto.idStatus() <= status) {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
@@ -389,11 +394,11 @@ public class PedidoServiceImpl implements PedidoService {
         repositoryPedido.persist(pedido);
       } catch (Exception e) {
         throw new GeneralErrorException(
-        "500",
-        "Server Error",
-        "PedidoServiceImpl(updateStatusDoPedido)",
-        "Não consegui persistir o pedido no banco de dados!"
-      );
+          "500",
+          "Server Error",
+          "PedidoServiceImpl(updateStatusDoPedido)",
+          "Não consegui persistir o pedido no banco de dados!"
+        );
       }
       return PedidoResponseDTO.valueOf(pedido);
     } else if (status == 1) {
@@ -404,11 +409,11 @@ public class PedidoServiceImpl implements PedidoService {
         repositoryPedido.persist(pedido);
       } catch (Exception e) {
         throw new GeneralErrorException(
-        "500",
-        "Server Error",
-        "PedidoServiceImpl(updateStatusDoPedido)",
-        "Não consegui persistir o pedido no banco de dados!"
-      );
+          "500",
+          "Server Error",
+          "PedidoServiceImpl(updateStatusDoPedido)",
+          "Não consegui persistir o pedido no banco de dados!"
+        );
       }
       return PedidoResponseDTO.valueOf(pedido);
     } else if (status == 2) {
@@ -418,11 +423,11 @@ public class PedidoServiceImpl implements PedidoService {
         repositoryPedido.persist(pedido);
       } catch (Exception e) {
         throw new GeneralErrorException(
-        "500",
-        "Server Error",
-        "PedidoServiceImpl(updateStatusDoPedido)",
-        "Não consegui persistir o pedido no banco de dados!"
-      );
+          "500",
+          "Server Error",
+          "PedidoServiceImpl(updateStatusDoPedido)",
+          "Não consegui persistir o pedido no banco de dados!"
+        );
       }
       return PedidoResponseDTO.valueOf(pedido);
     } else if (status == 3) {
@@ -432,11 +437,11 @@ public class PedidoServiceImpl implements PedidoService {
         repositoryPedido.persist(pedido);
       } catch (Exception e) {
         throw new GeneralErrorException(
-        "500",
-        "Server Error",
-        "PedidoServiceImpl(updateStatusDoPedido)",
-        "Não consegui persistir o pedido no banco de dados!"
-      );
+          "500",
+          "Server Error",
+          "PedidoServiceImpl(updateStatusDoPedido)",
+          "Não consegui persistir o pedido no banco de dados!"
+        );
       }
       return PedidoResponseDTO.valueOf(pedido);
     } else if (status == 4) {
@@ -448,11 +453,11 @@ public class PedidoServiceImpl implements PedidoService {
         repositoryPedido.persist(pedido);
       } catch (Exception e) {
         throw new GeneralErrorException(
-        "500",
-        "Server Error",
-        "PedidoServiceImpl(updateStatusDoPedido)",
-        "Não consegui persistir o pedido no banco de dados!"
-      );
+          "500",
+          "Server Error",
+          "PedidoServiceImpl(updateStatusDoPedido)",
+          "Não consegui persistir o pedido no banco de dados!"
+        );
       }
       return PedidoResponseDTO.valueOf(pedido);
     } else if (status == 5) {
@@ -462,22 +467,21 @@ public class PedidoServiceImpl implements PedidoService {
         repositoryPedido.persist(pedido);
       } catch (Exception e) {
         throw new GeneralErrorException(
-        "500",
-        "Server Error",
-        "PedidoServiceImpl(updateStatusDoPedido)",
-        "Não consegui persistir o pedido no banco de dados!"
-      );
+          "500",
+          "Server Error",
+          "PedidoServiceImpl(updateStatusDoPedido)",
+          "Não consegui persistir o pedido no banco de dados!"
+        );
       }
       return PedidoResponseDTO.valueOf(pedido);
     }
 
-throw new GeneralErrorException(
-        "500",
-        "Server Error",
-        "PedidoServiceImpl(updateStatusDoPedido)",
-        "Aconteceu algum erro inesperado!"
-      );
-    
+    throw new GeneralErrorException(
+      "500",
+      "Server Error",
+      "PedidoServiceImpl(updateStatusDoPedido)",
+      "Aconteceu algum erro inesperado!"
+    );
   }
 
   @Override
@@ -606,7 +610,7 @@ throw new GeneralErrorException(
     }
   }
 
-private Boolean verificaProduto1(Long id) {
+  private Boolean verificaProduto1(Long id) {
     if (id == null) {
       return false;
     }
@@ -625,8 +629,6 @@ private Boolean verificaProduto1(Long id) {
       return true;
     }
   }
-
-
 
   private Boolean verificaUsuario1(Long id) {
     if (id == null) {
