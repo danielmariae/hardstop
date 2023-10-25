@@ -129,14 +129,6 @@ public class PedidoServiceImpl implements PedidoService {
         Integer quantidade = (Integer) query.getSingleResult();
         Integer quantFinal = quantidade - idv.quantidade();
         if (quantFinal >= 0) {
-          /* String sql3 =
-            "INSERT INTO itemDaVenda (preco, quantidade, produto_id) VALUES (?1, ?2, ?3)";
-          em
-            .createNativeQuery(sql3)
-            .setParameter(1, idv.preco())
-            .setParameter(2, idv.quantidade())
-            .setParameter(3, idv.idProduto())
-            .executeUpdate(); */
           String sql4 = "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
           em
             .createNativeQuery(sql4)
