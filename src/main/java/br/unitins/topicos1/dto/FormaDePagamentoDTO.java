@@ -16,6 +16,7 @@ public record FormaDePagamentoDTO(
     // Dados para Pix
     String nomeCliente,
     String nomeRecebedor,
-    String chaveRecebedor
+    String chaveRecebedor,
+    String nomeCidade
 ) {
     }

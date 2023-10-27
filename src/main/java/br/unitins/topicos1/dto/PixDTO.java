@@ -10,7 +10,8 @@ public record PixDTO(
     String chaveRecebedor,
     Double valorPago,
     LocalDateTime dataHoraGeracao,
-    LocalDateTime dataHoraEfetivadoPagamento
+    LocalDateTime dataHoraEfetivadoPagamento,
+    String nomeCidade
 ) {
    public static PixDTO valueOf(Pix pix) {
     return new PixDTO(
@@ -19,7 +20,8 @@ public record PixDTO(
         pix.getChaveRecebedor(),
         pix.getValorPago(),
         pix.getDataHoraGeracao(),
-        pix.getDataHoraEfetivadoPagamento()
+        pix.getDataHoraEfetivadoPagamento(),
+        pix.getNomeCidade()
     );
    } 
 }

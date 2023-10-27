@@ -79,7 +79,18 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-jwt-build</artifactId>
-    </dependency> 
+    </dependency>
+    <!-- Geração de QR code para pagamento com Pix -->
+    <dependency>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>core</artifactId>
+    <version>3.5.2</version> 
+    </dependency>
+    <dependency>
+    <groupId>com.google.zxing</groupId>
+    <artifactId>javase</artifactId>
+    <version>3.5.2</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
