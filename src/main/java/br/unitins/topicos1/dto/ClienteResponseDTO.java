@@ -1,6 +1,8 @@
 package br.unitins.topicos1.dto;
 
 import br.unitins.topicos1.model.Cliente;
+import br.unitins.topicos1.model.Perfil;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,6 +14,7 @@ public record ClienteResponseDTO(
   String sexo,
   String login,
   String email,
+  Perfil perfil,
   List<EnderecoResponseDTO> listaEndereco,
   List<TelefoneResponseDTO> listaTelefone,
   List<PedidoResponseDTO> listaPedido
@@ -25,6 +28,7 @@ public record ClienteResponseDTO(
       cliente.getSexo(),
       cliente.getLogin(),
       cliente.getEmail(),
+      cliente.getPerfil(),
       cliente
         .getListaEndereco()
         .stream()

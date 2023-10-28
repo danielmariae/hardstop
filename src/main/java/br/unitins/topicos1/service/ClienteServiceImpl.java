@@ -5,7 +5,7 @@ import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.ClienteDTO;
-import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
+import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.ClienteResponseNPDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
@@ -37,6 +37,9 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Inject
   PedidoRepository repositoryPedido;
+
+  @Inject
+  HashService hashservice;
 
   @Override
   public ClienteResponseDTO findById(Long id) {
@@ -117,6 +120,7 @@ cliente.getListaProduto().clear();
     cliente.setCpf(ClienteFormatador.validaCpf(clt.cpf()));
     cliente.setSexo(clt.sexo());
     cliente.setLogin(clt.login());
+    cliente.setSenha(hashservice.getHashSenha(clt.senha()));
     cliente.setEmail(clt.email());
 
     int i = 0;
@@ -216,14 +220,18 @@ cliente.getListaProduto().clear();
     return ClienteResponseDTO.valueOf(cliente);
   }
 
-  // ClienteResponseDTO não tem senha, por isso trabalhamos com ClienteDTO
   @Override
   @Transactional
-  public ClienteDTO updateSenha(ClientePatchSenhaDTO senha) {
-    Cliente cliente = repository.findById(senha.id());
-    cliente.setSenha(senha.senha());
+  public String updateSenha(PatchSenhaDTO senha, Long id) {
+    Cliente cliente = repository.findById(id);
+
+    if(hashservice.getHashSenha(senha.senhaAntiga()).equals(cliente.getSenha())) {
+    cliente.setSenha(hashservice.getHashSenha(senha.senhaAtual()));
     repository.persist(cliente);
-    return ClienteDTO.valueOf(cliente);
+    return "Senha alterada com sucesso.";
+    } else {
+     throw new ValidationException("updateSenha", "Favor inserir a senha antiga correta."); 
+    }
   }
 
   @Override
@@ -362,7 +370,7 @@ cliente.getListaProduto().clear();
     cliente.setSexo(dto.sexo());
     verificaLogin(dto.login());
     cliente.setLogin(dto.login());
-    cliente.setSenha(dto.senha());
+    cliente.setSenha(hashservice.getHashSenha(dto.senha()));
     cliente.setEmail(dto.email());
 
     if (dto.listaTelefone() != null && !dto.listaTelefone().isEmpty()) {
@@ -538,7 +546,14 @@ private void verificaCpf(String cpf) {
       return ClienteResponseDTO.valueOf(cliente);
     }
 
-
+    @Override
+    public ClienteResponseDTO findByLogin(String login) {
+        Cliente cliente = repository.findByLogin(login);
+        if (cliente == null) 
+            throw new ValidationException("login", "Login inválido");
+        
+        return ClienteResponseDTO.valueOf(cliente);
+    }
 
 
 }

@@ -1,10 +1,9 @@
 package br.unitins.topicos1.service;
 
-
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
-import br.unitins.topicos1.dto.FuncionarioPatchSenhaDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
+import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import java.util.List;
 
@@ -23,8 +22,8 @@ public interface FuncionarioService {
   // Altera um endereço
   public FuncionarioResponseDTO updateEndereco(EnderecoPatchDTO end, Long id);
 
-  // Altera a senha do funcionário
-  public FuncionarioDTO updateSenha(FuncionarioPatchSenhaDTO senha);
+    // Altera a senha do funcionario
+  public String updateSenha(PatchSenhaDTO senha, Long id);
 
   // Apaga todos os dados de um funcionário
   public void delete(Long id);
@@ -43,4 +42,8 @@ public interface FuncionarioService {
 
   //Autenticação de usuário
   public FuncionarioResponseDTO findByLoginAndSenha(String login, String senha);
+
+  //Autenticação de usuário
+  public FuncionarioResponseDTO findByLogin(String login);
+
 }

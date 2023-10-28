@@ -2,7 +2,7 @@ package br.unitins.topicos1.service;
 
 
 import br.unitins.topicos1.dto.ClienteDTO;
-import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
+import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.ClienteResponseNPDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
@@ -25,7 +25,7 @@ public interface ClienteService {
   public ClienteResponseDTO updateEndereco(List<EnderecoPatchDTO> end, Long id);
 
   // Altera a senha do cliente
-  public ClienteDTO updateSenha(ClientePatchSenhaDTO senha);
+  public String updateSenha(PatchSenhaDTO senha, Long id);
 
   // Apaga um cliente inteiro
   public void delete(Long id);
@@ -47,5 +47,8 @@ public interface ClienteService {
 
   //Autenticação de usuário
   public ClienteResponseDTO findByLoginAndSenha(String login, String senha);
+
+  //Autenticação de usuário
+  public ClienteResponseDTO findByLogin(String login);
 
 }

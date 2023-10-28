@@ -19,6 +19,7 @@ public class Cliente extends DefaultEntity {
   private String login;
   private String senha;
   private String email;
+  private final Perfil perfil = Perfil.USER;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinTable(
@@ -126,6 +127,10 @@ public class Cliente extends DefaultEntity {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+    public Perfil getPerfil() {
+    return perfil;
   }
 
   public List<Endereco> getListaEndereco() {

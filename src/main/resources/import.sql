@@ -32,13 +32,18 @@ insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municip
 
 insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municipio, estado, pais) values('Mãe da Katia de Ruim', 'Sermão de mãe', 's/n', '58', 'Oeste', 'Ao lado da igreja do Véu', '73245787', 'Araraquara', 'São Paulo', 'Brasil');
 
-insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email) values('Katia de Ruim', '2010-08-08', '45390821398', 'F', 'katiaflavia', '123VaA_', 'katiaflavia@gmail.com');
+-- senha 123VaA_
+insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email, perfil) values('Katia de Ruim', '2010-08-08', '45390821398', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com', '0');
 
-insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email) values('Flávio de Boa', '2007-10-02', '15499833200', 'M', 'flavio1234', '1a2B3!', 'flavio1234@gmail.com');
+-- senha 1a2B3!
+insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email, perfil) values('Flávio de Boa', '2007-10-02', '15499833200', 'M', 'flavio1234', 'pTOqkVzjpPAXcO0Iau1rmMLSxHsi/CSmyX7a+k1h9oDcYjh2k2s+GQfTRhK9JECbQFkezUT2unji0ww04h7KDQ==', 'flavio1234@gmail.com', '0');
 
-insert into funcionario (nome, datanascimento, cpf, sexo, login, senha, email, endereco_id) values('Arruda de Alencar', '2000-09-12', '06143290811', 'M', 'arrudaalencar', 'bVgH_-2', 'arrudaalencar@gmail.com', 4);
+-- senha bVgH_-2
+insert into funcionario (nome, datanascimento, cpf, sexo, login, senha, email, endereco_id, perfil) values('Arruda de Alencar', '2000-09-12', '06143290811', 'M', 'arrudaalencar', '1dFLdP3297AHwCVMOu5ScNEXaWxFW2TO7uj60UQY+PktBgoem0kVhF8b3FqvZDXn2eyOCHQab6aCK0oYGgm/2w==', 'arrudaalencar@gmail.com', 4, '1');
 
-insert into funcionario (nome, datanascimento, cpf, sexo, login, senha, email, endereco_id) values('Marta de Cesare', '2001-11-30', '56798213483', 'F', 'martacesare', 'GfT12-', 'martacesare@gmail.com', 5);
+-- senha GfT12-
+insert into funcionario (nome, datanascimento, cpf, sexo, login, senha, email, endereco_id, perfil) values('Marta de Cesare', '2001-11-30', '56798213483', 'F', 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 'martacesare@gmail.com', 5, '2');
+
 
 insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '2022/34539382', 'www.netcom.br');
 

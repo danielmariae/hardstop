@@ -1,6 +1,8 @@
 package br.unitins.topicos1.dto;
 
 import br.unitins.topicos1.model.Funcionario;
+import br.unitins.topicos1.model.Perfil;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,6 +15,7 @@ public record FuncionarioResponseDTO(
   String login,
   String email,
   EnderecoResponseDTO endereco,
+  Perfil perfil,
   List<TelefoneResponseDTO> listaTelefone
 ) {
   public static FuncionarioResponseDTO valueOf(Funcionario funcionario) {
@@ -25,6 +28,7 @@ public record FuncionarioResponseDTO(
       funcionario.getLogin(),
       funcionario.getEmail(),
       EnderecoResponseDTO.valueOf(funcionario.getEndereco()),
+      funcionario.getPerfil(),
       funcionario
         .getListaTelefone()
         .stream()

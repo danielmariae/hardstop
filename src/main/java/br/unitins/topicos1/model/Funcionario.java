@@ -20,6 +20,7 @@ public class Funcionario extends DefaultEntity {
   private String login;
   private String senha;
   private String email;
+  private Perfil perfil;
 
   @OneToOne
   private Endereco endereco;
@@ -86,6 +87,14 @@ public class Funcionario extends DefaultEntity {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public Perfil getPerfil() {
+    return perfil;
+  }
+
+  public void setPerfil(Perfil perfil) {
+    this.perfil = perfil;
   }
 
   public Endereco getEndereco() {

@@ -21,9 +21,9 @@ public class JwtServiceImpl implements JwtService {
         Instant expiryDate = now.plus(EXPIRATION_TIME);
 
         Set<String> roles = new HashSet<String>();
-        roles.add("User");
+        roles.add(dto.perfil().getLabel());
 
-        return Jwt.issuer("unitins-jwt")
+        return Jwt.issuer("hardstop-jwt")
         .subject(dto.login())
         .groups(roles)
         .expiresAt(expiryDate)
@@ -36,9 +36,9 @@ public class JwtServiceImpl implements JwtService {
         Instant expiryDate = now.plus(EXPIRATION_TIME);
 
         Set<String> roles = new HashSet<String>();
-        roles.add("Employee");
+        roles.add(dto.perfil().getLabel());
 
-        return Jwt.issuer("unitins-jwt")
+        return Jwt.issuer("hardstop-jwt")
         .subject(dto.login())
         .groups(roles)
         .expiresAt(expiryDate)

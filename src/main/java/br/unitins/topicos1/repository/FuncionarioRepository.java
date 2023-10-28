@@ -29,7 +29,7 @@ public class FuncionarioRepository implements PanacheRepository<Funcionario> {
 
   public Funcionario findByLogin(String login) {
         try {
-            return find("login = ?1 ", login ).singleResult();
+            return find("login = ?1 ", login).singleResult();
         } catch (NoResultException e) {
             e.printStackTrace();
             return null;

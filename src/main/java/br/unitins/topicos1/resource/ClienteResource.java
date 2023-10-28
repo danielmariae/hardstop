@@ -2,7 +2,6 @@ package br.unitins.topicos1.resource;
 
 
 import br.unitins.topicos1.dto.ClienteDTO;
-import br.unitins.topicos1.dto.ClientePatchSenhaDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.service.ClienteService;
@@ -43,13 +42,6 @@ public class ClienteResource {
   public Response update(@Valid ClienteDTO dto, @PathParam("id") Long id) {
     service.update(dto, id);
     return Response.status(Status.NO_CONTENT).build();
-  }
-
-  @PATCH
-  @Transactional
-  @Path("patch/senha/")
-  public Response updateSenha(@Valid ClientePatchSenhaDTO senha) {
-    return Response.status(200).entity(service.updateSenha(senha)).build();
   }
 
   @PATCH

@@ -25,5 +25,4 @@ public class HashServiceImpl implements HashService {
             throw new RuntimeException("Erro ao criar um hash");
         }
     }
-    
 }
