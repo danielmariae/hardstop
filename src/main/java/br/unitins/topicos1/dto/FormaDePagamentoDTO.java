@@ -1,7 +1,5 @@
 package br.unitins.topicos1.dto;
 
-import java.time.LocalDateTime;
-
 public record FormaDePagamentoDTO(
     // Modalidade (1 para CartaoDeCredito, 2 para Boleto e 3 para Pix)
     Integer modalidade,
@@ -12,7 +10,7 @@ public record FormaDePagamentoDTO(
     Integer codSeguranca,
     // Dados para Boleto
     String nomeBanco,
-    LocalDateTime dataHoraLimitePag,
+    Integer diasVencimento,
     // Dados para Pix
     String nomeCliente,
     String nomeRecebedor,

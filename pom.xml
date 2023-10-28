@@ -80,7 +80,7 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-jwt-build</artifactId>
     </dependency>
-    <!-- Geração de QR code para pagamento com Pix -->
+    <!-- Geração de QR code para pagamento com Pix estático -->
     <dependency>
     <groupId>com.google.zxing</groupId>
     <artifactId>core</artifactId>
@@ -91,6 +91,13 @@
     <artifactId>javase</artifactId>
     <version>3.5.2</version>
     </dependency>
+     <!-- Geração de boleto -->
+     <!-- https://mvnrepository.com/artifact/io.github.braully/bpp-cobranca -->
+<dependency>
+    <groupId>io.github.braully</groupId>
+    <artifactId>bpp-cobranca</artifactId>
+    <version>1.0.1</version>
+</dependency>
   </dependencies>
   <build>
     <plugins>
