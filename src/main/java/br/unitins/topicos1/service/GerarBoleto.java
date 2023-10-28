@@ -1,16 +1,25 @@
 package br.unitins.topicos1.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.jrimum.bopepo.BancosSuportados;
 import org.jrimum.bopepo.Boleto;
+
 import org.jrimum.bopepo.view.BoletoViewer;
 import org.jrimum.domkee.banco.Agencia;
 import org.jrimum.domkee.banco.Carteira;
@@ -24,9 +33,212 @@ import org.jrimum.domkee.banco.Titulo.Aceite;
 import org.jrimum.domkee.pessoa.CEP;
 import org.jrimum.domkee.pessoa.Endereco;
 import org.jrimum.domkee.pessoa.UnidadeFederativa;
+import org.jrimum.utilix.DateFormat;
+
+import com.github.braully.boleto.BoletoCobranca;
+import com.github.braully.boleto.LayoutsSuportados;
+import com.github.braully.boleto.RemessaArquivo;
+import com.github.braully.boleto.RetornoArquivo;
+import com.github.braully.boleto.TagLayout;
+import com.github.braully.boleto.TituloArquivo;
+import static com.github.braully.boleto.TagLayout.TagCreator.*;
 
 @ApplicationScoped
 public class GerarBoleto {
+
+	  /*
+     * Ver exemplo mais detalhado em:
+     * com.github.braully.boleto.LayoutsSuportados._LAYOUT_FEBRABAN_CNAB240
+     */
+	public void geraLayout() {
+		TagLayout arquivo = tag("arquivo");
+        arquivo.with(
+                tag("cabecalho").with(
+                        //a linha de cabeçalho será ignorada
+                        tag("branco").length(240)
+                ),
+                tag("detalhe").with(
+                        tag("codigoBanco").length(3),
+                        //Val é usado para setar um campo literal fixo: espaçoes em branco, codigos, literais e etc
+                        tag("branco").val("  "),
+                        tag("codigoMoeda").val("09"),
+                        //As tags com id são importantes pra determinar o tipo da linha no layout de retorno
+                        tag("codigoRegistro").length(1).id(true),
+                        tag("segmento").id(true).value("D"),
+                        //Alguns campos podemo precisar de formatação ou parser personalizado, exemplo data
+                        tag("dataVencimento").length(8).format(new SimpleDateFormat("ddMMyyyy"))
+                ),
+                tag("rodape").with(
+                        //a linha de rodape será ignorada
+                        tag("branco").length(240)
+                )
+        );
+
+        //
+        System.out.println(arquivo);
+	}
+
+	/* Um arquivo de remessa de boletos de cobrança contem um ou mais lotes de boletos. Cada lote pode conter um ou mais boletos.
+
+	Nesse exemplo simples iremos criar um arquivo de remessa com apenas um lote de boletos e dois boletos fictício. */
+	public void geraRemessa() {
+		RemessaArquivo remessa = new RemessaArquivo(LayoutsSuportados.LAYOUT_BB_CNAB240_COBRANCA_REMESSA);
+        //Cabeçalho do arquivo de remessa: obrigatório
+        remessa.addNovoCabecalho()
+                .sequencialArquivo(1)
+                .dataGeracao(new Date()).setVal("horaGeracao", new Date())
+                .banco("0", "Banco").cedente("ACME S.A LTDA.", "1")
+                .convenio("1", "1", "1", "1")
+                .carteira("00");
+        //Cabeçalho do lote: obrigatório
+        remessa.addNovoCabecalhoLote()
+                .operacao("R")//Operação de remessa
+                .servico(1)//Cobrança
+                .forma(1)//Crédito em Conta Corrente
+                .banco("0", "Banco")
+                .cedente("ACME S.A LTDA.", "1")
+                .convenio("1", "1", "1", "1")
+                .carteira("00");;
+
+        int contadorRegistroLote = 1;
+        //Detalhes do boleto #1  
+        // Boleto emitido pela empresa ACME S.A. ltada
+        // Para o cliente: Fulano de Tal cpf: 000.000.000-00
+        // Valor R$ 0,01 com vencimento na data de 13/12/2024
+        remessa.addNovoDetalheSegmentoP()
+                //Dados da cobrança
+                .valor(1)
+                .valorDesconto(0).valorAcrescimo(0)//opcionais
+                .dataGeracao(new Date())
+                //.dataVencimento(new Date())
+                .dataVencimento(DateFormat.DDMMYYYY_B.parse("13/12/2024"))
+                .numeroDocumento(1).nossoNumero(1)
+                //Dados da Empresa ACM S.A. LTDA
+                .banco("0", "Banco")
+                .cedente("ACME S.A LTDA.", "1")
+                .convenio("1", "1", "1", "1")
+                //.sequencialRegistro(1)
+                .sequencialRegistro(contadorRegistroLote++)
+                .carteira("00");
+
+        remessa.addNovoDetalheSegmentoQ()
+                //Dados do cliente
+                .sacado("Fulano de Tal", "00000000000")
+                .banco("0", "Banco")
+                .cedente("ACME S.A LTDA.", "1")
+                .convenio("1", "1", "1", "1")
+                //.sequencialRegistro(2)
+                .sequencialRegistro(contadorRegistroLote++)
+                .carteira("00");
+
+        //Detalhes do boleto #2 Boleto emitido pela empresa ACME S.A. ltada
+        // Para o cliente: Ciclano de Tal cpf: 11111111111
+        // Valor R$ 2,50 com vencimento na data de hoje
+        remessa.addNovoDetalheSegmentoP()
+                .valor(2.50)
+                .valorDesconto(0).valorAcrescimo(0)//opcionais
+                .dataGeracao(new Date())
+                .dataVencimento(new Date())
+                .numeroDocumento(2).nossoNumero(2)
+                .banco("0", "Banco")
+                .cedente("ACME S.A LTDA.", "1")
+                .convenio("1", "1", "1", "1")
+                //.sequencialRegistro(3)
+                .sequencialRegistro(contadorRegistroLote++)
+                .carteira("00");
+        //Detalhes do boleto #2
+        remessa.addNovoDetalheSegmentoQ()
+                .sacado("Ciclano de Tal", "11111111111")
+                .banco("0", "Banco")
+                .cedente("ACME S.A LTDA.", "1")
+                .convenio("1", "1", "1", "1")
+                //.sequencialRegistro(4)
+                .sequencialRegistro(contadorRegistroLote++)
+                .carteira("00");
+
+        //Rodapé do lote: obrigatório
+        remessa.addNovoRodapeLote()
+                .quantidadeRegistros(2)
+                .valorTotalRegistros(1)
+                .banco("0", "Banco")
+                .cedente("ACME S.A LTDA.", "1")
+                .convenio("1", "1", "1", "1")
+                .carteira("00");
+
+        //Rodapé do arquivo de remessa: obrigatório
+        remessa.addNovoRodape()
+                .quantidadeRegistros(1)
+                .valorTotalRegistros(1)
+                .setVal("codigoRetorno", "1")
+                .banco("0", "Banco").cedente("ACME S.A LTDA.", "1")
+                .convenio("1", "1", "1", "1")
+                .carteira("00");
+
+        String remessaStr = remessa.render();
+        System.out.println(remessaStr);
+    }
+	
+	/* O código abaixo mostra como ler um arquivo de retorno de boleto CNAB 240. Normalmente compatível com todos os bancos, porém existem personalizações possíveis para cada banco. Favor conferir a documentação do banco para maiores detalhes. A versão do layout também podem apresentar diferenças, porém o código abaixo é compatível com a versão 5.0 do layout. */
+	
+	public void lerRetorno() throws FileNotFoundException, IOException {
+		BufferedReader leitorArquivo = new 
+        //Arquivo de retorno fornecido pelo banco
+        BufferedReader(new FileReader("RETORNO001.txt"));
+
+        List<String> linhasLidas = new ArrayList<>();
+        String linha = null;
+        while (null != (linha = leitorArquivo.readLine())) {
+            linhasLidas.add(linha);
+        }
+
+        // Layout de arquivo de retorno
+        RetornoArquivo retorno = new RetornoArquivo(LayoutsSuportados.LAYOUT_FEBRABAN_CNAB240);
+        // Parse do arquivo lido no layout LAYOUT_FEBRABAN_CNAB240
+        retorno.parse(linhasLidas);
+
+        System.out.println("Detalhes as Titulos: ");
+
+        List<TituloArquivo> titulos = retorno.detalhesAsTitulos();
+        //Titulos encontrados no arquivo de retorno
+        // E principais dados disponiveis
+        for (TituloArquivo titulo : titulos) {
+            String segmento = titulo.segmento();
+            String numeroDocumento = titulo.numeroDocumento();
+            String nossoNumero = titulo.nossoNumero();
+            String valorPagamento = titulo.valorPagamento();
+            String valorLiquido = titulo.valorLiquido();
+            String dataOcorrencia = titulo.dataOcorrencia();
+            String movimentoCodigo = titulo.movimentoCodigo();
+            String rejeicoes = titulo.rejeicoes();
+            String valorTarifaCustas = titulo.valorTarifaCustas();
+
+            // Print dos dados
+            System.out.println("Campos: {segmento=" + segmento + " numeroDocumento=" + numeroDocumento);
+            System.out.println("\tnossoNumero=" + nossoNumero + " valorPagamento=" + valorPagamento);
+            System.out.println("\tvalorLiquido=" + valorLiquido + " dataOcorrencia=" + dataOcorrencia);
+            System.out.println("\tmovimentoCodigo=" + movimentoCodigo + " rejeicoes=" + rejeicoes);
+            System.out.println("\tvalorTarifaCustas=" + valorTarifaCustas + " rejeicoes=" + valorTarifaCustas + "}");
+        }
+		leitorArquivo.close();
+	}
+
+
+
+
+public static void geraBoletoFinal() {
+	BoletoCobranca boleto = new BoletoCobranca();
+        boleto.sacado("Sacado da Silva Sauro").sacadoCpf("1");
+        boleto.banco("1").agencia("1").conta("1");
+        boleto.cedente("Cedente da Silva Sauro").cedenteCnpj("1");
+        boleto.carteira("1");
+        boleto.numeroDocumento("1")
+                .nossoNumero("1234567890")
+                .valor(100.23).dataVencimento("01/01/2019");
+
+        boleto.gerarLinhaDigitavel();
+        BoletoViewer create = BoletoViewer.create(boleto);
+        create.getPdfAsFile("teste.pdf");
+}
 
   public static void geraBoleto() {
     // Cedente
