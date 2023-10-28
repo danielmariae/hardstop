@@ -80,7 +80,7 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-jwt-build</artifactId>
     </dependency>
-    <!-- Geração de QR code para pagamento com Pix estático -->
+    <!-- Geração de QR code para pagamento com Pix -->
     <dependency>
     <groupId>com.google.zxing</groupId>
     <artifactId>core</artifactId>
@@ -91,14 +91,17 @@
     <artifactId>javase</artifactId>
     <version>3.5.2</version>
     </dependency>
+<dependency>
+    <groupId>io.github.alesaudate</groupId>
+    <artifactId>pix-qrcodegen</artifactId>
+    <version>1.0</version>
+</dependency>
      <!-- Geração de boleto -->
-     <!-- https://mvnrepository.com/artifact/io.github.braully/bpp-cobranca -->
 <dependency>
     <groupId>io.github.braully</groupId>
     <artifactId>bpp-cobranca</artifactId>
     <version>1.0.1</version>
 </dependency>
-<!-- https://mvnrepository.com/artifact/org.apache.directory.studio/org.apache.commons.io -->
 <dependency>
     <groupId>org.apache.directory.studio</groupId>
     <artifactId>org.apache.commons.io</artifactId>
