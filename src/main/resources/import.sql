@@ -20,17 +20,17 @@ END;
 $$; */
 
 
-insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municipio, estado, pais) values('Katia de Ruim', 'Barão de Cotegipe', '15', 's/l', 'Sul', 'Perto da igreja Assembléia', '64532098', 'Rialma', 'Goiás', 'Brasil');
+insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Katia de Ruim', 'Barão de Cotegipe', '15', 's/l', 'Sul', 'Perto da igreja Assembléia', '64532098', 'Rialma', 'GO', 'Brasil');
 
-insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municipio, estado, pais) values('Flávio de Boa', 'Palmares da Cruz', '88', 's/l', 'Norte', 'Perto do supermercado Real', '38432422', 'Ponte Alta', 'Tocantins', 'Brasil');
+insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Flávio de Boa', 'Palmares da Cruz', '88', 's/l', 'Norte', 'Perto do supermercado Real', '38432422', 'Ponte Alta', 'TO', 'Brasil');
 
-insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municipio, estado, pais) values('.Net.Com', 'Aida Aguiar', 's/n', '18', 'Santa Efigênia', 'Centro', '77532043', 'São Paulo', 'São Paulo', 'Brasil');
+insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('.Net.Com', 'Aida Aguiar', 's/n', '18', 'Santa Efigênia', 'Centro', '77532043', 'São Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municipio, estado, pais) values('Arruda de Alencar', 'Martins Pontes', 's/n', '55', 'Butantã', 'Sul', '73828382', 'São Paulo', 'São Paulo', 'Brasil');
+insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Arruda de Alencar', 'Martins Pontes', 's/n', '55', 'Butantã', 'Sul', '73828382', 'São Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municipio, estado, pais) values('Marta de Cesare', 'dos Potiguares', '567', 's/l', 'Anhangabaú', 'Centro', '70987213', 'São Paulo', 'São Paulo', 'Brasil');
+insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Marta de Cesare', 'dos Potiguares', '567', 's/l', 'Anhangabaú', 'Centro', '70987213', 'São Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, rua, numero, lote, bairro, complemento, cep, municipio, estado, pais) values('Mãe da Katia de Ruim', 'Sermão de mãe', 's/n', '58', 'Oeste', 'Ao lado da igreja do Véu', '73245787', 'Araraquara', 'São Paulo', 'Brasil');
+insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Mãe da Katia de Ruim', 'Sermão de mãe', 's/n', '58', 'Oeste', 'Ao lado da igreja do Véu', '73245787', 'Araraquara', 'SP', 'Brasil');
 
 -- senha 123VaA_
 insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email, perfil) values('Katia de Ruim', '2010-08-08', '45390821398', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com', '0');

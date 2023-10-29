@@ -29,6 +29,8 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jrimum.domkee.pessoa.CEP;
+
 @ApplicationScoped
 public class ClienteServiceImpl implements ClienteService {
 
@@ -151,14 +153,14 @@ cliente.getListaProduto().clear();
         je++;
         if (ie == je) {
           endereco.setNome(end1.nome());
-          endereco.setRua(end1.rua());
+          endereco.setLogradouro(end1.logradouro());
           endereco.setNumero(end1.numero());
           endereco.setLote(end1.lote());
           endereco.setBairro(end1.bairro());
           endereco.setComplemento(end1.complemento());
-          endereco.setCep(EnderecoFormatador.validaCep(end1.cep()));
-          endereco.setMunicipio(end1.municipio());
-          endereco.setEstado(end1.estado());
+          endereco.setCep(new CEP(EnderecoFormatador.validaCep(end1.cep().getCep())));
+          endereco.setLocalidade(end1.localidade());
+          endereco.setUF(end1.uf());
           endereco.setPais(end1.pais());
         }
       }
@@ -175,14 +177,14 @@ cliente.getListaProduto().clear();
           pedido.setCodigoDeRastreamento(ped.codigoDeRastreamento());
           pedido.getFormaDePagamento().setNome(ped.formaDePagamento().nome());
           pedido.getEndereco().setNome(ped.endereco().nome());
-          pedido.getEndereco().setRua(ped.endereco().rua());
+          pedido.getEndereco().setLogradouro(ped.endereco().logradouro());
           pedido.getEndereco().setNumero(ped.endereco().numero());
           pedido.getEndereco().setLote(ped.endereco().lote());
           pedido.getEndereco().setBairro(ped.endereco().bairro());
           pedido.getEndereco().setComplemento(ped.endereco().complemento());
           pedido.getEndereco().setCep(ped.endereco().cep());
-          pedido.getEndereco().setMunicipio(ped.endereco().municipio());
-          pedido.getEndereco().setEstado(ped.endereco().estado());
+          pedido.getEndereco().setLocalidade(ped.endereco().localidade());
+          pedido.getEndereco().setUF(ped.endereco().uf());
           pedido.getEndereco().setPais(ped.endereco().pais());
 
           int ia1 = 0;
@@ -315,14 +317,14 @@ cliente.getListaProduto().clear();
       for (EnderecoPatchDTO end1 : end) {
         if (end1.id() == endereco.getId()) {
           endereco.setNome(end1.nome());
-          endereco.setRua(end1.rua());
+          endereco.setLogradouro(end1.logradouro());
           endereco.setNumero(end1.numero());
           endereco.setLote(end1.lote());
           endereco.setBairro(end1.bairro());
-          endereco.setCep(EnderecoFormatador.validaCep(end1.cep()));
+          endereco.setCep(new CEP(EnderecoFormatador.validaCep(end1.cep().getCep())));
           endereco.setComplemento(end1.complemento());
-          endereco.setMunicipio(end1.municipio());
-          endereco.setEstado(end1.estado());
+          endereco.setLocalidade(end1.localidade());
+          endereco.setUF(end1.uf());
           endereco.setPais(end1.pais());
           d1.remove(d1.indexOf(end1.id()));
           d2.remove(d2.indexOf(end1.id()));
@@ -334,14 +336,14 @@ cliente.getListaProduto().clear();
       for (EnderecoPatchDTO end1 : end) {
         Endereco endereco = new Endereco();
         endereco.setNome(end1.nome());
-        endereco.setRua(end1.rua());
+        endereco.setLogradouro(end1.logradouro());
         endereco.setNumero(end1.numero());
         endereco.setLote(end1.lote());
         endereco.setBairro(end1.bairro());
         endereco.setComplemento(end1.complemento());
-        endereco.setCep(EnderecoFormatador.validaCep(end1.cep()));
-        endereco.setMunicipio(end1.municipio());
-        endereco.setEstado(end1.estado());
+       endereco.setCep(new CEP(EnderecoFormatador.validaCep(end1.cep().getCep())));
+        endereco.setLocalidade(end1.localidade());
+        endereco.setUF(end1.uf());
         endereco.setPais(end1.pais());
         cliente.getListaEndereco().add(endereco);
       }
@@ -400,14 +402,14 @@ cliente.getListaProduto().clear();
       for (EnderecoDTO end : dto.listaEndereco()) {
         Endereco endereco = new Endereco();
         endereco.setNome(end.nome());
-        endereco.setRua(end.rua());
+        endereco.setLogradouro(end.logradouro());
         endereco.setNumero(end.numero());
         endereco.setLote(end.lote());
         endereco.setBairro(end.bairro());
         endereco.setComplemento(end.complemento());
-        endereco.setCep(EnderecoFormatador.validaCep(end.cep()));
-        endereco.setMunicipio(end.municipio());
-        endereco.setEstado(end.estado());
+        endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+        endereco.setLocalidade(end.localidade());
+        endereco.setUF(end.uf());
         endereco.setPais(end.pais());
         cliente.getListaEndereco().add(endereco);
       }
@@ -426,14 +428,14 @@ cliente.getListaProduto().clear();
 
         Endereco endereco = new Endereco();
         endereco.setNome(pdd.endereco().nome());
-        endereco.setRua(pdd.endereco().rua());
+        endereco.setLogradouro(pdd.endereco().logradouro());
         endereco.setNumero(pdd.endereco().numero());
         endereco.setLote(pdd.endereco().lote());
         endereco.setBairro(pdd.endereco().bairro());
         endereco.setComplemento(pdd.endereco().complemento());
         endereco.setCep(EnderecoFormatador.validaCep(pdd.endereco().cep()));
-        endereco.setMunicipio(pdd.endereco().municipio());
-        endereco.setEstado(pdd.endereco().estado());
+        endereco.setLocalidade(pdd.endereco().localidade());
+        endereco.setUF(pdd.endereco().uf());
         endereco.setPais(pdd.endereco().pais());
         pedido.setEndereco(endereco);
 

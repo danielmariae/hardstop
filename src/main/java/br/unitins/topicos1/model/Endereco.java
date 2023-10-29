@@ -1,23 +1,29 @@
 package br.unitins.topicos1.model;
 
+import org.jrimum.domkee.pessoa.CEP;
+import org.jrimum.domkee.pessoa.UnidadeFederativa;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity
 public class Endereco extends DefaultEntity {
 
   
   private String nome;
-  private String rua;
+  private String logradouro;
   private String numero;
   private String lote;
   private String bairro;
   private String complemento;
-  private String cep;
-  private String municipio;
-  private String estado;
+  @Column(name = "cep")
+  private CEP cep;
+  private String localidade;
+  @Enumerated(EnumType.STRING)
+  private UnidadeFederativa uf;
   private String pais;
-
-  public Endereco() {}
 
   public String getNome() {
     return nome;
@@ -27,12 +33,12 @@ public class Endereco extends DefaultEntity {
     this.nome = nome;
   }
 
-  public String getRua() {
-    return rua;
+  public String getLogradouro() {
+    return logradouro;
   }
 
-  public void setRua(String rua) {
-    this.rua = rua;
+  public void setLogradouro(String logradouro) {
+    this.logradouro = logradouro;
   }
 
   public String getNumero() {
@@ -67,28 +73,28 @@ public class Endereco extends DefaultEntity {
     this.complemento = complemento;
   }
 
-  public String getCep() {
+  public CEP getCep() {
     return cep;
   }
 
-  public void setCep(String cep) {
+  public void setCep(CEP cep) {
     this.cep = cep;
   }
 
-  public String getMunicipio() {
-    return municipio;
+  public String getLocalidade() {
+    return localidade;
   }
 
-  public void setMunicipio(String municipio) {
-    this.municipio = municipio;
+  public void setLocalidade(String localidade) {
+    this.localidade = localidade;
   }
 
-  public String getEstado() {
-    return estado;
+  public UnidadeFederativa getUF() {
+    return uf;
   }
 
-  public void setEstado(String estado) {
-    this.estado = estado;
+  public void setUF(UnidadeFederativa uf) {
+    this.uf = uf;
   }
 
   public String getPais() {
@@ -98,4 +104,8 @@ public class Endereco extends DefaultEntity {
   public void setPais(String pais) {
     this.pais = pais;
   }
+
+  public Endereco() {}
+
+  
 }

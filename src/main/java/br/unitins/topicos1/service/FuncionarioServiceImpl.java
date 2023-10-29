@@ -21,6 +21,8 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jrimum.domkee.pessoa.CEP;
+
 @ApplicationScoped
 public class FuncionarioServiceImpl implements FuncionarioService {
 
@@ -103,16 +105,14 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     funcionario.getEndereco().setNome(func.endereco().nome());
-    funcionario.getEndereco().setRua(func.endereco().rua());
+    funcionario.getEndereco().setLogradouro(func.endereco().logradouro());
     funcionario.getEndereco().setNumero(func.endereco().numero());
     funcionario.getEndereco().setLote(func.endereco().lote());
     funcionario.getEndereco().setBairro(func.endereco().bairro());
     funcionario.getEndereco().setComplemento(func.endereco().complemento());
-    funcionario
-      .getEndereco()
-      .setCep(EnderecoFormatador.validaCep(func.endereco().cep()));
-    funcionario.getEndereco().setMunicipio(func.endereco().municipio());
-    funcionario.getEndereco().setEstado(func.endereco().estado());
+    funcionario.getEndereco().setCep(new CEP(EnderecoFormatador.validaCep(func.endereco().cep().getCep())));
+    funcionario.getEndereco().setLocalidade(func.endereco().localidade());
+    funcionario.getEndereco().setUF(func.endereco().uf());
     funcionario.getEndereco().setPais(func.endereco().pais());
 
     repository.persist(funcionario);
@@ -192,14 +192,14 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     Funcionario funcionario = repository.findById(id);
 
     funcionario.getEndereco().setNome(end.nome());
-    funcionario.getEndereco().setRua(end.rua());
+    funcionario.getEndereco().setLogradouro(end.logradouro());
     funcionario.getEndereco().setNumero(end.numero());
     funcionario.getEndereco().setLote(end.lote());
     funcionario.getEndereco().setBairro(end.bairro());
-    funcionario.getEndereco().setCep(EnderecoFormatador.validaCep(end.cep()));
+    funcionario.getEndereco().setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
     funcionario.getEndereco().setComplemento(end.complemento());
-    funcionario.getEndereco().setMunicipio(end.municipio());
-    funcionario.getEndereco().setEstado(end.estado());
+    funcionario.getEndereco().setLocalidade(end.localidade());
+    funcionario.getEndereco().setUF(end.uf());
     funcionario.getEndereco().setPais(end.pais());
 
     repository.persist(funcionario);
@@ -235,14 +235,14 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
     Endereco endereco = new Endereco();
     endereco.setNome(dto.endereco().nome());
-    endereco.setRua(dto.endereco().rua());
+    endereco.setLogradouro(dto.endereco().logradouro());
     endereco.setNumero(dto.endereco().numero());
     endereco.setLote(dto.endereco().lote());
     endereco.setBairro(dto.endereco().bairro());
     endereco.setComplemento(dto.endereco().complemento());
-    endereco.setCep(EnderecoFormatador.validaCep(dto.endereco().cep()));
-    endereco.setMunicipio(dto.endereco().municipio());
-    endereco.setEstado(dto.endereco().estado());
+    endereco.setCep(new CEP(EnderecoFormatador.validaCep(dto.endereco().cep().getCep())));
+    endereco.setLocalidade(dto.endereco().localidade());
+    endereco.setUF(dto.endereco().uf());
     endereco.setPais(dto.endereco().pais());
     funcionario.setEndereco(endereco);
 
