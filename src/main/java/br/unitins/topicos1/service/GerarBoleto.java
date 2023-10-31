@@ -1,17 +1,14 @@
 package br.unitins.topicos1.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,18 +27,15 @@ import org.jrimum.domkee.banco.Sacado;
 import org.jrimum.domkee.banco.TipoDeTitulo;
 import org.jrimum.domkee.banco.Titulo;
 import org.jrimum.domkee.banco.Titulo.Aceite;
-import org.jrimum.domkee.pessoa.CEP;
 import org.jrimum.domkee.pessoa.Endereco;
-import org.jrimum.domkee.pessoa.UnidadeFederativa;
 import org.jrimum.utilix.DateFormat;
-
-import com.github.braully.boleto.BoletoCobranca;
 import com.github.braully.boleto.LayoutsSuportados;
 import com.github.braully.boleto.RemessaArquivo;
 import com.github.braully.boleto.RetornoArquivo;
-import com.github.braully.boleto.TagLayout;
 import com.github.braully.boleto.TituloArquivo;
-import static com.github.braully.boleto.TagLayout.TagCreator.*;
+import br.unitins.topicos1.model.Cliente;
+import br.unitins.topicos1.model.Empresa;
+
 
 @ApplicationScoped
 public class GerarBoleto {
@@ -50,7 +44,7 @@ public class GerarBoleto {
      * Ver exemplo mais detalhado em:
      * com.github.braully.boleto.LayoutsSuportados._LAYOUT_FEBRABAN_CNAB240
      */
-	public void geraLayout() {
+	/* public void geraLayout() {
 		TagLayout arquivo = tag("arquivo");
         arquivo.with(
                 tag("cabecalho").with(
@@ -65,7 +59,7 @@ public class GerarBoleto {
                         //As tags com id são importantes pra determinar o tipo da linha no layout de retorno
                         tag("codigoRegistro").length(1).id(true),
                         tag("segmento").id(true).value("D"),
-                        //Alguns campos podemo precisar de formatação ou parser personalizado, exemplo data
+                        //Alguns campos podemos precisar de formatação ou parser personalizado, exemplo data
                         tag("dataVencimento").length(8).format(new SimpleDateFormat("ddMMyyyy"))
                 ),
                 tag("rodape").with(
@@ -76,11 +70,11 @@ public class GerarBoleto {
 
         //
         System.out.println(arquivo);
-	}
+	} */
 
 	/* Um arquivo de remessa de boletos de cobrança contem um ou mais lotes de boletos. Cada lote pode conter um ou mais boletos.
 
-	Nesse exemplo simples iremos criar um arquivo de remessa com apenas um lote de boletos e dois boletos fictício. */
+	Nesse exemplo simples iremos criar um arquivo de remessa com apenas um lote de boletos e dois boletos fictícios. */
 	public void geraRemessa() {
 		RemessaArquivo remessa = new RemessaArquivo(LayoutsSuportados.LAYOUT_BB_CNAB240_COBRANCA_REMESSA);
         //Cabeçalho do arquivo de remessa: obrigatório
@@ -225,49 +219,44 @@ public class GerarBoleto {
 
 
 
-public static void geraBoletoFinal() {
-	BoletoCobranca boleto = new BoletoCobranca();
-        boleto.sacado("Sacado da Silva Sauro").sacadoCpf("1");
-        boleto.banco("1").agencia("1").conta("1");
-        boleto.cedente("Cedente da Silva Sauro").cedenteCnpj("1");
-        boleto.carteira("1");
-        boleto.numeroDocumento("1")
-                .nossoNumero("1234567890")
-                .valor(100.23).dataVencimento("01/01/2019");
+public static void geraBoletoFinal(Integer intervalo, Double valorCompra, Cliente cliente, Empresa empresa, br.unitins.topicos1.model.Endereco enderecoCliente) {
 
-        boleto.gerarLinhaDigitavel();
-        BoletoViewer create = BoletoViewer.create(boleto);
-        create.getPdfAsFile("teste.pdf");
-}
-
-  public static void geraBoleto() {
-    // Cedente
-    Cedente cedente = new Cedente(
-      "FADESP - Fundação de Amparo e Desenvolvimento da Pesquisa",
-      "10.687.566/0001-97"
-    );
+        // Cedente
+    Cedente cedente = new Cedente(empresa.getNomeReal(), empresa.getCnpj());
 
     // Sacado
-    Sacado sacado = new Sacado("Rayan Teixeira", "00864683243");
+    Sacado sacado = new Sacado(cliente.getNome(), cliente.getCpf());
 
     // Endereço do sacado
-    Endereco endereco = new Endereco();
-    endereco.setUF(UnidadeFederativa.PA);
-    endereco.setLocalidade("Ananindeua");
-    endereco.setCep(new CEP("66645-000"));
-    endereco.setBairro("AGUAS LINDAS");
-    endereco.setLogradouro("BR 316 - KM 05");
-    endereco.setNumero("1010");
+        Endereco endereco = new Endereco();
+    endereco.setUF(enderecoCliente.getUF());
+    endereco.setLocalidade(enderecoCliente.getLocalidade());
+    endereco.setCep(enderecoCliente.getCep());
+    endereco.setBairro(enderecoCliente.getBairro());
+    endereco.setLogradouro(enderecoCliente.getLogradouro());
+    endereco.setNumero(enderecoCliente.getNumero());
 
-    sacado.addEndereco(endereco);
+    sacado.addEndereco(endereco); 
 
     // Criando o título
     ContaBancaria contaBancaria = new ContaBancaria(
       BancosSuportados.BANCO_DO_BRASIL.create()
     );
-    contaBancaria.setAgencia(new Agencia(1674, "8"));
-    contaBancaria.setNumeroDaConta(new NumeroDaConta(2941653));
-    //contaBancaria.setNumeroDaConta(new NumeroDaConta(101739, "X"));
+
+    if(empresa.getNumeroAgencia().matches("\\d+-\\w")) {
+        String[] agencia = empresa.getNumeroAgencia().split("-");
+        contaBancaria.setAgencia(new Agencia(Integer.parseInt(agencia[0]), agencia[1]));
+    } else {
+        contaBancaria.setAgencia(new Agencia(Integer.parseInt(empresa.getNumeroAgencia())));
+    }
+
+    if(empresa.getNumeroConta().matches("\\d+-\\w")) {
+        String[] conta = empresa.getNumeroConta().split("-");
+        contaBancaria.setNumeroDaConta(new NumeroDaConta(Integer.parseInt(conta[0]), conta[1])); 
+    } else {
+        contaBancaria.setNumeroDaConta(new NumeroDaConta(Integer.parseInt(empresa.getNumeroConta())));
+    }
+    
     //contaBancaria.setCarteira(new Carteira(17, TipoDeCobranca.COM_REGISTRO));
     contaBancaria.setCarteira(new Carteira(17));
 
@@ -276,7 +265,8 @@ public static void geraBoletoFinal() {
     titulo.setNossoNumero("28588450000000066");
     titulo.setDigitoDoNossoNumero("7");
 
-    titulo.setValor(BigDecimal.valueOf(100.00));
+
+    titulo.setValor(BigDecimal.valueOf(valorCompra));
 
     LocalDateTime dataHoraAtual = LocalDateTime.now();
     // Converta o LocalDateTime em Instant
@@ -286,8 +276,7 @@ public static void geraBoletoFinal() {
     titulo.setDataDoDocumento(date);
 
     LocalDateTime dataVencimento = dataHoraAtual
-      .plusDays(7)
-      .with(LocalTime.of(23, 59, 59));
+      .plusDays(intervalo);
     // Converta o LocalDateTime em Instant
     Instant instantVen = dataVencimento
       .atZone(ZoneId.systemDefault())
@@ -309,13 +298,24 @@ public static void geraBoletoFinal() {
       "Após o vencimento, aplicar multa de 2,00% e juros de 1,00% ao mês"
     );
 
-    BoletoViewer boletoViewer = new BoletoViewer(boleto);
+        BoletoViewer create = BoletoViewer.create(boleto);
+        File arquivoPdf = create.getPdfAsFile("teste.pdf");
+        mostreBoletoNaTela(arquivoPdf);
+}
 
-    File arquivoPdf = boletoViewer.getPdfAsFile("boletoBB.pdf");
-	mostreBoletoNaTela(arquivoPdf);
-  }
+private static void mostreBoletoNaTela(File arquivoBoleto) {
 
-  public static void geraBoletoConvenio() {
+        java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+
+        try {
+                desktop.open(arquivoBoleto);
+        } catch (IOException e) {
+                e.printStackTrace();
+        }
+}
+
+ 
+ /* public static void geraBoletoConvenio() {
 	int convenio = 2866935 ;
 	String nDocumento = "0000000003";
 
@@ -376,12 +376,12 @@ public static void geraBoletoFinal() {
 		titulo.setAceite(Aceite.N);
 
 		// Dados do boleto
-		Boleto boleto = new Boleto(titulo);
+		Boleto boleto = new Boleto(titulo); */
 
 		/* cria uma informação fake para o usuário, pois  foi necessáio o nº convênio em contaBancaria.setNumeroDaConta para 
 		*  poder mostrar agencia e conta para o usuário
 		*/
-		boleto.addTextosExtras("txtFcAgenciaCodigoCedente", "1674-8/101.912-0"); 
+		/* boleto.addTextosExtras("txtFcAgenciaCodigoCedente", "1674-8/101.912-0"); 
 		boleto.addTextosExtras("txtRsAgenciaCodigoCedente", "1674-8/101.912-0"); 
 		boleto.setLocalPagamento("Pagar preferencialmente no Banco do Brasil");
 		boleto.setInstrucaoAoSacado("Evite multas, pague em dias suas contas.");
@@ -394,18 +394,9 @@ public static void geraBoletoFinal() {
 
 		File arquivoPdf = boletoViewer.getPdfAsFile("boletoConvBB.pdf");
 		 mostreBoletoNaTela(arquivoPdf);
-  }
+  } */
 
 
 
-  private static void mostreBoletoNaTela(File arquivoBoleto) {
-
-        java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
-
-        try {
-                desktop.open(arquivoBoleto);
-        } catch (IOException e) {
-                e.printStackTrace();
-        }
-}
+  
 }

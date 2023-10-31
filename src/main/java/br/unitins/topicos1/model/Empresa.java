@@ -29,8 +29,8 @@ public class Empresa extends DefaultEntity {
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinTable(
     name = "empresa_endereco",
-    joinColumns = @JoinColumn(name = "id_cliente"),
-    inverseJoinColumns = @JoinColumn(name = "id_empresa")
+    joinColumns = @JoinColumn(name = "id_empresa"),
+    inverseJoinColumns = @JoinColumn(name = "id_endereco")
   )
   private List<Endereco> listaEndereco;
 

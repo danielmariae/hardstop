@@ -3,7 +3,9 @@ package br.unitins.topicos1.resource;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import br.unitins.topicos1.dto.PatchSenhaDTO;
+import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.service.ClienteService;
+import br.unitins.topicos1.service.PedidoService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -11,6 +13,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
@@ -27,6 +30,9 @@ JsonWebToken jwt;
 @Inject
 ClienteService service;
 
+@Inject
+PedidoService servicePedido;
+
 @GET
 @RolesAllowed({"User"})
 public Response getCliente() {
@@ -37,7 +43,7 @@ public Response getCliente() {
     return Response.ok(service.findByLogin(login)).build();
 }
 
-@PATCH
+  @PATCH
   @Transactional
   @RolesAllowed({"User"})
   @Path("patch/senha/")
@@ -50,5 +56,20 @@ public Response getCliente() {
 
     return Response.status(200).entity(service.updateSenha(senha, id)).build();
   }
+
+  @PUT
+  @Transactional
+  @RolesAllowed({"User"})
+  @Path("put/pedido/")
+  public Response insert(PedidoDTO dto, Long idCliente) {
+
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long id = service.findByLogin(login).id();
+
+    return Response.status(200).entity(servicePedido.insert(dto, id)).build();
+  }
+
     
 }

@@ -10,6 +10,7 @@ import br.unitins.topicos1.dto.PedidoResponseDTO;
 import br.unitins.topicos1.model.Boleto;
 import br.unitins.topicos1.model.CartaoDeCredito;
 import br.unitins.topicos1.model.Cliente;
+import br.unitins.topicos1.model.Empresa;
 import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.ItemDaVenda;
 import br.unitins.topicos1.model.ModalidadePagamento;
@@ -19,6 +20,7 @@ import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.Status;
 import br.unitins.topicos1.model.StatusDoPedido;
 import br.unitins.topicos1.repository.ClienteRepository;
+import br.unitins.topicos1.repository.EmpresaRepository;
 import br.unitins.topicos1.repository.EnderecoRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
 import br.unitins.topicos1.repository.ProdutoRepository;
@@ -50,11 +52,17 @@ public class PedidoServiceImpl implements PedidoService {
   @Inject
   EnderecoRepository repositoryEndereco;
 
+  @Inject
+  EmpresaRepository repositoyEmpresa;
+
   @PersistenceUnit
   EntityManagerFactory emf;
 
   @Override
   public PedidoResponseDTO insert(PedidoDTO dto, Long id) {
+    // Carrega os dados da empresa.
+    Empresa empresa = repositoyEmpresa.findById(Long.valueOf(1));
+
     // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
     if (!verificaUsuario1(id)) {
       throw new GeneralErrorException(
@@ -163,54 +171,6 @@ public class PedidoServiceImpl implements PedidoService {
       }
     }
 
-    if (dto.formaDePagamento().modalidade() == 0) {
-      CartaoDeCredito pagamento = new CartaoDeCredito();
-      pagamento.setModalidade(
-        ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade())
-      );
-      pagamento.setValorPago(valorCompra);
-      pagamento.setNumeroCartao(dto.formaDePagamento().numeroCartao());
-      pagamento.setMesValidade(dto.formaDePagamento().mesValidade());
-      pagamento.setAnoValidade(dto.formaDePagamento().anoValidade());
-      pagamento.setCodSeguranca(dto.formaDePagamento().codSeguranca());
-      pagamento.setDataHoraPagamento(LocalDateTime.now());
-      pedido.setFormaDePagamento(pagamento);
-    } else if (dto.formaDePagamento().modalidade() == 1) {
-      Boleto pagamento = new Boleto();
-      pagamento.setValorPago(valorCompra);
-      pagamento.setModalidade(
-        ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade())
-      );
-      pagamento.setNomeBanco(dto.formaDePagamento().nomeBanco());
-      pagamento.setDataHoraGeracao(LocalDateTime.now());
-      LocalDateTime pegDateTime = LocalDateTime.now();
-      LocalDateTime limite = pegDateTime.plusDays(15);
-      limite = limite.with(LocalTime.of(23, 59, 59));
-      pagamento.setDataHoraLimitePag(limite);
-      GerarBoleto.geraBoleto();
-      GerarBoleto.geraBoletoConvenio();
-      pedido.setFormaDePagamento(pagamento);
-    } else if (dto.formaDePagamento().modalidade() == 2) {
-      Pix pagamento = new Pix();
-      pagamento.setModalidade(
-        ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade())
-      );
-      pagamento.setValorPago(valorCompra);
-      pagamento.setNomeCliente(dto.formaDePagamento().nomeCliente());
-      pagamento.setNomeRecebedor(dto.formaDePagamento().nomeRecebedor());
-      pagamento.setChaveRecebedor(dto.formaDePagamento().chaveRecebedor());
-      pagamento.setDataHoraGeracao(LocalDateTime.now());
-      pagamento.setNomeCidade(dto.formaDePagamento().nomeCidade());
-      GerarPix.QrCodePix(pagamento);
-      pedido.setFormaDePagamento(pagamento);
-    } else {
-      throw new GeneralErrorException(
-        "400",
-        "Bad Request",
-        "PedidoServiceImpl(insert)",
-        "O id passado como índice de forma de pagamento não existe! Os ids válidos são 0,1 ou 2."
-      );
-    }
 
     // Verifica se o id fornecido para o endereço de entrega do pedido é nulo
     if (!verificaEndereco1(id)) {
@@ -245,6 +205,58 @@ public class PedidoServiceImpl implements PedidoService {
         "O id passado como índice de endereço não pertence ao cliente!"
       );
     }
+
+
+
+
+    if (dto.formaDePagamento().modalidade() == 0) {
+      CartaoDeCredito pagamento = new CartaoDeCredito();
+      pagamento.setModalidade(
+        ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade())
+      );
+      pagamento.setValorPago(valorCompra);
+      pagamento.setNumeroCartao(dto.formaDePagamento().numeroCartao());
+      pagamento.setMesValidade(dto.formaDePagamento().mesValidade());
+      pagamento.setAnoValidade(dto.formaDePagamento().anoValidade());
+      pagamento.setCodSeguranca(dto.formaDePagamento().codSeguranca());
+      pagamento.setDataHoraPagamento(LocalDateTime.now());
+      pedido.setFormaDePagamento(pagamento);
+    } else if (dto.formaDePagamento().modalidade() == 1) {
+      Boleto pagamento = new Boleto();
+      pagamento.setValorPago(valorCompra);
+      pagamento.setModalidade(
+        ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade())
+      );
+      pagamento.setNomeBanco(empresa.getNomeBanco());
+      pagamento.setDataHoraGeracao(LocalDateTime.now());
+      LocalDateTime pegDateTime = LocalDateTime.now();
+      LocalDateTime limite = pegDateTime.plusDays(dto.formaDePagamento().diasVencimento());
+      limite = limite.with(LocalTime.of(23, 59, 59));
+      pagamento.setDataHoraLimitePag(limite);
+      GerarBoleto.geraBoletoFinal(dto.formaDePagamento().diasVencimento(), valorCompra, cliente, empresa, endereco);
+      pedido.setFormaDePagamento(pagamento);
+    } else if (dto.formaDePagamento().modalidade() == 2) {
+      Pix pagamento = new Pix();
+      pagamento.setModalidade(
+        ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade())
+      );
+      pagamento.setValorPago(valorCompra);
+      pagamento.setNomeCliente(cliente.getNome());
+      pagamento.setNomeRecebedor(empresa.getNomeFantasia());
+      pagamento.setChaveRecebedor(empresa.getChavePixAleatoria());
+      pagamento.setDataHoraGeracao(LocalDateTime.now());
+      pagamento.setNomeCidade(empresa.getListaEndereco().get(0).getLocalidade());
+      GerarPix.QrCodePix(pagamento);
+      pedido.setFormaDePagamento(pagamento);
+    } else {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "PedidoServiceImpl(insert)",
+        "O id passado como índice de forma de pagamento não existe! Os ids válidos são 0,1 ou 2."
+      );
+    }
+
 
     pedido.setStatusDoPedido(new ArrayList<StatusDoPedido>());
     StatusDoPedido status = new StatusDoPedido();

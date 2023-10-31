@@ -19,30 +19,33 @@ BEGIN
 END;
 $$; */
 
+insert into empresa (nomeReal, nomeFantasia, nomeResponsavel, cnpj, cpf, chavePixAleatoria, email, nomeBanco, codigoBanco, numeroConta, numeroAgencia, isEmpresa) values('Leandro Armações Ilimitadas Ltda', 'LAILPALMAS', 'Leandro Guimarães Garcia', '81.478.733/0001-38', '73522652363', 'a87a052f-64f7-4496-9399-8f898c416f28', 'leocid25@gmail.com', 'Banco do Brasil', '001', '124911-8', '1867-8', 'true');
 
 insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Katia de Ruim', 'Barão de Cotegipe', '15', 's/l', 'Sul', 'Perto da igreja Assembléia', '64532098', 'Rialma', 'GO', 'Brasil');
 
 insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Flávio de Boa', 'Palmares da Cruz', '88', 's/l', 'Norte', 'Perto do supermercado Real', '38432422', 'Ponte Alta', 'TO', 'Brasil');
 
-insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('.Net.Com', 'Aida Aguiar', 's/n', '18', 'Santa Efigênia', 'Centro', '77532043', 'São Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('.Net.Com', 'Aida Aguiar', 's/n', '18', 'Santa Efigênia', 'Centro', '77532043', 'Sao Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Arruda de Alencar', 'Martins Pontes', 's/n', '55', 'Butantã', 'Sul', '73828382', 'São Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Arruda de Alencar', 'Martins Pontes', 's/n', '55', 'Butantã', 'Sul', '73828382', 'Sao Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Marta de Cesare', 'dos Potiguares', '567', 's/l', 'Anhangabaú', 'Centro', '70987213', 'São Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Marta de Cesare', 'dos Potiguares', '567', 's/l', 'Anhangabaú', 'Centro', '70987213', 'Sao Paulo', 'SP', 'Brasil');
 
 insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Mãe da Katia de Ruim', 'Sermão de mãe', 's/n', '58', 'Oeste', 'Ao lado da igreja do Véu', '73245787', 'Araraquara', 'SP', 'Brasil');
 
+insert into endereco (nome, logradouro, numero, lote, bairro, cep, localidade, uf, pais) values('Leandro Armações Ilimitadas Ltda', 'rua dos Guaytacazes', '1000', 's/l', 'Santa Efigênia', '77226654', 'Sao Paulo', 'SP', 'Brasil');
+
 -- senha 123VaA_
-insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email, perfil) values('Katia de Ruim', '2010-08-08', '45390821398', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com', '0');
+insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email, perfil) values('Katia de Ruim', '2010-08-08', '23576472720', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com', '0');
 
 -- senha 1a2B3!
-insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email, perfil) values('Flávio de Boa', '2007-10-02', '15499833200', 'M', 'flavio1234', 'pTOqkVzjpPAXcO0Iau1rmMLSxHsi/CSmyX7a+k1h9oDcYjh2k2s+GQfTRhK9JECbQFkezUT2unji0ww04h7KDQ==', 'flavio1234@gmail.com', '0');
+insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email, perfil) values('Flávio de Boa', '2007-10-02', '20275068536', 'M', 'flavio1234', 'pTOqkVzjpPAXcO0Iau1rmMLSxHsi/CSmyX7a+k1h9oDcYjh2k2s+GQfTRhK9JECbQFkezUT2unji0ww04h7KDQ==', 'flavio1234@gmail.com', '0');
 
 -- senha bVgH_-2
-insert into funcionario (nome, datanascimento, cpf, sexo, login, senha, email, endereco_id, perfil) values('Arruda de Alencar', '2000-09-12', '06143290811', 'M', 'arrudaalencar', '1dFLdP3297AHwCVMOu5ScNEXaWxFW2TO7uj60UQY+PktBgoem0kVhF8b3FqvZDXn2eyOCHQab6aCK0oYGgm/2w==', 'arrudaalencar@gmail.com', 4, '1');
+insert into funcionario (nome, datanascimento, cpf, sexo, login, senha, email, endereco_id, perfil) values('Arruda de Alencar', '2000-09-12', '48202498783', 'M', 'arrudaalencar', '1dFLdP3297AHwCVMOu5ScNEXaWxFW2TO7uj60UQY+PktBgoem0kVhF8b3FqvZDXn2eyOCHQab6aCK0oYGgm/2w==', 'arrudaalencar@gmail.com', 4, '1');
 
 -- senha GfT12-
-insert into funcionario (nome, datanascimento, cpf, sexo, login, senha, email, endereco_id, perfil) values('Marta de Cesare', '2001-11-30', '56798213483', 'F', 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 'martacesare@gmail.com', 5, '2');
+insert into funcionario (nome, datanascimento, cpf, sexo, login, senha, email, endereco_id, perfil) values('Marta de Cesare', '2001-11-30', '19452476141', 'F', 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 'martacesare@gmail.com', 5, '2');
 
 
 insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '2022/34539382', 'www.netcom.br');
@@ -62,6 +65,7 @@ insert into cliente_telefone (id_cliente, id_telefone) values(1,2);
 insert into cliente_endereco (id_cliente, id_endereco) values(2,2);
 insert into cliente_telefone (id_cliente, id_telefone) values(2,3);
 
+insert into empresa_endereco (id_empresa, id_endereco) values(1,7);
 
 insert into funcionario_telefone (id_funcionario, id_telefone) values(1,4);
 insert into funcionario_telefone (id_funcionario, id_telefone) values(2,5);
