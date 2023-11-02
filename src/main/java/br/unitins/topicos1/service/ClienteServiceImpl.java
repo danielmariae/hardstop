@@ -44,12 +44,12 @@ public class ClienteServiceImpl implements ClienteService {
   HashService hashservice;
 
   @Override
-  public ClienteResponseDTO findById(Long id) {
+  public ClienteResponseDTO findByIdCliente(Long id) {
     return ClienteResponseDTO.valueOf(repository.findById(id));
   }
 
   @Override
-  public List<ClienteResponseDTO> findByName(String name) {
+  public List<ClienteResponseDTO> findByNameCliente(String name) {
     return repository
       .findByName(name)
       .stream()
@@ -58,12 +58,12 @@ public class ClienteServiceImpl implements ClienteService {
   }
 
   @Override
-  public ClienteResponseDTO findByCpf(String cpf) {
+  public ClienteResponseDTO findByCpfCliente(String cpf) {
     return ClienteResponseDTO.valueOf(repository.findByCpf(cpf));
   }
 
   @Override
-  public List<ClienteResponseDTO> findByAll() {
+  public List<ClienteResponseDTO> findByAllCliente() {
     return repository
       .listAll()
       .stream()
@@ -74,7 +74,7 @@ public class ClienteServiceImpl implements ClienteService {
   @Override
   @Transactional
   // Método para deletar o cliente junto com todos os seus relacionamentos.
-  public void delete(Long id) {
+  public void deleteCliente(Long id) {
 
 // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
 if(!verificaUsuario1(id)) {
@@ -112,7 +112,7 @@ cliente.getListaProduto().clear();
 
   @Override
   @Transactional
-  public ClienteResponseDTO update(ClienteDTO clt, Long id) {
+  public ClienteResponseDTO updateCliente(ClienteDTO clt, Long id) {
     Cliente cliente = repository.findById(id);
 
     cliente.setNome(clt.nome());
@@ -224,7 +224,7 @@ cliente.getListaProduto().clear();
 
   @Override
   @Transactional
-  public String updateSenha(PatchSenhaDTO senha, Long id) {
+  public String updateSenhaCliente(PatchSenhaDTO senha, Long id) {
     Cliente cliente = repository.findById(id);
 
     if(hashservice.getHashSenha(senha.senhaAntiga()).equals(cliente.getSenha())) {
@@ -238,7 +238,7 @@ cliente.getListaProduto().clear();
 
   @Override
   @Transactional
-  public ClienteResponseDTO updateTelefone(
+  public ClienteResponseDTO updateTelefoneCliente(
     List<TelefonePatchDTO> tel,
     Long id
   ) {
@@ -291,7 +291,7 @@ cliente.getListaProduto().clear();
 
   @Override
   @Transactional
-  public ClienteResponseDTO updateEndereco(
+  public ClienteResponseDTO updateEnderecoCliente(
     List<EnderecoPatchDTO> end,
     Long id
   ) {
@@ -354,7 +354,7 @@ cliente.getListaProduto().clear();
 
   @Override
   @Transactional
-  public ClienteResponseNPDTO insert(ClienteDTO dto) {
+  public ClienteResponseNPDTO insertCliente(ClienteDTO dto) {
 
     Cliente cliente = null;
 
@@ -466,7 +466,7 @@ cliente.getListaProduto().clear();
     return ClienteResponseNPDTO.valueOf(cliente);
   }
 
-  public List<ProdutoResponseDTO> findListaDesejos(Long id) {
+  public List<ProdutoResponseDTO> findListaDesejosCliente(Long id) {
     Cliente cliente = repository.findById(id);
 
     List<ProdutoResponseDTO> lista = new ArrayList<ProdutoResponseDTO>();

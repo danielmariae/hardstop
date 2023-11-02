@@ -8,42 +8,45 @@ import br.unitins.topicos1.dto.ClienteResponseNPDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
+import jakarta.enterprise.context.ApplicationScoped;
+
 
 import java.util.List;
 
+@ApplicationScoped
 public interface ClienteService {
   // Cadastra um novo cliente
-  public ClienteResponseNPDTO insert(ClienteDTO dto);
+  public ClienteResponseNPDTO insertCliente(ClienteDTO dto);
 
   // Substitui todas as informações relacionadas a um cliente com determinado id
-  public ClienteResponseDTO update(ClienteDTO dto, Long id);
+  public ClienteResponseDTO updateCliente(ClienteDTO dto, Long id);
 
   // Substitui um telefone ou insere um novo telefone
-  public ClienteResponseDTO updateTelefone(List<TelefonePatchDTO> tel, Long id);
+  public ClienteResponseDTO updateTelefoneCliente(List<TelefonePatchDTO> tel, Long id);
 
   // Substitui um endereco ou insere um novo endereco
-  public ClienteResponseDTO updateEndereco(List<EnderecoPatchDTO> end, Long id);
+  public ClienteResponseDTO updateEnderecoCliente(List<EnderecoPatchDTO> end, Long id);
 
   // Altera a senha do cliente
-  public String updateSenha(PatchSenhaDTO senha, Long id);
+  public String updateSenhaCliente(PatchSenhaDTO senha, Long id);
 
   // Apaga um cliente inteiro
-  public void delete(Long id);
+  public void deleteCliente(Long id);
 
   // Encontra um cliente usando seu id
-  public ClienteResponseDTO findById(Long id);
+  public ClienteResponseDTO findByIdCliente(Long id);
 
   // Encontra um cliente usando seu cpf
-  public ClienteResponseDTO findByCpf(String cpf);
+  public ClienteResponseDTO findByCpfCliente(String cpf);
 
   // Encontra um cliente usando seu nome
-  public List<ClienteResponseDTO> findByName(String nome);
+  public List<ClienteResponseDTO> findByNameCliente(String nome);
 
   // Retorna uma lista com os dados de todos os clientes
-  public List<ClienteResponseDTO> findByAll();
+  public List<ClienteResponseDTO> findByAllCliente();
 
   // Retorna a lista de desejos de um dado usuário
-  public List<ProdutoResponseDTO> findListaDesejos(Long id);
+  public List<ProdutoResponseDTO> findListaDesejosCliente(Long id);
 
   //Autenticação de usuário
   public ClienteResponseDTO findByLoginAndSenha(String login, String senha);

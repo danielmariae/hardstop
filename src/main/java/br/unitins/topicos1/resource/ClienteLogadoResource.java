@@ -1,9 +1,14 @@
 package br.unitins.topicos1.resource;
 
+import java.util.List;
+
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
+import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
+import br.unitins.topicos1.dto.PedidoPatchEnderecoDTO;
+import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.service.ClienteService;
 import br.unitins.topicos1.service.PedidoService;
 import jakarta.annotation.security.RolesAllowed;
@@ -11,10 +16,12 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -54,13 +61,13 @@ public Response getCliente() {
 
     Long id = service.findByLogin(login).id();
 
-    return Response.status(200).entity(service.updateSenha(senha, id)).build();
+    return Response.status(200).entity(service.updateSenhaCliente(senha, id)).build();
   }
 
   @PUT
   @Transactional
   @RolesAllowed({"User"})
-  @Path("put/pedido/")
+  @Path("pedido/insert/")
   public Response insert(PedidoDTO dto, Long idCliente) {
 
     // obtendo o login pelo token jwt
@@ -71,5 +78,84 @@ public Response getCliente() {
     return Response.status(200).entity(servicePedido.insert(dto, id)).build();
   }
 
-    
+  @PATCH
+  @Transactional
+  @Path("patch/telefone/")
+  @RolesAllowed({"User"})
+  public Response updateTelefoneCliente(@Valid List<TelefonePatchDTO> tel) {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = service.findByLogin(login).id();
+    return Response.status(200).entity(service.updateTelefoneCliente(tel, idCliente)).build();
+  }
+
+  @PATCH
+  @Transactional
+  @Path("patch/endereco/")
+  @RolesAllowed({"User"})
+  public Response updateEnderecoCliente(@Valid List<EnderecoPatchDTO> end) {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = service.findByLogin(login).id();
+    return Response.status(200).entity(service.updateEnderecoCliente(end, idCliente)).build();
+  }
+
+  @DELETE
+  @Transactional
+  @Path("/delete/")
+  @RolesAllowed({"User"})
+  public Response deleteCliente() {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = service.findByLogin(login).id();
+    service.deleteCliente(idCliente);
+    return Response.ok().build();
+  }
+
+  @GET
+  @Path("/search/listaDesejos/")
+  @RolesAllowed({"User"})
+  public Response findListaDesejosCliente(Long id) {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = service.findByLogin(login).id();
+    return Response.ok(service.findListaDesejosCliente(idCliente)).build();
+  }
+
+  @DELETE
+  @Transactional
+  @Path("/pedido/delete/")
+  @RolesAllowed({"User"})
+  public Response deletePedidoByCliente(Long idPedido) {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = service.findByLogin(login).id();
+    servicePedido.deletePedidoByCliente(idCliente, idPedido);
+    return Response.ok().build();
+  }
+
+  @PATCH
+  @Transactional
+  @Path("/pedido/patch/endereco/")
+  @RolesAllowed({"User"})
+  public Response updateEndereco(PedidoPatchEnderecoDTO dto) {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = service.findByLogin(login).id();
+    return Response.ok(servicePedido.updateEndereco(dto, idCliente)).build();
+  }
+
+  @GET
+  @Path("/pedido/search/id/{id}")
+  @RolesAllowed({"User"})
+  public Response findPedidoByCliente(@PathParam("id") Long id) {
+    return Response.ok(servicePedido.findPedidoByCliente(id)).build();
+  }
+
 }

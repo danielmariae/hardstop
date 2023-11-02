@@ -33,12 +33,12 @@ public class FuncionarioServiceImpl implements FuncionarioService {
   HashService hashservice;
 
   @Override
-  public FuncionarioResponseDTO findById(Long id) {
+  public FuncionarioResponseDTO findByIdFuncionario(Long id) {
     return FuncionarioResponseDTO.valueOf(repository.findById(id));
   }
 
   @Override
-  public List<FuncionarioResponseDTO> findByName(String name) {
+  public List<FuncionarioResponseDTO> findByNameFuncionario(String name) {
     return repository
       .findByName(name)
       .stream()
@@ -47,12 +47,12 @@ public class FuncionarioServiceImpl implements FuncionarioService {
   }
 
   @Override
-  public FuncionarioResponseDTO findByCpf(String cpf) {
+  public FuncionarioResponseDTO findByCpfFuncionario(String cpf) {
     return FuncionarioResponseDTO.valueOf(repository.findByCpf(cpf));
   }
 
   @Override
-  public List<FuncionarioResponseDTO> findByAll() {
+  public List<FuncionarioResponseDTO> findByAllFuncionario() {
     return repository
       .listAll()
       .stream()
@@ -62,7 +62,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Override
   @Transactional
-  public void delete(Long id) {
+  public void deleteFuncionario(Long id) {
     Funcionario func = repository.findById(id);
     repository.deleteById(func.getEndereco().getId());
     for (Telefone tel : func.getListaTelefone()) {
@@ -73,7 +73,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Override
   @Transactional
-  public FuncionarioResponseDTO update(FuncionarioDTO func, Long id) {
+  public FuncionarioResponseDTO updateFuncionario(FuncionarioDTO func, Long id) {
     Funcionario funcionario = repository.findById(id);
 
     funcionario.setNome(func.nome());
@@ -121,7 +121,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Override
   @Transactional
-  public String updateSenha(PatchSenhaDTO senha, Long id) {
+  public String updateSenhaFuncionario(PatchSenhaDTO senha, Long id) {
     Funcionario funcionario = repository.findById(id);
 
     if(hashservice.getHashSenha(senha.senhaAntiga()).equals(funcionario.getSenha())) {
@@ -135,7 +135,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Override
   @Transactional
-  public FuncionarioResponseDTO updateTelefone(
+  public FuncionarioResponseDTO updateTelefoneFuncionario(
     List<TelefonePatchDTO> tel,
     Long id
   ) {
@@ -188,7 +188,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Override
   @Transactional
-  public FuncionarioResponseDTO updateEndereco(EnderecoPatchDTO end, Long id) {
+  public FuncionarioResponseDTO updateEnderecoFuncionario(EnderecoPatchDTO end, Long id) {
     Funcionario funcionario = repository.findById(id);
 
     funcionario.getEndereco().setNome(end.nome());
@@ -206,7 +206,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     return FuncionarioResponseDTO.valueOf(funcionario);
   }
 
-  public FuncionarioDTO insert(FuncionarioDTO dto) {
+  public FuncionarioDTO insertFuncionario(FuncionarioDTO dto) {
     Funcionario funcionario = new Funcionario();
     funcionario.setNome(dto.nome());
     funcionario.setDataNascimento(
