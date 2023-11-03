@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import br.unitins.topicos1.dto.ClienteDTO;
-import br.unitins.topicos1.dto.EnderecoPatchDTO;
+import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
@@ -124,7 +124,7 @@ public Response getFuncionario() {
   @PATCH
   @Transactional
   @RolesAllowed({"Func", "Admin"})
-  @Path("patch/telefone/funcionario/")
+  @Path("patch/telefone/")
   public Response updateTelefoneFuncionario(@Valid List<TelefonePatchDTO> tel) {
 
     // obtendo o login pelo token jwt
@@ -138,8 +138,8 @@ public Response getFuncionario() {
   @PATCH
   @Transactional
   @RolesAllowed({"Func", "Admin"})
-  @Path("patch/endereco/funcionario/")
-  public Response updateEnderecoFuncionario(@Valid EnderecoPatchDTO end) {
+  @Path("patch/endereco/")
+  public Response updateEnderecoFuncionario(@Valid EnderecoFuncPatchDTO end) {
 
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();

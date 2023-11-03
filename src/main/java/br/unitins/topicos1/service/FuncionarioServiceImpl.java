@@ -3,7 +3,7 @@ package br.unitins.topicos1.service;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.FuncionarioFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
-import br.unitins.topicos1.dto.EnderecoPatchDTO;
+import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
@@ -11,8 +11,10 @@ import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.Funcionario;
+import br.unitins.topicos1.model.Perfil;
 import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
+import br.unitins.topicos1.repository.EnderecoRepository;
 import br.unitins.topicos1.repository.FuncionarioRepository;
 import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,6 +30,9 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Inject
   FuncionarioRepository repository;
+
+  @Inject
+  EnderecoRepository repositoryEndereco;
 
   @Inject
   HashService hashservice;
@@ -188,10 +193,9 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Override
   @Transactional
-  public FuncionarioResponseDTO updateEnderecoFuncionario(EnderecoPatchDTO end, Long id) {
+  public FuncionarioResponseDTO updateEnderecoFuncionario(EnderecoFuncPatchDTO end, Long id) {
     Funcionario funcionario = repository.findById(id);
 
-    funcionario.getEndereco().setNome(end.nome());
     funcionario.getEndereco().setLogradouro(end.logradouro());
     funcionario.getEndereco().setNumero(end.numero());
     funcionario.getEndereco().setLote(end.lote());
@@ -217,8 +221,8 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     funcionario.setLogin(dto.login());
     funcionario.setSenha(hashservice.getHashSenha(dto.senha()));
     funcionario.setEmail(dto.email());
+    funcionario.setPerfil(Perfil.valueOf(dto.idperfil()));
     funcionario.setListaTelefone(new ArrayList<Telefone>());
-    funcionario.setEndereco(new Endereco());
 
     if (dto.listaTelefone() != null && !dto.listaTelefone().isEmpty()) {
       funcionario.setListaTelefone(new ArrayList<Telefone>());
@@ -244,8 +248,9 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     endereco.setLocalidade(dto.endereco().localidade());
     endereco.setUF(dto.endereco().uf());
     endereco.setPais(dto.endereco().pais());
-    funcionario.setEndereco(endereco);
+    repositoryEndereco.persist(endereco);
 
+    funcionario.setEndereco(endereco);
     repository.persist(funcionario);
     return FuncionarioDTO.valueOf(funcionario);
   }

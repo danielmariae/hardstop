@@ -2,7 +2,7 @@ package br.unitins.topicos1.Formatadores;
 
 public class TelefoneFormatador {
     public static String validaNumeroTelefone(String numeroTelefone) {
-        if(numeroTelefone.matches(("[0-9]{5}[-/.\s][0-9]{3}"))) {
+        if(numeroTelefone.matches(("[0-9]{5}[-/.\s][0-9]{4}"))) {
             String[] datasplit = numeroTelefone.split("[-/.\s]");
            String data = datasplit[0].concat(datasplit[1]);
            return data;

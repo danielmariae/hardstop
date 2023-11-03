@@ -19,9 +19,8 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
-import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -64,7 +63,7 @@ public Response getCliente() {
     return Response.status(200).entity(service.updateSenhaCliente(senha, id)).build();
   }
 
-  @PUT
+  @POST
   @Transactional
   @RolesAllowed({"User"})
   @Path("pedido/insert/")
@@ -118,7 +117,7 @@ public Response getCliente() {
   @GET
   @Path("/search/listaDesejos/")
   @RolesAllowed({"User"})
-  public Response findListaDesejosCliente(Long id) {
+  public Response findListaDesejosCliente() {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
 
@@ -152,10 +151,14 @@ public Response getCliente() {
   }
 
   @GET
-  @Path("/pedido/search/id/{id}")
+  @Path("/pedido/search/")
   @RolesAllowed({"User"})
-  public Response findPedidoByCliente(@PathParam("id") Long id) {
-    return Response.ok(servicePedido.findPedidoByCliente(id)).build();
+  public Response findPedidoByCliente() {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = service.findByLogin(login).id();
+    return Response.status(200).entity(servicePedido.findPedidoByCliente(idCliente)).build();
   }
 
 }

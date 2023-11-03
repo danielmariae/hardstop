@@ -124,13 +124,13 @@ public class PedidoServiceImpl implements PedidoService {
         );
       }
 
-      // Analisa se tem o produto em estoque e
+      // Analisa se tem o produto em estoque, subtrai a quantidade desejada e persiste no banco
       EntityManager em = emf.createEntityManager();
       EntityTransaction transaction = em.getTransaction();
 
       try {
         transaction.begin();
-        String sql1 = "SELECT quantidade FROM produto WHERE id = ?1 FOR UPDATE";
+        String sql1 = "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE ";
         Query query = em
           .createNativeQuery(sql1)
           .setParameter(1, idv.idProduto());
@@ -145,6 +145,7 @@ public class PedidoServiceImpl implements PedidoService {
             .executeUpdate();
           transaction.commit();
           item.setProduto(produto);
+          item.setIdProduto(idv.idProduto());
           pedido.getItemDaVenda().add(item);
           valorCompra = valorCompra + idv.quantidade() * idv.preco();
         } else {
@@ -170,7 +171,6 @@ public class PedidoServiceImpl implements PedidoService {
         em.close();
       }
     }
-
 
     // Verifica se o id fornecido para o endereço de entrega do pedido é nulo
     if (!verificaEndereco1(id)) {
@@ -206,9 +206,6 @@ public class PedidoServiceImpl implements PedidoService {
       );
     }
 
-
-
-
     if (dto.formaDePagamento().modalidade() == 0) {
       CartaoDeCredito pagamento = new CartaoDeCredito();
       pagamento.setModalidade(
@@ -230,10 +227,18 @@ public class PedidoServiceImpl implements PedidoService {
       pagamento.setNomeBanco(empresa.getNomeBanco());
       pagamento.setDataHoraGeracao(LocalDateTime.now());
       LocalDateTime pegDateTime = LocalDateTime.now();
-      LocalDateTime limite = pegDateTime.plusDays(dto.formaDePagamento().diasVencimento());
+      LocalDateTime limite = pegDateTime.plusDays(
+        dto.formaDePagamento().diasVencimento()
+      );
       limite = limite.with(LocalTime.of(23, 59, 59));
       pagamento.setDataHoraLimitePag(limite);
-      GerarBoleto.geraBoletoFinal(dto.formaDePagamento().diasVencimento(), valorCompra, cliente, empresa, endereco);
+      GerarBoleto.geraBoletoFinal(
+        dto.formaDePagamento().diasVencimento(),
+        valorCompra,
+        cliente,
+        empresa,
+        endereco
+      );
       pedido.setFormaDePagamento(pagamento);
     } else if (dto.formaDePagamento().modalidade() == 2) {
       Pix pagamento = new Pix();
@@ -245,7 +250,9 @@ public class PedidoServiceImpl implements PedidoService {
       pagamento.setNomeRecebedor(empresa.getNomeFantasia());
       pagamento.setChaveRecebedor(empresa.getChavePixAleatoria());
       pagamento.setDataHoraGeracao(LocalDateTime.now());
-      pagamento.setNomeCidade(empresa.getListaEndereco().get(0).getLocalidade());
+      pagamento.setNomeCidade(
+        empresa.getListaEndereco().get(0).getLocalidade()
+      );
       GerarPix.QrCodePix(pagamento);
       pedido.setFormaDePagamento(pagamento);
     } else {
@@ -256,7 +263,6 @@ public class PedidoServiceImpl implements PedidoService {
         "O id passado como índice de forma de pagamento não existe! Os ids válidos são 0,1 ou 2."
       );
     }
-
 
     pedido.setStatusDoPedido(new ArrayList<StatusDoPedido>());
     StatusDoPedido status = new StatusDoPedido();
@@ -326,7 +332,7 @@ public class PedidoServiceImpl implements PedidoService {
       );
     }
 
-    if (podeDeletar(cliente, pedido)) {
+    if (!podeDeletar(cliente, pedido)) {
       throw new GeneralErrorException(
         "400",
         "Bad Request",
@@ -413,6 +419,43 @@ public class PedidoServiceImpl implements PedidoService {
       // IMPORTANTE!!! Este status será gerado por comunicação com a administradora do cartão de crédito que negou o pedido ou por perder o prazo do pagamento no caso de ser pix ou boleto.
       statusVenda.setStatus(Status.valueOf(ppsdto.idStatus()));
       pedido.getStatusDoPedido().add(statusVenda);
+
+      // Devolve o produto separado ao estoque
+      for (ItemDaVenda idv : pedido.getItemDaVenda()) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+
+        try {
+          transaction.begin();
+          String sql1 =
+            "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
+          Query query = em
+            .createNativeQuery(sql1)
+            .setParameter(1, idv.getIdProduto());
+          Integer quantidade = (Integer) query.getSingleResult();
+          Integer quantFinal = quantidade + idv.getQuantidade();
+
+          String sql4 = "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
+          em
+            .createNativeQuery(sql4)
+            .setParameter(1, quantFinal)
+            .setParameter(2, idv.getIdProduto())
+            .executeUpdate();
+          transaction.commit();
+        } catch (Exception e) {
+          if (transaction != null && transaction.isActive()) {
+            transaction.rollback();
+            throw new GeneralErrorException(
+              "400",
+              "Bad Resquest",
+              "PedidoServiceImpl(insert)",
+              "Não consegui gravar no banco. " + e.getMessage()
+            );
+          }
+        } finally {
+          em.close();
+        }
+      }
       try {
         repositoryPedido.persist(pedido);
       } catch (Exception e) {
@@ -758,9 +801,85 @@ public class PedidoServiceImpl implements PedidoService {
           //Em caso de compras no cartão de crédito precisa primeiro comunicar a financeira antes de permitir essa deleção! Caso a financeira desfaça a ordem de pagamento, aí essa deleção será permitida. Caso a compra seja na forma de boleto ou pix o pedido poderá ser deletado imediatamente.
           if (pedido.getFormaDePagamento().getModalidade().getId() != 0) {
             // Pedido AGUARDANDO_PAGAMENTO foi excluído com sucesso! Em caso do pagamento escolhido tiver sido cartão de crédito é necessária comunicação com a financeira para concluir esta operação.
+
+            // Devolve o produto separado ao estoque
+            for (ItemDaVenda idv : pedido.getItemDaVenda()) {
+              EntityManager em1 = emf.createEntityManager();
+              EntityTransaction transaction = em1.getTransaction();
+
+              try {
+                transaction.begin();
+                String sql1 =
+                  "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
+                Query query = em1
+                  .createNativeQuery(sql1)
+                  .setParameter(1, idv.getIdProduto());
+                Integer quantidade = (Integer) query.getSingleResult();
+                Integer quantFinal = quantidade + idv.getQuantidade();
+
+                String sql4 =
+                  "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
+                em1
+                  .createNativeQuery(sql4)
+                  .setParameter(1, quantFinal)
+                  .setParameter(2, idv.getIdProduto())
+                  .executeUpdate();
+                transaction.commit();
+              } catch (Exception e) {
+                if (transaction != null && transaction.isActive()) {
+                  transaction.rollback();
+                  throw new GeneralErrorException(
+                    "400",
+                    "Bad Resquest",
+                    "PedidoServiceImpl(insert)",
+                    "Não consegui gravar no banco. " + e.getMessage()
+                  );
+                }
+              } finally {
+                em1.close();
+              }
+            }
             return true;
           } else {
             // IMPORTANTE!!!!! Chama função que comunica a financeira o desfazimento da negociação e aguarda a confirmação da financeira para deletar o pedido.
+
+            // Devolve o produto separado ao estoque
+            for (ItemDaVenda idv : pedido.getItemDaVenda()) {
+              EntityManager em2 = emf.createEntityManager();
+              EntityTransaction transaction = em2.getTransaction();
+
+              try {
+                transaction.begin();
+                String sql1 =
+                  "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
+                Query query = em2
+                  .createNativeQuery(sql1)
+                  .setParameter(1, idv.getIdProduto());
+                Integer quantidade = (Integer) query.getSingleResult();
+                Integer quantFinal = quantidade + idv.getQuantidade();
+
+                String sql4 =
+                  "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
+                em2
+                  .createNativeQuery(sql4)
+                  .setParameter(1, quantFinal)
+                  .setParameter(2, idv.getIdProduto())
+                  .executeUpdate();
+                transaction.commit();
+              } catch (Exception e) {
+                if (transaction != null && transaction.isActive()) {
+                  transaction.rollback();
+                  throw new GeneralErrorException(
+                    "400",
+                    "Bad Resquest",
+                    "PedidoServiceImpl(insert)",
+                    "Não consegui gravar no banco. " + e.getMessage()
+                  );
+                }
+              } finally {
+                em2.close();
+              }
+            }
             return true;
           }
         } else if (chaveDelecao == 1) {

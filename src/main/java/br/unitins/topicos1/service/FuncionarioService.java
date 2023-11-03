@@ -1,6 +1,6 @@
 package br.unitins.topicos1.service;
 
-import br.unitins.topicos1.dto.EnderecoPatchDTO;
+import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
@@ -23,7 +23,7 @@ public interface FuncionarioService {
   public FuncionarioResponseDTO updateTelefoneFuncionario(List<TelefonePatchDTO> tel, Long id);
 
   // Altera um endereço
-  public FuncionarioResponseDTO updateEnderecoFuncionario(EnderecoPatchDTO end, Long id);
+  public FuncionarioResponseDTO updateEnderecoFuncionario(EnderecoFuncPatchDTO end, Long id);
 
     // Altera a senha do funcionario
   public String updateSenhaFuncionario(PatchSenhaDTO senha, Long id);
