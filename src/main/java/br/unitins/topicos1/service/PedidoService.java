@@ -2,6 +2,7 @@ package br.unitins.topicos1.service;
 
 import java.util.List;
 
+import br.unitins.topicos1.dto.DesejoResponseDTO;
 import br.unitins.topicos1.dto.EnderecoResponseDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.dto.PedidoPatchEnderecoDTO;
@@ -26,4 +27,7 @@ public void deletePedidoByCliente(Long idCliente, Long idPedido);
 
     // Retorna todos os pedidos relacionados a um cliente específico
   public List<PedidoResponseDTO> findPedidoByCliente(Long idcliente);
+
+  // Insere produtos na lista de desejos do Cliente
+  public DesejoResponseDTO insertDesejos(Long idProduto, Long idCliente);
 }

@@ -1,6 +1,7 @@
 package br.unitins.topicos1.service;
 
 import br.unitins.topicos1.application.GeneralErrorException;
+import br.unitins.topicos1.dto.DesejoResponseDTO;
 import br.unitins.topicos1.dto.EnderecoResponseDTO;
 import br.unitins.topicos1.dto.ItemDaVendaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
@@ -145,7 +146,6 @@ public class PedidoServiceImpl implements PedidoService {
             .executeUpdate();
           transaction.commit();
           item.setProduto(produto);
-          item.setIdProduto(idv.idProduto());
           pedido.getItemDaVenda().add(item);
           valorCompra = valorCompra + idv.quantidade() * idv.preco();
         } else {
@@ -431,7 +431,7 @@ public class PedidoServiceImpl implements PedidoService {
             "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
           Query query = em
             .createNativeQuery(sql1)
-            .setParameter(1, idv.getIdProduto());
+            .setParameter(1, idv.getProduto().getId());
           Integer quantidade = (Integer) query.getSingleResult();
           Integer quantFinal = quantidade + idv.getQuantidade();
 
@@ -439,7 +439,7 @@ public class PedidoServiceImpl implements PedidoService {
           em
             .createNativeQuery(sql4)
             .setParameter(1, quantFinal)
-            .setParameter(2, idv.getIdProduto())
+            .setParameter(2, idv.getProduto().getId())
             .executeUpdate();
           transaction.commit();
         } catch (Exception e) {
@@ -545,6 +545,8 @@ public class PedidoServiceImpl implements PedidoService {
       .toList();
   }
 
+  @Override
+  @Transactional
   public EnderecoResponseDTO updateEndereco(
     PedidoPatchEnderecoDTO dto,
     Long id
@@ -635,6 +637,22 @@ public class PedidoServiceImpl implements PedidoService {
     }
     return EnderecoResponseDTO.valueOf(pedido.getEndereco());
   }
+
+  @Override
+  @Transactional
+  public DesejoResponseDTO insertDesejos(Long idProduto, Long idCliente) {
+    Cliente cliente = repository.findById(idCliente);
+    Produto produto = repositoryProduto.findById(idProduto);
+    cliente.getListaProduto().add(produto);
+    repository.persist(cliente);
+    return DesejoResponseDTO.valueOf(produto);
+  }
+
+
+
+
+
+
 
   private Boolean verificaEnderecoCliente(Cliente cliente, Endereco endereco) {
     for (Endereco end : cliente.getListaEndereco()) {
@@ -813,7 +831,7 @@ public class PedidoServiceImpl implements PedidoService {
                   "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
                 Query query = em1
                   .createNativeQuery(sql1)
-                  .setParameter(1, idv.getIdProduto());
+                  .setParameter(1, idv.getProduto().getId());
                 Integer quantidade = (Integer) query.getSingleResult();
                 Integer quantFinal = quantidade + idv.getQuantidade();
 
@@ -822,7 +840,7 @@ public class PedidoServiceImpl implements PedidoService {
                 em1
                   .createNativeQuery(sql4)
                   .setParameter(1, quantFinal)
-                  .setParameter(2, idv.getIdProduto())
+                  .setParameter(2, idv.getProduto().getId())
                   .executeUpdate();
                 transaction.commit();
               } catch (Exception e) {
@@ -854,7 +872,7 @@ public class PedidoServiceImpl implements PedidoService {
                   "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
                 Query query = em2
                   .createNativeQuery(sql1)
-                  .setParameter(1, idv.getIdProduto());
+                  .setParameter(1, idv.getProduto().getId());
                 Integer quantidade = (Integer) query.getSingleResult();
                 Integer quantFinal = quantidade + idv.getQuantidade();
 
@@ -863,7 +881,7 @@ public class PedidoServiceImpl implements PedidoService {
                 em2
                   .createNativeQuery(sql4)
                   .setParameter(1, quantFinal)
-                  .setParameter(2, idv.getIdProduto())
+                  .setParameter(2, idv.getProduto().getId())
                   .executeUpdate();
                 transaction.commit();
               } catch (Exception e) {

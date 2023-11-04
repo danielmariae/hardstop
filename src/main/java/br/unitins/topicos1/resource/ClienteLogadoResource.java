@@ -64,9 +64,8 @@ public Response getCliente() {
   }
 
   @POST
-  @Transactional
   @RolesAllowed({"User"})
-  @Path("pedido/insert/")
+  @Path("/insert/pedidos/")
   public Response insert(PedidoDTO dto, Long idCliente) {
 
     // obtendo o login pelo token jwt
@@ -77,8 +76,20 @@ public Response getCliente() {
     return Response.status(200).entity(servicePedido.insert(dto, id)).build();
   }
 
+  @POST
+  @RolesAllowed({"User"})
+  @Path("/insert/desejos/")
+  public Response insertDesejos(Long idProduto) {
+
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long id = service.findByLogin(login).id();
+
+    return Response.status(200).entity(servicePedido.insertDesejos(idProduto, id)).build();
+  }
+
   @PATCH
-  @Transactional
   @Path("patch/telefone/")
   @RolesAllowed({"User"})
   public Response updateTelefoneCliente(@Valid List<TelefonePatchDTO> tel) {
@@ -90,7 +101,6 @@ public Response getCliente() {
   }
 
   @PATCH
-  @Transactional
   @Path("patch/endereco/")
   @RolesAllowed({"User"})
   public Response updateEnderecoCliente(@Valid List<EnderecoPatchDTO> end) {
@@ -102,7 +112,6 @@ public Response getCliente() {
   }
 
   @DELETE
-  @Transactional
   @Path("/delete/")
   @RolesAllowed({"User"})
   public Response deleteCliente() {
@@ -126,8 +135,7 @@ public Response getCliente() {
   }
 
   @DELETE
-  @Transactional
-  @Path("/pedido/delete/")
+  @Path("/delete/pedido/")
   @RolesAllowed({"User"})
   public Response deletePedidoByCliente(Long idPedido) {
     // obtendo o login pelo token jwt
@@ -139,8 +147,7 @@ public Response getCliente() {
   }
 
   @PATCH
-  @Transactional
-  @Path("/pedido/patch/endereco/")
+  @Path("/patch/pedido/endereco/")
   @RolesAllowed({"User"})
   public Response updateEndereco(PedidoPatchEnderecoDTO dto) {
     // obtendo o login pelo token jwt
@@ -151,7 +158,7 @@ public Response getCliente() {
   }
 
   @GET
-  @Path("/pedido/search/")
+  @Path("/search/pedidos/")
   @RolesAllowed({"User"})
   public Response findPedidoByCliente() {
     // obtendo o login pelo token jwt

@@ -2,7 +2,6 @@ package br.unitins.topicos1.dto;
 
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Perfil;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,7 +16,8 @@ public record ClienteResponseDTO(
   Perfil perfil,
   List<EnderecoResponseDTO> listaEndereco,
   List<TelefoneResponseDTO> listaTelefone,
-  List<PedidoResponseDTO> listaPedido
+  List<PedidoResponseDTO> listaPedido,
+  List<DesejoResponseDTO> listaDesejos
 ) {
   public static ClienteResponseDTO valueOf(Cliente cliente) {
     return new ClienteResponseDTO(
@@ -43,6 +43,11 @@ public record ClienteResponseDTO(
         .getListaPedido()
         .stream()
         .map(t -> PedidoResponseDTO.valueOf(t))
+        .toList(),
+      cliente
+        .getListaProduto()
+        .stream()
+        .map(d -> DesejoResponseDTO.valueOf(d))
         .toList()
     );
   }

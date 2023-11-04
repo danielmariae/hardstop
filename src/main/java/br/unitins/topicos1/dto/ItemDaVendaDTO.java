@@ -14,7 +14,7 @@ public record ItemDaVendaDTO(
         return new ItemDaVendaDTO(
             idv.getPreco(),
             idv.getQuantidade(),
-            idv.getIdProduto()
+            idv.getProduto().getId()
             /* ProdutoDTO.valueOf(idv.getProduto()) */
         );
     }

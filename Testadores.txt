@@ -50,7 +50,8 @@ martacesare    GfT12-   ADMIN
 }
 
 
-// Inserir ou alterar endereço já existente - Funcionario Logado Resource - PATCH /funcionariologado/patch/endereco/
+// Inserir ou alterar endereço já existente
+// - Funcionario Logado Resource - PATCH /funcionariologado/patch/endereco/
 // - Cliente Logado Resource - PATCH /clientelogado/patch/endereco/
 // Caso o id pertença ao usuário, o sistema irá alterar os dados do endereço e manter o mesmo id
 // Caso o id não pertença ao usuário, o sistema adicionará um novo endereço àquele usuário 
@@ -81,10 +82,11 @@ martacesare    GfT12-   ADMIN
 
 
 
-// Inserir ou alterar telefone já existente - Funcionario Logado Resource - PATCH /funcionariologado/patch/telefone/
+// Inserir ou alterar telefone já existente 
+// - Funcionario Logado Resource - PATCH /funcionariologado/patch/telefone/
 // - Cliente Logado Resource - PATCH /clientelogado/patch/telefone/
 // Caso o id pertença ao usuário, o sistema irá alterar o tipo, ddd e númeroTelefone e manter o id
-// Caso o id não pertença ao usuário, o sistema adicionará um novo número de telefone àquele usuário 
+// Caso o id não pertença ao usuário, o sistema adicionará um novo número de telefone àquele usuário. 
 
 
 [
@@ -131,7 +133,7 @@ martacesare    GfT12-   ADMIN
 // Pedidos com status: AGUARDANDO_PAGAMENTO (0), PAGO (2), SEPARADO_DO_ESTOQUE (3) podem ter seus endereços alterados
 // Pedidos com status: PAGAMENTO_NÃO_AUTORIZADO (1), ENTREGUE_A_TRANSPORTADORA (4) e ENTREGUE (5) não podem ter seus endereços alterados
 // O endereço do pedido só pode ser alterado para algum outro endereço dentro da lista de endereços do mesmo cliente
-// Precisa informar o pedido e em seguida o id do endereço para onde o pedido deverá ser enviado
+// Precisa informar o id do pedido e em seguida o id do endereço para onde o pedido deverá ser enviado
 
 {
   "idPedido": 1,
@@ -201,39 +203,3 @@ martacesare    GfT12-   ADMIN
   "uf": "SP",
   "pais": "Brasil"
 }
-
-
-
-// Inserir Pedido
-{
-  "formaDePagamento": {
-    "modalidade": 0,
-    "numeroCartao": "123456789012",
-    "mesValidade": 10,
-    "anoValidade": 25,
-    "codSeguranca": 123,
-    "nomeBanco": "string",
-    "dataHoraLimitePag": "2022-03-10T12:15:50",
-    "nomeCliente": "string",
-    "nomeRecebedor": "string",
-    "chaveRecebedor": "string"
-  },
-  "itemDaVenda": [
-    {
-      "preco": 1000,
-      "quantidade": 3,
-      "idProduto": 1
-    },
-    {
-      "preco": 1000,
-      "quantidade": 1,
-      "idProduto": 2
-    }
-  ],
-  "idEndereco": 2
-}
-
-
-
-
-@Pattern(regexp = "([0-9]{5}[-./\s][0-9]{3})|([0-9]{8})", message = "Digite um cep válido!")

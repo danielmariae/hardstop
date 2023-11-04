@@ -8,18 +8,9 @@ public class ItemDaVenda extends DefaultEntity {
     
     private Double preco;
     private Integer quantidade;
-    private Long idProduto;
 
 @ManyToOne
     private Produto produto;
-
-
-    public Long getIdProduto() {
-        return idProduto;
-    }
-    public void setIdProduto(Long idProduto) {
-        this.idProduto = idProduto;
-    }
 
     public Produto getProduto() {
         return produto;
