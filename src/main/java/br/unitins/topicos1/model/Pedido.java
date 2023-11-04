@@ -39,7 +39,7 @@ public class Pedido extends DefaultEntity {
     )
     private List<ItemDaVenda> itemDaVenda;
 
-    // Não posso usar CascadeType.REMOVE porque endereço é uma entidade compartilhada com outras várias outras entidades como Cliente, Funcionário, Fornecedor e Logística
+    // Não posso usar CascadeType.REMOVE porque endereço é uma entidade compartilhada com várias outras entidades como Cliente, Funcionário, Fornecedor e Logística
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "id_endereco")
     private Endereco endereco;

@@ -8,12 +8,10 @@ import br.unitins.topicos1.dto.ClienteResponseNPDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
-import jakarta.enterprise.context.ApplicationScoped;
 
 
 import java.util.List;
 
-@ApplicationScoped
 public interface ClienteService {
   // Cadastra um novo cliente
   public ClienteResponseNPDTO insertCliente(ClienteDTO dto);

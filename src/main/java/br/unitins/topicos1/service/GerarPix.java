@@ -15,7 +15,9 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import br.unitins.topicos1.model.Pix;
+import jakarta.enterprise.context.ApplicationScoped;
 
+@ApplicationScoped
 public class GerarPix {
     public static void QrCodePix(Pix pagamento) {
     String filePath = "pix.png"; // Caminho para a imagem de saída

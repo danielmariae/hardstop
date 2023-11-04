@@ -5,12 +5,11 @@ import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
-import jakarta.enterprise.context.ApplicationScoped;
 
 
 import java.util.List;
 
-@ApplicationScoped
+
 public interface FuncionarioService {
 
   // Cadastra um funcionário

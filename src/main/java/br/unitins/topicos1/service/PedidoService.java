@@ -9,6 +9,7 @@ import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
 import br.unitins.topicos1.dto.PedidoResponseDTO;
 import jakarta.ws.rs.PathParam;
 
+
 public interface PedidoService {
 
 // Cria um novo pedido atrelado a um dado cliente
