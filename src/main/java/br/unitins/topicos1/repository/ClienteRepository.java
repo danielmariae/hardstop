@@ -12,7 +12,13 @@ import java.util.List;
 public class ClienteRepository implements PanacheRepository<Cliente> {
 
   public List<Cliente> findByName(String nome) {
-    return find("UPPER(nome) LIKE UPPER(?1) ", "%"+nome+"%").list();
+    try {
+      return find("UPPER(nome) LIKE UPPER(?1) ", "%"+nome+"%").list();
+    } catch (NoResultException e) {
+          e.printStackTrace();
+          return null;  
+    }
+    
   }
 
   public Cliente findByCpf(String cpf) {
@@ -22,19 +28,28 @@ public class ClienteRepository implements PanacheRepository<Cliente> {
       parte2cpf = cpf.substring(4,7);
       parte3cpf = cpf.substring(8,11);
       parte4cpf = cpf.substring(12,14);
-      return find("cpf", parte1cpf.concat(parte2cpf).concat(parte3cpf).concat(parte4cpf)).firstResult();
+      try {
+        return find("cpf", parte1cpf.concat(parte2cpf).concat(parte3cpf).concat(parte4cpf)).firstResult();
+      } catch (NoResultException e) {
+          e.printStackTrace();
+          return null;  
+    } 
     }
-    return find("cpf = :cpf", Parameters.with("cpf", cpf)).firstResult();
+    try {
+      return find("cpf = :cpf", Parameters.with("cpf", cpf)).firstResult();
+    } catch (NoResultException e) {
+          e.printStackTrace();
+          return null;  
+    } 
   }
 
  public Cliente findByLogin(String login) {
         try {
             return find("login = ?1 ", login).singleResult();
         } catch (NoResultException e) {
-            e.printStackTrace();
-            return null;
+          e.printStackTrace();
+          return null;  
         }
-        
     }
 
     public Cliente findByLoginAndSenha(String login, String senha) {

@@ -39,7 +39,10 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Override
   public FuncionarioResponseDTO findByIdFuncionario(Long id) {
-    return FuncionarioResponseDTO.valueOf(repository.findById(id));
+    Funcionario funcionario = repository.findById(id);
+    if (funcionario == null) 
+            throw new ValidationException("ID", "id inexistente");
+    return FuncionarioResponseDTO.valueOf(funcionario);
   }
 
   @Override
@@ -53,7 +56,10 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Override
   public FuncionarioResponseDTO findByCpfFuncionario(String cpf) {
-    return FuncionarioResponseDTO.valueOf(repository.findByCpf(cpf));
+    Funcionario funcionario = repository.findByCpf(cpf);
+    if (funcionario == null) 
+            throw new ValidationException("CPF", "cpf inexistente");
+    return FuncionarioResponseDTO.valueOf(funcionario);
   }
 
   @Override

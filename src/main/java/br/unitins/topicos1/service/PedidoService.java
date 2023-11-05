@@ -30,4 +30,7 @@ public void deletePedidoByCliente(Long idCliente, Long idPedido);
 
   // Insere produtos na lista de desejos do Cliente
   public DesejoResponseDTO insertDesejos(Long idProduto, Long idCliente);
+
+  // Remove produtos na lista de desejos do Cliente
+  public void deleteDesejos(Long idProduto, Long idCliente);
 }

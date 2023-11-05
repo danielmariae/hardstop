@@ -12,7 +12,12 @@ import java.util.List;
 public class FuncionarioRepository implements PanacheRepository<Funcionario> {
 
   public List<Funcionario> findByName(String nome) {
-    return find("UPPER(nome) LIKE UPPER(?1) ", "%"+nome+"%").list();
+    try {
+      return find("UPPER(nome) LIKE UPPER(?1) ", "%"+nome+"%").list();
+    } catch (NoResultException e) {
+            e.printStackTrace();
+            return null;
+    }
   }
 
   public Funcionario findByCpf(String cpf) {
@@ -22,9 +27,22 @@ public class FuncionarioRepository implements PanacheRepository<Funcionario> {
       parte2cpf = cpf.substring(4,7);
       parte3cpf = cpf.substring(8,11);
       parte4cpf = cpf.substring(12,14);
-      return find("cpf", parte1cpf.concat(parte2cpf).concat(parte3cpf).concat(parte4cpf)).firstResult();
+
+      try {
+        return find("cpf", parte1cpf.concat(parte2cpf).concat(parte3cpf).concat(parte4cpf)).firstResult();
+      } catch (NoResultException e) {
+            e.printStackTrace();
+            return null;
+    } 
     }
-    return find("cpf = :cpf", Parameters.with("cpf", cpf)).firstResult();
+
+
+    try {
+      return find("cpf = :cpf", Parameters.with("cpf", cpf)).firstResult();
+    } catch (NoResultException e) {
+            e.printStackTrace();
+            return null;
+    } 
   }
 
   public Funcionario findByLogin(String login) {

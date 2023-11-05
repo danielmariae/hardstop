@@ -146,6 +146,26 @@ public Response getCliente() {
     return Response.ok().build();
   }
 
+  @DELETE
+  @RolesAllowed({"User"})
+  @Path("/delete/desejos/")
+  public Response deleteDesejos(Long idProduto) {
+
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long id = service.findByLogin(login).id();
+
+    servicePedido.deleteDesejos(idProduto, id);
+
+    return Response.ok().build();
+  }
+
+
+
+
+
+
   @PATCH
   @Path("/patch/pedido/endereco/")
   @RolesAllowed({"User"})

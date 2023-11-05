@@ -9,8 +9,6 @@ arrudaalencar  bVgH_-2  FUNC
 martacesare    GfT12-   ADMIN
 
 
-
-
 // Inserir Cliente - Cliente Resource - POST /clientes
 // Os tipos possíveis de telefone são: FIXO_RESIDENCIAL (0), FIXO_COMERCIAL (1), CELULAR_PARTICULAR (2), CELULAR_COMERCIAL (3), TELEFONE_OUTRA_PESSOA (4)
 
@@ -100,7 +98,8 @@ martacesare    GfT12-   ADMIN
 
 
 
-// Inserir pedido - Cliente Logado Resource - POST - /clientelogado/pedido/insert
+// Inserir pedido
+// - Cliente Logado Resource - POST - /clientelogado/insert/pedido
 // Modalidade 0 representa Cartão de Credito; modalidade 1 representa Boleto bancário; modalidade 2 representa PIX.
 // Ao escolher a modalidade 0 precisará preencher numeroCartao, mesValidade, anoValidade, codSeguranca
 // Ao escolher a modalidade 1 precisará preencher diasVencimento
@@ -129,7 +128,8 @@ martacesare    GfT12-   ADMIN
 }
 
 
-// Alterar endereço do pedido - Cliente Logado Resource - GET - /clientelogado/pedido/patch/endereco
+// Alterar endereço do pedido
+// - Cliente Logado Resource - GET - /clientelogado/pedido/patch/endereco
 // Pedidos com status: AGUARDANDO_PAGAMENTO (0), PAGO (2), SEPARADO_DO_ESTOQUE (3) podem ter seus endereços alterados
 // Pedidos com status: PAGAMENTO_NÃO_AUTORIZADO (1), ENTREGUE_A_TRANSPORTADORA (4) e ENTREGUE (5) não podem ter seus endereços alterados
 // O endereço do pedido só pode ser alterado para algum outro endereço dentro da lista de endereços do mesmo cliente
@@ -141,11 +141,35 @@ martacesare    GfT12-   ADMIN
 }
 
 
-// Deletar pedido - Cliente Logado Resource - DELETE - /clientelogado/pedido/delete
+// Deletar pedido
+// - Cliente Logado Resource - DELETE - /clientelogado/delete/pedido
 // Pedidos com status do tipo: AGUARDANDO_PAGAMENTO ou PAGAMENTO_NÃO_AUTORIZADO podem ser deletados
 // Pedidos com status do tipo: PAGO, SEPARADO_DO_ESTOQUE, ENTREGUE_A_TRANSPORTADORA e ENTREGUE não podem ser deletados
 // Precisa informar o id do pedido
 // O id do pedido informado precisa pertencer ao cliente
+
+
+
+// Inserir na lista de desejos do Cliente
+// - Cliente Logado Resource - POST - /clientelogado/insert/desejos
+// Precisa informar o id do produto a ser inserido na lista de desejos do cliente
+// o id do produto precisa existir no banco de dados
+
+
+
+
+// Deletar desejos
+// - Cliente Logado Resource - DELETE - /clientelogado/delete/desejos
+// Precisa informar o id do produto
+// O id do produto informado precisa pertencer à lista de desejos do cliente, caso contrário o método não fará nada
+
+
+// Alterar Senha
+// - Cliente Logado Resource - PATCH - /clientelogado/patch/senha
+// Precisa informar a senha atual
+// Precisa informar a nova senha
+// A nova senha precisa obedecer o padrão pré-estabelecido no sistema (mínimo de 6 caracteres, 1 letra minúscula, 1 letra maiúscula, 1 número, 1 caractere especial) 
+
 
 
 

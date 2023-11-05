@@ -642,12 +642,92 @@ public class PedidoServiceImpl implements PedidoService {
   @Transactional
   public DesejoResponseDTO insertDesejos(Long idProduto, Long idCliente) {
     Cliente cliente = repository.findById(idCliente);
-    Produto produto = repositoryProduto.findById(idProduto);
+    if (!verificaUsuario2(cliente)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(insertDesejos)",
+        "id do usuário não existe no banco de dados."
+      );
+    }
+    // Verifica o id do prduto. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+      if (!verificaProduto1(idProduto)) {
+        throw new GeneralErrorException(
+          "400",
+          "Bad Resquest",
+          "PedidoServiceImpl(insertDesejos)",
+          "id do produto é nulo ou tem valor inferior a 1."
+        );
+      }
+
+      // Verifica o produto. Caso o id inexista no banco de dados, o sistema não realiza a operação.
+      Produto produto = repositoryProduto.findById(idProduto);
+      if (!verificaProduto2(produto)) {
+        throw new GeneralErrorException(
+          "400",
+          "Bad Resquest",
+          "PedidoServiceImpl(insertDesejos)",
+          "id do produto não existe no banco de dados."
+        );
+      }
     cliente.getListaProduto().add(produto);
-    repository.persist(cliente);
+    try {
+      repository.persist(cliente);
+    } catch (Exception e) {
+      throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "PedidoServiceImpl(insertDesejos)",
+        "O produto não pôde ser inserido na lista de desejos do Cliente no banco de dados."
+      );
+    }
     return DesejoResponseDTO.valueOf(produto);
   }
 
+  @Override
+  @Transactional
+  public void deleteDesejos(Long idProduto, Long idCliente) {
+    Cliente cliente = repository.findById(idCliente);
+    if (!verificaUsuario2(cliente)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(deleteDesejos)",
+        "id do usuário não existe no banco de dados."
+      );
+    }
+    // Verifica o id do prduto. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+      if (!verificaProduto1(idProduto)) {
+        throw new GeneralErrorException(
+          "400",
+          "Bad Resquest",
+          "PedidoServiceImpl(deleteDesejos)",
+          "id do produto é nulo ou tem valor inferior a 1."
+        );
+      }
+
+      // Verifica o produto. Caso o id inexista no banco de dados, o sistema não realiza a operação.
+      Produto produto = repositoryProduto.findById(idProduto);
+      if (!verificaProduto2(produto)) {
+        throw new GeneralErrorException(
+          "400",
+          "Bad Resquest",
+          "PedidoServiceImpl(deleteDesejos)",
+          "id do produto não existe no banco de dados."
+        );
+      }
+    cliente.getListaProduto().remove(produto);
+    try {
+      repository.persist(cliente);
+    } catch (Exception e) {
+      throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "PedidoServiceImpl(insertDesejos)",
+        "O produto não pôde ser retirado da lista de desejos do Cliente no banco de dados."
+      );
+    }
+  }
 
 
 

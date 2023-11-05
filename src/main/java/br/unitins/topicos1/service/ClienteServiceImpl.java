@@ -45,7 +45,10 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Override
   public ClienteResponseDTO findByIdCliente(Long id) {
-    return ClienteResponseDTO.valueOf(repository.findById(id));
+    Cliente cliente = repository.findById(id);
+    if (cliente == null) 
+            throw new ValidationException("ID", "id inexistente");
+    return ClienteResponseDTO.valueOf(cliente);
   }
 
   @Override
@@ -59,7 +62,10 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Override
   public ClienteResponseDTO findByCpfCliente(String cpf) {
-    return ClienteResponseDTO.valueOf(repository.findByCpf(cpf));
+    Cliente cliente = repository.findByCpf(cpf);
+    if (cliente == null) 
+            throw new ValidationException("CPF", "cpf inexistente");
+    return ClienteResponseDTO.valueOf(cliente);
   }
 
   @Override
@@ -478,6 +484,29 @@ cliente.getListaProduto().clear();
     return lista;
   }
 
+
+  @Override
+    public ClienteResponseDTO findByLoginAndSenha(String login, String senha) {
+      Cliente cliente = repository.findByLoginAndSenha(login, senha);
+      if(!verificaUsuario2(cliente)) {
+        throw new ValidationException("login", "Login ou senha inválido");
+      }
+      return ClienteResponseDTO.valueOf(cliente);
+    }
+
+    @Override
+    public ClienteResponseDTO findByLogin(String login) {
+        Cliente cliente = repository.findByLogin(login);
+        if (cliente == null) 
+            throw new ValidationException("login", "Login inválido");
+        
+        return ClienteResponseDTO.valueOf(cliente);
+    }
+
+
+
+
+
 // Métodos de validação
 
  private void verificaLogin(String login) {
@@ -538,24 +567,5 @@ private void verificaCpf(String cpf) {
           return true;
       }
     }
-
-    @Override
-    public ClienteResponseDTO findByLoginAndSenha(String login, String senha) {
-      Cliente cliente = repository.findByLoginAndSenha(login, senha);
-      if(!verificaUsuario2(cliente)) {
-        throw new ValidationException("login", "Login ou senha inválido");
-      }
-      return ClienteResponseDTO.valueOf(cliente);
-    }
-
-    @Override
-    public ClienteResponseDTO findByLogin(String login) {
-        Cliente cliente = repository.findByLogin(login);
-        if (cliente == null) 
-            throw new ValidationException("login", "Login inválido");
-        
-        return ClienteResponseDTO.valueOf(cliente);
-    }
-
 
 }
