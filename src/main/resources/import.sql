@@ -82,8 +82,9 @@ insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comp
 insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, custoCompra, valorVenda, quantidade, classificacao_id) values('Processador AMD Xeon7 11 gen', 'Processador AMD Xeon7 11 gen', 'PAMDX711gen07102023', 'AMD', 0.5, 0.5, 0.5, 0.25, 500.0, 1000.0, 4, 1);
 
 insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '2022/34539382', 'www.netcom.br');
-insert into lote (lote, fornecedor_id) values('f1_p1_lt15', 1);
-
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote) values('f1_p1_lt15', 1, '2023-10-01 16:11:26');
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote) values('f1_p1_lt15', 1, '2023-10-02 15:14:01');
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote) values('f1_p1_lt15', 1, '2023-10-03 09:47:50');
 
 insert into itemDaVenda (preco, quantidade, produto_id) values(900.0, 3, 1);
 insert into itemDaVenda (preco, quantidade, produto_id) values(1200.0, 1, 2);
@@ -95,8 +96,8 @@ insert into pedido (id_formaDePagamento, id_endereco) values(1, 1);
 
 insert into cliente_pedido (id_cliente, id_pedido) values(1,1);
 insert into produto_lote (id_produto, id_lote) values(1,1);
-insert into produto_lote (id_produto, id_lote) values(2,1);
-insert into produto_lote (id_produto, id_lote) values(3,1);
+insert into produto_lote (id_produto, id_lote) values(2,2);
+insert into produto_lote (id_produto, id_lote) values(3,3);
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,1);
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,2);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,1);
