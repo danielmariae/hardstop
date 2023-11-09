@@ -1,9 +1,0 @@
-Clientes:
-http://localhost:8080/auth/cliente
-katiaflavia     123VaA_  USER
-flavio1234      1a2B3!   USER
-
-Funcionarios:
-http://localhost:8080/auth/funcionario
-arrudaalencar  bVgH_-2  FUNC
-martacesare    GfT12-   ADMIN
