@@ -27,7 +27,7 @@ public class Produto extends DefaultEntity {
 
      @ManyToMany(cascade = CascadeType.ALL)
      @JoinTable(
-         name = "produto_fornecedor",
+         name = "produto_lote",
          joinColumns = @JoinColumn(name = "id_produto"),
          inverseJoinColumns = @JoinColumn(name = "id_lote")
      )
