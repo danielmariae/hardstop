@@ -107,6 +107,17 @@
     <artifactId>org.apache.commons.io</artifactId>
     <version>2.4</version>
 </dependency>
+  <!-- Dependência do Quarkus para o Kafka -->
+    <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
+    </dependency>
+    <!-- Dependência do Kafka Clients -->
+    <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-clients</artifactId>
+        <version>3.6.0</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
