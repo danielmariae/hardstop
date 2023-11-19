@@ -15,6 +15,7 @@ import br.unitins.topicos1.model.Empresa;
 import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.ItemDaVenda;
 import br.unitins.topicos1.model.ModalidadePagamento;
+import br.unitins.topicos1.model.ObjetoRetorno;
 import br.unitins.topicos1.model.Pedido;
 import br.unitins.topicos1.model.Pix;
 import br.unitins.topicos1.model.Produto;
@@ -38,9 +39,16 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+
 @ApplicationScoped
 public class PedidoServiceImpl implements PedidoService {
 
+  @Channel("card-out")
+  Emitter<String> cardRequestEmitter;
+  
   @Inject
   ClienteRepository repository;
 
@@ -60,6 +68,7 @@ public class PedidoServiceImpl implements PedidoService {
   EntityManagerFactory emf;
 
   @Override
+  @Transactional
   public PedidoResponseDTO insert(PedidoDTO dto, Long id) {
     // Carrega os dados da empresa.
     Empresa empresa = repositoyEmpresa.findById(Long.valueOf(1));
@@ -270,11 +279,14 @@ public class PedidoServiceImpl implements PedidoService {
     status.setStatus(Status.valueOf(0));
     pedido.getStatusDoPedido().add(status);
 
+    repositoryPedido.persist(pedido);
+
     cliente.getListaPedido().add(pedido);
 
     // Verifica se Cliente foi persistido no banco de dados.
     try {
       repository.persist(cliente);
+      //repository.flush();
     } catch (Exception e) {
       throw new GeneralErrorException(
         "500",
@@ -283,6 +295,11 @@ public class PedidoServiceImpl implements PedidoService {
         "Não consegui gravar o pedido para este cliente no banco de dados!"
       );
     }
+
+    //if(pedido.getFormaDePagamento().getModalidade().getId() == 0)
+    if(pedido.getFormaDePagamento() instanceof CartaoDeCredito)
+    enviaDadosCartao((CartaoDeCredito) pedido.getFormaDePagamento(), cliente.getNome(), cliente.getCpf(), pedido.getId());
+
 
     return PedidoResponseDTO.valueOf(pedido);
   }
@@ -998,4 +1015,50 @@ public class PedidoServiceImpl implements PedidoService {
     // O pedido repassado ao método não pertence ao Cliente repassado ao método.
     return false;
   }
+
+  private void enviaDadosCartao(CartaoDeCredito pagamento, String clienteNome, String cpf, Long idPedido) {
+    String dadosCartao;
+    String dataHora[] = pagamento.getDataHoraPagamento().toString().split("\\.");
+    dadosCartao = clienteNome + "+" + pagamento.getNumeroCartao() + "+" + pagamento.getAnoValidade().toString() + "+" + pagamento.getMesValidade().toString() + "+" + pagamento.getCodSeguranca().toString() + "+" + dataHora[0] + "+" + pagamento.getValorPago().toString() + "+" + cpf + "+" + idPedido.toString();
+
+   
+    String dadoCriptografado;
+    try {
+      dadoCriptografado = Criptografia.criptografar(dadosCartao);
+      cardRequestEmitter.send(dadoCriptografado);
+    } catch (Exception e) {
+     throw new GeneralErrorException(
+                    "400",
+                    "Bad Resquest",
+                    "PedidoServiceImpl(enviaDadosCartao)",
+                    "Não consegui criptografar a String. " + e.getMessage()
+                  );
+    }
+
+    
+  }
+
+    @Incoming("card-in")
+    @Transactional
+    public void alteraStatusCompraCredito(ObjetoRetorno objR) {
+
+    if(objR.getBoo()) {
+      Long idPedido = Long.parseLong(objR.getIdPedido());
+      Pedido pedido = repositoryPedido.findById(idPedido);
+      StatusDoPedido status = new StatusDoPedido();
+      status.setDataHora(LocalDateTime.now());
+      status.setStatus(Status.valueOf(2));
+      pedido.getStatusDoPedido().add(status);
+
+    } else {
+      Long idPedido = Long.parseLong(objR.getIdPedido());
+      Pedido pedido = repositoryPedido.findById(idPedido);
+      StatusDoPedido status = new StatusDoPedido();
+      status.setDataHora(LocalDateTime.now());
+      status.setStatus(Status.valueOf(1));
+      pedido.getStatusDoPedido().add(status);
+ 
+    }
+  }
+
 }

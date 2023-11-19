@@ -127,6 +127,26 @@ martacesare    GfT12-   ADMIN
   "idEndereco": 1
 }
 
+OU
+
+{
+  "formaDePagamento": {
+    "modalidade": 0,
+    "numeroCartao": "345690872106",
+    "mesValidade": 3,
+    "anoValidade": 24,
+    "codSeguranca": 237,
+    "diasVencimento": 0
+  },
+  "itemDaVenda": [
+    {
+      "preco": 1000,
+      "quantidade": 1,
+      "idProduto": 1
+    }
+  ],
+  "idEndereco": 1
+}
 
 // Alterar endereço do pedido
 // - Cliente Logado Resource - GET - /clientelogado/pedido/patch/endereco

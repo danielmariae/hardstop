@@ -1,0 +1,26 @@
+Dezipar o download diretamente na pasta C:\
+
+Entrar na Pasta C:\kafka_2.13-3.6.0, abrir um terminal e digitar:
+
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+
+Ainda na pasta C:\kafka_2.13-3.6.0, abrir outro terminal e digitar:
+
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+Ainda na pasta C:\kafka_2.13-3.6.0, abrir um terceiro terminal e digitar:
+
+.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe
+
+.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --topic card --create --partitions 1
+
+.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --describe
+
+No aplicativo que simula a empresa de cartão de crédito precisa alterar o dt_socket:
+
+./mvnw quarkus:dev -Ddebug=6006
+
+Gerando uma chave aleatória de 32 bytes (256 bits) e a codificando em Base64 usando openssl.exe
+
+openssl.exe rand -base64 32
+
