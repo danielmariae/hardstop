@@ -26,6 +26,11 @@ import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -503,6 +508,31 @@ cliente.getListaProduto().clear();
         return ClienteResponseDTO.valueOf(cliente);
     }
 
+    @Override
+    @Transactional
+    public ClienteResponseDTO updateNomeImagem(Long id, String nomeImagem) {
+        Cliente cliente = repository.findById(id);
+
+        // Substituindo o arquivo de imagem anterior pelo atual
+      if(cliente.getNomeImagem() != null) {
+        // Obtendo o caminho do Arquivo de imagem a ser deletado
+        String caminhoDoArquivo = cliente.getNomeImagem();
+         
+        // Convertendo o caminho para um objeto Path
+         Path caminho = Paths.get(caminhoDoArquivo);
+
+        try {
+            // Deletando o arquivo
+            Files.delete(caminho);
+        } catch (IOException e) {
+             e.getMessage();
+        }
+      }
+        // Adicionando o caminho para o novo arquivo de imagem
+        cliente.setNomeImagem(nomeImagem);
+        
+        return ClienteResponseDTO.valueOf(cliente);
+    }
 
 
 

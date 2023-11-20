@@ -20,6 +20,7 @@ public class Cliente extends DefaultEntity {
   private String senha;
   private String email;
   private final Perfil perfil = Perfil.USER;
+  private String nomeImagem;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinTable(
@@ -52,10 +53,6 @@ public class Cliente extends DefaultEntity {
     inverseJoinColumns = @JoinColumn(name = "id_produto")
   )
   private List<Produto> listaProduto;
-
-
-
-
   
   public List<Produto> getListaProduto() {
     return listaProduto;
@@ -148,4 +145,13 @@ public class Cliente extends DefaultEntity {
   public void setListaTelefone(List<Telefone> listaTelefone) {
     this.listaTelefone = listaTelefone;
   }
+
+  public String getNomeImagem() {
+    return this.nomeImagem;
+  }
+
+  public void setNomeImagem(String nomeImagem) {
+    this.nomeImagem = nomeImagem;
+  }
+
 }

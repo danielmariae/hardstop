@@ -20,7 +20,7 @@ No aplicativo que simula a empresa de cartão de crédito precisa alterar o dt_s
 
 ./mvnw quarkus:dev -Ddebug=6006
 
-Gerando uma chave aleatória de 32 bytes (256 bits) e a codificando em Base64 usando openssl.exe
+Gerando uma chave aleatória de 32 bytes (256 bits) e a codificando em Base64 usando openssl.exe. Este comando remove tanto caracteres de retorno de carro (\r) quanto quebras de linha (\n). 
 
-openssl.exe rand -base64 32
+openssl.exe rand -base64 32 | ForEach-Object { $_ -replace '\r|\n' }
 

@@ -52,4 +52,6 @@ public interface ClienteService {
   //Autenticação de usuário
   public ClienteResponseDTO findByLogin(String login);
 
+  public ClienteResponseDTO updateNomeImagem(Long id, String nomeImagem);
+
 }

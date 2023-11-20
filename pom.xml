@@ -112,16 +112,11 @@
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
 </dependency>
-    <!-- <dependency>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
-    </dependency> -->
-    <!-- Dependência do Kafka Clients -->
-    <!-- <dependency>
-        <groupId>org.apache.kafka</groupId>
-        <artifactId>kafka-clients</artifactId>
-        <version>3.6.0</version>
-    </dependency> -->
+<!-- Dependência do Quarkus para PartType -->
+<dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-multipart</artifactId>
+    </dependency>
 </dependencies>
   <build>
     <plugins>

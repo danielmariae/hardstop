@@ -21,6 +21,7 @@ public class Funcionario extends DefaultEntity {
   private String senha;
   private String email;
   private Perfil perfil;
+  private String nomeImagem;
 
   @OneToOne
   private Endereco endereco;
@@ -112,4 +113,13 @@ public class Funcionario extends DefaultEntity {
   public void setListaTelefone(List<Telefone> listaTelefone) {
     this.listaTelefone = listaTelefone;
   }
+
+  public String getNomeImagem() {
+    return this.nomeImagem;
+  }
+
+  public void setNomeImagem(String nomeImagem) {
+    this.nomeImagem = nomeImagem;
+  }
+
 }
