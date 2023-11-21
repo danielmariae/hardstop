@@ -44,7 +44,7 @@ public class FileServiceImpl implements FileService{
 
     private static final List<String> SUPPORTED_DOCUMENT_TYPES = Arrays.asList("doc/docx", "doc/doc", "doc/odt", "doc/xml", "doc/json", "doc/rtf", "doc/txt", "doc/pptx", "doc/pdf", "doc/ppt", "doc/xlsx", "doc/xls", "doc/csv", "doc/ods");
 
-    private static final List<String> SUPPORTED_VIDEO_TYPES = Arrays.asList("video/mp4", "video/mov", "video/wmv", "video/avi", "video/flv", "video/mkv", "video/webm", "video/swf", "video/f4v");
+    private static final List<String> SUPPORTED_VIDEO_TYPES = Arrays.asList("video/mp4", "video/mov", "video/wmv", "video/avi", "video/flv", "video/mkv", "video/webm", "video/swf", "video/f4v", "video/ogg");
 
     private static final int MAX_IMAGE_FILE_SIZE = 1024 * 1024 * 10; // 10Mb
 
@@ -158,12 +158,21 @@ public class FileServiceImpl implements FileService{
                 String archiveType = Files.probeContentType(Paths.get(nomeArquivo));
                 if(SUPPORTED_IMAGE_TYPES.contains(archiveType)) {
                     File file = new File(PATH_USER_IMAGE+nomeArquivo);
+                    if (!file.exists()) {
+                        throw new GeneralErrorException("400", "Bad Request", "FileServiceImpl(obterP)", "Este arquivo inexiste no sistema.");
+                    }
                     return file;
                 } else if(SUPPORTED_DOCUMENT_TYPES.contains(archiveType)) {
                     File file = new File(PATH_USER_DOCUMENTS+nomeArquivo);
+                    if (!file.exists()) {
+                        throw new GeneralErrorException("400", "Bad Request", "FileServiceImpl(obterP)", "Este arquivo inexiste no sistema.");
+                    }
                     return file;
                 } else if(SUPPORTED_VIDEO_TYPES.contains(archiveType)) {
                     File file = new File(PATH_USER_VIDEOS+nomeArquivo);
+                    if (!file.exists()) {
+                        throw new GeneralErrorException("400", "Bad Request", "FileServiceImpl(obterP)", "Este arquivo inexiste no sistema.");
+                    }
                     return file;
                 } else {
                     throw new GeneralErrorException("400", "Bad Resquest", "FileServiceImpl(obter)", "Tipo de arquivo não suportado");
@@ -210,6 +219,11 @@ public class FileServiceImpl implements FileService{
 
     public File obterP(String nomeArquivo) {
         File file = new File(PATH_PRODUTO_IMAGE+nomeArquivo);
+
+        if (!file.exists()) {
+            throw new GeneralErrorException("400", "Bad Request", "FileServiceImpl(obterP)", "Este arquivo inexiste no sistema.");
+        }
+
         return file;
     }
 

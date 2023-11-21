@@ -2,9 +2,11 @@ package br.unitins.topicos1.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Hashtable;
+import java.util.UUID;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -14,13 +16,40 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.model.Pix;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class GerarPix {
-    public static void QrCodePix(Pix pagamento) {
-    String filePath = "pix.png"; // Caminho para a imagem de saída
+
+  private static final String PATH_USER_PIX = System.getProperty("user.home") +
+    File.separator + "quarkus" +
+    File.separator + "pix" +
+    File.separator + "usuario" +
+    File.separator;
+
+
+  public static String QrCodePix(Pix pagamento) throws IOException {
+
+    
+    // criar diretorio caso nao exista
+    Path diretorio = Paths.get(PATH_USER_PIX);
+    Files.createDirectories(diretorio);
+
+    String extensao = "png";
+    Boolean flipflop = false;
+    Path filePath;
+    do {
+      // criando o nome do arquivo randomico
+      String novoNomeArquivo = UUID.randomUUID() + "." + extensao;
+
+      // definindo o caminho completo do arquivo
+      filePath = diretorio.resolve(novoNomeArquivo);
+      flipflop = filePath.toFile().exists();
+    } while (flipflop);
+
+    //String filePath = "pix.png"; // Caminho para a imagem de saída
 
     Integer mai = (pagamento.getChaveRecebedor().length() + 22);
     Integer chave = pagamento.getChaveRecebedor().length();
@@ -144,20 +173,22 @@ public class GerarPix {
       /* QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix matrix = qrCodeWriter.encode(dadosPagamento, BarcodeFormat.QR_CODE, width, height, hintMap); */
         
-        Path path = FileSystems.getDefault().getPath(filePath);
+        //Path path = FileSystems.getDefault().getPath(filePath);
 
       MatrixToImageWriter.writeToPath(
         matrix,
         fileType,
-        path
+        filePath
       );
 
-      File arquivo = path.toFile();
+      File arquivo = filePath.toFile();
       mostrePixNaTela(arquivo);
 
     } catch (WriterException | IOException e) {
       e.printStackTrace();
     }
+
+    return filePath.toFile().getName();
   }
 
   private static void mostrePixNaTela(File arquivoBoleto) {
@@ -173,7 +204,7 @@ public class GerarPix {
 
 
 
-  public class CRC16Calculator {
+  private class CRC16Calculator {
 
     // Tabela de lookup para o cálculo do CRC16 (CRC-CCITT)
     private static final int[] CRC16_TABLE = {
@@ -210,4 +241,14 @@ public class GerarPix {
       return crc & 0xFFFF; // Garante que o resultado seja um valor de 16 bits
     }
   }
+
+  public static File obterArquivoPix(String nomeArquivo) {
+        File file = new File(PATH_USER_PIX+nomeArquivo);
+
+        if (!file.exists()) {
+            throw new GeneralErrorException("400", "Bad Request", "GerarPix(obterArquivoPix)", "Este arquivo inexiste no sistema.");
+        }
+
+        return file;
+    }
 }

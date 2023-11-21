@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
@@ -23,6 +24,10 @@ public class Pedido extends DefaultEntity {
         this.idEndereco = idEndereco;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
     name = "pedido_statusDoPedido",
@@ -31,7 +36,7 @@ public class Pedido extends DefaultEntity {
     )
     private List<StatusDoPedido> statusDoPedido;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinTable(
     name = "pedido_itemDaVenda",
     joinColumns = @JoinColumn(name = "id_pedido"),
@@ -51,6 +56,14 @@ public class Pedido extends DefaultEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_logistica")
     private Logistica logistica;
+
+    public Cliente getCliente() {
+        return this.cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
     public Logistica getLogistica() {
         return logistica;

@@ -14,6 +14,7 @@ public record FuncionarioResponseDTO(
   String sexo,
   String login,
   String email,
+  String nomeImagem,
   EnderecoResponseDTO endereco,
   Perfil perfil,
   List<TelefoneResponseDTO> listaTelefone
@@ -27,6 +28,7 @@ public record FuncionarioResponseDTO(
       funcionario.getSexo(),
       funcionario.getLogin(),
       funcionario.getEmail(),
+      funcionario.getNomeImagem(),
       EnderecoResponseDTO.valueOf(funcionario.getEndereco()),
       funcionario.getPerfil(),
       funcionario

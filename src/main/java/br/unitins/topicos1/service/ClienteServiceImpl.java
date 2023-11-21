@@ -26,11 +26,6 @@ import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,11 +97,11 @@ if(!verificaUsuario2(cliente)) {
 cliente.getListaProduto().clear();
 
   // podeDeletar verifica se todos os pedidos foram finalizados, retornando true ou false.
-      if(!podeDeletar(cliente.getListaPedido())) {
+      if(!podeDeletar(repositoryPedido.findAll(id))) {
         throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(delete)", "Nada foi excluído porque este cliente possui pedidos ainda não finalizados!");
       }
 
-        for(Pedido pedido : cliente.getListaPedido()) {
+        for(Pedido pedido : repositoryPedido.findAll(id)) {
           try {
             repositoryPedido.delete(pedido);
           } catch (Exception e) {
@@ -513,22 +508,7 @@ cliente.getListaProduto().clear();
     public ClienteResponseDTO updateNomeImagem(Long id, String nomeImagem) {
         Cliente cliente = repository.findById(id);
 
-        // Substituindo o arquivo de imagem anterior pelo atual
-      if(cliente.getNomeImagem() != null) {
-        // Obtendo o caminho do Arquivo de imagem a ser deletado
-        String caminhoDoArquivo = cliente.getNomeImagem();
-         
-        // Convertendo o caminho para um objeto Path
-         Path caminho = Paths.get(caminhoDoArquivo);
-
-        try {
-            // Deletando o arquivo
-            Files.delete(caminho);
-        } catch (IOException e) {
-             e.getMessage();
-        }
-      }
-        // Adicionando o caminho para o novo arquivo de imagem
+        // Adicionando o nome do arquivo de imagem
         cliente.setNomeImagem(nomeImagem);
         
         return ClienteResponseDTO.valueOf(cliente);

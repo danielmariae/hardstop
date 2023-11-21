@@ -2,7 +2,6 @@ package br.unitins.topicos1.repository;
 
 import br.unitins.topicos1.model.Cliente;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
-import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.NoResultException;
 
@@ -28,19 +27,20 @@ public class ClienteRepository implements PanacheRepository<Cliente> {
       parte2cpf = cpf.substring(4,7);
       parte3cpf = cpf.substring(8,11);
       parte4cpf = cpf.substring(12,14);
+          try {
+              String cpfConcat = parte1cpf.concat(parte2cpf).concat(parte3cpf).concat(parte4cpf);
+              return find("cpf = ?1", cpfConcat).firstResult();
+          } catch (NoResultException e) {
+              e.printStackTrace();
+              return null;  
+          } 
+      }
       try {
-        return find("cpf", parte1cpf.concat(parte2cpf).concat(parte3cpf).concat(parte4cpf)).firstResult();
+      return find("cpf = ?1", cpf).firstResult();
       } catch (NoResultException e) {
           e.printStackTrace();
           return null;  
-    } 
-    }
-    try {
-      return find("cpf = :cpf", Parameters.with("cpf", cpf)).firstResult();
-    } catch (NoResultException e) {
-          e.printStackTrace();
-          return null;  
-    } 
+      } 
   }
 
  public Cliente findByLogin(String login) {

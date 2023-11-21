@@ -14,6 +14,7 @@ public class Pix extends FormaDePagamento{
     private LocalDateTime dataHoraGeracao;
     private LocalDateTime dataHoraEfetivadoPagamento;
     private String nomeCidade;
+    private String nomeArquivo;
 
     public String getNomeCidade() {
         return nomeCidade;
@@ -51,4 +52,13 @@ public class Pix extends FormaDePagamento{
     public void setChaveRecebedor(String chaveRecebedor) {
         this.chaveRecebedor = chaveRecebedor;
     }
+
+    public String getNomeArquivo() {
+        return this.nomeArquivo;
+    }
+
+    public void setNomeArquivo(String nomeArquivo) {
+        this.nomeArquivo = nomeArquivo;
+    }
+
 }

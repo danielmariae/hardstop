@@ -39,7 +39,7 @@ insert into endereco (nome, logradouro, numero, lote, bairro, cep, localidade, u
 insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email, perfil) values('Katia de Ruim', '2010-08-08', '23576472720', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com', '0');
 
 -- senha 1a2B3!
-insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email, perfil) values('Flávio de Boa', '2007-10-02', '20275068536', 'M', 'flavio1234', 'pTOqkVzjpPAXcO0Iau1rmMLSxHsi/CSmyX7a+k1h9oDcYjh2k2s+GQfTRhK9JECbQFkezUT2unji0ww04h7KDQ==', 'flavio1234@gmail.com', '0');
+insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email, perfil) values('Flavio de Boa', '2007-10-02', '20275068536', 'M', 'flavio1234', 'pTOqkVzjpPAXcO0Iau1rmMLSxHsi/CSmyX7a+k1h9oDcYjh2k2s+GQfTRhK9JECbQFkezUT2unji0ww04h7KDQ==', 'flavio1234@gmail.com', '0');
 
 -- senha bVgH_-2
 insert into funcionario (nome, datanascimento, cpf, sexo, login, senha, email, endereco_id, perfil) values('Arruda de Alencar', '2000-09-12', '48202498783', 'M', 'arrudaalencar', '1dFLdP3297AHwCVMOu5ScNEXaWxFW2TO7uj60UQY+PktBgoem0kVhF8b3FqvZDXn2eyOCHQab6aCK0oYGgm/2w==', 'arrudaalencar@gmail.com', 4, '1');
@@ -92,9 +92,8 @@ insert into itemDaVenda (preco, quantidade, produto_id) values(1000.0, 2, 3);
 
 insert into formaDePagamento (forma_de_pagamento, modalidade, valorPago) values('CARTAO_DE_CREDITO',0, 5900);
 insert into cartaodecredito (id, anovalidade, codseguranca, mesvalidade, datahorapagamento, numerocartao) values(1, 24, 237, 3, '2023-10-01 16:11:26', '345690872106');
-insert into pedido (id_formaDePagamento, id_endereco) values(1, 1);
+insert into pedido (id_formaDePagamento, id_endereco, id_cliente) values(1, 1, 1);
 
-insert into cliente_pedido (id_cliente, id_pedido) values(1,1);
 insert into produto_lote (id_produto, id_lote) values(1,1);
 insert into produto_lote (id_produto, id_lote) values(2,2);
 insert into produto_lote (id_produto, id_lote) values(3,3);

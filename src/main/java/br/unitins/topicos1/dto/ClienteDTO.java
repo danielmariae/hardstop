@@ -48,16 +48,6 @@ public static ClienteDTO valueOf(Cliente cliente) {
         .stream()
         .map(t -> TelefoneDTO.valueOf(t))
         .toList()
-       /* cliente
-        .getListaPedido()
-        .stream()
-        .map(t -> PedidoDTO.valueOf(t))
-        .toList()
-       cliente
-        .getListaProduto()
-        .stream()
-        .map(p -> ProdutoDTO.valueOf(p))
-        .toList() */
     );
   }
 

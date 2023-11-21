@@ -7,12 +7,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.jrimum.bopepo.BancosSuportados;
 import org.jrimum.bopepo.Boleto;
@@ -33,12 +37,22 @@ import com.github.braully.boleto.LayoutsSuportados;
 import com.github.braully.boleto.RemessaArquivo;
 import com.github.braully.boleto.RetornoArquivo;
 import com.github.braully.boleto.TituloArquivo;
+
+import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Empresa;
 
 
 @ApplicationScoped
 public class GerarBoleto {
+
+        private static final String PATH_USER_BOLETO = System.getProperty("user.home") +
+        File.separator + "quarkus" +
+        File.separator + "boleto" +
+        File.separator + "usuario" +
+        File.separator;
+
+
 
 	  /*
      * Ver exemplo mais detalhado em:
@@ -219,7 +233,7 @@ public class GerarBoleto {
 
 
 
-public static void geraBoletoFinal(Integer intervalo, Double valorCompra, Cliente cliente, Empresa empresa, br.unitins.topicos1.model.Endereco enderecoCliente) {
+public static String geraBoletoFinal(Integer intervalo, Double valorCompra, Cliente cliente, Empresa empresa, br.unitins.topicos1.model.Endereco enderecoCliente) throws IOException {
 
         // Cedente
     Cedente cedente = new Cedente(empresa.getNomeReal(), empresa.getCnpj());
@@ -298,9 +312,28 @@ public static void geraBoletoFinal(Integer intervalo, Double valorCompra, Client
       "Após o vencimento, aplicar multa de 2,00% e juros de 1,00% ao mês"
     );
 
+    // criar diretorio caso nao exista
+    Path diretorio = Paths.get(PATH_USER_BOLETO);
+    Files.createDirectories(diretorio);
+
+    String extensao = "pdf";
+    Boolean flipflop = false;
+    Path filePath;
+    do {
+      // criando o nome do arquivo randomico
+      String novoNomeArquivo = UUID.randomUUID() + "." + extensao;
+
+      // definindo o caminho completo do arquivo
+      filePath = diretorio.resolve(novoNomeArquivo);
+      flipflop = filePath.toFile().exists();
+    } while (flipflop);
+
+
         BoletoViewer create = BoletoViewer.create(boleto);
-        File arquivoPdf = create.getPdfAsFile("teste.pdf");
+        File arquivoPdf = create.getPdfAsFile(filePath.toString());
         mostreBoletoNaTela(arquivoPdf);
+
+        return filePath.toFile().getName();
 }
 
 private static void mostreBoletoNaTela(File arquivoBoleto) {
@@ -396,7 +429,15 @@ private static void mostreBoletoNaTela(File arquivoBoleto) {
 		 mostreBoletoNaTela(arquivoPdf);
   } */
 
+        public static File obterArquivoBoleto(String nomeArquivo) {
+                File file = new File(PATH_USER_BOLETO+nomeArquivo);
 
+                if (!file.exists()) {
+                throw new GeneralErrorException("400", "Bad Request", "GerarBoleto(obterArquivoBoleto)", "Este arquivo inexiste no sistema.");
+                }
+
+        return file;
+        }
 
   
 }

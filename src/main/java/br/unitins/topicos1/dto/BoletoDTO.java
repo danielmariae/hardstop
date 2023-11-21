@@ -9,7 +9,8 @@ public record BoletoDTO(
     LocalDateTime dataHoraGeracao,
     LocalDateTime dataHoraLimitePag,
     LocalDateTime dataHoraEfetivadoPagamento,
-    Double valorPago
+    Double valorPago,
+    String nomeArquivo
 ) {
     public static BoletoDTO valueOf(Boleto bol) {
         return new BoletoDTO(
@@ -17,7 +18,8 @@ public record BoletoDTO(
         bol.getDataHoraGeracao(),
         bol.getDataHoraLimitePag(),
         bol.getDataHoraEfetivadoPagamento(),
-        bol.getValorPago()
+        bol.getValorPago(),
+        bol.getNomeArquivo()
         );
     }
 }

@@ -97,6 +97,8 @@ public class PedidoServiceImpl implements PedidoService {
     Pedido pedido = new Pedido();
     //pedido.setCodigoDeRastreamento(dto.codigoDeRastreamento());
 
+    pedido.setCliente(cliente);
+
     pedido.setItemDaVenda(new ArrayList<ItemDaVenda>());
     Double valorCompra = 0.0;
     for (ItemDaVendaDTO idv : dto.itemDaVenda()) {
@@ -241,13 +243,25 @@ public class PedidoServiceImpl implements PedidoService {
       );
       limite = limite.with(LocalTime.of(23, 59, 59));
       pagamento.setDataHoraLimitePag(limite);
-      GerarBoleto.geraBoletoFinal(
+      try {
+        String nomeArquivo;
+        nomeArquivo = GerarBoleto.geraBoletoFinal(
         dto.formaDePagamento().diasVencimento(),
         valorCompra,
         cliente,
         empresa,
         endereco
       );
+      pagamento.setNomeArquivo(nomeArquivo);
+      } catch (Exception e) {
+        throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "PedidoServiceImpl(insert)",
+        "Ocorreu algum erro na geração do boleto."
+      );
+      }
+      
       pedido.setFormaDePagamento(pagamento);
     } else if (dto.formaDePagamento().modalidade() == 2) {
       Pix pagamento = new Pix();
@@ -262,7 +276,19 @@ public class PedidoServiceImpl implements PedidoService {
       pagamento.setNomeCidade(
         empresa.getListaEndereco().get(0).getLocalidade()
       );
-      GerarPix.QrCodePix(pagamento);
+      try {
+        String nomeArquivo;
+        nomeArquivo = GerarPix.QrCodePix(pagamento);
+        pagamento.setNomeArquivo(nomeArquivo);
+      } catch (Exception e) {
+        throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "PedidoServiceImpl(insert)",
+        "Ocorreu algum erro na geração da chave pix ou do QRCode."
+      );
+      }
+      
       pedido.setFormaDePagamento(pagamento);
     } else {
       throw new GeneralErrorException(
@@ -281,20 +307,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     repositoryPedido.persist(pedido);
 
-    cliente.getListaPedido().add(pedido);
-
-    // Verifica se Cliente foi persistido no banco de dados.
-    try {
-      repository.persist(cliente);
-      //repository.flush();
-    } catch (Exception e) {
-      throw new GeneralErrorException(
-        "500",
-        "Server error",
-        "PedidoServiceImpl(insert)",
-        "Não consegui gravar o pedido para este cliente no banco de dados!"
-      );
-    }
 
     //if(pedido.getFormaDePagamento().getModalidade().getId() == 0)
     if(pedido.getFormaDePagamento() instanceof CartaoDeCredito)
@@ -357,8 +369,6 @@ public class PedidoServiceImpl implements PedidoService {
         "O pedido não pode ser desfeito!"
       );
     }
-    // Primeiro removo o pedido da lista de pedidos do cliente
-    cliente.getListaPedido().remove(pedido);
 
     try {
       // Persito a alteração no banco
@@ -554,9 +564,8 @@ public class PedidoServiceImpl implements PedidoService {
 
   @Override
   public List<PedidoResponseDTO> findPedidoByCliente(Long idcliente) {
-    Cliente cliente = repository.findById(idcliente);
-    return cliente
-      .getListaPedido()
+    return repositoryPedido
+      .findAll(idcliente)
       .stream()
       .map(p -> PedidoResponseDTO.valueOf(p))
       .toList();
@@ -866,7 +875,7 @@ public class PedidoServiceImpl implements PedidoService {
   }
 
   private Boolean verificaPedido3(Cliente cliente, Pedido pedido) {
-    for (Pedido pedidoteste : cliente.getListaPedido()) {
+    for (Pedido pedidoteste : repositoryPedido.findAll(cliente.getId())) {
       // O pedido repassado ao método pertence ao Cliente repassado ao método.
       if (pedidoteste.getId() == pedido.getId()) {
         return true;
@@ -900,7 +909,7 @@ public class PedidoServiceImpl implements PedidoService {
   }
 
   private Boolean podeDeletar(Cliente cliente, Pedido pedido) {
-    for (Pedido pedidoteste : cliente.getListaPedido()) {
+    for (Pedido pedidoteste : repositoryPedido.findAll(cliente.getId())) {
       // O pedido repassado ao método pertence ao Cliente repassado ao método.
       if (pedidoteste.getId() == pedido.getId()) {
         // Coletando o Status de número mais elevado neste pedido
@@ -1044,19 +1053,27 @@ public class PedidoServiceImpl implements PedidoService {
 
     if(objR.getBoo()) {
       Long idPedido = Long.parseLong(objR.getIdPedido());
-      Pedido pedido = repositoryPedido.findById(idPedido);
+      /* */
+      PedidoPatchStatusDTO update = new PedidoPatchStatusDTO(idPedido, 2, null);
+      updateStatusDoPedido(update);
+
+
+      /*  Pedido pedido = repositoryPedido.findById(idPedido);
       StatusDoPedido status = new StatusDoPedido();
       status.setDataHora(LocalDateTime.now());
       status.setStatus(Status.valueOf(2));
-      pedido.getStatusDoPedido().add(status);
+      pedido.getStatusDoPedido().add(status); */
 
     } else {
       Long idPedido = Long.parseLong(objR.getIdPedido());
-      Pedido pedido = repositoryPedido.findById(idPedido);
+      PedidoPatchStatusDTO update = new PedidoPatchStatusDTO(idPedido, 1, null);
+      updateStatusDoPedido(update);
+      
+      /*  Pedido pedido = repositoryPedido.findById(idPedido);
       StatusDoPedido status = new StatusDoPedido();
       status.setDataHora(LocalDateTime.now());
       status.setStatus(Status.valueOf(1));
-      pedido.getStatusDoPedido().add(status);
+      pedido.getStatusDoPedido().add(status); */
  
     }
   }
