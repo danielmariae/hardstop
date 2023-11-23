@@ -11,11 +11,25 @@ import java.util.List;
 import java.util.UUID;
 
 import br.unitins.topicos1.application.GeneralErrorException;
+import br.unitins.topicos1.dto.ClienteResponseDTO;
+import br.unitins.topicos1.dto.FuncionarioResponseDTO;
+import br.unitins.topicos1.model.Cliente;
+import br.unitins.topicos1.model.Funcionario;
+import br.unitins.topicos1.repository.ClienteRepository;
+import br.unitins.topicos1.repository.FuncionarioRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class FileServiceImpl implements FileService{
-    
+
+    @Inject
+    ClienteRepository repositoryCliente;
+
+    @Inject
+    FuncionarioRepository repositoryFuncionario;
+
     private final String PATH_USER_IMAGE = System.getProperty("user.home") +
     File.separator + "quarkus" +
     File.separator + "images" +
@@ -37,6 +51,18 @@ public class FileServiceImpl implements FileService{
     private final String PATH_USER_VIDEOS = System.getProperty("user.home") +
     File.separator + "quarkus" +
     File.separator + "videos" +
+    File.separator + "usuario" +
+    File.separator;
+
+    private static final String PATH_USER_PIX = System.getProperty("user.home") +
+    File.separator + "quarkus" +
+    File.separator + "pix" +
+    File.separator + "usuario" +
+    File.separator;
+
+    private static final String PATH_USER_BOLETO = System.getProperty("user.home") +
+    File.separator + "quarkus" +
+    File.separator + "boleto" +
     File.separator + "usuario" +
     File.separator;
 
@@ -183,6 +209,48 @@ public class FileServiceImpl implements FileService{
             return null;
     }
 
+    @Transactional
+    public ClienteResponseDTO updateNomeImagemC(Long id, String nomeImagem) {
+        Cliente cliente = repositoryCliente.findById(id);
+
+        if(cliente.getNomeImagem() != null) {
+            String spath = PATH_USER_IMAGE+cliente.getNomeImagem();
+            Path path = Paths.get(spath);
+            try {
+                Files.delete(path);
+            } catch (Exception e) {
+                throw new GeneralErrorException("400", "Bad Resquest", "FileServiceImpl(updateNomeImagemC)", "Não consegui excluir o arquivo");
+            } 
+        }
+    
+        // Adicionando o nome do arquivo de imagem
+        cliente.setNomeImagem(nomeImagem);
+        
+        return ClienteResponseDTO.valueOf(cliente);
+    }
+
+    @Transactional
+    public FuncionarioResponseDTO updateNomeImagemF(Long id, String nomeImagem) {
+        Funcionario funcionario = repositoryFuncionario.findById(id);
+
+        if(funcionario.getNomeImagem() != null) {
+            String spath = PATH_USER_IMAGE+funcionario.getNomeImagem();
+            Path path = Paths.get(spath);
+            try {
+                Files.delete(path);
+            } catch (Exception e) {
+                throw new GeneralErrorException("400", "Bad Resquest", "FileServiceImpl(updateNomeImagemC)", "Não consegui excluir o arquivo");
+            } 
+        }
+    
+        // Adicionando o nome do arquivo de imagem
+        funcionario.setNomeImagem(nomeImagem);
+        
+        return FuncionarioResponseDTO.valueOf(funcionario);
+    }
+
+
+
     @Override
     public String salvarP(String nomeArquivo, byte[] arquivo) throws IOException {
         String archiveType = Files.probeContentType(Paths.get(nomeArquivo));
@@ -228,7 +296,23 @@ public class FileServiceImpl implements FileService{
     }
 
 
+    public static File obterArquivoPix(String nomeArquivo) {
+        File file = new File(PATH_USER_PIX+nomeArquivo);
 
+        if (!file.exists()) {
+            throw new GeneralErrorException("400", "Bad Request", "GerarPix(obterArquivoPix)", "Este arquivo inexiste no sistema.");
+        }
 
+        return file;
+    }
 
+    public static File obterArquivoBoleto(String nomeArquivo) {
+        File file = new File(PATH_USER_BOLETO+nomeArquivo);
+
+        if (!file.exists()) {
+        throw new GeneralErrorException("400", "Bad Request", "GerarBoleto(obterArquivoBoleto)", "Este arquivo inexiste no sistema.");
+        }
+
+return file;
+}
 }

@@ -6,7 +6,6 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.application.ErrorTP1;
-import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
@@ -208,12 +207,9 @@ public Response getCliente() {
         }
 
         String login = jwt.getSubject();
-        ClienteResponseDTO cliente = service.findByLogin(login);
+        Long idCliente = service.findByLogin(login).id();
 
-        service.updateNomeImagem(cliente.id(), nomeImagem);
-
-        return Response.ok(cliente).build();
-        
+        return Response.ok(fileService.updateNomeImagemC(idCliente, nomeImagem)).build();
 
     }
 

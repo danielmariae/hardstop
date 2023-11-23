@@ -37,8 +37,6 @@ import com.github.braully.boleto.LayoutsSuportados;
 import com.github.braully.boleto.RemessaArquivo;
 import com.github.braully.boleto.RetornoArquivo;
 import com.github.braully.boleto.TituloArquivo;
-
-import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Empresa;
 
@@ -428,16 +426,4 @@ private static void mostreBoletoNaTela(File arquivoBoleto) {
 		File arquivoPdf = boletoViewer.getPdfAsFile("boletoConvBB.pdf");
 		 mostreBoletoNaTela(arquivoPdf);
   } */
-
-        public static File obterArquivoBoleto(String nomeArquivo) {
-                File file = new File(PATH_USER_BOLETO+nomeArquivo);
-
-                if (!file.exists()) {
-                throw new GeneralErrorException("400", "Bad Request", "GerarBoleto(obterArquivoBoleto)", "Este arquivo inexiste no sistema.");
-                }
-
-        return file;
-        }
-
-  
 }
