@@ -1,5 +1,7 @@
 package br.unitins.topicos1.dto;
 
+import java.util.List;
+
 // import java.util.List;
 
 import br.unitins.topicos1.model.Classificacao;
@@ -18,6 +20,7 @@ public record ProdutoResponseDTO(
     Double custoCompra,
     Double valorVenda,
     Integer quantidade,
+    List<String> nomeImagem,
     // List<Lote> listaLote,
 
     Classificacao classificacao) {
@@ -35,6 +38,7 @@ public record ProdutoResponseDTO(
                 produto.getCustoCompra(), 
                 produto.getValorVenda(), 
                 produto.getQuantidade(),
+                produto.getNomeImagem(),
                 // produto.getListaLote(),
               produto.getClassificacao()      
             );

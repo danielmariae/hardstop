@@ -503,19 +503,6 @@ cliente.getListaProduto().clear();
         return ClienteResponseDTO.valueOf(cliente);
     }
 
-    @Override
-    @Transactional
-    public ClienteResponseDTO updateNomeImagem(Long id, String nomeImagem) {
-        Cliente cliente = repository.findById(id);
-
-        // Adicionando o nome do arquivo de imagem
-        cliente.setNomeImagem(nomeImagem);
-        
-        return ClienteResponseDTO.valueOf(cliente);
-    }
-
-
-
 
 // Métodos de validação
 

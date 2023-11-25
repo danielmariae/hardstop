@@ -16,7 +16,6 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.model.Pix;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -241,14 +240,4 @@ public class GerarPix {
       return crc & 0xFFFF; // Garante que o resultado seja um valor de 16 bits
     }
   }
-
-  public static File obterArquivoPix(String nomeArquivo) {
-        File file = new File(PATH_USER_PIX+nomeArquivo);
-
-        if (!file.exists()) {
-            throw new GeneralErrorException("400", "Bad Request", "GerarPix(obterArquivoPix)", "Este arquivo inexiste no sistema.");
-        }
-
-        return file;
-    }
 }

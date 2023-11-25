@@ -6,7 +6,6 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.application.ErrorTP1;
-import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
@@ -30,7 +29,6 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.Response.Status;
 
 @Path("/clientelogado")
@@ -208,12 +206,9 @@ public Response getCliente() {
         }
 
         String login = jwt.getSubject();
-        ClienteResponseDTO cliente = service.findByLogin(login);
+        Long idCliente = service.findByLogin(login).id();
 
-        service.updateNomeImagem(cliente.id(), nomeImagem);
-
-        return Response.ok(cliente).build();
-        
+        return Response.ok(fileService.updateNomeImagemC(idCliente, nomeImagem)).build();
 
     }
 
@@ -222,9 +217,10 @@ public Response getCliente() {
     @RolesAllowed({"User"})
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response download(@PathParam("nomeImagem") String nomeImagem){
-        ResponseBuilder response = Response.ok(fileService.obterU(nomeImagem));
-        response.header("Content-Diposition", "attachment; filename="+nomeImagem);
-        return response.build();
+      return Response
+      .ok(fileService.obterU(nomeImagem), MediaType.APPLICATION_OCTET_STREAM)
+      .header("Content-Disposition", "attachment; filename=" + nomeImagem)
+      .build();
 
     }
 
