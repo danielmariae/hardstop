@@ -29,7 +29,6 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.core.Response.Status;
 
 @Path("/clientelogado")
@@ -218,9 +217,10 @@ public Response getCliente() {
     @RolesAllowed({"User"})
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response download(@PathParam("nomeImagem") String nomeImagem){
-        ResponseBuilder response = Response.ok(fileService.obterU(nomeImagem));
-        response.header("Content-Diposition", "attachment; filename="+nomeImagem);
-        return response.build();
+      return Response
+      .ok(fileService.obterU(nomeImagem), MediaType.APPLICATION_OCTET_STREAM)
+      .header("Content-Disposition", "attachment; filename=" + nomeImagem)
+      .build();
 
     }
 

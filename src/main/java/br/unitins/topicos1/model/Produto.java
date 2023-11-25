@@ -22,6 +22,7 @@ public class Produto extends DefaultEntity {
     private Double custoCompra;
     private Double valorVenda;
     private Integer quantidade;
+    private List<String> nomeImagem;
 
     public Produto() {}
 
@@ -31,7 +32,15 @@ public class Produto extends DefaultEntity {
          joinColumns = @JoinColumn(name = "id_produto"),
          inverseJoinColumns = @JoinColumn(name = "id_lote")
      )
-     private List<Lote> listaLote;
+    private List<Lote> listaLote;
+
+    public List<String> getNomeImagem() {
+        return this.nomeImagem;
+    }
+
+    public void setNomeImagem(List<String> nomeImagem) {
+        this.nomeImagem = nomeImagem;
+    }
 
     public List<Lote> getListaLote() {
         return listaLote;
