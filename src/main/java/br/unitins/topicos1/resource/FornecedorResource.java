@@ -73,7 +73,6 @@ public class FornecedorResource {
     @GET
     @Path("/search/id/{id}")
     @RolesAllowed({"Func", "Admin"})
-
     public Response findById(@PathParam("id") Long id) {
         return Response.ok(service.findById(id)).build();
     }

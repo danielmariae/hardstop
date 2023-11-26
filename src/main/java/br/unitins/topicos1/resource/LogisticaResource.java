@@ -25,7 +25,6 @@ public class LogisticaResource {
     @POST
     @Transactional
     @RolesAllowed({"Func", "Admin"})
-
     public Response insert (LogisticaDTO dto){
         LogisticaResponseDTO retorno = service.insert(dto);
         return Response.status(201).entity(retorno).build();
@@ -36,7 +35,6 @@ public class LogisticaResource {
     @Transactional
     @Path("/put/{id}")
     @RolesAllowed({"Func", "Admin"})
-
     public Response update(
             LogisticaDTO dto,
             @PathParam("id") Long id)
