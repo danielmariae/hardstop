@@ -9,13 +9,13 @@ import java.util.List;
 public interface LoteService {
     LoteResponseDTO insert(LoteDTO dto);
 
-    // ATUALIZAR DETALHES DO PRODUTO E CLASSIFICAÇÃO JUNTO:
-    LoteResponseDTO update(LoteResponseDTO dto, Long id);
+    // ATUALIZAR LOTE:
+    LoteResponseDTO update(LoteDTO dto, Long id);
 
     // IMPLEMENTAÇÃO NA PROVA A2:
     // public ProdutoResponseDTO updateLote(List<LoteDTO> lt, Long id);
 
-    // DELETAR PRODUTO POR ID:
+    // DELETAR LOTE:
     void delete(Long id);
 
     // PROCURAR POR ID:
