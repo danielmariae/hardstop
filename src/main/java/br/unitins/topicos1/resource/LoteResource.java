@@ -1,20 +1,14 @@
 package br.unitins.topicos1.resource;
 
-import br.unitins.topicos1.application.ErrorTP1;
 import br.unitins.topicos1.dto.LoteDTO;
 import br.unitins.topicos1.dto.LoteResponseDTO;
-import br.unitins.topicos1.dto.ProdutoDTO;
-import br.unitins.topicos1.dto.ProdutoResponseDTO;
-import br.unitins.topicos1.model.form.ArchiveForm;
 import br.unitins.topicos1.service.LoteService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 @Path("/lotes")
 @Produces(MediaType.APPLICATION_JSON)
