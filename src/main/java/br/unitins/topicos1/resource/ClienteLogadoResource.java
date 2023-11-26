@@ -1,15 +1,15 @@
 package br.unitins.topicos1.resource;
 
-import java.util.List;
-
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.application.ErrorTP1;
+import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.dto.PedidoPatchEnderecoDTO;
+import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.form.ArchiveForm;
 import br.unitins.topicos1.service.ClienteService;
@@ -24,6 +24,7 @@ import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -75,7 +76,7 @@ public Response getCliente() {
   @POST
   @RolesAllowed({"User"})
   @Path("/insert/pedidos/")
-  public Response insert(PedidoDTO dto, Long idCliente) {
+  public Response insert(@Valid PedidoDTO dto, Long idCliente) {
 
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
@@ -98,10 +99,21 @@ public Response getCliente() {
     return Response.status(200).entity(servicePedido.insertDesejos(idProduto, id)).build();
   }
 
-  @PATCH
-  @Path("patch/telefone/")
+  @POST
+  @Path("post/telefone/")
   @RolesAllowed({"User"})
-  public Response updateTelefoneCliente(@Valid List<TelefonePatchDTO> tel) {
+  public Response insertTelefoneCliente(@Valid TelefoneDTO tel) {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = service.findByLogin(login).id();
+    return Response.status(200).entity(service.insertTelefoneCliente(tel, idCliente)).build();
+  }
+
+  @PUT
+  @Path("put/telefone/")
+  @RolesAllowed({"User"})
+  public Response updateTelefoneCliente(@Valid TelefonePatchDTO tel) {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
 
@@ -109,15 +121,26 @@ public Response getCliente() {
     return Response.status(200).entity(service.updateTelefoneCliente(tel, idCliente)).build();
   }
 
-  @PATCH
-  @Path("patch/endereco/")
+  @PUT
+  @Path("put/endereco/")
   @RolesAllowed({"User"})
-  public Response updateEnderecoCliente(@Valid List<EnderecoPatchDTO> end) {
+  public Response updateEnderecoCliente(@Valid EnderecoPatchDTO end) {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
 
     Long idCliente = service.findByLogin(login).id();
     return Response.status(200).entity(service.updateEnderecoCliente(end, idCliente)).build();
+  }
+
+  @POST
+  @Path("post/endereco/")
+  @RolesAllowed({"User"})
+  public Response insertEnderecoCliente(@Valid EnderecoDTO end) {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = service.findByLogin(login).id();
+    return Response.status(200).entity(service.insertEnderecoCliente(end, idCliente)).build();
   }
 
   @DELETE
@@ -173,7 +196,7 @@ public Response getCliente() {
   @PATCH
   @Path("/patch/pedido/endereco/")
   @RolesAllowed({"User"})
-  public Response updateEndereco(PedidoPatchEnderecoDTO dto) {
+  public Response updateEndereco(@Valid PedidoPatchEnderecoDTO dto) {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
 
@@ -192,7 +215,7 @@ public Response getCliente() {
     return Response.status(200).entity(servicePedido.findPedidoByCliente(idCliente)).build();
   }
 
-  @PATCH
+    @PATCH
     @Path("/upload/imagem")
     @RolesAllowed({"User"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)

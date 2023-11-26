@@ -171,59 +171,7 @@ cliente.getListaProduto().clear();
       }
     }
 
-    /* int ia = 0;
-    int ja = 0;
-    for (Pedido pedido : cliente.getListaPedido()) {
-      ia++;
-      ja = 0;
-      for (PedidoDTO ped : clt.listaPedido()) {
-        ja++;
-        if (ia == ja) {
-          pedido.setCodigoDeRastreamento(ped.codigoDeRastreamento());
-          pedido.getFormaDePagamento().setNome(ped.formaDePagamento().nome());
-          pedido.getEndereco().setNome(ped.endereco().nome());
-          pedido.getEndereco().setLogradouro(ped.endereco().logradouro());
-          pedido.getEndereco().setNumero(ped.endereco().numero());
-          pedido.getEndereco().setLote(ped.endereco().lote());
-          pedido.getEndereco().setBairro(ped.endereco().bairro());
-          pedido.getEndereco().setComplemento(ped.endereco().complemento());
-          pedido.getEndereco().setCep(ped.endereco().cep());
-          pedido.getEndereco().setLocalidade(ped.endereco().localidade());
-          pedido.getEndereco().setUF(ped.endereco().uf());
-          pedido.getEndereco().setPais(ped.endereco().pais());
-
-          int ia1 = 0;
-          int ja1 = 0;
-          for (ItemDaVenda item : pedido.getItemDaVenda()) {
-            ia1++;
-            ja1 = 0;
-            for (ItemDaVendaDTO it : ped.itemDaVenda()) {
-              ja1++;
-              if (ia1 == ja1) {
-                item.setPreco(it.preco());
-                item.setQuantidade(it.quantidade());
-              }
-            }
-          }
-
-          int ia2 = 0;
-          int ja2 = 0;
-          for (StatusDoPedido status : pedido.getStatusDoPedido()) {
-            ia2++;
-            ja2 = 0;
-            for (StatusDoPedidoDTO st : ped.statusDoPedido()) {
-              ja2++;
-              if (ia2 == ja2) {
-                status.setDataHora(st.dataHora());
-                status.setStatus(Status.valueOf(st.status()));
-              }
-            }
-          }
-        }
-      }
-    } */
-
-    repository.persist(cliente);
+    //repository.persist(cliente);
     return ClienteResponseDTO.valueOf(cliente);
   }
 
@@ -234,127 +182,120 @@ cliente.getListaProduto().clear();
 
     if(hashservice.getHashSenha(senha.senhaAntiga()).equals(cliente.getSenha())) {
     cliente.setSenha(hashservice.getHashSenha(senha.senhaAtual()));
-    repository.persist(cliente);
+    //repository.persist(cliente);
     return "Senha alterada com sucesso.";
     } else {
      throw new ValidationException("updateSenha", "Favor inserir a senha antiga correta."); 
     }
   }
 
+
   @Override
   @Transactional
-  public ClienteResponseDTO updateTelefoneCliente(
-    List<TelefonePatchDTO> tel,
-    Long id
-  ) {
+  public ClienteResponseDTO insertTelefoneCliente(TelefoneDTO tel, Long id) {
     Cliente cliente = repository.findById(id);
+    
+        Telefone telefone = new Telefone();
+        telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
+        telefone.setDdd(tel.ddd());
+        telefone.setNumeroTelefone(TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+        cliente.getListaTelefone().add(telefone);
+    repository.persist(cliente);
+    return ClienteResponseDTO.valueOf(cliente);
+  }
 
-    List<Long> id1 = new ArrayList<Long>();
-    List<Long> id2 = new ArrayList<Long>();
+
+  @Override
+  @Transactional
+  public ClienteResponseDTO updateTelefoneCliente(TelefonePatchDTO tel,Long id) {
+    Cliente cliente = repository.findById(id);
 
     if (
       cliente.getListaTelefone() != null ||
       !cliente.getListaTelefone().isEmpty()
     ) {
+
+      Boolean chave = true;
+      
       for (Telefone tele1 : cliente.getListaTelefone()) {
-        id1.add(tele1.getId());
+          if (tele1.getId() == tel.id()) {
+            tele1.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
+            tele1.setDdd(tel.ddd());
+            tele1.setNumeroTelefone(TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+            chave = false;
+          }   
       }
+      if(chave) {
+        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "O id fornecido não corresponde a um id de telefone cadastrado para este usuario");
+      }
+    } else {
+      throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "Este usuário não possui nenhum telefone cadastrado.");
     }
 
-    for (TelefonePatchDTO tele1 : tel) {
-      id2.add(tele1.id());
-    }
-
-    for (Telefone tele1 : cliente.getListaTelefone()) {
-      for (TelefonePatchDTO tele : tel) {
-        if (tele1.getId() == tele.id()) {
-          tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
-          tele1.setDdd(tele.ddd());
-          tele1.setNumeroTelefone(
-            TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone())
-          );
-          id1.remove(id1.indexOf(tele1.getId()));
-          id2.remove(id2.indexOf(tele1.getId()));
-        }
-      }
-    }
-
-    for (int i = 0; i < id2.size(); i++) {
-      for (TelefonePatchDTO tele : tel) {
-        Telefone telefone = new Telefone();
-        telefone.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
-        telefone.setDdd(tele.ddd());
-        telefone.setNumeroTelefone(
-          TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone())
-        );
-        cliente.getListaTelefone().add(telefone);
-      }
-    }
-    repository.persist(cliente);
+    //repository.persist(cliente);
     return ClienteResponseDTO.valueOf(cliente);
   }
 
   @Override
   @Transactional
-  public ClienteResponseDTO updateEnderecoCliente(
-    List<EnderecoPatchDTO> end,
-    Long id
-  ) {
+  public ClienteResponseDTO updateEnderecoCliente(EnderecoPatchDTO end,Long id) {
     Cliente cliente = repository.findById(id);
-
-    List<Long> d1 = new ArrayList<Long>();
-    List<Long> d2 = new ArrayList<Long>();
 
     if (
       cliente.getListaEndereco() != null ||
       !cliente.getListaEndereco().isEmpty()
     ) {
-      for (Endereco end1 : cliente.getListaEndereco()) {
-        d1.add(end1.getId());
-      }
-    }
 
-    for (EnderecoPatchDTO end2 : end) {
-      d2.add(end2.id());
-    }
+      Boolean chave = true;
 
-    for (Endereco endereco : cliente.getListaEndereco()) {
-      for (EnderecoPatchDTO end1 : end) {
-        if (end1.id() == endereco.getId()) {
-          endereco.setNome(end1.nome());
-          endereco.setLogradouro(end1.logradouro());
-          endereco.setNumero(end1.numero());
-          endereco.setLote(end1.lote());
-          endereco.setBairro(end1.bairro());
-          endereco.setCep(new CEP(EnderecoFormatador.validaCep(end1.cep().getCep())));
-          endereco.setComplemento(end1.complemento());
-          endereco.setLocalidade(end1.localidade());
-          endereco.setUF(end1.uf());
-          endereco.setPais(end1.pais());
-          d1.remove(d1.indexOf(end1.id()));
-          d2.remove(d2.indexOf(end1.id()));
-        }
-      }
-    }
+      for (Endereco endereco : cliente.getListaEndereco()) {
+        
+          if (endereco.getId() == end.id()) {
+            endereco.setNome(end.nome());
+            endereco.setLogradouro(end.logradouro());
+            endereco.setNumero(end.numero());
+            endereco.setLote(end.lote());
+            endereco.setBairro(end.bairro());
+            endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+            endereco.setComplemento(end.complemento());
+            endereco.setLocalidade(end.localidade());
+            endereco.setUF(end.uf());
+            endereco.setPais(end.pais());
+          }
 
-    for (int i = 0; i < d2.size(); i++) {
-      for (EnderecoPatchDTO end1 : end) {
-        Endereco endereco = new Endereco();
-        endereco.setNome(end1.nome());
-        endereco.setLogradouro(end1.logradouro());
-        endereco.setNumero(end1.numero());
-        endereco.setLote(end1.lote());
-        endereco.setBairro(end1.bairro());
-        endereco.setComplemento(end1.complemento());
-       endereco.setCep(new CEP(EnderecoFormatador.validaCep(end1.cep().getCep())));
-        endereco.setLocalidade(end1.localidade());
-        endereco.setUF(end1.uf());
-        endereco.setPais(end1.pais());
-        cliente.getListaEndereco().add(endereco);
       }
+
+      if(chave) {
+        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "O id fornecido não corresponde a um id de endereço cadastrado para este usuario");
+      }
+      
+    } else {
+      throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateEnderecoCliente)", "Este usuário não possui nenhum endereço cadastrado.");
     }
-    repository.persist(cliente);
+    //repository.persist(cliente);
     return ClienteResponseDTO.valueOf(cliente);
+  }
+
+
+  @Override
+  @Transactional
+  public ClienteResponseDTO insertEnderecoCliente(EnderecoDTO end,Long id) {
+    Cliente cliente = repository.findById(id);
+
+     Endereco endereco = new Endereco();
+      endereco.setNome(end.nome());
+      endereco.setLogradouro(end.logradouro());
+      endereco.setNumero(end.numero());
+      endereco.setLote(end.lote());
+      endereco.setBairro(end.bairro());
+      endereco.setComplemento(end.complemento());
+      endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+      endereco.setLocalidade(end.localidade());
+      endereco.setUF(end.uf());
+      endereco.setPais(end.pais());
+      cliente.getListaEndereco().add(endereco);
+      repository.persist(cliente);
+      return ClienteResponseDTO.valueOf(cliente);
   }
 
   @Override
@@ -419,48 +360,6 @@ cliente.getListaProduto().clear();
         cliente.getListaEndereco().add(endereco);
       }
     }
-
-    /* if (dto.listaPedido() != null && !dto.listaPedido().isEmpty()) {
-      cliente.setListaPedido(new ArrayList<Pedido>());
-
-      for (PedidoDTO pdd : dto.listaPedido()) {
-        Pedido pedido = new Pedido();
-        pedido.setCodigoDeRastreamento(pdd.codigoDeRastreamento());
-
-        FormaDePagamento forma = new FormaDePagamento();
-        forma.setNome(pdd.formaDePagamento().nome());
-        pedido.setFormaDePagamento(forma);
-
-        Endereco endereco = new Endereco();
-        endereco.setNome(pdd.endereco().nome());
-        endereco.setLogradouro(pdd.endereco().logradouro());
-        endereco.setNumero(pdd.endereco().numero());
-        endereco.setLote(pdd.endereco().lote());
-        endereco.setBairro(pdd.endereco().bairro());
-        endereco.setComplemento(pdd.endereco().complemento());
-        endereco.setCep(EnderecoFormatador.validaCep(pdd.endereco().cep()));
-        endereco.setLocalidade(pdd.endereco().localidade());
-        endereco.setUF(pdd.endereco().uf());
-        endereco.setPais(pdd.endereco().pais());
-        pedido.setEndereco(endereco);
-
-        pedido.setItemDaVenda(new ArrayList<ItemDaVenda>());
-        for (ItemDaVendaDTO itens : pdd.itemDaVenda()) {
-          ItemDaVenda itemVenda = new ItemDaVenda();
-          itemVenda.setPreco(itens.preco());
-          itemVenda.setQuantidade(itens.quantidade());
-          pedido.getItemDaVenda().add(itemVenda);
-        }
-
-        pedido.setStatusDoPedido(new ArrayList<StatusDoPedido>());
-        StatusDoPedido statusVenda = new StatusDoPedido();
-        statusVenda.setDataHora(LocalDateTime.now());
-        statusVenda.setStatus(Status.valueOf(0));
-        pedido.getStatusDoPedido().add(statusVenda);
-
-        cliente.getListaPedido().add(pedido);
-      }
-    } */
 
     try {
       repository.persist(cliente);

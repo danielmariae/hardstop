@@ -3,6 +3,8 @@ package br.unitins.topicos1.service;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.FuncionarioFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
+import br.unitins.topicos1.application.GeneralErrorException;
+import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
@@ -146,72 +148,94 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
   @Override
   @Transactional
-  public FuncionarioResponseDTO updateTelefoneFuncionario(
-    List<TelefonePatchDTO> tel,
-    Long id
-  ) {
+  public FuncionarioResponseDTO insertTelefoneFuncionario(TelefoneDTO tel, Long id) {
     Funcionario funcionario = repository.findById(id);
+    
+    Telefone telefone = new Telefone();
+    telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
+    telefone.setDdd(tel.ddd());
+    telefone.setNumeroTelefone(TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+    funcionario.getListaTelefone().add(telefone);
+    repository.persist(funcionario);
+    return FuncionarioResponseDTO.valueOf(funcionario);
+  }
 
-    List<Long> id1 = new ArrayList<Long>();
-    List<Long> id2 = new ArrayList<Long>();
+
+  @Override
+  @Transactional
+  public FuncionarioResponseDTO updateTelefoneFuncionario(TelefonePatchDTO tel,Long id) {
+    Funcionario funcionario = repository.findById(id);
 
     if (
       funcionario.getListaTelefone() != null ||
       !funcionario.getListaTelefone().isEmpty()
     ) {
+
+      Boolean chave = true;
+      
       for (Telefone tele1 : funcionario.getListaTelefone()) {
-        id1.add(tele1.getId());
+          if (tele1.getId() == tel.id()) {
+            tele1.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
+            tele1.setDdd(tel.ddd());
+            tele1.setNumeroTelefone(TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+            chave = false;
+          }   
       }
+      if(chave) {
+        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "O id fornecido não corresponde a um id de telefone cadastrado para este usuario");
+      }
+    } else {
+      throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "Este usuário não possui nenhum telefone cadastrado.");
     }
 
-    for (TelefonePatchDTO tele1 : tel) {
-      id2.add(tele1.id());
-    }
-
-    for (Telefone tele1 : funcionario.getListaTelefone()) {
-      for (TelefonePatchDTO tele : tel) {
-        if (tele1.getId() == tele.id()) {
-          tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
-          tele1.setDdd(tele.ddd());
-          tele1.setNumeroTelefone(
-            TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone())
-          );
-          id1.remove(id1.indexOf(tele1.getId()));
-          id2.remove(id2.indexOf(tele1.getId()));
-        }
-      }
-    }
-
-    for (int i = 0; i < id2.size(); i++) {
-      for (TelefonePatchDTO tele : tel) {
-        Telefone telefone = new Telefone();
-        telefone.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
-        telefone.setDdd(tele.ddd());
-        telefone.setNumeroTelefone(
-          TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone())
-        );
-        funcionario.getListaTelefone().add(telefone);
-      }
-    }
-    repository.persist(funcionario);
+    //repository.persist(cliente);
     return FuncionarioResponseDTO.valueOf(funcionario);
   }
 
   @Override
   @Transactional
-  public FuncionarioResponseDTO updateEnderecoFuncionario(EnderecoFuncPatchDTO end, Long id) {
+  public FuncionarioResponseDTO updateEnderecoFuncionario(EnderecoFuncPatchDTO end,Long id) {
     Funcionario funcionario = repository.findById(id);
 
-    funcionario.getEndereco().setLogradouro(end.logradouro());
-    funcionario.getEndereco().setNumero(end.numero());
-    funcionario.getEndereco().setLote(end.lote());
-    funcionario.getEndereco().setBairro(end.bairro());
-    funcionario.getEndereco().setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
-    funcionario.getEndereco().setComplemento(end.complemento());
-    funcionario.getEndereco().setLocalidade(end.localidade());
-    funcionario.getEndereco().setUF(end.uf());
-    funcionario.getEndereco().setPais(end.pais());
+    if(funcionario.getEndereco()!= null) {
+      if(funcionario.getEndereco().getId() == end.id()) {
+        funcionario.getEndereco().setLogradouro(end.logradouro());
+        funcionario.getEndereco().setNumero(end.numero());
+        funcionario.getEndereco().setLote(end.lote());
+        funcionario.getEndereco().setBairro(end.bairro());
+        funcionario.getEndereco().setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+        funcionario.getEndereco().setComplemento(end.complemento());
+        funcionario.getEndereco().setLocalidade(end.localidade());
+        funcionario.getEndereco().setUF(end.uf());
+        funcionario.getEndereco().setPais(end.pais());
+        } else {
+          throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "O id fornecido não corresponde a um id de endereço cadastrado para este usuario");
+        }
+    } else {
+      throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateEnderecoCliente)", "Este usuário não possui nenhum endereço cadastrado.");
+    }
+    //repository.persist(cliente);
+    return FuncionarioResponseDTO.valueOf(funcionario);
+  }
 
+
+  @Override
+  @Transactional
+  public FuncionarioResponseDTO insertEnderecoFuncionario(EnderecoFuncDTO end,Long id) {
+    Funcionario funcionario = repository.findById(id);
+    Endereco endereco = new Endereco();
+
+    endereco.setLogradouro(end.logradouro());
+    endereco.setNumero(end.numero());
+    endereco.setLote(end.lote());
+    endereco.setBairro(end.bairro());
+    endereco.setComplemento(end.complemento());
+    endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+    endereco.setLocalidade(end.localidade());
+    endereco.setUF(end.uf());
+    endereco.setPais(end.pais());
+    
+    funcionario.setEndereco(endereco);
     repository.persist(funcionario);
     return FuncionarioResponseDTO.valueOf(funcionario);
   }

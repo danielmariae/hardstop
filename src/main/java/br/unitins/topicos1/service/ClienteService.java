@@ -4,8 +4,10 @@ package br.unitins.topicos1.service;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
+import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
+import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 
 
@@ -18,11 +20,17 @@ public interface ClienteService {
   // Substitui todas as informações relacionadas a um cliente com determinado id
   public ClienteResponseDTO updateCliente(ClienteDTO dto, Long id);
 
-  // Substitui um telefone ou insere um novo telefone
-  public ClienteResponseDTO updateTelefoneCliente(List<TelefonePatchDTO> tel, Long id);
+  // Substitui algum dado de um telefone
+  public ClienteResponseDTO updateTelefoneCliente(TelefonePatchDTO tel, Long id);
 
-  // Substitui um endereco ou insere um novo endereco
-  public ClienteResponseDTO updateEnderecoCliente(List<EnderecoPatchDTO> end, Long id);
+   // Insere um novo telefone
+  public ClienteResponseDTO insertTelefoneCliente(TelefoneDTO tel, Long id);
+
+  // Substitui algum dado de um endereco
+  public ClienteResponseDTO updateEnderecoCliente(EnderecoPatchDTO end, Long id);
+
+  // Insere um novo endereco
+  public ClienteResponseDTO insertEnderecoCliente(EnderecoDTO end, Long id);
 
   // Altera a senha do cliente
   public String updateSenhaCliente(PatchSenhaDTO senha, Long id);

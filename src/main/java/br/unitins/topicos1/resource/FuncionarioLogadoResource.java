@@ -1,15 +1,15 @@
 package br.unitins.topicos1.resource;
 
-import java.util.List;
-
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.application.ErrorTP1;
 import br.unitins.topicos1.dto.ClienteDTO;
+import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
+import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.form.ArchiveForm;
 import br.unitins.topicos1.service.ClienteService;
@@ -128,32 +128,48 @@ public Response getFuncionario() {
     return Response.status(Status.NO_CONTENT).build();
   }
 
-  @PATCH
-  @Transactional
+  @POST
+  @Path("insert/telefone/")
   @RolesAllowed({"Func", "Admin"})
-  @Path("patch/telefone/")
-  public Response updateTelefoneFuncionario(@Valid List<TelefonePatchDTO> tel) {
-
+  public Response insertTelefoneFuncionario(@Valid TelefoneDTO tel) {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
 
-    Long idFuncionario = serviceFuncionario.findByLogin(login).id();
-
-    return Response.status(200).entity(serviceFuncionario.updateTelefoneFuncionario(tel, idFuncionario)).build();
+    Long idCliente = serviceFuncionario.findByLogin(login).id();
+    return Response.status(200).entity(serviceFuncionario.insertTelefoneFuncionario(tel, idCliente)).build();
   }
 
-  @PATCH
-  @Transactional
+  @PUT
+  @Path("put/telefone/")
   @RolesAllowed({"Func", "Admin"})
-  @Path("patch/endereco/")
-  public Response updateEnderecoFuncionario(@Valid EnderecoFuncPatchDTO end) {
-
+  public Response updateTelefoneFuncionario(@Valid TelefonePatchDTO tel) {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
 
-    Long idFuncionario = serviceFuncionario.findByLogin(login).id();
+    Long idCliente = serviceFuncionario.findByLogin(login).id();
+    return Response.status(200).entity(serviceFuncionario.updateTelefoneFuncionario(tel, idCliente)).build();
+  }
 
-    return Response.status(200).entity(serviceFuncionario.updateEnderecoFuncionario(end, idFuncionario)).build();
+  @PUT
+  @Path("put/endereco/")
+  @RolesAllowed({"Func", "Admin"})
+  public Response updateEnderecoFuncionario(@Valid EnderecoFuncPatchDTO end) {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = serviceFuncionario.findByLogin(login).id();
+    return Response.status(200).entity(serviceFuncionario.updateEnderecoFuncionario(end, idCliente)).build();
+  }
+
+  @POST
+  @Path("insert/endereco/")
+  @RolesAllowed({"Func", "Admin"})
+  public Response insertEnderecoFuncionario(@Valid EnderecoFuncDTO end) {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = serviceFuncionario.findByLogin(login).id();
+    return Response.status(200).entity(serviceFuncionario.insertEnderecoFuncionario(end, idCliente)).build();
   }
 
   @DELETE
