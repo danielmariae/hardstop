@@ -11,7 +11,7 @@ import java.util.List;
 public class Logistica extends DefaultEntity{
 
   private String nomeFantasia;
-  private String nomeRegistro;
+  private String cnpj;
   private String endSite;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -38,14 +38,6 @@ public class Logistica extends DefaultEntity{
     this.nomeFantasia = nomeFantasia;
   }
 
-  public String getNomeRegistro() {
-    return nomeRegistro;
-  }
-
-  public void setNomeRegistro(String nomeRegistro) {
-    this.nomeRegistro = nomeRegistro;
-  }
-
   public String getEndSite() {
     return endSite;
   }
@@ -69,4 +61,13 @@ public class Logistica extends DefaultEntity{
   public void setListaTelefone(List<Telefone> listaTelefone) {
     this.listaTelefone = listaTelefone;
   }
+
+  public String getCnpj() {
+    return this.cnpj;
+  }
+
+  public void setCnpj(String cnpj) {
+    this.cnpj = cnpj;
+  }
+
 }

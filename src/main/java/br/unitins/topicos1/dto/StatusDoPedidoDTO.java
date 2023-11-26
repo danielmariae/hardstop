@@ -2,12 +2,15 @@ package br.unitins.topicos1.dto;
 
 import java.time.LocalDateTime;
 import br.unitins.topicos1.model.StatusDoPedido;
+import jakarta.validation.constraints.NotNull;
 
 public record StatusDoPedidoDTO(
    
+    @NotNull(message = "O campo Data e Hora não pode ser nulo")
     LocalDateTime dataHora,
-    
-    Integer status) 
+    @NotNull(message = "O campo Status não pode ser nulo")
+    Integer status
+    ) 
 
 {
     

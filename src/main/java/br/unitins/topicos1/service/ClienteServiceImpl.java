@@ -7,7 +7,6 @@ import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.ClienteResponseNPDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
@@ -360,7 +359,7 @@ cliente.getListaProduto().clear();
 
   @Override
   @Transactional
-  public ClienteResponseNPDTO insertCliente(ClienteDTO dto) {
+  public ClienteResponseDTO insertCliente(ClienteDTO dto) {
 
     Cliente cliente = null;
 
@@ -469,7 +468,7 @@ cliente.getListaProduto().clear();
       throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui persistir os dados do cliente no repositório " + e.getCause());
     }
     
-    return ClienteResponseNPDTO.valueOf(cliente);
+    return ClienteResponseDTO.valueOf(cliente);
   }
 
   public List<ProdutoResponseDTO> findListaDesejosCliente(Long id) {

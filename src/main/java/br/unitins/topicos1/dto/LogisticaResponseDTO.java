@@ -14,7 +14,7 @@ public record LogisticaResponseDTO(
   public static LogisticaResponseDTO valueOf(Logistica logistica) {
     return new LogisticaResponseDTO(
       logistica.getNomeFantasia(),
-      logistica.getNomeRegistro(),
+      logistica.getCnpj(),
       logistica.getEndSite(),
       logistica
         .getListaEndereco()

@@ -4,7 +4,6 @@ package br.unitins.topicos1.service;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.ClienteResponseNPDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
@@ -14,7 +13,7 @@ import java.util.List;
 
 public interface ClienteService {
   // Cadastra um novo cliente
-  public ClienteResponseNPDTO insertCliente(ClienteDTO dto);
+  public ClienteResponseDTO insertCliente(ClienteDTO dto);
 
   // Substitui todas as informações relacionadas a um cliente com determinado id
   public ClienteResponseDTO updateCliente(ClienteDTO dto, Long id);

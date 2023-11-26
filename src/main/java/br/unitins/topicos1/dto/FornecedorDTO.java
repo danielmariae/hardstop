@@ -3,9 +3,14 @@ package br.unitins.topicos1.dto;
 import java.util.List;
 
 import br.unitins.topicos1.model.Fornecedor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 public record FornecedorDTO(
+  @NotBlank(message = "O campo nomeFantasia não pode ser nulo.")
   String nomeFantasia,
+  @NotBlank(message = "O campo cnpj não pode ser nulo.")
+  @Pattern(regexp = "([0-9]{2}[-./\s][0-9]{3}[-./\s][0-9]{3}[-./\s][0-9]{4}[-./\s][0-9]{2})|([0-9]{14})", message = "Valor digitado inválido!")
   String cnpj,
   String endSite,
   List<EnderecoDTO> listaEndereco,
