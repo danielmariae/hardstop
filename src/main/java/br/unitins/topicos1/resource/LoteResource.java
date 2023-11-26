@@ -3,6 +3,7 @@ package br.unitins.topicos1.resource;
 import br.unitins.topicos1.dto.LoteDTO;
 import br.unitins.topicos1.dto.LoteResponseDTO;
 import br.unitins.topicos1.service.LoteService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -23,6 +24,7 @@ public class LoteResource {
 
     @POST
     @Transactional
+    @RolesAllowed({"Func", "Admin"})
     public Response insert (LoteDTO dto){
         LoteResponseDTO retorno = service.insert(dto);
         return Response.status(201).entity(retorno).build();
@@ -31,6 +33,7 @@ public class LoteResource {
 
     @PUT
     @Transactional
+    @RolesAllowed({"Func", "Admin"})
     @Path("/put/{id}")
     public Response update(
             LoteDTO dto,
@@ -53,6 +56,7 @@ public class LoteResource {
 
     @DELETE
     @Transactional
+    @RolesAllowed({"Func", "Admin"})
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id){
         service.delete(id);
@@ -60,11 +64,13 @@ public class LoteResource {
     }
 
     @GET
+    @RolesAllowed({"Func", "Admin"})
     public Response findAll() {
         return Response.ok(service.findByAll()).build();
     }
 
     @GET
+    @RolesAllowed({"Func", "Admin"})
     @Path("/search/id/{id}")
     public Response findById(@PathParam("id") Long id) {
         return Response.ok(service.findById(id)).build();

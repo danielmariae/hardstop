@@ -3,6 +3,7 @@ package br.unitins.topicos1.resource;
 import br.unitins.topicos1.dto.FornecedorDTO;
 import br.unitins.topicos1.dto.FornecedorResponseDTO;
 import br.unitins.topicos1.service.FornecedorService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -23,6 +24,7 @@ public class FornecedorResource {
 
     @POST
     @Transactional
+    @RolesAllowed({"Func", "Admin"})
     public Response insert (FornecedorDTO dto){
         FornecedorResponseDTO retorno = service.insert(dto);
         return Response.status(201).entity(retorno).build();
@@ -31,6 +33,7 @@ public class FornecedorResource {
 
     @PUT
     @Transactional
+    @RolesAllowed({"Func", "Admin"})
     @Path("/put/{id}")
     public Response update(
             FornecedorDTO dto,
@@ -54,18 +57,23 @@ public class FornecedorResource {
     @DELETE
     @Transactional
     @Path("/delete/{id}")
+    @RolesAllowed({"Func", "Admin"})
     public Response delete(@PathParam("id") Long id){
         service.delete(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @GET
+    @RolesAllowed({"Func", "Admin"})
+
     public Response findAll() {
         return Response.ok(service.findByAll()).build();
     }
 
     @GET
     @Path("/search/id/{id}")
+    @RolesAllowed({"Func", "Admin"})
+
     public Response findById(@PathParam("id") Long id) {
         return Response.ok(service.findById(id)).build();
     }
