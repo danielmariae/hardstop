@@ -17,6 +17,7 @@ public class FornecedorServiceImpl implements FornecedorService {
 
     @Inject
     FornecedorRepository repository;
+    
     @Override
     public FornecedorResponseDTO insert(FornecedorDTO dto) {
         Fornecedor fornecedor = new Fornecedor();
