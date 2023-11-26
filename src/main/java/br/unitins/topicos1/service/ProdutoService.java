@@ -33,4 +33,16 @@ public interface ProdutoService {
 
     // LISTAR TODOS:
     public List<ProdutoResponseDTO> findByAll();
+
+    // UPDATE LOTE DO PRODUTO
+    public ProdutoResponseDTO updateLote(Long idLote, Long id);
+
+    // UPDATE QUANTIDADE DO PRODUTO
+    public ProdutoResponseDTO updateQuantidade(Integer quantidade, Long id);
+
+    // UPDATE VALOR DE VENDA DO PRODUTO
+    public ProdutoResponseDTO updateValorVenda(Double valorVenda, Long id);
+
+    // UPDATE VALOR DE COMPRA DO PRODUTO
+    public ProdutoResponseDTO updateCustoCompra(Double custoCompra, Long id);
 }

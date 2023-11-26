@@ -8,6 +8,8 @@ import br.unitins.topicos1.model.*;
 import br.unitins.topicos1.repository.LogisticaRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+
 import org.jrimum.domkee.pessoa.CEP;
 
 import java.util.*;
@@ -17,16 +19,20 @@ public class LogisticaServiceImpl implements LogisticaService {
 
     @Inject
     LogisticaRepository repository;
+
     @Override
+    @Transactional
     public LogisticaResponseDTO insert(LogisticaDTO dto) {
         Logistica logistica = new Logistica();
         logistica.setNomeFantasia(dto.nomeFantasia());
         logistica.setEndSite(dto.endSite());
+        logistica.setCnpj(dto.cnpj());
+
         if (dto.listaEndereco() != null && !dto.listaEndereco().isEmpty()) {
             try {
                 logistica.setListaEndereco(new ArrayList<Endereco>());
             } catch (Exception e) {
-                throw new GeneralErrorException("500", "Internal Server Error", "LogisticaServiceImpl(insert)", "Não consegui alocar memória para a lista de endereços do novo Logistica. Tente novamente mais tarde! " +  e.getCause());
+                throw new GeneralErrorException("500", "Internal Server Error", "LogisticaServiceImpl(insert)", "Não consegui alocar memória para a lista de endereços da nova empresa de Logistica. Tente novamente mais tarde! " +  e.getCause());
             }
 
             for (EnderecoDTO end : dto.listaEndereco()) {
@@ -48,31 +54,33 @@ public class LogisticaServiceImpl implements LogisticaService {
                try {
                    logistica.setListaTelefone(new ArrayList<Telefone>());
                } catch (Exception e) {
-                   throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui alocar memória para a lista telefônica do novo Cliente. Tente novamente mais tarde! " +  e.getCause());
+                   throw new GeneralErrorException("500", "Internal Server Error", "LogisticaServiceImpl(insert)", "Não consegui alocar memória para a lista telefônica da nova empresa de Logística. Tente novamente mais tarde! " +  e.getCause());
                }
                for (TelefoneDTO tel : dto.listaTelefone()) {
                    Telefone telefone = new Telefone();
                    telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
                    telefone.setDdd(tel.ddd());
                    telefone.setNumeroTelefone(
-                           TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+                    TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
                    logistica.getListaTelefone().add(telefone);
                }
            }
            try{
                repository.persist(logistica);
            } catch (Exception e) {
-               throw new GeneralErrorException("500", "Internal Server Error", "LogisticaServiceImpl(insert)", "Não consegui persistir os dados do cliente no repositório " + e.getCause());
+               throw new GeneralErrorException("500", "Internal Server Error", "LogisticaServiceImpl(insert)", "Não consegui persistir os dados da nova empresa de Logística no repositório " + e.getCause());
            }
         return LogisticaResponseDTO.valueOf(logistica);
     }
 
 
     @Override
+    @Transactional
     public LogisticaResponseDTO update(LogisticaDTO dto, Long id) {
-            Logistica logistica = new Logistica();
+            Logistica logistica = repository.findById(id);
             logistica.setNomeFantasia(dto.nomeFantasia());
             logistica.setEndSite(dto.endSite());
+            logistica.setCnpj(dto.cnpj());
             int i = 0;
             int j = 0;
 
@@ -85,7 +93,7 @@ public class LogisticaServiceImpl implements LogisticaService {
                         tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
                         tele1.setDdd(tele.ddd());
                         tele1.setNumeroTelefone(
-                                TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone())
+                        TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone())
                         );
                     }
                 }
@@ -114,11 +122,10 @@ public class LogisticaServiceImpl implements LogisticaService {
                 }
             }
     
-        repository.persist(logistica);
+        //repository.persist(logistica);
         return LogisticaResponseDTO.valueOf(logistica);
     }
-    //    @Override
-    //    public void delete(Long id) {
+  
     @Override
     public LogisticaResponseDTO findById(Long id) {
         return LogisticaResponseDTO.valueOf(repository.findById(id));
@@ -134,6 +141,7 @@ public class LogisticaServiceImpl implements LogisticaService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         repository.deleteById(id);
     }

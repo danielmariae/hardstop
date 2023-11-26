@@ -5,7 +5,7 @@ import br.unitins.topicos1.dto.LogisticaResponseDTO;
 import br.unitins.topicos1.service.LogisticaService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -23,39 +23,23 @@ public class LogisticaResource {
     JsonWebToken jwt;
 
     @POST
-    @Transactional
     @RolesAllowed({"Func", "Admin"})
-    public Response insert (LogisticaDTO dto){
+    public Response insert (@Valid LogisticaDTO dto){
         LogisticaResponseDTO retorno = service.insert(dto);
         return Response.status(201).entity(retorno).build();
     }
 
 
     @PUT
-    @Transactional
     @Path("/put/{id}")
     @RolesAllowed({"Func", "Admin"})
-    public Response update(
-            LogisticaDTO dto,
-            @PathParam("id") Long id)
+    public Response update(@Valid LogisticaDTO dto, @PathParam("id") Long id)
     {
         service.update(dto, id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    // @PATCH
-    // @Transactional
-    // @Path("patch/classificacao/{id}")
-    // public Response updateClassificacao(
-    //     @Valid List<ClassificacaoDTO> cls,
-    //     @PathParam("id") Long id)
-    // {
-    //     return Response.status(200).entity(service.updateClassificacao(cls, id)).build();
-    // }
-
-
     @DELETE
-    @Transactional
     @Path("/delete/{id}")
     @RolesAllowed({"Func", "Admin"})
     public Response delete(@PathParam("id") Long id){

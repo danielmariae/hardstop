@@ -9,6 +9,10 @@ import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
+import br.unitins.topicos1.dto.PatchCpfDTO;
+import br.unitins.topicos1.dto.PatchEmailDTO;
+import br.unitins.topicos1.dto.PatchLoginDTO;
+import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
@@ -173,6 +177,40 @@ cliente.getListaProduto().clear();
 
     //repository.persist(cliente);
     return ClienteResponseDTO.valueOf(cliente);
+  }
+
+  @Override
+  @Transactional
+  public String updateNome(PatchNomeDTO nome, Long id) {
+    Cliente cliente = repository.findById(id);
+    cliente.setNome(nome.nome());
+    return "Nome alterado com sucesso.";
+  }
+
+  @Override
+  @Transactional
+  public String updateCpf(PatchCpfDTO cpf, Long id) {
+    Cliente cliente = repository.findById(id);
+    verificaCpf(ClienteFormatador.validaCpf(cpf.cpf()));
+    cliente.setCpf(ClienteFormatador.validaCpf(cpf.cpf()));
+    return "Cpf alterado com sucesso.";
+  }
+
+  @Override
+  @Transactional
+  public String updateLogin(PatchLoginDTO login, Long id) {
+    Cliente cliente = repository.findById(id);
+    verificaLogin(login.login());
+    cliente.setLogin(login.login());
+    return "Login alterado com sucesso.";
+  }
+
+  @Override
+  @Transactional
+  public String updateEmail(PatchEmailDTO email, Long id) {
+    Cliente cliente = repository.findById(id);
+    cliente.setEmail(email.email());
+    return "Email alterado com sucesso.";
   }
 
   @Override

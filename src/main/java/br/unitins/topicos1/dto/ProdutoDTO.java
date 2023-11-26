@@ -1,9 +1,5 @@
 package br.unitins.topicos1.dto;
 
-import java.util.List;
-
-// import java.util.List;
-import br.unitins.topicos1.model.Produto;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -40,28 +36,6 @@ public record ProdutoDTO(
     @Digits(integer = 10, fraction = 0, message = "Por favor, digite um número válido")
     Integer quantidade,
     @NotNull(message = "O campo Lote não pode ser nulo")
-    List<LoteDTO> listaLote,
+    Long idLoteProduto,
     @NotNull(message = "O campo Classificacao não pode ser nulo")
-    ClassificacaoDTO classificacao) {
-        public static ProdutoDTO valueOf(Produto produto) {
-            return new ProdutoDTO(
-                produto.getNome(),
-                produto.getDescricao(),
-                produto.getCodigoBarras(),
-                produto.getMarca(),
-                produto.getAltura(),
-                produto.getLargura(),
-                produto.getComprimento(),
-                produto.getPeso(),
-                produto.getCustoCompra(),
-                produto.getValorVenda(),
-                produto.getQuantidade(),
-                produto
-                .getListaLote()
-                .stream()
-                .map(l -> LoteDTO.valueOf(l))
-                .toList(),
-                ClassificacaoDTO.valueOf(produto.getClassificacao())
-                );
-        }
-    }
+    ClassificacaoDTO classificacao) {}

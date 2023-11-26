@@ -1,5 +1,6 @@
 package br.unitins.topicos1.service;
 
+import br.unitins.topicos1.Formatadores.ClienteFormatador;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.FuncionarioFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
@@ -8,6 +9,10 @@ import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
+import br.unitins.topicos1.dto.PatchCpfDTO;
+import br.unitins.topicos1.dto.PatchEmailDTO;
+import br.unitins.topicos1.dto.PatchLoginDTO;
+import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
@@ -131,6 +136,45 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     repository.persist(funcionario);
     return FuncionarioResponseDTO.valueOf(funcionario);
   }
+
+  @Override
+  @Transactional
+  public String updateNome(PatchNomeDTO nome, Long id) {
+    Funcionario funcionario = repository.findById(id);
+    funcionario.setNome(nome.nome());
+    return "Nome alterado com sucesso.";
+  }
+
+  @Override
+  @Transactional
+  public String updateCpf(PatchCpfDTO cpf, Long id) {
+    Funcionario funcionario = repository.findById(id);
+    verificaCpf(ClienteFormatador.validaCpf(cpf.cpf()));
+    funcionario.setCpf(ClienteFormatador.validaCpf(cpf.cpf()));
+    return "Cpf alterado com sucesso.";
+  }
+
+  @Override
+  @Transactional
+  public String updateLogin(PatchLoginDTO login, Long id) {
+    Funcionario funcionario = repository.findById(id);
+    verificaLogin(login.login());
+    funcionario.setLogin(login.login());
+    return "Login alterado com sucesso.";
+  }
+
+  @Override
+  @Transactional
+  public String updateEmail(PatchEmailDTO email, Long id) {
+    Funcionario funcionario = repository.findById(id);
+    funcionario.setEmail(email.email());
+    return "Email alterado com sucesso.";
+  }
+
+
+
+
+
 
   @Override
   @Transactional
@@ -304,5 +348,17 @@ public class FuncionarioServiceImpl implements FuncionarioService {
       throw new ValidationException("Login", "Login incorreto");
     }
     return FuncionarioResponseDTO.valueOf(funcionario);
+  }
+
+  private void verificaLogin(String login) {
+    if(repository.findByLogin(login) != null) {
+      throw new ValidationException("login", "Login já existe no sistema. Favor escolher outro.");
+    }
+   }
+  
+  private void verificaCpf(String cpf) {
+    if(repository.findByCpf(cpf) != null) {
+      throw new ValidationException("cpf", "Este cpf já existe no sistema. Usuário já está cadastrado no sistema.");
+    }
   }
 }

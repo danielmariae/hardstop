@@ -8,6 +8,8 @@ import br.unitins.topicos1.model.*;
 import br.unitins.topicos1.repository.FornecedorRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+
 import org.jrimum.domkee.pessoa.CEP;
 
 import java.util.*;
@@ -19,6 +21,7 @@ public class FornecedorServiceImpl implements FornecedorService {
     FornecedorRepository repository;
     
     @Override
+    @Transactional
     public FornecedorResponseDTO insert(FornecedorDTO dto) {
         Fornecedor fornecedor = new Fornecedor();
         fornecedor.setNomeFantasia(dto.nomeFantasia());
@@ -50,7 +53,7 @@ public class FornecedorServiceImpl implements FornecedorService {
                try {
                    fornecedor.setListaTelefone(new ArrayList<Telefone>());
                } catch (Exception e) {
-                   throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui alocar memória para a lista telefônica do novo Cliente. Tente novamente mais tarde! " +  e.getCause());
+                   throw new GeneralErrorException("500", "Internal Server Error", "FornecedorServiceImpl(insert)", "Não consegui alocar memória para a lista telefônica do novo Fornecedor. Tente novamente mais tarde! " +  e.getCause());
                }
                for (TelefoneDTO tel : dto.listaTelefone()) {
                    Telefone telefone = new Telefone();
@@ -64,15 +67,16 @@ public class FornecedorServiceImpl implements FornecedorService {
            try{
                repository.persist(fornecedor);
            } catch (Exception e) {
-               throw new GeneralErrorException("500", "Internal Server Error", "FornecedorServiceImpl(insert)", "Não consegui persistir os dados do cliente no repositório " + e.getCause());
+               throw new GeneralErrorException("500", "Internal Server Error", "FornecedorServiceImpl(insert)", "Não consegui persistir os dados do Fornecedor no repositório " + e.getCause());
            }
         return FornecedorResponseDTO.valueOf(fornecedor);
     }
 
 
     @Override
+    @Transactional
     public FornecedorResponseDTO update(FornecedorDTO dto, Long id) {
-            Fornecedor fornecedor = new Fornecedor();
+            Fornecedor fornecedor = repository.findById(id);
             fornecedor.setNomeFantasia(dto.nomeFantasia());
             fornecedor.setCnpj(dto.cnpj());
             fornecedor.setEndSite(dto.endSite());
@@ -117,11 +121,10 @@ public class FornecedorServiceImpl implements FornecedorService {
                 }
             }
     
-        repository.persist(fornecedor);
+        //repository.persist(fornecedor);
         return FornecedorResponseDTO.valueOf(fornecedor);
     }
-    //    @Override
-    //    public void delete(Long id) {
+ 
     @Override
     public FornecedorResponseDTO findById(Long id) {
         return FornecedorResponseDTO.valueOf(repository.findById(id));
@@ -137,6 +140,7 @@ public class FornecedorServiceImpl implements FornecedorService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         repository.deleteById(id);
     }

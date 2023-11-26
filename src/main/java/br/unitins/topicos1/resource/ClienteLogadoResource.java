@@ -6,6 +6,10 @@ import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import br.unitins.topicos1.application.ErrorTP1;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
+import br.unitins.topicos1.dto.PatchCpfDTO;
+import br.unitins.topicos1.dto.PatchEmailDTO;
+import br.unitins.topicos1.dto.PatchLoginDTO;
+import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.PedidoDTO;
 import br.unitins.topicos1.dto.PedidoPatchEnderecoDTO;
@@ -17,7 +21,6 @@ import br.unitins.topicos1.service.FileService;
 import br.unitins.topicos1.service.PedidoService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -60,7 +63,58 @@ public Response getCliente() {
 }
 
   @PATCH
-  @Transactional
+  @RolesAllowed({"User"})
+  @Path("patch/nome/")
+  public Response updateNome(@Valid PatchNomeDTO nome, Long idCliente) {
+
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long id = service.findByLogin(login).id();
+
+    return Response.status(200).entity(service.updateNome(nome, id)).build();
+  }
+
+  @PATCH
+  @RolesAllowed({"User"})
+  @Path("patch/cpf/")
+  public Response updateCpf(@Valid PatchCpfDTO cpf, Long idCliente) {
+
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long id = service.findByLogin(login).id();
+
+    return Response.status(200).entity(service.updateCpf(cpf, id)).build();
+  }
+
+  @PATCH
+  @RolesAllowed({"User"})
+  @Path("patch/login/")
+  public Response updateLogin(@Valid PatchLoginDTO novoLogin, Long idCliente) {
+
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long id = service.findByLogin(login).id();
+
+    return Response.status(200).entity(service.updateLogin(novoLogin, id)).build();
+  }
+
+  @PATCH
+  @RolesAllowed({"User"})
+  @Path("patch/email/")
+  public Response updateEmail(@Valid PatchEmailDTO email, Long idCliente) {
+
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long id = service.findByLogin(login).id();
+
+    return Response.status(200).entity(service.updateEmail(email, id)).build();
+  }
+
+  @PATCH
   @RolesAllowed({"User"})
   @Path("patch/senha/")
   public Response updateSenha(@Valid PatchSenhaDTO senha, Long idCliente) {

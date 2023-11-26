@@ -1,5 +1,6 @@
 package br.unitins.topicos1.service;
 
+import java.util.ArrayList;
 // import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,9 @@ import java.util.List;
 import br.unitins.topicos1.dto.ProdutoDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.model.Classificacao;
+import br.unitins.topicos1.model.Lote;
 import br.unitins.topicos1.model.Produto;
+import br.unitins.topicos1.repository.LoteRepository;
 import br.unitins.topicos1.repository.ProdutoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -19,6 +22,11 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Inject
     ProdutoRepository repository;
 
+    @Inject
+    LoteRepository repositoryLote;
+
+    @Override
+    @Transactional
     public ProdutoResponseDTO insert(ProdutoDTO dto) {
         Produto produto = new Produto();
         produto.setNome(dto.nome());
@@ -31,7 +39,9 @@ public class ProdutoServiceImpl implements ProdutoService {
         produto.setPeso(dto.peso());
         produto.setCustoCompra(dto.custoCompra());
         produto.setValorVenda(dto.valorVenda());
-        produto.setQuantidade(dto.quantidade());  
+        produto.setQuantidade(dto.quantidade());
+        produto.setListaLote(new ArrayList<Lote>());
+        produto.getListaLote().add(repositoryLote.findById(dto.idLoteProduto())); 
 
         if (dto.classificacao() != null) {
             Classificacao classificacao = new Classificacao();
@@ -59,6 +69,8 @@ public class ProdutoServiceImpl implements ProdutoService {
         produto.setCustoCompra(dto.custoCompra());
         produto.setValorVenda(dto.valorVenda());
         produto.setQuantidade(dto.quantidade());
+        produto.getListaLote().add(repositoryLote.findById(dto.idLoteProduto()));
+
          if (dto.classificacao() != null) {
             Classificacao classificacao = new Classificacao();
             classificacao.setNome(dto.classificacao().nome());
@@ -66,7 +78,43 @@ public class ProdutoServiceImpl implements ProdutoService {
         }
         
 
-        repository.persist(produto);
+        //repository.persist(produto);
+        return ProdutoResponseDTO.valueOf(produto);
+    }
+
+    @Override
+    @Transactional
+    public ProdutoResponseDTO updateCustoCompra(Double custoCompra, Long id) {
+        Produto produto = repository.findById(id);
+
+        produto.setCustoCompra(custoCompra);
+        return ProdutoResponseDTO.valueOf(produto);
+    }
+
+    @Override
+    @Transactional
+    public ProdutoResponseDTO updateValorVenda(Double valorVenda, Long id) {
+        Produto produto = repository.findById(id);
+
+        produto.setValorVenda(valorVenda);
+        return ProdutoResponseDTO.valueOf(produto);
+    }
+
+    @Override
+    @Transactional
+    public ProdutoResponseDTO updateQuantidade(Integer quantidade, Long id) {
+        Produto produto = repository.findById(id);
+
+        produto.setQuantidade(quantidade);
+        return ProdutoResponseDTO.valueOf(produto);
+    }
+
+    @Override
+    @Transactional
+    public ProdutoResponseDTO updateLote(Long idLote, Long id) {
+        Produto produto = repository.findById(id);
+
+        produto.getListaLote().add(repositoryLote.findById(idLote));
         return ProdutoResponseDTO.valueOf(produto);
     }
 

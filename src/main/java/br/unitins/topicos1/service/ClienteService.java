@@ -6,6 +6,10 @@ import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
+import br.unitins.topicos1.dto.PatchCpfDTO;
+import br.unitins.topicos1.dto.PatchEmailDTO;
+import br.unitins.topicos1.dto.PatchLoginDTO;
+import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
@@ -31,6 +35,18 @@ public interface ClienteService {
 
   // Insere um novo endereco
   public ClienteResponseDTO insertEnderecoCliente(EnderecoDTO end, Long id);
+
+  // Altera o nome do cliente
+  public String updateNome(PatchNomeDTO nome, Long id);
+
+  // Altera o cpf do cliente
+  public String updateCpf(PatchCpfDTO cpf, Long id);
+
+  // Altera o login do cliente
+  public String updateLogin(PatchLoginDTO login, Long id);
+
+  // Altera o email do cliente
+  public String updateEmail(PatchEmailDTO email, Long id);
 
   // Altera a senha do cliente
   public String updateSenhaCliente(PatchSenhaDTO senha, Long id);

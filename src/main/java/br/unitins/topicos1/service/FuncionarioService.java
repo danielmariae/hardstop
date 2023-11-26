@@ -4,6 +4,10 @@ import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
+import br.unitins.topicos1.dto.PatchCpfDTO;
+import br.unitins.topicos1.dto.PatchEmailDTO;
+import br.unitins.topicos1.dto.PatchLoginDTO;
+import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
@@ -31,6 +35,18 @@ public interface FuncionarioService {
 
   // Insere um novo endereco
   public FuncionarioResponseDTO insertEnderecoFuncionario(EnderecoFuncDTO end, Long id);
+
+  // Altera o nome do funcionario
+  public String updateNome(PatchNomeDTO nome, Long id);
+
+  // Altera o cpf do funcionario
+  public String updateCpf(PatchCpfDTO cpf, Long id);
+
+  // Altera o login do funcionario
+  public String updateLogin(PatchLoginDTO login, Long id);
+
+  // Altera o email do funcionario
+  public String updateEmail(PatchEmailDTO email, Long id);
 
     // Altera a senha do funcionario
   public String updateSenhaFuncionario(PatchSenhaDTO senha, Long id);

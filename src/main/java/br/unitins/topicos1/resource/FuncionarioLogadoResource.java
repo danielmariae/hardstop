@@ -8,6 +8,10 @@ import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
+import br.unitins.topicos1.dto.PatchCpfDTO;
+import br.unitins.topicos1.dto.PatchEmailDTO;
+import br.unitins.topicos1.dto.PatchLoginDTO;
+import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
@@ -58,6 +62,58 @@ public Response getFuncionario() {
     
     return Response.ok(serviceFuncionario.findByLogin(login)).build();
 }
+
+  @PATCH
+  @RolesAllowed({"Func", "Admin"})
+  @Path("patch/nome/")
+  public Response updateNome(@Valid PatchNomeDTO nome, Long idFuncionario) {
+
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long id = serviceFuncionario.findByLogin(login).id();
+
+    return Response.status(200).entity(serviceFuncionario.updateNome(nome, id)).build();
+  }
+
+  @PATCH
+  @RolesAllowed({"Func", "Admin"})
+  @Path("patch/cpf/")
+  public Response updateCpf(@Valid PatchCpfDTO cpf, Long idFuncionario) {
+
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long id = serviceFuncionario.findByLogin(login).id();
+
+    return Response.status(200).entity(serviceFuncionario.updateCpf(cpf, id)).build();
+  }
+
+  @PATCH
+  @RolesAllowed({"Func", "Admin"})
+  @Path("patch/login/")
+  public Response updateLogin(@Valid PatchLoginDTO novoLogin, Long idFuncionario) {
+
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long id = serviceFuncionario.findByLogin(login).id();
+
+    return Response.status(200).entity(serviceFuncionario.updateLogin(novoLogin, id)).build();
+  }
+
+  @PATCH
+  @RolesAllowed({"Func", "Admin"})
+  @Path("patch/email/")
+  public Response updateEmail(@Valid PatchEmailDTO email, Long idFuncionario) {
+
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long id = serviceFuncionario.findByLogin(login).id();
+
+    return Response.status(200).entity(serviceFuncionario.updateEmail(email, id)).build();
+  }
 
   @PATCH
   @Transactional

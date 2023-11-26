@@ -17,7 +17,7 @@ import br.unitins.topicos1.service.FileService;
 import br.unitins.topicos1.service.ProdutoService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -48,37 +48,51 @@ public class ProdutoResource {
 
     
     @POST
-    @Transactional
-    public Response insert (ProdutoDTO dto){
+    @RolesAllowed({"Func", "Admin"})
+    public Response insert (@Valid ProdutoDTO dto){
         ProdutoResponseDTO retorno = service.insert(dto);
         return Response.status(201).entity(retorno).build();
     }
 
-
     @PUT
-    @Transactional
+    @RolesAllowed({"Func", "Admin"})
     @Path("/put/{id}")
-    public Response update(
-        ProdutoDTO dto, 
-        @PathParam("id") Long id)
+    public Response update(@Valid ProdutoDTO dto, @PathParam("id") Long id)
     {
         service.update(dto, id);
         return Response.status(Status.NO_CONTENT).build();
     }
 
-    // @PATCH
-    // @Transactional
-    // @Path("patch/classificacao/{id}")
-    // public Response updateClassificacao(
-    //     @Valid List<ClassificacaoDTO> cls,
-    //     @PathParam("id") Long id)
-    // {
-    //     return Response.status(200).entity(service.updateClassificacao(cls, id)).build();
-    // }
+    @PATCH
+    @RolesAllowed({"Func", "Admin"})
+    @Path("/patch/lote/{id}")
+    public Response updateLoteProduto(@PathParam("id") Long idProduto, Long idLote) {
+        return Response.ok().entity(service.updateLote(idProduto, idLote)).build();
+    }
 
-    
+    @PATCH
+    @RolesAllowed({"Func", "Admin"})
+    @Path("/patch/quantidade/{id}")
+    public Response updateQuantidadeProduto(@PathParam("id") Long idProduto, Integer quantidade) {
+        return Response.ok().entity(service.updateQuantidade(quantidade, idProduto)).build();
+    }
+
+    @PATCH
+    @RolesAllowed({"Func", "Admin"})
+    @Path("/patch/valorVenda/{id}")
+    public Response updateValorVendaProduto(@PathParam("id") Long idProduto, Double valorVenda) {
+        return Response.ok().entity(service.updateValorVenda(valorVenda, idProduto)).build();
+    }
+
+    @PATCH
+    @RolesAllowed({"Func", "Admin"})
+    @Path("/patch/custoCompra/{id}")
+    public Response updateCustoCompraProduto(@PathParam("id") Long idProduto, Double custoCompra) {
+        return Response.ok().entity(service.updateCustoCompra(custoCompra, idProduto)).build();
+    }
+
     @DELETE
-    @Transactional
+    @RolesAllowed({"Func", "Admin"})
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id){
         service.delete(id);
