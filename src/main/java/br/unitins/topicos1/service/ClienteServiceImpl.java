@@ -45,6 +45,7 @@ public class ClienteServiceImpl implements ClienteService {
   @Inject
   HashService hashservice;
 
+
   @Override
   public ClienteResponseDTO findByIdCliente(Long id) {
     Cliente cliente = repository.findById(id);
@@ -298,12 +299,13 @@ cliente.getListaProduto().clear();
             endereco.setLocalidade(end.localidade());
             endereco.setUF(end.uf());
             endereco.setPais(end.pais());
+            chave = false;
           }
 
       }
 
       if(chave) {
-        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "O id fornecido não corresponde a um id de endereço cadastrado para este usuario");
+        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateEndereçoCliente)", "O id fornecido não corresponde a um id de endereço cadastrado para este usuario");
       }
       
     } else {

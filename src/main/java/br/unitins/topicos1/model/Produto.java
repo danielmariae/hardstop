@@ -18,7 +18,6 @@ public class Produto extends DefaultEntity {
     private Double largura;
     private Double comprimento;
     private Double peso;
-    private Double custoCompra;
     private Double valorVenda;
     private Integer quantidade;
     private List<String> nomeImagem;
@@ -94,14 +93,6 @@ public class Produto extends DefaultEntity {
 
     public void setPeso(Double peso) {
         this.peso = peso;
-    }
-
-    public Double getCustoCompra() {
-        return custoCompra;
-    }
-
-    public void setCustoCompra(Double custoCompra) {
-        this.custoCompra = custoCompra;
     }
 
     public Double getValorVenda() {

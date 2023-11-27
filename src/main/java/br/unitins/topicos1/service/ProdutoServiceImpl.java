@@ -66,7 +66,6 @@ public class ProdutoServiceImpl implements ProdutoService {
         if(produto.getQuantidade() == 0) {
 
           try {
-          produto.setCustoCompra(dto.custoCompra());
           produto.setValorVenda(dto.valorVenda());
           produto.setLoteAtual(repositoryLote.findById(dto.idLoteProduto()));
           produto.setQuantidade(dto.quantidade());

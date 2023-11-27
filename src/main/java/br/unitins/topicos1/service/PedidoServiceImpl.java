@@ -753,10 +753,25 @@ public class PedidoServiceImpl implements PedidoService {
           "id do produto não existe no banco de dados."
         );
       }
-      if(cliente.getListaProduto() == null)
+      if(cliente.getListaProduto() == null) {
         cliente.setListaProduto(new ArrayList<Produto>());
+        cliente.getListaProduto().add(produto);
+      } else {
+        for(Produto prod : cliente.getListaProduto()) {
+          if(prod.getId() == produto.getId()) {
+            throw new GeneralErrorException(
+          "400",
+          "Bad Resquest",
+          "PedidoServiceImpl(insertDesejos)",
+          "Produto já existe na lista de desejos deste cliente."
+        );
+          }
+        }
+        cliente.getListaProduto().add(produto);
+      }
+
         
-    cliente.getListaProduto().add(produto);
+    
     /* try {
       repository.persist(cliente);
     } catch (Exception e) {
@@ -770,6 +785,7 @@ public class PedidoServiceImpl implements PedidoService {
     return DesejoResponseDTO.valueOf(produto);
   }
 
+  
   @Override
   @Transactional
   public void deleteDesejos(Long idProduto, Long idCliente) {
@@ -802,17 +818,26 @@ public class PedidoServiceImpl implements PedidoService {
           "id do produto não existe no banco de dados."
         );
       }
-    cliente.getListaProduto().remove(produto);
-    try {
-      repository.persist(cliente);
-    } catch (Exception e) {
-      throw new GeneralErrorException(
-        "500",
-        "Server Error",
-        "PedidoServiceImpl(insertDesejos)",
-        "O produto não pôde ser retirado da lista de desejos do Cliente no banco de dados."
-      );
-    }
+
+      
+      Boolean chave = true;
+      for(Produto prod : cliente.getListaProduto()) {
+        if(prod.getId() == idProduto) {
+          chave = false;
+        }
+      }
+
+      if(chave) {
+        throw new GeneralErrorException(
+          "400",
+          "Bad Resquest",
+          "PedidoServiceImpl(deleteDesejos)",
+          "Produto não existe na lista de desejos do cliente."
+        );
+      }
+
+      cliente.getListaProduto().remove(produto);
+      
   }
 
   private Boolean verificaEnderecoCliente(Cliente cliente, Endereco endereco) {

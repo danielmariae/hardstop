@@ -51,7 +51,7 @@ public class LoteServiceImpl implements LoteService {
             "Não consegui persistir o lote no banco de dados.");
         }
         if(repositoryProduto.findById(dto.idProduto()).getQuantidade() == 0) {
-            ProdutoPatchDTO prodpatch = new ProdutoPatchDTO(dto.idProduto(), dto.custoCompra(), dto.valorVenda(), dto.quantidade(), lote.getId());
+            ProdutoPatchDTO prodpatch = new ProdutoPatchDTO(dto.idProduto(), dto.valorVenda(), dto.quantidade(), lote.getId());
             serviceProduto.update(prodpatch);
         }
         /* try {

@@ -7,9 +7,6 @@ public record ProdutoPatchDTO(
 
     @NotNull(message = "O campo Id não pode ser nulo")
     Long id,
-    @NotNull(message = "O campo Custo da compra não pode ser nulo")
-    @Digits(integer = 6, fraction = 3, message = "Por favor, digite um número válido")
-    Double custoCompra,
     @NotNull(message = "O campo Valor da venda não pode ser nulo")
     @Digits(integer = 6, fraction = 3, message = "Por favor, digite um número válido")
     Double valorVenda,

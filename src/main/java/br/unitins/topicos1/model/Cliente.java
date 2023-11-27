@@ -4,7 +4,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.List;
@@ -38,7 +37,7 @@ public class Cliente extends DefaultEntity {
   )
   private List<Telefone> listaTelefone;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinTable(
     name = "lista_de_desejos",
     joinColumns = @JoinColumn(name = "id_cliente"),
