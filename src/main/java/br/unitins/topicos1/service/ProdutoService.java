@@ -1,11 +1,12 @@
 package br.unitins.topicos1.service;
 
 import java.util.List;
-
-// import br.unitins.topicos1.dto.ClassificacaoDTO;
-// import br.unitins.topicos1.dto.LoteDTO;
 import br.unitins.topicos1.dto.ProdutoDTO;
+import br.unitins.topicos1.dto.ProdutoFornecedorPatch;
+import br.unitins.topicos1.dto.ProdutoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
+import br.unitins.topicos1.dto.ProdutoValorPatch;
+import br.unitins.topicos1.model.Fornecedor;
 
 
 public interface ProdutoService {
@@ -14,7 +15,7 @@ public interface ProdutoService {
     public ProdutoResponseDTO insert(ProdutoDTO dto);
 
     // ATUALIZAR DETALHES DO PRODUTO E CLASSIFICAÇÃO JUNTO:
-    public ProdutoResponseDTO update(ProdutoDTO dto, Long id);
+    public ProdutoResponseDTO update(ProdutoPatchDTO dto);
 
     // IMPLEMENTAÇÃO NA PROVA A2:
     // public ProdutoResponseDTO updateLote(List<LoteDTO> lt, Long id);
@@ -34,15 +35,10 @@ public interface ProdutoService {
     // LISTAR TODOS:
     public List<ProdutoResponseDTO> findByAll();
 
-    // UPDATE LOTE DO PRODUTO
-    public ProdutoResponseDTO updateLote(Long idLote, Long id);
-
-    // UPDATE QUANTIDADE DO PRODUTO
-    public ProdutoResponseDTO updateQuantidade(Integer quantidade, Long id);
-
     // UPDATE VALOR DE VENDA DO PRODUTO
-    public ProdutoResponseDTO updateValorVenda(Double valorVenda, Long id);
+    public ProdutoResponseDTO updateValorVenda(ProdutoValorPatch dto);
 
-    // UPDATE VALOR DE COMPRA DO PRODUTO
-    public ProdutoResponseDTO updateCustoCompra(Double custoCompra, Long id);
+    // ENCONTRAR O FORNECEDOR DE UM PRODUTO ESTRAGADO
+    public Fornecedor encontraFornecedor(ProdutoFornecedorPatch dto);
+
 }

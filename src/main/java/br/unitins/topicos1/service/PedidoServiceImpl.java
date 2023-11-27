@@ -24,6 +24,7 @@ import br.unitins.topicos1.model.StatusDoPedido;
 import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.EmpresaRepository;
 import br.unitins.topicos1.repository.EnderecoRepository;
+import br.unitins.topicos1.repository.LoteRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
 import br.unitins.topicos1.repository.ProdutoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,11 +32,13 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.PersistenceUnit;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +65,10 @@ public class PedidoServiceImpl implements PedidoService {
   EnderecoRepository repositoryEndereco;
 
   @Inject
-  EmpresaRepository repositoyEmpresa;
+  EmpresaRepository repositoryEmpresa;
+
+  @Inject
+  LoteRepository repositoryLote;
 
   @PersistenceUnit
   EntityManagerFactory emf;
@@ -71,7 +77,7 @@ public class PedidoServiceImpl implements PedidoService {
   @Transactional
   public PedidoResponseDTO insert(PedidoDTO dto, Long id) {
     // Carrega os dados da empresa.
-    Empresa empresa = repositoyEmpresa.findById(Long.valueOf(1));
+    Empresa empresa = repositoryEmpresa.findById(Long.valueOf(1));
 
     // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
     if (!verificaUsuario1(id)) {
@@ -126,16 +132,42 @@ public class PedidoServiceImpl implements PedidoService {
           "id do produto não existe no banco de dados."
         );
       }
-
-      if (!temEmEstoque(produto.getQuantidade(), idv.quantidade())) {
-        throw new GeneralErrorException(
+      try{
+        Integer quant = produto.getQuantidade() - idv.quantidade();
+        if(quant > 0) {
+          produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
+          item.setProduto(produto);
+          pedido.getItemDaVenda().add(item);
+          valorCompra = valorCompra + idv.quantidade() * idv.preco();
+        } else if(quant == 0) {
+          produto.setQuantidade(0);
+          LocalDateTime agora = LocalDateTime.now();
+          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+          String dataFormatada = agora.format(formatter);
+          LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
+          produto.getLoteAtual().setDataHoraUltimoVendido(novoDateTime);
+          produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
+          item.setProduto(produto);
+          pedido.getItemDaVenda().add(item);
+          valorCompra = valorCompra + idv.quantidade() * idv.preco();
+        } else if(quant < 0) {
+          throw new GeneralErrorException(
           "400",
           "Bad Resquest",
           "PedidoServiceImpl(insert)",
           "Inexiste esta quantidade de produto em estoque."
         );
-      }
+        }
+      
+      } catch (OptimisticLockException e) {
+        throw new GeneralErrorException(
+    "500",
+    "Server Error",
+    "PedidoServiceImpl(insert)",
+    "Não consegui realizar o insert do pedido por conta de concorrência no banco de dados. Tente novamente mais tarde." + e);
+    } 
 
+      /* 
       // Analisa se tem o produto em estoque, subtrai a quantidade desejada e persiste no banco
       EntityManager em = emf.createEntityManager();
       EntityTransaction transaction = em.getTransaction();
@@ -159,8 +191,10 @@ public class PedidoServiceImpl implements PedidoService {
           item.setProduto(produto);
           pedido.getItemDaVenda().add(item);
           valorCompra = valorCompra + idv.quantidade() * idv.preco();
+          if(quantFinal == 0) {
+            produto.getLoteAtual().setDataHoraUltimoVendido(LocalDateTime.now());
+          }
         } else {
-          transaction.rollback();
           throw new GeneralErrorException(
             "400",
             "Bad Resquest",
@@ -180,7 +214,7 @@ public class PedidoServiceImpl implements PedidoService {
         }
       } finally {
         em.close();
-      }
+      } */
     }
 
     // Verifica se o id fornecido para o endereço de entrega do pedido é nulo
@@ -227,7 +261,11 @@ public class PedidoServiceImpl implements PedidoService {
       pagamento.setMesValidade(dto.formaDePagamento().mesValidade());
       pagamento.setAnoValidade(dto.formaDePagamento().anoValidade());
       pagamento.setCodSeguranca(dto.formaDePagamento().codSeguranca());
-      pagamento.setDataHoraPagamento(LocalDateTime.now());
+      LocalDateTime agora = LocalDateTime.now();
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+      String dataFormatada = agora.format(formatter);
+      LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
+      pagamento.setDataHoraPagamento(novoDateTime);
       pedido.setFormaDePagamento(pagamento);
     } else if (dto.formaDePagamento().modalidade() == 1) {
       Boleto pagamento = new Boleto();
@@ -301,17 +339,27 @@ public class PedidoServiceImpl implements PedidoService {
 
     pedido.setStatusDoPedido(new ArrayList<StatusDoPedido>());
     StatusDoPedido status = new StatusDoPedido();
-    status.setDataHora(LocalDateTime.now());
+    LocalDateTime agora = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    String dataFormatada = agora.format(formatter);
+    LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
+    status.setDataHora(novoDateTime);
     status.setStatus(Status.valueOf(0));
     pedido.getStatusDoPedido().add(status);
 
-    repositoryPedido.persist(pedido);
-
-
+    try {
+       repositoryPedido.persist(pedido);
+     } catch (Exception e) {
+        throw new GeneralErrorException(
+    "500",
+    "Server Error",
+    "PedidoServiceImpl(insert)",
+    "Não consegui realizar o insert do pedido no banco de dados. Tente novamente mais tarde." + e);
+    } 
+   
     //if(pedido.getFormaDePagamento().getModalidade().getId() == 0)
     if(pedido.getFormaDePagamento() instanceof CartaoDeCredito)
     enviaDadosCartao((CartaoDeCredito) pedido.getFormaDePagamento(), cliente.getNome(), cliente.getCpf(), pedido.getId());
-
 
     return PedidoResponseDTO.valueOf(pedido);
   }
@@ -408,7 +456,11 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     StatusDoPedido statusVenda = new StatusDoPedido();
-    statusVenda.setDataHora(LocalDateTime.now());
+    LocalDateTime agora = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    String dataFormatada = agora.format(formatter);
+    LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
+    statusVenda.setDataHora(novoDateTime);
 
     // Coletando o Status de número mais elevado neste pedido
     Integer status = 0;
@@ -444,11 +496,16 @@ public class PedidoServiceImpl implements PedidoService {
       return PedidoResponseDTO.valueOf(pedido);
     } else if (status == 1) {
       // IMPORTANTE!!! Este status será gerado por comunicação com a administradora do cartão de crédito que negou o pedido ou por perder o prazo do pagamento no caso de ser pix ou boleto.
+      try {
       statusVenda.setStatus(Status.valueOf(ppsdto.idStatus()));
       pedido.getStatusDoPedido().add(statusVenda);
 
       // Devolve o produto separado ao estoque
       for (ItemDaVenda idv : pedido.getItemDaVenda()) {
+
+        idv.getProduto().setQuantidade(idv.getProduto().getQuantidade()+idv.getQuantidade());
+        idv.getProduto().getLoteAtual().setDataHoraUltimoVendido(null);
+        /*
         EntityManager em = emf.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
 
@@ -469,6 +526,7 @@ public class PedidoServiceImpl implements PedidoService {
             .setParameter(2, idv.getProduto().getId())
             .executeUpdate();
           transaction.commit();
+          idv.getProduto().getLoteAtual().setDataHoraUltimoVendido(null);
         } catch (Exception e) {
           if (transaction != null && transaction.isActive()) {
             transaction.rollback();
@@ -481,16 +539,15 @@ public class PedidoServiceImpl implements PedidoService {
           }
         } finally {
           em.close();
-        }
+        } */
       }
-      try {
-        repositoryPedido.persist(pedido);
-      } catch (Exception e) {
+      
+       } catch (OptimisticLockException e) {
         throw new GeneralErrorException(
           "500",
           "Server Error",
           "PedidoServiceImpl(updateStatusDoPedido)",
-          "Não consegui persistir o pedido no banco de dados!"
+          "Não consegui persistir o pedido no banco de dados!" + e
         );
       }
       return PedidoResponseDTO.valueOf(pedido);
@@ -696,8 +753,11 @@ public class PedidoServiceImpl implements PedidoService {
           "id do produto não existe no banco de dados."
         );
       }
+      if(cliente.getListaProduto() == null)
+        cliente.setListaProduto(new ArrayList<Produto>());
+        
     cliente.getListaProduto().add(produto);
-    try {
+    /* try {
       repository.persist(cliente);
     } catch (Exception e) {
       throw new GeneralErrorException(
@@ -706,7 +766,7 @@ public class PedidoServiceImpl implements PedidoService {
         "PedidoServiceImpl(insertDesejos)",
         "O produto não pôde ser inserido na lista de desejos do Cliente no banco de dados."
       );
-    }
+    } */
     return DesejoResponseDTO.valueOf(produto);
   }
 
@@ -755,11 +815,6 @@ public class PedidoServiceImpl implements PedidoService {
     }
   }
 
-
-
-
-
-
   private Boolean verificaEnderecoCliente(Cliente cliente, Endereco endereco) {
     for (Endereco end : cliente.getListaEndereco()) {
       // O pedido repassado ao método pertence ao Cliente repassado ao método.
@@ -768,21 +823,6 @@ public class PedidoServiceImpl implements PedidoService {
       }
     }
     return false;
-  }
-
-  private Boolean temEmEstoque(
-    Integer num_produtos_banco,
-    Integer num_produtos_pedido
-  ) {
-    Integer sub;
-    sub = num_produtos_banco - num_produtos_pedido;
-    // Existem produtos em quantidade adequada no banco
-    if (sub >= 0) {
-      return true;
-      // Não existem produtos em quantidade adequada no banco
-    } else {
-      return false;
-    }
   }
 
   private Boolean verificaProduto1(Long id) {
@@ -1053,27 +1093,13 @@ public class PedidoServiceImpl implements PedidoService {
 
     if(objR.getBoo()) {
       Long idPedido = Long.parseLong(objR.getIdPedido());
-      /* */
       PedidoPatchStatusDTO update = new PedidoPatchStatusDTO(idPedido, 2, null);
       updateStatusDoPedido(update);
-
-
-      /*  Pedido pedido = repositoryPedido.findById(idPedido);
-      StatusDoPedido status = new StatusDoPedido();
-      status.setDataHora(LocalDateTime.now());
-      status.setStatus(Status.valueOf(2));
-      pedido.getStatusDoPedido().add(status); */
 
     } else {
       Long idPedido = Long.parseLong(objR.getIdPedido());
       PedidoPatchStatusDTO update = new PedidoPatchStatusDTO(idPedido, 1, null);
       updateStatusDoPedido(update);
-      
-      /*  Pedido pedido = repositoryPedido.findById(idPedido);
-      StatusDoPedido status = new StatusDoPedido();
-      status.setDataHora(LocalDateTime.now());
-      status.setStatus(Status.valueOf(1));
-      pedido.getStatusDoPedido().add(status); */
  
     }
   }

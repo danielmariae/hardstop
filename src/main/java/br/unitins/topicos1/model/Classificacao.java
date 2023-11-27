@@ -8,7 +8,6 @@ public class Classificacao extends DefaultEntity {
 
     public Classificacao() {
     }
-
     
     public Classificacao(Long id, String nome) {
         this.setId(id);
@@ -21,4 +20,5 @@ public class Classificacao extends DefaultEntity {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
 }  

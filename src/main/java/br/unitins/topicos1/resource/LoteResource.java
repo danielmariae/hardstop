@@ -1,11 +1,12 @@
 package br.unitins.topicos1.resource;
 
 import br.unitins.topicos1.dto.LoteDTO;
+import br.unitins.topicos1.dto.LotePatchDTO;
 import br.unitins.topicos1.dto.LoteResponseDTO;
 import br.unitins.topicos1.service.LoteService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -23,39 +24,22 @@ public class LoteResource {
     JsonWebToken jwt;
 
     @POST
-    @Transactional
     @RolesAllowed({"Func", "Admin"})
-    public Response insert (LoteDTO dto){
+    public Response insert (@Valid LoteDTO dto){
         LoteResponseDTO retorno = service.insert(dto);
         return Response.status(201).entity(retorno).build();
     }
 
 
-    @PUT
-    @Transactional
+    @PATCH
     @RolesAllowed({"Func", "Admin"})
-    @Path("/put/{id}")
-    public Response update(
-            LoteDTO dto,
-            @PathParam("id") Long id)
+    @Path("/patch/")
+    public Response update(@Valid LotePatchDTO dto)
     {
-        service.update(dto, id);
-        return Response.status(Response.Status.NO_CONTENT).build();
+        return Response.status(201).entity(service.update(dto)).build();
     }
 
-    // @PATCH
-    // @Transactional
-    // @Path("patch/classificacao/{id}")
-    // public Response updateClassificacao(
-    //     @Valid List<ClassificacaoDTO> cls,
-    //     @PathParam("id") Long id)
-    // {
-    //     return Response.status(200).entity(service.updateClassificacao(cls, id)).build();
-    // }
-
-
     @DELETE
-    @Transactional
     @RolesAllowed({"Func", "Admin"})
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") Long id){
