@@ -6,7 +6,6 @@ import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import br.unitins.topicos1.application.ErrorTP1;
 import br.unitins.topicos1.dto.ProdutoDTO;
 import br.unitins.topicos1.dto.ProdutoFornecedorPatch;
-import br.unitins.topicos1.dto.ProdutoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.ProdutoValorPatch;
 import br.unitins.topicos1.model.form.ArchiveForm;
@@ -45,17 +44,10 @@ public class ProdutoResource {
     
     @POST
     @RolesAllowed({"Func", "Admin"})
+    @Path("/insert/")
     public Response insert (@Valid ProdutoDTO dto){
         ProdutoResponseDTO retorno = service.insert(dto);
         return Response.status(201).entity(retorno).build();
-    }
-
-    @PATCH
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/patch/")
-    public Response update(@Valid ProdutoPatchDTO dto)
-    {
-        return Response.status(201).entity(service.update(dto)).build();
     }
 
     @PATCH
@@ -74,6 +66,7 @@ public class ProdutoResource {
     }
 
     @GET
+    @Path("/search/all/")
     public Response findAll() {
         return Response.ok(service.findByAll()).build();
     }

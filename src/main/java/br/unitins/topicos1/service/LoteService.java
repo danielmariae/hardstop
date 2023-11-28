@@ -24,4 +24,7 @@ public interface LoteService {
 
     // LISTAR TODOS:
     List<LoteResponseDTO> findByAll();
+
+    // ATIVA UM LOTE PRÉ CADASTRADO
+    LoteResponseDTO ativaLote(Long idProduto);
 }

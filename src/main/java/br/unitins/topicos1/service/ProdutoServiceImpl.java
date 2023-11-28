@@ -137,7 +137,16 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Override
     @Transactional
     public void delete(Long id) {
+      try {
         repository.deleteById(id);
+      } catch (Exception e) {
+        throw new GeneralErrorException(
+            "400",
+            "Bad Resquest",
+            "ProdutoServiceImpl(deleteById)",
+            "Não posso deletar o objeto por conta de relações ativas com outras entidades.");
+      }
+        
     }
 
     @Override
@@ -176,7 +185,7 @@ public class ProdutoServiceImpl implements ProdutoService {
       LocalDateTime tempDateTime = LocalDateTime.parse(dataFormatador, formatador);
       
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-      LocalDateTime novoDateTime = LocalDateTime.parse(dto.dataVenda(), formatter);
+      LocalDateTime novoDateTime = LocalDateTime.parse(dto.dataHoraVenda(), formatter);
 
       for(Lote lt : repositoryLote.findAll(dto.idProduto())) {
 
@@ -195,5 +204,4 @@ public class ProdutoServiceImpl implements ProdutoService {
             "Não consegui encontrar o Fornecedor deste produto na data estipulada");
     }
 
-    
 }

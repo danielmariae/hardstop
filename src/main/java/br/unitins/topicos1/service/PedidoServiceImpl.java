@@ -132,10 +132,11 @@ public class PedidoServiceImpl implements PedidoService {
           "id do produto não existe no banco de dados."
         );
       }
+      Integer quant;
       try{
-        Integer quant = produto.getQuantidade() - idv.quantidade();
+        quant = produto.getQuantidade() - idv.quantidade();
         if(quant > 0) {
-          produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
+          produto.setQuantidade(quant);
           item.setProduto(produto);
           pedido.getItemDaVenda().add(item);
           valorCompra = valorCompra + idv.quantidade() * idv.preco();
@@ -146,7 +147,6 @@ public class PedidoServiceImpl implements PedidoService {
           String dataFormatada = agora.format(formatter);
           LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
           produto.getLoteAtual().setDataHoraUltimoVendido(novoDateTime);
-          produto.setQuantidade(produto.getQuantidade() - idv.quantidade());
           item.setProduto(produto);
           pedido.getItemDaVenda().add(item);
           valorCompra = valorCompra + idv.quantidade() * idv.preco();

@@ -25,11 +25,19 @@ public class LoteResource {
 
     @POST
     @RolesAllowed({"Func", "Admin"})
+    @Path("/insert/lote/")
     public Response insert (@Valid LoteDTO dto){
         LoteResponseDTO retorno = service.insert(dto);
         return Response.status(201).entity(retorno).build();
     }
 
+    @PATCH
+    @RolesAllowed({"Func", "Admin"})
+    @Path("/patch/ativalote/{idProduto}")
+    public Response ativaLote(@PathParam("idProduto") Long idProduto)
+    {
+        return Response.status(201).entity(service.ativaLote(idProduto)).build();
+    }
 
     @PATCH
     @RolesAllowed({"Func", "Admin"})
@@ -49,6 +57,7 @@ public class LoteResource {
 
     @GET
     @RolesAllowed({"Func", "Admin"})
+    @Path("/search/all/")
     public Response findAll() {
         return Response.ok(service.findByAll()).build();
     }

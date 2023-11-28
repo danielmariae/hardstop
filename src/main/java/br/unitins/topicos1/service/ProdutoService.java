@@ -12,33 +12,30 @@ import br.unitins.topicos1.model.Fornecedor;
 public interface ProdutoService {
 
     // INSERIR NOVO PRODUTO:
-    public ProdutoResponseDTO insert(ProdutoDTO dto);
+    ProdutoResponseDTO insert(ProdutoDTO dto);
 
     // ATUALIZAR DETALHES DO PRODUTO E CLASSIFICAÇÃO JUNTO:
-    public ProdutoResponseDTO update(ProdutoPatchDTO dto);
-
-    // IMPLEMENTAÇÃO NA PROVA A2:
-    // public ProdutoResponseDTO updateLote(List<LoteDTO> lt, Long id);
+    ProdutoResponseDTO update(ProdutoPatchDTO dto);
 
     // DELETAR PRODUTO POR ID:
-    public void delete(Long id);
+    void delete(Long id);
 
     // PROCURAR POR ID:
-    public ProdutoResponseDTO findById(Long id);
+    ProdutoResponseDTO findById(Long id);
 
     // PROCURAR POR CÓDIGO DE BARRAS:
-    public ProdutoResponseDTO findByCodigoBarras(String cpf);
+    ProdutoResponseDTO findByCodigoBarras(String cpf);
 
     // PROCURAR POR NOME:
-    public List<ProdutoResponseDTO> findByName(String nome);
+    List<ProdutoResponseDTO> findByName(String nome);
 
     // LISTAR TODOS:
-    public List<ProdutoResponseDTO> findByAll();
+    List<ProdutoResponseDTO> findByAll();
 
     // UPDATE VALOR DE VENDA DO PRODUTO
-    public ProdutoResponseDTO updateValorVenda(ProdutoValorPatch dto);
+    ProdutoResponseDTO updateValorVenda(ProdutoValorPatch dto);
 
     // ENCONTRAR O FORNECEDOR DE UM PRODUTO ESTRAGADO
-    public Fornecedor encontraFornecedor(ProdutoFornecedorPatch dto);
+    Fornecedor encontraFornecedor(ProdutoFornecedorPatch dto);
 
 }

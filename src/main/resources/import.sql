@@ -87,6 +87,9 @@ insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCom
 insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 1, '2023-10-03 09:47:50', 3, 500.0, 1000.0, 20);
 insert into lote (lote, fornecedor_id, dataHoraChegadaLote, dataHoraUltimoVendido, produto_id, custoCompra, valorVenda, quantidade) values('f2_p2_lt14', 2, '2022-01-01 16:11:26', '2023-09-30 16:11:26', 1, 700.0, 1400.0, 50);
 insert into lote (lote, fornecedor_id, dataHoraChegadaLote, dataHoraUltimoVendido, produto_id, custoCompra, valorVenda, quantidade) values('f2_p2_lt14', 2, '2022-01-01 16:11:26', '2023-10-01 16:11:26', 2, 800.0, 1600.0, 50);
+insert into lote (lote, fornecedor_id, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 1, 3, 500.0, 1000.0, 40);
+insert into lote (lote, fornecedor_id, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 2, 1, 500.0, 1000.0, 5);
+insert into lote (lote, fornecedor_id, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 2, 2, 600.0, 1200.0, 15);
 
 update produto set loteAtual_id = 1 where id = 1;
 update produto set loteAtual_id = 2 where id = 2;

@@ -136,8 +136,42 @@ public class LoteServiceImpl implements LoteService {
         "Bad Request",
         "LoteServiceImpl(delete)",
         "Lote ativo. Impossível deletar.");
+        } else {
+            try {
+                repository.deleteById(id);
+            } catch (Exception e) {
+                throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "LoteServiceImpl(delete)",
+        "Não consegui deletar o produto em questão. Tente novamente mais tarde." + e);
+            }
+        
         }
-        repository.deleteById(id);
+    }
+
+    public LoteResponseDTO ativaLote(Long idProduto) {
+        Lote lote;
+        for(Lote lt : repository.findAll(idProduto)) {
+          if(lt.getDataHoraChegadaLote() == null) {
+            lote = lt;
+            LocalDateTime agora = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String dataFormatada = agora.format(formatter);
+            LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
+            lote.setDataHoraChegadaLote(novoDateTime);
+            ProdutoPatchDTO prodpatch = new ProdutoPatchDTO(lote.getProduto().getId(), lote.getValorVenda(), lote.getQuantidade(), lote.getId());
+            serviceProduto.update(prodpatch);
+            return LoteResponseDTO.valueOf(lote);
+          }
+        }
+        
+        throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "LoteServiceImpl(ativaLote)",
+        "Não existe Lote pré cadastrado para este produto e por isso não pode ser ativado. Utilize o método LoteServiceImpl(insert).");
+  
     }
 
 }
