@@ -12,6 +12,7 @@ import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @ApplicationScoped
@@ -40,7 +41,7 @@ public class LoteServiceImpl implements LoteService {
         lote.setCustoCompra(dto.custoCompra());
         lote.setFornecedor(repositoryFornecedor.findById(dto.idFornecedor()));
         lote.setProduto(repositoryProduto.findById(dto.idProduto()));
-        lote.setDataHoraChegadaLote(LocalDateTime.now());
+        
         try {
             repository.persist(lote); 
         } catch (Exception e) {
@@ -51,6 +52,11 @@ public class LoteServiceImpl implements LoteService {
             "Não consegui persistir o lote no banco de dados.");
         }
         if(repositoryProduto.findById(dto.idProduto()).getQuantidade() == 0) {
+            LocalDateTime agora = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String dataFormatada = agora.format(formatter);
+            LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
+            lote.setDataHoraChegadaLote(novoDateTime);
             ProdutoPatchDTO prodpatch = new ProdutoPatchDTO(dto.idProduto(), dto.valorVenda(), dto.quantidade(), lote.getId());
             serviceProduto.update(prodpatch);
         }
@@ -72,7 +78,7 @@ public class LoteServiceImpl implements LoteService {
     @Override
     @Transactional
     // Chegaram mais unidades do mesmo produto, do mesmo fornecedor, pelo mesmo custo de compra e irei manter o mesmo valor de venda. Neste caso só altero a quantidade e mais nada.
-    public LoteResponseDTO update(LotePatchDTO dto) {
+    public LoteResponseDTO updateQuantidade(LotePatchDTO dto) {
         Lote lote = repository.findById(dto.id());
 
         if(lote != null) {
@@ -83,7 +89,7 @@ public class LoteServiceImpl implements LoteService {
             throw new GeneralErrorException(
         "500",
         "Server Error",
-        "LoteServiceImpl(insert)",
+        "LoteServiceImpl(updateQuantidade)",
         "Não consegui realizar o insert de Lote por conta de concorrência no banco de dados. Tente novamente." + e);
         } 
             return LoteResponseDTO.valueOf(lote);
@@ -91,7 +97,7 @@ public class LoteServiceImpl implements LoteService {
             throw new GeneralErrorException(
         "400",
         "Bad Request",
-        "LoteServiceImpl(update)",
+        "LoteServiceImpl(updateQuantidade)",
         "O id passado como índice de lote não existe no banco de dados."
       );
         }
@@ -123,6 +129,14 @@ public class LoteServiceImpl implements LoteService {
     @Override
     @Transactional
     public void delete(Long id) {
+        Lote lote = repository.findById(id);
+        if(lote.getDataHoraUltimoVendido() == null) {
+            throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "LoteServiceImpl(delete)",
+        "Lote ativo. Impossível deletar.");
+        }
         repository.deleteById(id);
     }
 

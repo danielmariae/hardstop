@@ -1,14 +1,12 @@
 package br.unitins.topicos1.dto;
 
-import br.unitins.topicos1.model.Fornecedor;
 import br.unitins.topicos1.model.Lote;
-import br.unitins.topicos1.model.Produto;
 
 public record LoteResponseDTO(
     Long id,
     String lote,
-    Fornecedor fornecedor,
-    Produto produto,
+    Long idFornecedor,
+    Long idProduto,
     Integer quantidade,
     Double custoCompra,
     Double valorVenda
@@ -17,8 +15,8 @@ public record LoteResponseDTO(
         return new LoteResponseDTO(
             lote.getId(),
             lote.getLote(),
-            lote.getFornecedor(),
-            lote.getProduto(),
+            lote.getFornecedor().getId(),
+            lote.getProduto().getId(),
             lote.getQuantidade(),
             lote.getCustoCompra(),
             lote.getValorVenda()

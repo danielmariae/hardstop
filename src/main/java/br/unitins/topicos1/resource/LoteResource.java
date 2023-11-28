@@ -33,10 +33,10 @@ public class LoteResource {
 
     @PATCH
     @RolesAllowed({"Func", "Admin"})
-    @Path("/patch/")
-    public Response update(@Valid LotePatchDTO dto)
+    @Path("/patch/quantidade")
+    public Response updateQuantidade(@Valid LotePatchDTO dto)
     {
-        return Response.status(201).entity(service.update(dto)).build();
+        return Response.status(201).entity(service.updateQuantidade(dto)).build();
     }
 
     @DELETE

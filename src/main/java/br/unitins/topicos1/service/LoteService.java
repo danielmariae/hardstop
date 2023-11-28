@@ -11,7 +11,7 @@ public interface LoteService {
     LoteResponseDTO insert(LoteDTO dto);
 
     // ATUALIZAR LOTE:
-    LoteResponseDTO update(LotePatchDTO dto);
+    LoteResponseDTO updateQuantidade(LotePatchDTO dto);
 
     // DELETAR LOTE:
     void delete(Long id);
