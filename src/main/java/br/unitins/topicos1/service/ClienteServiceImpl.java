@@ -23,6 +23,7 @@ import br.unitins.topicos1.model.StatusDoPedido;
 import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
+import br.unitins.topicos1.repository.EnderecoRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
 import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -44,6 +45,9 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Inject
   HashService hashservice;
+
+  @Inject
+  EnderecoRepository repositoryEndereco;
 
 
   @Override
@@ -332,9 +336,15 @@ cliente.getListaProduto().clear();
       endereco.setLocalidade(end.localidade());
       endereco.setUF(end.uf());
       endereco.setPais(end.pais());
-      cliente.getListaEndereco().add(endereco);
-      repository.persist(cliente);
-      return ClienteResponseDTO.valueOf(cliente);
+
+    if(cliente.getListaEndereco() == null)
+      cliente.setListaEndereco(new ArrayList<Endereco>());
+
+    repositoryEndereco.persist(endereco);
+
+    cliente.getListaEndereco().add(endereco);
+    repository.persist(cliente);
+    return ClienteResponseDTO.valueOf(cliente);
   }
 
   @Override

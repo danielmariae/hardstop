@@ -44,6 +44,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
   @Inject
   HashService hashservice;
 
+
   @Override
   public FuncionarioResponseDTO findByIdFuncionario(Long id) {
     Funcionario funcionario = repository.findById(id);
@@ -122,7 +123,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
       }
     }
 
-    funcionario.getEndereco().setNome(func.endereco().nome());
     funcionario.getEndereco().setLogradouro(func.endereco().logradouro());
     funcionario.getEndereco().setNumero(func.endereco().numero());
     funcionario.getEndereco().setLote(func.endereco().lote());
@@ -170,11 +170,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     funcionario.setEmail(email.email());
     return "Email alterado com sucesso.";
   }
-
-
-
-
-
 
   @Override
   @Transactional
@@ -226,10 +221,10 @@ public class FuncionarioServiceImpl implements FuncionarioService {
           }   
       }
       if(chave) {
-        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "O id fornecido não corresponde a um id de telefone cadastrado para este usuario");
+        throw new GeneralErrorException("400", "Bad Request", "FuncionarioServiceImpl(updateTelefoneFuncionario)", "O id fornecido não corresponde a um id de telefone cadastrado para este usuario");
       }
     } else {
-      throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "Este usuário não possui nenhum telefone cadastrado.");
+      throw new GeneralErrorException("400", "Bad Request", "FuncionarioServiceImpl(updateTelefoneFuncionario)", "Este usuário não possui nenhum telefone cadastrado.");
     }
 
     //repository.persist(cliente);
@@ -278,7 +273,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     endereco.setLocalidade(end.localidade());
     endereco.setUF(end.uf());
     endereco.setPais(end.pais());
-    
+    repositoryEndereco.persist(endereco);
     funcionario.setEndereco(endereco);
     repository.persist(funcionario);
     return FuncionarioResponseDTO.valueOf(funcionario);
@@ -312,7 +307,6 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     Endereco endereco = new Endereco();
-    endereco.setNome(dto.endereco().nome());
     endereco.setLogradouro(dto.endereco().logradouro());
     endereco.setNumero(dto.endereco().numero());
     endereco.setLote(dto.endereco().lote());
