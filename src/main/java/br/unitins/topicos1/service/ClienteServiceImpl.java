@@ -7,23 +7,23 @@ import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
+import br.unitins.topicos1.dto.DesejoResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.PatchCpfDTO;
 import br.unitins.topicos1.dto.PatchEmailDTO;
 import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
-import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.Pedido;
-import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.StatusDoPedido;
 import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.ClienteRepository;
+import br.unitins.topicos1.repository.EnderecoRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
 import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -45,6 +45,10 @@ public class ClienteServiceImpl implements ClienteService {
 
   @Inject
   HashService hashservice;
+
+  @Inject
+  EnderecoRepository repositoryEndereco;
+
 
   @Override
   public ClienteResponseDTO findByIdCliente(Long id) {
@@ -299,12 +303,13 @@ cliente.getListaProduto().clear();
             endereco.setLocalidade(end.localidade());
             endereco.setUF(end.uf());
             endereco.setPais(end.pais());
+            chave = false;
           }
 
       }
 
       if(chave) {
-        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "O id fornecido não corresponde a um id de endereço cadastrado para este usuario");
+        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateEndereçoCliente)", "O id fornecido não corresponde a um id de endereço cadastrado para este usuario");
       }
       
     } else {
@@ -331,9 +336,15 @@ cliente.getListaProduto().clear();
       endereco.setLocalidade(end.localidade());
       endereco.setUF(end.uf());
       endereco.setPais(end.pais());
-      cliente.getListaEndereco().add(endereco);
-      repository.persist(cliente);
-      return ClienteResponseDTO.valueOf(cliente);
+
+    if(cliente.getListaEndereco() == null)
+      cliente.setListaEndereco(new ArrayList<Endereco>());
+
+    repositoryEndereco.persist(endereco);
+
+    cliente.getListaEndereco().add(endereco);
+    repository.persist(cliente);
+    return ClienteResponseDTO.valueOf(cliente);
   }
 
   @Override
@@ -408,16 +419,14 @@ cliente.getListaProduto().clear();
     return ClienteResponseDTO.valueOf(cliente);
   }
 
-  public List<ProdutoResponseDTO> findListaDesejosCliente(Long id) {
-    Cliente cliente = repository.findById(id);
+  public List<DesejoResponseDTO> findListaDesejosCliente(Long id) {
 
-    List<ProdutoResponseDTO> lista = new ArrayList<ProdutoResponseDTO>();
-
-    for (Produto produto : cliente.getListaProduto()) {
-      lista.add(ProdutoResponseDTO.valueOf(produto));
-    }
-
-    return lista;
+     return repository
+      .findById(id)
+      .getListaProduto()
+      .stream()
+      .map(p -> DesejoResponseDTO.valueOf(p))
+      .toList();
   }
 
 

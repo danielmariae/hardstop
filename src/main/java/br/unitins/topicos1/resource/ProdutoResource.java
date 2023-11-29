@@ -4,14 +4,10 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.application.ErrorTP1;
-
-// import java.util.List;
-
-// import br.unitins.topicos1.dto.ClassificacaoDTO;
-// import jakarta.validation.Valid;
-// import jakarta.ws.rs.PATCH;
 import br.unitins.topicos1.dto.ProdutoDTO;
+import br.unitins.topicos1.dto.ProdutoFornecedorPatch;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
+import br.unitins.topicos1.dto.ProdutoValorPatch;
 import br.unitins.topicos1.model.form.ArchiveForm;
 import br.unitins.topicos1.service.FileService;
 import br.unitins.topicos1.service.ProdutoService;
@@ -23,7 +19,6 @@ import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -49,46 +44,17 @@ public class ProdutoResource {
     
     @POST
     @RolesAllowed({"Func", "Admin"})
+    @Path("/insert/")
     public Response insert (@Valid ProdutoDTO dto){
         ProdutoResponseDTO retorno = service.insert(dto);
         return Response.status(201).entity(retorno).build();
     }
 
-    @PUT
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/put/{id}")
-    public Response update(@Valid ProdutoDTO dto, @PathParam("id") Long id)
-    {
-        service.update(dto, id);
-        return Response.status(Status.NO_CONTENT).build();
-    }
-
-    @PATCH
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/patch/lote/{id}")
-    public Response updateLoteProduto(@PathParam("id") Long idProduto, Long idLote) {
-        return Response.ok().entity(service.updateLote(idProduto, idLote)).build();
-    }
-
-    @PATCH
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/patch/quantidade/{id}")
-    public Response updateQuantidadeProduto(@PathParam("id") Long idProduto, Integer quantidade) {
-        return Response.ok().entity(service.updateQuantidade(quantidade, idProduto)).build();
-    }
-
     @PATCH
     @RolesAllowed({"Func", "Admin"})
     @Path("/patch/valorVenda/{id}")
-    public Response updateValorVendaProduto(@PathParam("id") Long idProduto, Double valorVenda) {
-        return Response.ok().entity(service.updateValorVenda(valorVenda, idProduto)).build();
-    }
-
-    @PATCH
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/patch/custoCompra/{id}")
-    public Response updateCustoCompraProduto(@PathParam("id") Long idProduto, Double custoCompra) {
-        return Response.ok().entity(service.updateCustoCompra(custoCompra, idProduto)).build();
+    public Response updateValorVendaProduto(ProdutoValorPatch dto) {
+        return Response.ok().entity(service.updateValorVenda(dto)).build();
     }
 
     @DELETE
@@ -100,6 +66,7 @@ public class ProdutoResource {
     }
 
     @GET
+    @Path("/search/all/")
     public Response findAll() {
         return Response.ok(service.findByAll()).build();
     }
@@ -123,6 +90,12 @@ public class ProdutoResource {
         return Response.ok(service.findByName(nome)).build();
     }
 
+    @POST
+    @Path("/search/fornecedor")
+    @RolesAllowed({"Func", "Admin"})
+    public Response fornecedor(ProdutoFornecedorPatch dto) {
+        return Response.ok(service.encontraFornecedor(dto)).build();
+    }
 
     @PATCH
     @Path("/upload/imagem/id/{id}")

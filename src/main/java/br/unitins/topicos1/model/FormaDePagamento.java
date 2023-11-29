@@ -1,6 +1,6 @@
 package br.unitins.topicos1.model;
 
-import jakarta.persistence.DiscriminatorColumn;
+//import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -9,7 +9,7 @@ import jakarta.persistence.InheritanceType;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
-@DiscriminatorColumn(name = "forma_de_pagamento")
+//@DiscriminatorColumn(name = "forma_de_pagamento")
 public class FormaDePagamento extends DefaultEntity {
 
     @Enumerated(EnumType.ORDINAL)

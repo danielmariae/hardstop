@@ -77,14 +77,23 @@ insert into statusDoPedido (dataHora, status) values('2023-10-01 16:11:26', 0);
 insert into statusDoPedido (dataHora, status) values('2023-10-04 20:23:35', 1);
 insert into classificacao (nome) values('Processadores');
 
-insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, custoCompra, valorVenda, quantidade, classificacao_id) values('Processador Intel Core i7 11 gen', 'Processador Intel Core i7 11 gen', 'PICI711gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 500.0, 1000.0, 10, 1);
-insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, custoCompra, valorVenda, quantidade, classificacao_id) values('Processador Intel Core i5 12 gen', 'Processador Intel Core i5 12 gen', 'PICI512gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 600.0, 1200.0, 5, 1);
-insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, custoCompra, valorVenda, quantidade, classificacao_id) values('Processador AMD Xeon7 11 gen', 'Processador AMD Xeon7 11 gen', 'PAMDX711gen07102023', 'AMD', 0.5, 0.5, 0.5, 0.25, 500.0, 1000.0, 4, 1);
+insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidade, classificacao_id, version) values('Processador Intel Core i7 11 gen', 'Processador Intel Core i7 11 gen', 'PICI711gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 1000.0, 10, 1, 1);
+insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidade, classificacao_id, version) values('Processador Intel Core i5 12 gen', 'Processador Intel Core i5 12 gen', 'PICI512gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 1200.0, 5, 1, 1);
+insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidade, classificacao_id, version) values('Processador AMD Xeon7 11 gen', 'Processador AMD Xeon7 11 gen', 'PAMDX711gen07102023', 'AMD', 0.5, 0.5, 0.5, 0.25, 1000.0, 4, 1, 1);
 
-insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '2022/34539382', 'www.netcom.br');
-insert into lote (lote, fornecedor_id, dataHoraChegadaLote) values('f1_p1_lt15', 1, '2023-10-01 16:11:26');
-insert into lote (lote, fornecedor_id, dataHoraChegadaLote) values('f1_p1_lt15', 1, '2023-10-02 15:14:01');
-insert into lote (lote, fornecedor_id, dataHoraChegadaLote) values('f1_p1_lt15', 1, '2023-10-03 09:47:50');
+insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Hardware.Com', '2020/376937201', 'www.hardware.com.br');
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 1, '2023-10-01 16:11:26', 1, 500.0, 1000.0, 100);
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 1, '2023-10-02 15:14:01', 2, 600.0, 1200.0, 50);
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 1, '2023-10-03 09:47:50', 3, 500.0, 1000.0, 20);
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote, dataHoraUltimoVendido, produto_id, custoCompra, valorVenda, quantidade) values('f2_p2_lt14', 2, '2022-01-01 16:11:26', '2023-09-30 16:11:26', 1, 700.0, 1400.0, 50);
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote, dataHoraUltimoVendido, produto_id, custoCompra, valorVenda, quantidade) values('f2_p2_lt14', 2, '2022-01-01 16:11:26', '2023-10-01 16:11:26', 2, 800.0, 1600.0, 50);
+insert into lote (lote, fornecedor_id, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 1, 3, 500.0, 1000.0, 40);
+insert into lote (lote, fornecedor_id, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 2, 1, 500.0, 1000.0, 5);
+insert into lote (lote, fornecedor_id, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 2, 2, 600.0, 1200.0, 15);
+
+update produto set loteAtual_id = 1 where id = 1;
+update produto set loteAtual_id = 2 where id = 2;
+update produto set loteAtual_id = 3 where id = 3;
 
 insert into itemDaVenda (preco, quantidade, produto_id) values(900.0, 3, 1);
 insert into itemDaVenda (preco, quantidade, produto_id) values(1200.0, 1, 2);
@@ -94,9 +103,7 @@ insert into formaDePagamento (forma_de_pagamento, modalidade, valorPago) values(
 insert into cartaodecredito (id, anovalidade, codseguranca, mesvalidade, datahorapagamento, numerocartao) values(1, 24, 237, 3, '2023-10-01 16:11:26', '345690872106');
 insert into pedido (id_formaDePagamento, id_endereco, id_cliente) values(1, 1, 1);
 
-insert into produto_lote (id_produto, id_lote) values(1,1);
-insert into produto_lote (id_produto, id_lote) values(2,2);
-insert into produto_lote (id_produto, id_lote) values(3,3);
+
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,1);
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,2);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,1);

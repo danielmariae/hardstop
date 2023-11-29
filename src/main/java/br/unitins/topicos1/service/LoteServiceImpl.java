@@ -1,15 +1,18 @@
 package br.unitins.topicos1.service;
 
-import br.unitins.topicos1.Formatadores.EnderecoFormatador;
-import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.*;
 import br.unitins.topicos1.model.*;
+import br.unitins.topicos1.repository.FornecedorRepository;
 import br.unitins.topicos1.repository.LoteRepository;
+import br.unitins.topicos1.repository.ProdutoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.jrimum.domkee.pessoa.CEP;
+import jakarta.persistence.OptimisticLockException;
+import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @ApplicationScoped
@@ -17,118 +20,89 @@ public class LoteServiceImpl implements LoteService {
 
     @Inject
     LoteRepository repository;
+
+    @Inject
+    FornecedorRepository repositoryFornecedor;
+
+    @Inject
+    ProdutoRepository repositoryProduto;
+
+    @Inject
+    ProdutoServiceImpl serviceProduto;
+
     @Override
+    @Transactional
     public LoteResponseDTO insert(LoteDTO dto) {
+
         Lote lote = new Lote();
         lote.setLote(dto.lote());
-        if(dto.fornecedor() != null) {
-           Fornecedor fornecedor = new Fornecedor();
-           fornecedor.setNomeFantasia(dto.fornecedor().nomeFantasia());
-           fornecedor.setCnpj(dto.fornecedor().cnpj());
-           fornecedor.setEndSite(dto.fornecedor().endSite());
-           if (dto.fornecedor().listaEndereco() != null && !dto.fornecedor().listaEndereco().isEmpty()) {
-                try {
-                    fornecedor.setListaEndereco(new ArrayList<Endereco>());
-                } catch (Exception e) {
-                    throw new GeneralErrorException("500", "Internal Server Error", "LoteServiceImpl(insert)", "Não consegui alocar memória para a lista de endereços do novo Fornecedor. Tente novamente mais tarde! " +  e.getCause());
-                }
-
-                for (EnderecoDTO end : dto.fornecedor().listaEndereco()) {
-                    Endereco endereco = new Endereco();
-                    endereco.setNome(end.nome());
-                    endereco.setLogradouro(end.logradouro());
-                    endereco.setNumero(end.numero());
-                    endereco.setLote(end.lote());
-                    endereco.setBairro(end.bairro());
-                    endereco.setComplemento(end.complemento());
-                    endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
-                    endereco.setLocalidade(end.localidade());
-                    endereco.setUF(end.uf());
-                    endereco.setPais(end.pais());
-                    fornecedor.getListaEndereco().add(endereco);
-                }
-           }
-           if (dto.fornecedor().listaTelefone() != null && !dto.fornecedor().listaTelefone().isEmpty()) {
-               try {
-                   fornecedor.setListaTelefone(new ArrayList<Telefone>());
-               } catch (Exception e) {
-                   throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui alocar memória para a lista telefônica do novo Cliente. Tente novamente mais tarde! " +  e.getCause());
-               }
-               for (TelefoneDTO tel : dto.fornecedor().listaTelefone()) {
-                   Telefone telefone = new Telefone();
-                   telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
-                   telefone.setDdd(tel.ddd());
-                   telefone.setNumeroTelefone(
-                           TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
-                   fornecedor.getListaTelefone().add(telefone);
-               }
-           }
-           try{
-               repository.persist(lote);
-           } catch (Exception e) {
-               throw new GeneralErrorException("500", "Internal Server Error", "LoteServiceImpl(insert)", "Não consegui persistir os dados do cliente no repositório " + e.getCause());
-           }
+        lote.setQuantidade(dto.quantidade());
+        lote.setValorVenda(dto.valorVenda());
+        lote.setCustoCompra(dto.custoCompra());
+        lote.setFornecedor(repositoryFornecedor.findById(dto.idFornecedor()));
+        lote.setProduto(repositoryProduto.findById(dto.idProduto()));
+        
+        try {
+            repository.persist(lote); 
+        } catch (Exception e) {
+            throw new GeneralErrorException(
+            "500",
+            "Server Error",
+            "LoteServiceImpl(insert)",
+            "Não consegui persistir o lote no banco de dados.");
         }
+        if(repositoryProduto.findById(dto.idProduto()).getQuantidade() == 0) {
+            LocalDateTime agora = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String dataFormatada = agora.format(formatter);
+            LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
+            lote.setDataHoraChegadaLote(novoDateTime);
+            ProdutoPatchDTO prodpatch = new ProdutoPatchDTO(dto.idProduto(), dto.valorVenda(), dto.quantidade(), lote.getId());
+            serviceProduto.update(prodpatch);
+        }
+        /* try {
+            repositoryProduto.findById(dto.idProduto()).setLoteAtual(lote);
+            repositoryProduto.findById(dto.idProduto()).setQuantidade(repositoryProduto.findById(dto.idProduto()).getQuantidade()+dto.quantidade());
+         } catch (OptimisticLockException e) {
+            throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "LoteServiceImpl(insert)",
+        "Não consegui realizar o insert de Lote por conta de concorrência no banco de dados. Tente novamente." + e);
+        } */
+        
         return LoteResponseDTO.valueOf(lote);
     }
 
 
     @Override
-    public LoteResponseDTO update(LoteDTO dto, Long id) {
-        Lote lote = repository.findById(id);
-        lote.setLote(dto.lote());
-        if(dto.fornecedor() != null) {
-            Fornecedor fornecedor = new Fornecedor();
-            fornecedor.setNomeFantasia(dto.fornecedor().nomeFantasia());
-            fornecedor.setCnpj(dto.fornecedor().cnpj());
-            fornecedor.setEndSite(dto.fornecedor().endSite());
-            int i = 0;
-            int j = 0;
+    @Transactional
+    // Chegaram mais unidades do mesmo produto, do mesmo fornecedor, pelo mesmo custo de compra e irei manter o mesmo valor de venda. Neste caso só altero a quantidade e mais nada.
+    public LoteResponseDTO updateQuantidade(LotePatchDTO dto) {
+        Lote lote = repository.findById(dto.id());
 
-            for (Telefone tele1 : lote.getFornecedor().getListaTelefone()) {
-                i++;
-                j = 0;
-                for (TelefoneDTO tele : dto.fornecedor().listaTelefone()) {
-                    j++;
-                    if (i == j) {
-                        tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
-                        tele1.setDdd(tele.ddd());
-                        tele1.setNumeroTelefone(
-                                TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone())
-                        );
-                    }
-                }
-            }
-
-            int ie = 0;
-            int je = 0;
-
-            for (Endereco endereco : lote.getFornecedor().getListaEndereco()) {
-                ie++;
-                je = 0;
-                for (EnderecoDTO end1 : dto.fornecedor().listaEndereco()) {
-                    je++;
-                    if (ie == je) {
-                        endereco.setNome(end1.nome());
-                        endereco.setLogradouro(end1.logradouro());
-                        endereco.setNumero(end1.numero());
-                        endereco.setLote(end1.lote());
-                        endereco.setBairro(end1.bairro());
-                        endereco.setComplemento(end1.complemento());
-                        endereco.setCep(new CEP(EnderecoFormatador.validaCep(end1.cep().getCep())));
-                        endereco.setLocalidade(end1.localidade());
-                        endereco.setUF(end1.uf());
-                        endereco.setPais(end1.pais());
-                    }
-                }
-            }
-            lote.setFornecedor(fornecedor);
+        if(lote != null) {
+           try {
+            lote.getProduto().setQuantidade(lote.getProduto().getQuantidade()+dto.quantidade());
+            lote.setQuantidade(lote.getQuantidade()+dto.quantidade());
+         } catch (OptimisticLockException e) {
+            throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "LoteServiceImpl(updateQuantidade)",
+        "Não consegui realizar o insert de Lote por conta de concorrência no banco de dados. Tente novamente." + e);
+        } 
+            return LoteResponseDTO.valueOf(lote);
+        } else {
+            throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "LoteServiceImpl(updateQuantidade)",
+        "O id passado como índice de lote não existe no banco de dados."
+      );
         }
-        repository.persist(lote);
-        return LoteResponseDTO.valueOf(lote);
     }
-    //    @Override
-    //    public void delete(Long id) {
+ 
     @Override
     public LoteResponseDTO findById(Long id) {
         return LoteResponseDTO.valueOf(repository.findById(id));
@@ -153,8 +127,51 @@ public class LoteServiceImpl implements LoteService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
-        repository.deleteById(id);
+        Lote lote = repository.findById(id);
+        if(lote.getDataHoraUltimoVendido() == null) {
+            throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "LoteServiceImpl(delete)",
+        "Lote ativo. Impossível deletar.");
+        } else {
+            try {
+                repository.deleteById(id);
+            } catch (Exception e) {
+                throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "LoteServiceImpl(delete)",
+        "Não consegui deletar o produto em questão. Tente novamente mais tarde." + e);
+            }
+        
+        }
+    }
+
+    public LoteResponseDTO ativaLote(Long idProduto) {
+        Lote lote;
+        for(Lote lt : repository.findAll(idProduto)) {
+          if(lt.getDataHoraChegadaLote() == null) {
+            lote = lt;
+            LocalDateTime agora = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String dataFormatada = agora.format(formatter);
+            LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
+            lote.setDataHoraChegadaLote(novoDateTime);
+            ProdutoPatchDTO prodpatch = new ProdutoPatchDTO(lote.getProduto().getId(), lote.getValorVenda(), lote.getQuantidade(), lote.getId());
+            serviceProduto.update(prodpatch);
+            return LoteResponseDTO.valueOf(lote);
+          }
+        }
+        
+        throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "LoteServiceImpl(ativaLote)",
+        "Não existe Lote pré cadastrado para este produto e por isso não pode ser ativado. Utilize o método LoteServiceImpl(insert).");
+  
     }
 
 }

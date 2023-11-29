@@ -38,7 +38,7 @@ public class Cliente extends DefaultEntity {
   )
   private List<Telefone> listaTelefone;
 
-  @ManyToMany(cascade = CascadeType.ALL)
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinTable(
     name = "lista_de_desejos",
     joinColumns = @JoinColumn(name = "id_cliente"),

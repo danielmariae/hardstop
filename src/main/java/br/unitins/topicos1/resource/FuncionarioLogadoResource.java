@@ -276,7 +276,7 @@ public Response getFuncionario() {
 
   @PATCH
     @Path("/upload/imagem")
-    @RolesAllowed({"User"})
+    @RolesAllowed({"Func", "Admin"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response salvarImagem(@MultipartForm ArchiveForm form) {
         String nomeImagem;
@@ -296,7 +296,7 @@ public Response getFuncionario() {
 
     @GET
     @Path("/download/imagem/{nomeImagem}")
-    @RolesAllowed({"User"})
+    @RolesAllowed({"Func", "Admin"})
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response download(@PathParam("nomeImagem") String nomeImagem){
       return Response

@@ -11,4 +11,8 @@ public class LoteRepository implements PanacheRepository<Lote> {
     public List<Lote> findByName(String lote) {
         return find("UPPER(lote) LIKE UPPER(?1) ", "%" + lote + "%").list();
     }
+
+    public List<Lote> findAll(Long idProduto) {
+        return find("produto.id = ?1", idProduto).list();
+    }
 }
