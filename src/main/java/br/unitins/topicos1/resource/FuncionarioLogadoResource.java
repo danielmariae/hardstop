@@ -237,6 +237,15 @@ public Response getFuncionario() {
     return Response.status(Status.NO_CONTENT).build();
   }
 
+  @DELETE
+  @Transactional
+  @Path("/delete/cliente/{id}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response deleteCliente(@PathParam("id") Long id) {
+    serviceCliente.deleteCliente(id);
+    return Response.status(Status.NO_CONTENT).build();
+  }
+
   @GET
   @Path("/search/funcionario/all")
   @RolesAllowed({"Func", "Admin"})
