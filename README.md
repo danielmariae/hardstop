@@ -6,7 +6,7 @@ Como fazer para executar o projeto:
 
 <h3>BANCO DE DADOS</h1>
 
-*Importante ter o PostgreSQL instalado, a partir da versão 14.*
+*Necessário ter o PostgreSQL instalado, a partir da versão 14.*
 
 **1. Criar usuário no PgAdmin com as seguintes informações de usuário:**
 
@@ -26,6 +26,8 @@ Nome da base de dados: topicos2db
 ```
 
 <h3>BACKEND</h3>
+
+*Necessário ter o JDK ou OpenJDK instalado na versão 11 ou 17.*
 
 **1. Verificar instalação do JDK 11 ou 17, os suportados pelo Quarkus (recomendamos o Java 17). Digite o comando:**
 
