@@ -2,7 +2,6 @@ package br.unitins.topicos1;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
-import io.restassured.specification.RequestSpecification;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;

@@ -11,9 +11,7 @@ public record EnderecoFuncDTO(
   @NotBlank(message = "O campo não pode ser nulo.")
   String logradouro,
   @NotBlank(message = "O campo não pode ser nulo. Caso não exista, use s/n")
-  String numero,
-  @NotBlank(message = "O campo não pode ser nulo. Caso inexista, use s/lt")
-  String lote,
+  String numeroLote,
   @NotBlank(message = "O campo não pode ser nulo.")
   String bairro,
   @NotBlank(message = "O campo não pode ser nulo.")
@@ -28,8 +26,7 @@ public record EnderecoFuncDTO(
   public static EnderecoFuncDTO valueOf(Endereco endereco) {
     return new EnderecoFuncDTO(
       endereco.getLogradouro(),
-      endereco.getNumero(),
-      endereco.getLote(),
+      endereco.getNumeroLote(),
       endereco.getBairro(),
       endereco.getComplemento(),
       endereco.getCep(),

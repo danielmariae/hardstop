@@ -246,7 +246,7 @@ public static String geraBoletoFinal(Integer intervalo, Double valorCompra, Clie
     endereco.setCep(enderecoCliente.getCep());
     endereco.setBairro(enderecoCliente.getBairro());
     endereco.setLogradouro(enderecoCliente.getLogradouro());
-    endereco.setNumero(enderecoCliente.getNumero());
+    endereco.setNumero(enderecoCliente.getNumeroLote());
 
     sacado.addEndereco(endereco); 
 

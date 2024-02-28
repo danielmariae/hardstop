@@ -1,7 +1,6 @@
 package br.unitins.topicos1;
 
 import br.unitins.topicos1.dto.ClienteDTO;
-import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import io.quarkus.test.junit.QuarkusTest;
@@ -9,8 +8,6 @@ import io.restassured.http.ContentType;
 import jakarta.inject.Inject;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 
 import org.jrimum.domkee.pessoa.CEP;
 import org.jrimum.domkee.pessoa.UnidadeFederativa;

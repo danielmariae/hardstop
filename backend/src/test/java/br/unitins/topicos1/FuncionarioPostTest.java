@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.service.FuncionarioService;

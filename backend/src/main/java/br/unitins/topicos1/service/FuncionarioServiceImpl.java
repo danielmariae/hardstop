@@ -124,8 +124,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     funcionario.getEndereco().setLogradouro(func.endereco().logradouro());
-    funcionario.getEndereco().setNumero(func.endereco().numero());
-    funcionario.getEndereco().setLote(func.endereco().lote());
+    funcionario.getEndereco().setNumeroLote(func.endereco().numeroLote());
     funcionario.getEndereco().setBairro(func.endereco().bairro());
     funcionario.getEndereco().setComplemento(func.endereco().complemento());
     funcionario.getEndereco().setCep(new CEP(EnderecoFormatador.validaCep(func.endereco().cep().getCep())));
@@ -239,8 +238,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     if(funcionario.getEndereco()!= null) {
       if(funcionario.getEndereco().getId() == end.id()) {
         funcionario.getEndereco().setLogradouro(end.logradouro());
-        funcionario.getEndereco().setNumero(end.numero());
-        funcionario.getEndereco().setLote(end.lote());
+        funcionario.getEndereco().setNumeroLote(end.numeroLote());
         funcionario.getEndereco().setBairro(end.bairro());
         funcionario.getEndereco().setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
         funcionario.getEndereco().setComplemento(end.complemento());
@@ -265,8 +263,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     Endereco endereco = new Endereco();
 
     endereco.setLogradouro(end.logradouro());
-    endereco.setNumero(end.numero());
-    endereco.setLote(end.lote());
+    endereco.setNumeroLote(end.numeroLote());
     endereco.setBairro(end.bairro());
     endereco.setComplemento(end.complemento());
     endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
@@ -308,8 +305,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
     Endereco endereco = new Endereco();
     endereco.setLogradouro(dto.endereco().logradouro());
-    endereco.setNumero(dto.endereco().numero());
-    endereco.setLote(dto.endereco().lote());
+    endereco.setNumeroLote(dto.endereco().numeroLote());
     endereco.setBairro(dto.endereco().bairro());
     endereco.setComplemento(dto.endereco().complemento());
     endereco.setCep(new CEP(EnderecoFormatador.validaCep(dto.endereco().cep().getCep())));

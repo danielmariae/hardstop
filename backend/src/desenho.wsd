@@ -19,7 +19,7 @@ class Telefone {
     - numero: String
 }
 
-class Cliente {
+class Usuario {
     - id: Long
     - nome: String
     - dataNascimento: LocalDate
@@ -30,16 +30,16 @@ class Cliente {
     - email: String
 }
 
-class Funcionario {
-    - id: Long
-    - nome: String
-    - dataNascimento: date
-    - cpf: String
-    - sexo: String
-    - login: String
-    - senha: String
-    - email: String
-}
+' class Funcionario {
+'     - id: Long
+'     - nome: String
+'     - dataNascimento: date
+'     - cpf: String
+'     - sexo: String
+'     - login: String
+'     - senha: String
+'     - email: String
+' }
 
 class Produto {
     - id: Long
@@ -74,7 +74,7 @@ class ItemDaVenda {
 
 class Pix {
     - id: Long
-    - nomeCliente: String
+    - nomeUsuario: String
     - nomeRecebedor: String
     - chaveRecebedor: String
     - valor: Double
@@ -99,7 +99,7 @@ class Boleto {
 
 class FormaDePagamento {
     - id : Long
-    - nomeCliente : String
+    - nomeUsuario : String
 }
 
 enum Status {
@@ -142,21 +142,21 @@ class Classificacao {
     - nome : String
 }
 
-Cliente "1" *--> "*" Endereco
-Cliente "1" *--> "*" Telefone
-Funcionario "1" *--> "1" Endereco
-Funcionario "1" *--> "1" Telefone
+Usuario "1" *--> "*" Endereco
+Usuario "1" *--> "*" Telefone
+' Funcionario "1" *--> "1" Endereco
+' Funcionario "1" *--> "1" Telefone
 Pedido "*" *--> "1" Endereco
 Pedido "1" *--> "*" ItemDaVenda
 ItemDaVenda "*" o--> "1" Produto
-Cliente "*" --> "*" Produto : ListaDesejos
+Usuario "*" --> "*" Produto : ListaDesejos
 Pix  --|> FormaDePagamento
 CartaoDeCredito --|> FormaDePagamento
 Boleto --|> FormaDePagamento
 Pedido "1" *--> "*" StatusDoPedido
 StatusDoPedido "*" o--> "1" Status
 Telefone "1" o--> "1" TipoTelefone
-Cliente "1" o--> "*" Pedido
+Usuario "1" o--> "*" Pedido
 Produto "*" o--> "1" Classificacao
 Pedido "*" *--> "1" FormaDePagamento
 Pedido "*" o--> "1" Logistica

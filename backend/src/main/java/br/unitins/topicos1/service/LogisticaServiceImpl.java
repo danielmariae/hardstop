@@ -39,8 +39,7 @@ public class LogisticaServiceImpl implements LogisticaService {
                 Endereco endereco = new Endereco();
                 endereco.setNome(end.nome());
                 endereco.setLogradouro(end.logradouro());
-                endereco.setNumero(end.numero());
-                endereco.setLote(end.lote());
+                endereco.setNumeroLote(end.numeroLote());
                 endereco.setBairro(end.bairro());
                 endereco.setComplemento(end.complemento());
                 endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
@@ -110,8 +109,7 @@ public class LogisticaServiceImpl implements LogisticaService {
                     if (ie == je) {
                         endereco.setNome(end1.nome());
                         endereco.setLogradouro(end1.logradouro());
-                        endereco.setNumero(end1.numero());
-                        endereco.setLote(end1.lote());
+                        endereco.setNumeroLote(end1.numeroLote());
                         endereco.setBairro(end1.bairro());
                         endereco.setComplemento(end1.complemento());
                         endereco.setCep(new CEP(EnderecoFormatador.validaCep(end1.cep().getCep())));

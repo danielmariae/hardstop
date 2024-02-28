@@ -11,9 +11,7 @@ public record EnderecoFuncPatchDTO(
   @NotBlank(message = "O campo rua não pode ser nulo.")
   String logradouro,
   @NotBlank(message = "O campo numero não pode ser nulo. Pode inserir s/n.")
-  String numero,
-  @NotBlank(message = "O campo lote não pode ser nulo. Pode inserir s/l.")
-  String lote,
+  String numeroLote,
   @NotBlank(message = "O campo bairro não pode ser nulo.")
   String bairro,
   @NotBlank(message = "O campo complemento não pode ser nulo.")
@@ -29,8 +27,7 @@ public record EnderecoFuncPatchDTO(
     return new EnderecoFuncPatchDTO(
       endereco.getId(),
       endereco.getLogradouro(),
-      endereco.getNumero(),
-      endereco.getLote(),
+      endereco.getNumeroLote(),
       endereco.getBairro(),
       endereco.getComplemento(),
       endereco.getCep(),

@@ -14,8 +14,7 @@ public class Endereco extends DefaultEntity {
   
   private String nome;
   private String logradouro;
-  private String numero;
-  private String lote;
+  private String numeroLote;
   private String bairro;
   private String complemento;
   @Column(name = "cep")
@@ -41,21 +40,14 @@ public class Endereco extends DefaultEntity {
     this.logradouro = logradouro;
   }
 
-  public String getNumero() {
-    return numero;
+  public String getNumeroLote() {
+    return numeroLote;
   }
 
-  public void setNumero(String numero) {
-    this.numero = numero;
+  public void setNumeroLote(String numeroLote) {
+    this.numeroLote = numeroLote;
   }
 
-  public String getLote() {
-    return lote;
-  }
-
-  public void setLote(String lote) {
-    this.lote = lote;
-  }
 
   public String getBairro() {
     return bairro;
