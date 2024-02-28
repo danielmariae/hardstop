@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import br.unitins.topicos1.dto.UsuarioResponseDTO;
+import br.unitins.topicos1.model.Perfil;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -21,7 +22,7 @@ public class JwtServiceImpl implements JwtService {
 
         Set<String> roles = new HashSet<String>();
         for (int i = 0; i < dto.tipoUsuario().size(); i++) {
-            roles.add(dto.tipoUsuario().);
+            roles.add(Perfil.valueOf(dto.tipoUsuario().get(i).idTipoPerfil()).getLabel());
         }
 
         return Jwt.issuer("hardstop-jwt")
