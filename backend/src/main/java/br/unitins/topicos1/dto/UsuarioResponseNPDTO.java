@@ -1,10 +1,10 @@
 package br.unitins.topicos1.dto;
 
-import br.unitins.topicos1.model.Cliente;
+import br.unitins.topicos1.model.Usuario;
 import java.time.LocalDate;
 import java.util.List;
 
-public record ClienteResponseNPDTO(
+public record UsuarioResponseNPDTO(
   Long id,
   String nome,
   LocalDate dataNascimento,
@@ -15,21 +15,21 @@ public record ClienteResponseNPDTO(
   List<EnderecoResponseDTO> listaEndereco,
   List<TelefoneResponseDTO> listaTelefone
 ) {
-  public static ClienteResponseNPDTO valueOf(Cliente cliente) {
-    return new ClienteResponseNPDTO(
-      cliente.getId(),
-      cliente.getNome(),
-      cliente.getDataNascimento(),
-      cliente.getCpf(),
-      cliente.getSexo(),
-      cliente.getLogin(),
-      cliente.getEmail(),
-      cliente
+  public static UsuarioResponseNPDTO valueOf(Usuario usuario) {
+    return new UsuarioResponseNPDTO(
+      usuario.getId(),
+      usuario.getNome(),
+      usuario.getDataNascimento(),
+      usuario.getCpf(),
+      usuario.getSexo(),
+      usuario.getLogin(),
+      usuario.getEmail(),
+      usuario
         .getListaEndereco()
         .stream()
         .map(e -> EnderecoResponseDTO.valueOf(e))
         .toList(),
-      cliente
+      usuario
         .getListaTelefone()
         .stream()
         .map(t -> TelefoneResponseDTO.valueOf(t))

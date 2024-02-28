@@ -37,8 +37,8 @@ import com.github.braully.boleto.LayoutsSuportados;
 import com.github.braully.boleto.RemessaArquivo;
 import com.github.braully.boleto.RetornoArquivo;
 import com.github.braully.boleto.TituloArquivo;
-import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Empresa;
+import br.unitins.topicos1.model.Usuario;
 
 
 @ApplicationScoped
@@ -109,7 +109,7 @@ public class GerarBoleto {
         int contadorRegistroLote = 1;
         //Detalhes do boleto #1  
         // Boleto emitido pela empresa ACME S.A. ltada
-        // Para o cliente: Fulano de Tal cpf: 000.000.000-00
+        // Para o usuario: Fulano de Tal cpf: 000.000.000-00
         // Valor R$ 0,01 com vencimento na data de 13/12/2024
         remessa.addNovoDetalheSegmentoP()
                 //Dados da cobrança
@@ -128,7 +128,7 @@ public class GerarBoleto {
                 .carteira("00");
 
         remessa.addNovoDetalheSegmentoQ()
-                //Dados do cliente
+                //Dados do usuario
                 .sacado("Fulano de Tal", "00000000000")
                 .banco("0", "Banco")
                 .cedente("ACME S.A LTDA.", "1")
@@ -138,7 +138,7 @@ public class GerarBoleto {
                 .carteira("00");
 
         //Detalhes do boleto #2 Boleto emitido pela empresa ACME S.A. ltada
-        // Para o cliente: Ciclano de Tal cpf: 11111111111
+        // Para o usuario: Ciclano de Tal cpf: 11111111111
         // Valor R$ 2,50 com vencimento na data de hoje
         remessa.addNovoDetalheSegmentoP()
                 .valor(2.50)
@@ -231,22 +231,22 @@ public class GerarBoleto {
 
 
 
-public static String geraBoletoFinal(Integer intervalo, Double valorCompra, Cliente cliente, Empresa empresa, br.unitins.topicos1.model.Endereco enderecoCliente) throws IOException {
+public static String geraBoletoFinal(Integer intervalo, Double valorCompra, Usuario usuario, Empresa empresa, br.unitins.topicos1.model.Endereco enderecoUsuario) throws IOException {
 
         // Cedente
     Cedente cedente = new Cedente(empresa.getNomeReal(), empresa.getCnpj());
 
     // Sacado
-    Sacado sacado = new Sacado(cliente.getNome(), cliente.getCpf());
+    Sacado sacado = new Sacado(usuario.getNome(), usuario.getCpf());
 
     // Endereço do sacado
         Endereco endereco = new Endereco();
-    endereco.setUF(enderecoCliente.getUF());
-    endereco.setLocalidade(enderecoCliente.getLocalidade());
-    endereco.setCep(enderecoCliente.getCep());
-    endereco.setBairro(enderecoCliente.getBairro());
-    endereco.setLogradouro(enderecoCliente.getLogradouro());
-    endereco.setNumero(enderecoCliente.getNumeroLote());
+    endereco.setUF(enderecoUsuario.getUF());
+    endereco.setLocalidade(enderecoUsuario.getLocalidade());
+    endereco.setCep(enderecoUsuario.getCep());
+    endereco.setBairro(enderecoUsuario.getBairro());
+    endereco.setLogradouro(enderecoUsuario.getLogradouro());
+    endereco.setNumero(enderecoUsuario.getNumeroLote());
 
     sacado.addEndereco(endereco); 
 

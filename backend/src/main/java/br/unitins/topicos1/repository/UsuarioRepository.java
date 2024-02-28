@@ -1,6 +1,6 @@
 package br.unitins.topicos1.repository;
 
-import br.unitins.topicos1.model.Cliente;
+import br.unitins.topicos1.model.Usuario;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.NoResultException;
@@ -8,9 +8,9 @@ import jakarta.persistence.NoResultException;
 import java.util.List;
 
 @ApplicationScoped
-public class ClienteRepository implements PanacheRepository<Cliente> {
+public class UsuarioRepository implements PanacheRepository<Usuario> {
 
-  public List<Cliente> findByName(String nome) {
+  public List<Usuario> findByName(String nome) {
     try {
       return find("UPPER(nome) LIKE UPPER(?1) ", "%"+nome+"%").list();
     } catch (NoResultException e) {
@@ -20,7 +20,7 @@ public class ClienteRepository implements PanacheRepository<Cliente> {
     
   }
 
-  public Cliente findByCpf(String cpf) {
+  public Usuario findByCpf(String cpf) {
     if(cpf.matches("[0-9]{3}[-./\s][0-9]{3}[-./\s][0-9]{3}[-./\s][0-9]{2}")) {
       String parte1cpf, parte2cpf, parte3cpf, parte4cpf;
       parte1cpf = cpf.substring(0,3);
@@ -43,7 +43,7 @@ public class ClienteRepository implements PanacheRepository<Cliente> {
       } 
   }
 
- public Cliente findByLogin(String login) {
+ public Usuario findByLogin(String login) {
         try {
             return find("login = ?1 ", login).singleResult();
         } catch (NoResultException e) {
@@ -52,7 +52,7 @@ public class ClienteRepository implements PanacheRepository<Cliente> {
         }
     }
 
-    public Cliente findByLoginAndSenha(String login, String senha) {
+    public Usuario findByLoginAndSenha(String login, String senha) {
         try {
             return find("login = ?1 AND senha = ?2 ", login, senha).singleResult();
         } catch (NoResultException e) {

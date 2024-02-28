@@ -3,7 +3,7 @@ package br.unitins.topicos1.Formatadores;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class ClienteFormatador {
+public class UsuarioFormatador {
 
     public static LocalDate validaDataNascimento(String dataNascimento) {
         

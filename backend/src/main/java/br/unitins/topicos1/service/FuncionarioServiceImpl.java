@@ -1,6 +1,6 @@
 package br.unitins.topicos1.service;
 
-import br.unitins.topicos1.Formatadores.ClienteFormatador;
+import br.unitins.topicos1.Formatadores.UsuarioFormatador;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.FuncionarioFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
@@ -148,8 +148,8 @@ public class FuncionarioServiceImpl implements FuncionarioService {
   @Transactional
   public String updateCpf(PatchCpfDTO cpf, Long id) {
     Funcionario funcionario = repository.findById(id);
-    verificaCpf(ClienteFormatador.validaCpf(cpf.cpf()));
-    funcionario.setCpf(ClienteFormatador.validaCpf(cpf.cpf()));
+    verificaCpf(UsuarioFormatador.validaCpf(cpf.cpf()));
+    funcionario.setCpf(UsuarioFormatador.validaCpf(cpf.cpf()));
     return "Cpf alterado com sucesso.";
   }
 
@@ -246,10 +246,10 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         funcionario.getEndereco().setUF(end.uf());
         funcionario.getEndereco().setPais(end.pais());
         } else {
-          throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "O id fornecido não corresponde a um id de endereço cadastrado para este usuario");
+          throw new GeneralErrorException("400", "Bad Request", "UsuarioServiceImpl(updateTelefoneUsuario)", "O id fornecido não corresponde a um id de endereço cadastrado para este usuario");
         }
     } else {
-      throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateEnderecoCliente)", "Este usuário não possui nenhum endereço cadastrado.");
+      throw new GeneralErrorException("400", "Bad Request", "UsuarioServiceImpl(updateEnderecoUsuario)", "Este usuário não possui nenhum endereço cadastrado.");
     }
     //repository.persist(cliente);
     return FuncionarioResponseDTO.valueOf(funcionario);

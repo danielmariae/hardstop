@@ -95,10 +95,10 @@ public class GerarPix {
     }
 
     // O txid deve conter até 25 caracteres e respeitar a seguinte regra: a-z; A-Z; 0-9.
-    String nomeCliente = pagamento.getNomeCliente();
+    String nomeUsuario = pagamento.getNomeUsuario();
     String nomeF = "";
-    if (nomeCliente.matches(".+\\S+.*")) {
-      String[] datasplit = nomeCliente.split("\\s+");
+    if (nomeUsuario.matches(".+\\S+.*")) {
+      String[] datasplit = nomeUsuario.split("\\s+");
       for (int i = 0; i < datasplit.length; i++) {
         nomeF = nomeF + datasplit[i];
       }
@@ -106,9 +106,9 @@ public class GerarPix {
 
     if (nomeF != "") {
       if (nomeF.length() > 10) {
-        nomeCliente = nomeF.substring(0, 10);
+        nomeUsuario = nomeF.substring(0, 10);
       } else {
-        nomeCliente = nomeF;
+        nomeUsuario = nomeF;
       }
     }
 
@@ -118,7 +118,7 @@ public class GerarPix {
       .split("[-:.]");
     String dataHora =
       datasplit[0] + datasplit[1] + datasplit[2] + datasplit[3] + datasplit[4];
-    String txId = nomeCliente + dataHora;
+    String txId = nomeUsuario + dataHora;
     Integer txIdTam = txId.length();
     Integer adft = txIdTam + 4;
 

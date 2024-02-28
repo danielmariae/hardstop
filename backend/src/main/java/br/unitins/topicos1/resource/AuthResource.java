@@ -1,9 +1,8 @@
 package br.unitins.topicos1.resource;
 
-import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.FuncionarioResponseDTO;
+import br.unitins.topicos1.dto.UsuarioResponseDTO;
 import br.unitins.topicos1.dto.LoginDTO;
-import br.unitins.topicos1.service.ClienteService;
+import br.unitins.topicos1.service.UsuarioService;
 import br.unitins.topicos1.service.FuncionarioService;
 import br.unitins.topicos1.service.HashService;
 import br.unitins.topicos1.service.JwtService;
@@ -22,7 +21,7 @@ import jakarta.ws.rs.core.Response;
 
 public class AuthResource {
 @Inject
-ClienteService serviceC;
+UsuarioService serviceU;
 
 @Inject
 FuncionarioService serviceF;
@@ -34,26 +33,13 @@ HashService hashService;
 JwtService jwtService;
 
 @POST
-@Path("cliente/")
+@Path("usuario/")
 public Response loginC(@Valid LoginDTO dto) {
 
     String hashSenha = hashService.getHashSenha(dto.senha());
 
-    ClienteResponseDTO result = serviceC.findByLoginAndSenha(dto.login(), hashSenha);
+    UsuarioResponseDTO result = serviceU.findByLoginAndSenha(dto.login(), hashSenha);
 
-    String token = jwtService.generateJwt(result);
-
-    return Response.ok().header("Authorization", token).build();
-}
-
-@POST
-@Path("funcionario/")
-public Response loginF(@Valid LoginDTO dto) {
-
-    String hashSenha = hashService.getHashSenha(dto.senha());
-
-    FuncionarioResponseDTO result = serviceF.findByLoginAndSenha(dto.login(), hashSenha);
-    
     String token = jwtService.generateJwt(result);
 
     return Response.ok().header("Authorization", token).build();

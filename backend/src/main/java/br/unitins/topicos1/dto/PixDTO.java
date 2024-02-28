@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import br.unitins.topicos1.model.Pix;
 
 public record PixDTO(
-    String nomeCliente,
+    String nomeUsuario,
     String nomeRecebedor,
     String chaveRecebedor,
     Double valorPago,
@@ -16,7 +16,7 @@ public record PixDTO(
 ) {
    public static PixDTO valueOf(Pix pix) {
     return new PixDTO(
-        pix.getNomeCliente(),
+        pix.getNomeUsuario(),
         pix.getNomeRecebedor(),
         pix.getChaveRecebedor(),
         pix.getValorPago(),

@@ -1,11 +1,11 @@
 package br.unitins.topicos1.dto;
 
-import br.unitins.topicos1.model.Cliente;
-import br.unitins.topicos1.model.Perfil;
+import br.unitins.topicos1.model.Usuario;
+
 import java.time.LocalDate;
 import java.util.List;
 
-public record ClienteResponseDTO(
+public record UsuarioResponseDTO(
   Long id,
   String nome,
   LocalDate dataNascimento,
@@ -14,27 +14,31 @@ public record ClienteResponseDTO(
   String login,
   String email,
   String nomeImagem,
-  Perfil perfil,
+  List<TipoUsuarioDTO> tipoUsuario,
   List<EnderecoResponseDTO> listaEndereco,
   List<TelefoneResponseDTO> listaTelefone
 ) {
-  public static ClienteResponseDTO valueOf(Cliente cliente) {
-    return new ClienteResponseDTO(
-      cliente.getId(),
-      cliente.getNome(),
-      cliente.getDataNascimento(),
-      cliente.getCpf(),
-      cliente.getSexo(),
-      cliente.getLogin(),
-      cliente.getEmail(),
-      cliente.getNomeImagem(),
-      cliente.getPerfil(),
-      cliente
+  public static UsuarioResponseDTO valueOf(Usuario usuario) {
+    return new UsuarioResponseDTO(
+      usuario.getId(),
+      usuario.getNome(),
+      usuario.getDataNascimento(),
+      usuario.getCpf(),
+      usuario.getSexo(),
+      usuario.getLogin(),
+      usuario.getEmail(),
+      usuario.getNomeImagem(),
+      usuario
+        .getTipoUsuario()
+        .stream()
+        .map(t -> TipoUsuarioDTO.valueOf(t))
+        .toList(),
+      usuario
         .getListaEndereco()
         .stream()
         .map(e -> EnderecoResponseDTO.valueOf(e))
         .toList(),
-      cliente
+      usuario
         .getListaTelefone()
         .stream()
         .map(t -> TelefoneResponseDTO.valueOf(t))

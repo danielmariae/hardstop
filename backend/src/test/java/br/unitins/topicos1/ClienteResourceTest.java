@@ -1,6 +1,6 @@
 package br.unitins.topicos1;
 
-import br.unitins.topicos1.dto.ClienteDTO;
+import br.unitins.topicos1.dto.UsuarioDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import io.quarkus.test.junit.QuarkusTest;
@@ -12,7 +12,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import org.jrimum.domkee.pessoa.CEP;
 import org.jrimum.domkee.pessoa.UnidadeFederativa;
 import org.junit.jupiter.api.Test;
-import br.unitins.topicos1.service.ClienteService;
+import br.unitins.topicos1.service.UsuarioService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
 @QuarkusTest
 public class ClienteResourceTest {
     @Inject
-    ClienteService clienteService;
+    UsuarioService clienteService;
 
     @Test
     public void testFindAll() {
@@ -39,7 +39,7 @@ public class ClienteResourceTest {
         telefones.add(new TelefoneDTO(1, "63", "99963-2459"));
 
         
-        ClienteDTO clienteDTO = new ClienteDTO(
+        UsuarioDTO usuarioDTO = new UsuarioDTO(
                 "João Silva",
                 "1990-01-01",
                 "123.456.789-09",
@@ -54,7 +54,7 @@ public class ClienteResourceTest {
         // Fazer a requisição POST para um endpoint fictício (substitua pelo endpoint real)
         given()
             .contentType(ContentType.JSON)
-            .body(clienteDTO)
+            .body(usuarioDTO)
         .when()
             .post("/clientes")
         .then()

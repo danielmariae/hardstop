@@ -1,12 +1,12 @@
 package br.unitins.topicos1.service;
 
-import br.unitins.topicos1.Formatadores.ClienteFormatador;
+import br.unitins.topicos1.Formatadores.UsuarioFormatador;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
-import br.unitins.topicos1.dto.ClienteDTO;
+import br.unitins.topicos1.dto.UsuarioDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
-import br.unitins.topicos1.dto.ClienteResponseDTO;
+import br.unitins.topicos1.dto.UsuarioResponseDTO;
 import br.unitins.topicos1.dto.DesejoResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
@@ -16,13 +16,9 @@ import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
-import br.unitins.topicos1.model.Cliente;
-import br.unitins.topicos1.model.Endereco;
-import br.unitins.topicos1.model.Pedido;
-import br.unitins.topicos1.model.StatusDoPedido;
-import br.unitins.topicos1.model.Telefone;
-import br.unitins.topicos1.model.TipoTelefone;
-import br.unitins.topicos1.repository.ClienteRepository;
+import br.unitins.topicos1.model.*;
+import br.unitins.topicos1.model.Usuario;
+import br.unitins.topicos1.repository.UsuarioRepository;
 import br.unitins.topicos1.repository.EnderecoRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
 import br.unitins.topicos1.validation.ValidationException;
@@ -35,10 +31,10 @@ import java.util.List;
 import org.jrimum.domkee.pessoa.CEP;
 
 @ApplicationScoped
-public class ClienteServiceImpl implements ClienteService {
+public class UsuarioServiceImpl implements UsuarioService {
 
   @Inject
-  ClienteRepository repository;
+  UsuarioRepository repository;
 
   @Inject
   PedidoRepository repositoryPedido;
@@ -51,97 +47,97 @@ public class ClienteServiceImpl implements ClienteService {
 
 
   @Override
-  public ClienteResponseDTO findByIdCliente(Long id) {
-    Cliente cliente = repository.findById(id);
-    if (cliente == null) 
+  public UsuarioResponseDTO findByIdUsuario(Long id) {
+    Usuario usuario = repository.findById(id);
+    if (usuario == null)
             throw new ValidationException("ID", "id inexistente");
-    return ClienteResponseDTO.valueOf(cliente);
+    return UsuarioResponseDTO.valueOf(usuario);
   }
 
   @Override
-  public List<ClienteResponseDTO> findByNameCliente(String name) {
+  public List<UsuarioResponseDTO> findByNameUsuario(String name) {
     return repository
       .findByName(name)
       .stream()
-      .map(c -> ClienteResponseDTO.valueOf(c))
+      .map(c -> UsuarioResponseDTO.valueOf(c))
       .toList();
   }
 
   @Override
-  public ClienteResponseDTO findByCpfCliente(String cpf) {
-    Cliente cliente = repository.findByCpf(cpf);
-    if (cliente == null) 
+  public UsuarioResponseDTO findByCpfUsuario(String cpf) {
+    Usuario usuario = repository.findByCpf(cpf);
+    if (usuario == null) 
             throw new ValidationException("CPF", "cpf inexistente");
-    return ClienteResponseDTO.valueOf(cliente);
+    return UsuarioResponseDTO.valueOf(usuario);
   }
 
   @Override
-  public List<ClienteResponseDTO> findByAllCliente() {
+  public List<UsuarioResponseDTO> findByAllUsuario() {
     return repository
       .listAll()
       .stream()
-      .map(c -> ClienteResponseDTO.valueOf(c))
+      .map(c -> UsuarioResponseDTO.valueOf(c))
       .toList();
   }
 
   @Override
   @Transactional
-  // Método para deletar o cliente junto com todos os seus relacionamentos.
-  public void deleteCliente(Long id) {
+  // Método para deletar o usuario junto com todos os seus relacionamentos.
+  public void deleteUsuario(Long id) {
 
-// Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+// Verifica o id do usuario. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
 if(!verificaUsuario1(id)) {
-  throw new GeneralErrorException("400", "Bad Resquest", "ClienteServiceImpl(delete)", "id do usuário é nulo ou tem valor inferior a 1.");
+  throw new GeneralErrorException("400", "Bad Resquest", "UsuarioServiceImpl(delete)", "id do usuário é nulo ou tem valor inferior a 1.");
 }
 
-// Verifica o cliente. Caso o id inexista no banco de dados, o sistema não realiza a operação.
-Cliente cliente = repository.findById(id);
-if(!verificaUsuario2(cliente)) {
-  throw new GeneralErrorException("400", "Bad Resquest", "ClienteServiceImpl(delete)", "id do usuário não existe no banco de dados.");
+// Verifica o usuario. Caso o id inexista no banco de dados, o sistema não realiza a operação.
+Usuario usuario = repository.findById(id);
+if(!verificaUsuario2(usuario)) {
+  throw new GeneralErrorException("400", "Bad Resquest", "UsuarioServiceImpl(delete)", "id do usuário não existe no banco de dados.");
 }
 
-// Desconecta o cliente da lista de desejos de produtos.
-cliente.getListaProduto().clear();
+// Desconecta o usuario da lista de desejos de produtos.
+usuario.getListaProduto().clear();
 
   // podeDeletar verifica se todos os pedidos foram finalizados, retornando true ou false.
       if(!podeDeletar(repositoryPedido.findAll(id))) {
-        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(delete)", "Nada foi excluído porque este cliente possui pedidos ainda não finalizados!");
+        throw new GeneralErrorException("400", "Bad Request", "UsuarioServiceImpl(delete)", "Nada foi excluído porque este usuario possui pedidos ainda não finalizados!");
       }
 
         for(Pedido pedido : repositoryPedido.findAll(id)) {
           try {
             repositoryPedido.delete(pedido);
           } catch (Exception e) {
-            throw new GeneralErrorException("500", "Server Error", "ClienteServiceImpl(delete)", "Erro ao tentar apagar os pedidos deste cliente no banco de dados!");
+            throw new GeneralErrorException("500", "Server Error", "UsuarioServiceImpl(delete)", "Erro ao tentar apagar os pedidos deste usuario no banco de dados!");
           }
           
         }
         try {
-          repository.delete(cliente);
+          repository.delete(usuario);
         } catch (Exception e) {
-          throw new GeneralErrorException("500", "Server Error", "ClienteServiceImpl(delete)", "Erro ao tentar apagar o cliente no banco de dados!");
+          throw new GeneralErrorException("500", "Server Error", "UsuarioServiceImpl(delete)", "Erro ao tentar apagar o usuario no banco de dados!");
         }
   }
 
   @Override
   @Transactional
-  public ClienteResponseDTO updateCliente(ClienteDTO clt, Long id) {
-    Cliente cliente = repository.findById(id);
+  public UsuarioResponseDTO updateUsuario(UsuarioDTO clt, Long id) {
+    Usuario usuario = repository.findById(id);
 
-    cliente.setNome(clt.nome());
-    cliente.setDataNascimento(
-      ClienteFormatador.validaDataNascimento(clt.dataNascimento())
+    usuario.setNome(clt.nome());
+    usuario.setDataNascimento(
+      UsuarioFormatador.validaDataNascimento(clt.dataNascimento())
     );
-    cliente.setCpf(ClienteFormatador.validaCpf(clt.cpf()));
-    cliente.setSexo(clt.sexo());
-    cliente.setLogin(clt.login());
-    cliente.setSenha(hashservice.getHashSenha(clt.senha()));
-    cliente.setEmail(clt.email());
+    usuario.setCpf(UsuarioFormatador.validaCpf(clt.cpf()));
+    usuario.setSexo(clt.sexo());
+    usuario.setLogin(clt.login());
+    usuario.setSenha(hashservice.getHashSenha(clt.senha()));
+    usuario.setEmail(clt.email());
 
     int i = 0;
     int j = 0;
 
-    for (Telefone tele1 : cliente.getListaTelefone()) {
+    for (Telefone tele1 : usuario.getListaTelefone()) {
       i++;
       j = 0;
       for (TelefoneDTO tele : clt.listaTelefone()) {
@@ -159,7 +155,7 @@ cliente.getListaProduto().clear();
     int ie = 0;
     int je = 0;
 
-    for (Endereco endereco : cliente.getListaEndereco()) {
+    for (Endereco endereco : usuario.getListaEndereco()) {
       ie++;
       je = 0;
       for (EnderecoDTO end1 : clt.listaEndereco()) {
@@ -178,52 +174,52 @@ cliente.getListaProduto().clear();
       }
     }
 
-    //repository.persist(cliente);
-    return ClienteResponseDTO.valueOf(cliente);
+    //repository.persist(usuario);
+    return UsuarioResponseDTO.valueOf(usuario);
   }
 
   @Override
   @Transactional
   public String updateNome(PatchNomeDTO nome, Long id) {
-    Cliente cliente = repository.findById(id);
-    cliente.setNome(nome.nome());
+    Usuario usuario = repository.findById(id);
+    usuario.setNome(nome.nome());
     return "Nome alterado com sucesso.";
   }
 
   @Override
   @Transactional
   public String updateCpf(PatchCpfDTO cpf, Long id) {
-    Cliente cliente = repository.findById(id);
-    verificaCpf(ClienteFormatador.validaCpf(cpf.cpf()));
-    cliente.setCpf(ClienteFormatador.validaCpf(cpf.cpf()));
+    Usuario usuario = repository.findById(id);
+    verificaCpf(UsuarioFormatador.validaCpf(cpf.cpf()));
+    usuario.setCpf(UsuarioFormatador.validaCpf(cpf.cpf()));
     return "Cpf alterado com sucesso.";
   }
 
   @Override
   @Transactional
   public String updateLogin(PatchLoginDTO login, Long id) {
-    Cliente cliente = repository.findById(id);
+    Usuario usuario = repository.findById(id);
     verificaLogin(login.login());
-    cliente.setLogin(login.login());
+    usuario.setLogin(login.login());
     return "Login alterado com sucesso.";
   }
 
   @Override
   @Transactional
   public String updateEmail(PatchEmailDTO email, Long id) {
-    Cliente cliente = repository.findById(id);
-    cliente.setEmail(email.email());
+    Usuario usuario = repository.findById(id);
+    usuario.setEmail(email.email());
     return "Email alterado com sucesso.";
   }
 
   @Override
   @Transactional
-  public String updateSenhaCliente(PatchSenhaDTO senha, Long id) {
-    Cliente cliente = repository.findById(id);
+  public String updateSenhaUsuario(PatchSenhaDTO senha, Long id) {
+    Usuario usuario = repository.findById(id);
 
-    if(hashservice.getHashSenha(senha.senhaAntiga()).equals(cliente.getSenha())) {
-    cliente.setSenha(hashservice.getHashSenha(senha.senhaAtual()));
-    //repository.persist(cliente);
+    if(hashservice.getHashSenha(senha.senhaAntiga()).equals(usuario.getSenha())) {
+    usuario.setSenha(hashservice.getHashSenha(senha.senhaAtual()));
+    //repository.persist(usuario);
     return "Senha alterada com sucesso.";
     } else {
      throw new ValidationException("updateSenha", "Favor inserir a senha antiga correta."); 
@@ -233,32 +229,32 @@ cliente.getListaProduto().clear();
 
   @Override
   @Transactional
-  public ClienteResponseDTO insertTelefoneCliente(TelefoneDTO tel, Long id) {
-    Cliente cliente = repository.findById(id);
+  public UsuarioResponseDTO insertTelefoneUsuario(TelefoneDTO tel, Long id) {
+    Usuario usuario = repository.findById(id);
     
         Telefone telefone = new Telefone();
         telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
         telefone.setDdd(tel.ddd());
         telefone.setNumeroTelefone(TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
-        cliente.getListaTelefone().add(telefone);
-    repository.persist(cliente);
-    return ClienteResponseDTO.valueOf(cliente);
+        usuario.getListaTelefone().add(telefone);
+    repository.persist(usuario);
+    return UsuarioResponseDTO.valueOf(usuario);
   }
 
 
   @Override
   @Transactional
-  public ClienteResponseDTO updateTelefoneCliente(TelefonePatchDTO tel,Long id) {
-    Cliente cliente = repository.findById(id);
+  public UsuarioResponseDTO updateTelefoneUsuario(TelefonePatchDTO tel, Long id) {
+    Usuario usuario = repository.findById(id);
 
     if (
-      cliente.getListaTelefone() != null ||
-      !cliente.getListaTelefone().isEmpty()
+      usuario.getListaTelefone() != null ||
+      !usuario.getListaTelefone().isEmpty()
     ) {
 
       Boolean chave = true;
       
-      for (Telefone tele1 : cliente.getListaTelefone()) {
+      for (Telefone tele1 : usuario.getListaTelefone()) {
           if (tele1.getId() == tel.id()) {
             tele1.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
             tele1.setDdd(tel.ddd());
@@ -267,29 +263,29 @@ cliente.getListaProduto().clear();
           }   
       }
       if(chave) {
-        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "O id fornecido não corresponde a um id de telefone cadastrado para este usuario");
+        throw new GeneralErrorException("400", "Bad Request", "UsuarioServiceImpl(updateTelefoneUsuario)", "O id fornecido não corresponde a um id de telefone cadastrado para este usuario");
       }
     } else {
-      throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateTelefoneCliente)", "Este usuário não possui nenhum telefone cadastrado.");
+      throw new GeneralErrorException("400", "Bad Request", "UsuarioServiceImpl(updateTelefoneUsuario)", "Este usuário não possui nenhum telefone cadastrado.");
     }
 
-    //repository.persist(cliente);
-    return ClienteResponseDTO.valueOf(cliente);
+    //repository.persist(usuario);
+    return UsuarioResponseDTO.valueOf(usuario);
   }
 
   @Override
   @Transactional
-  public ClienteResponseDTO updateEnderecoCliente(EnderecoPatchDTO end,Long id) {
-    Cliente cliente = repository.findById(id);
+  public UsuarioResponseDTO updateEnderecoUsuario(EnderecoPatchDTO end, Long id) {
+    Usuario usuario = repository.findById(id);
 
     if (
-      cliente.getListaEndereco() != null ||
-      !cliente.getListaEndereco().isEmpty()
+      usuario.getListaEndereco() != null ||
+      !usuario.getListaEndereco().isEmpty()
     ) {
 
       Boolean chave = true;
 
-      for (Endereco endereco : cliente.getListaEndereco()) {
+      for (Endereco endereco : usuario.getListaEndereco()) {
         
           if (endereco.getId() == end.id()) {
             endereco.setNome(end.nome());
@@ -307,21 +303,21 @@ cliente.getListaProduto().clear();
       }
 
       if(chave) {
-        throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateEndereçoCliente)", "O id fornecido não corresponde a um id de endereço cadastrado para este usuario");
+        throw new GeneralErrorException("400", "Bad Request", "UsuarioServiceImpl(updateEndereçoUsuario)", "O id fornecido não corresponde a um id de endereço cadastrado para este usuario");
       }
       
     } else {
-      throw new GeneralErrorException("400", "Bad Request", "ClienteServiceImpl(updateEnderecoCliente)", "Este usuário não possui nenhum endereço cadastrado.");
+      throw new GeneralErrorException("400", "Bad Request", "UsuarioServiceImpl(updateEnderecoUsuario)", "Este usuário não possui nenhum endereço cadastrado.");
     }
-    //repository.persist(cliente);
-    return ClienteResponseDTO.valueOf(cliente);
+    //repository.persist(usuario);
+    return UsuarioResponseDTO.valueOf(usuario);
   }
 
 
   @Override
   @Transactional
-  public ClienteResponseDTO insertEnderecoCliente(EnderecoDTO end,Long id) {
-    Cliente cliente = repository.findById(id);
+  public UsuarioResponseDTO insertEnderecoUsuario(EnderecoDTO end, Long id) {
+    Usuario usuario = repository.findById(id);
 
      Endereco endereco = new Endereco();
       endereco.setNome(end.nome());
@@ -334,44 +330,46 @@ cliente.getListaProduto().clear();
       endereco.setUF(end.uf());
       endereco.setPais(end.pais());
 
-    if(cliente.getListaEndereco() == null)
-      cliente.setListaEndereco(new ArrayList<Endereco>());
+    if(usuario.getListaEndereco() == null)
+      usuario.setListaEndereco(new ArrayList<Endereco>());
 
     repositoryEndereco.persist(endereco);
 
-    cliente.getListaEndereco().add(endereco);
-    repository.persist(cliente);
-    return ClienteResponseDTO.valueOf(cliente);
+    usuario.getListaEndereco().add(endereco);
+    repository.persist(usuario);
+    return UsuarioResponseDTO.valueOf(usuario);
   }
 
   @Override
   @Transactional
-  public ClienteResponseDTO insertCliente(ClienteDTO dto) {
+  public UsuarioResponseDTO insertUsuario(UsuarioDTO dto) {
 
-    Cliente cliente = null;
+    Usuario usuario = null;
 
     try {
-      cliente = new Cliente();
+      usuario = new Usuario();
     } catch (Exception e) {
-      throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui alocar memória para o novo Cliente. Tente novamente mais tarde! " +  e.getCause());
+      throw new GeneralErrorException("500", "Internal Server Error", "UsuarioServiceImpl(insert)", "Não consegui alocar memória para o novo Usuario. Tente novamente mais tarde! " +  e.getCause());
     }
 
-    cliente.setNome(dto.nome());
-    cliente.setDataNascimento(
-    ClienteFormatador.validaDataNascimento(dto.dataNascimento()));
-    verificaCpf(ClienteFormatador.validaCpf(dto.cpf()));
-    cliente.setCpf(ClienteFormatador.validaCpf(dto.cpf()));
-    cliente.setSexo(dto.sexo());
+    usuario.setNome(dto.nome());
+    usuario.setDataNascimento(
+    UsuarioFormatador.validaDataNascimento(dto.dataNascimento()));
+    verificaCpf(UsuarioFormatador.validaCpf(dto.cpf()));
+    usuario.setCpf(UsuarioFormatador.validaCpf(dto.cpf()));
+    usuario.setSexo(dto.sexo());
     verificaLogin(dto.login());
-    cliente.setLogin(dto.login());
-    cliente.setSenha(hashservice.getHashSenha(dto.senha()));
-    cliente.setEmail(dto.email());
+    usuario.setLogin(dto.login());
+    usuario.setSenha(hashservice.getHashSenha(dto.senha()));
+    usuario.setEmail(dto.email());
+    usuario.setTipoUsuario(new ArrayList<TipoUsuario>());
+    
 
     if (dto.listaTelefone() != null && !dto.listaTelefone().isEmpty()) {
       try {
-        cliente.setListaTelefone(new ArrayList<Telefone>());
+        usuario.setListaTelefone(new ArrayList<Telefone>());
       } catch (Exception e) {
-        throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui alocar memória para a lista telefônica do novo Cliente. Tente novamente mais tarde! " +  e.getCause());
+        throw new GeneralErrorException("500", "Internal Server Error", "UsuarioServiceImpl(insert)", "Não consegui alocar memória para a lista telefônica do novo Usuario. Tente novamente mais tarde! " +  e.getCause());
       }
       
       for (TelefoneDTO tel : dto.listaTelefone()) {
@@ -380,15 +378,15 @@ cliente.getListaProduto().clear();
         telefone.setDdd(tel.ddd());
         telefone.setNumeroTelefone(
         TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
-        cliente.getListaTelefone().add(telefone);
+        usuario.getListaTelefone().add(telefone);
       }
     }
 
     if (dto.listaEndereco() != null && !dto.listaEndereco().isEmpty()) {
       try {
-        cliente.setListaEndereco(new ArrayList<Endereco>());
+        usuario.setListaEndereco(new ArrayList<Endereco>());
       } catch (Exception e) {
-        throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui alocar memória para a lista de endereços do novo Cliente. Tente novamente mais tarde! " +  e.getCause());
+        throw new GeneralErrorException("500", "Internal Server Error", "UsuarioServiceImpl(insert)", "Não consegui alocar memória para a lista de endereços do novo Usuario. Tente novamente mais tarde! " +  e.getCause());
       }
       
       for (EnderecoDTO end : dto.listaEndereco()) {
@@ -402,20 +400,20 @@ cliente.getListaProduto().clear();
         endereco.setLocalidade(end.localidade());
         endereco.setUF(end.uf());
         endereco.setPais(end.pais());
-        cliente.getListaEndereco().add(endereco);
+        usuario.getListaEndereco().add(endereco);
       }
     }
 
     try {
-      repository.persist(cliente);
+      repository.persist(usuario);
     } catch (Exception e) {
-      throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui persistir os dados do cliente no repositório " + e.getCause());
+      throw new GeneralErrorException("500", "Internal Server Error", "UsuarioServiceImpl(insert)", "Não consegui persistir os dados do usuario no repositório " + e.getCause());
     }
     
-    return ClienteResponseDTO.valueOf(cliente);
+    return UsuarioResponseDTO.valueOf(usuario);
   }
 
-  public List<DesejoResponseDTO> findListaDesejosCliente(Long id) {
+  public List<DesejoResponseDTO> findListaDesejosUsuario(Long id) {
 
      return repository
       .findById(id)
@@ -427,21 +425,21 @@ cliente.getListaProduto().clear();
 
 
   @Override
-    public ClienteResponseDTO findByLoginAndSenha(String login, String senha) {
-      Cliente cliente = repository.findByLoginAndSenha(login, senha);
-      if(!verificaUsuario2(cliente)) {
+    public UsuarioResponseDTO findByLoginAndSenha(String login, String senha) {
+      Usuario usuario = repository.findByLoginAndSenha(login, senha);
+      if(!verificaUsuario2(usuario)) {
         throw new ValidationException("login", "Login ou senha inválido");
       }
-      return ClienteResponseDTO.valueOf(cliente);
+      return UsuarioResponseDTO.valueOf(usuario);
     }
 
     @Override
-    public ClienteResponseDTO findByLogin(String login) {
-        Cliente cliente = repository.findByLogin(login);
-        if (cliente == null) 
+    public UsuarioResponseDTO findByLogin(String login) {
+        Usuario usuario = repository.findByLogin(login);
+        if (usuario == null) 
             throw new ValidationException("login", "Login inválido");
         
-        return ClienteResponseDTO.valueOf(cliente);
+        return UsuarioResponseDTO.valueOf(usuario);
     }
 
 
@@ -461,12 +459,12 @@ private void verificaCpf(String cpf) {
 
  private boolean podeDeletar(List<Pedido> listaPedidos) {
 
-    // Dá permissão para deletar o cliente que nunca fez um pedido
+    // Dá permissão para deletar o usuario que nunca fez um pedido
         if(listaPedidos == null || listaPedidos.isEmpty()) {
             return true;
         }
 
-    // Todos os pedidos feitos pelo cliente já foram finalizados (Status.getId() == 5) ou tiveram pagamento não autorizado (Status.getId() == 1)? 
+    // Todos os pedidos feitos pelo usuario já foram finalizados (Status.getId() == 5) ou tiveram pagamento não autorizado (Status.getId() == 1)? 
         Integer chaveDelecao = 0;
         for(Pedido pedido : listaPedidos) {
             for(StatusDoPedido statusPedido : pedido.getStatusDoPedido()) {
@@ -476,7 +474,7 @@ private void verificaCpf(String cpf) {
             }
         }
 
-  // Caso a igualdade seja verdadeira, significa que todos os pedidos do cliente foram finalizados ou tiverem pagamento não autorizado. Deste modo, poderemos deletar o cliente do banco de dados junto com todos os seus endereços.
+  // Caso a igualdade seja verdadeira, significa que todos os pedidos do usuario foram finalizados ou tiverem pagamento não autorizado. Deste modo, poderemos deletar o usuario do banco de dados junto com todos os seus endereços.
         if(chaveDelecao == listaPedidos.size()) {
             return true;
         } else {
@@ -497,9 +495,9 @@ private void verificaCpf(String cpf) {
       return true;
     }
     
-    private Boolean verificaUsuario2(Cliente cliente) {
+    private Boolean verificaUsuario2(Usuario usuario) {
     
-      if(cliente == null) {
+      if(usuario == null) {
           return false;
       } else {
           return true;

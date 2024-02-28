@@ -1,9 +1,14 @@
 package br.unitins.topicos1.model;
 
-import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Usuario extends DefaultEntity {
@@ -15,28 +20,28 @@ public class Usuario extends DefaultEntity {
   private String login;
   private String senha;
   private String email;
-
-  @ManyToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinTable(
-          name = "usuario_endereco",
-          inverseJoinColumns = @JoinColumn(name="id_perfil"),
-          joinColumns = @JoinColumn(name = "id_usuario")
-  )
-  private List<Perfil> tiposCadastros;
   private String nomeImagem;
+
+  @OneToMany
+  @JoinTable(
+          name = "tipo_usuario",
+          joinColumns = @JoinColumn(name = "id_tipo"),
+          inverseJoinColumns = @JoinColumn(name = "id_usuario")
+  )
+  private List<TipoUsuario> tipoUsuario;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinTable(
-    name = "cliente_endereco",
-    joinColumns = @JoinColumn(name = "id_cliente"),
+    name = "usuario_endereco",
+    joinColumns = @JoinColumn(name = "id_usuario"),
     inverseJoinColumns = @JoinColumn(name = "id_endereco")
   )
   private List<Endereco> listaEndereco;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinTable(
-    name = "cliente_telefone",
-    joinColumns = @JoinColumn(name = "id_cliente"),
+    name = "usuario_telefone",
+    joinColumns = @JoinColumn(name = "id_usuario"),
     inverseJoinColumns = @JoinColumn(name = "id_telefone")
   )
   private List<Telefone> listaTelefone;
@@ -44,11 +49,12 @@ public class Usuario extends DefaultEntity {
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinTable(
     name = "lista_de_desejos",
-    joinColumns = @JoinColumn(name = "id_cliente"),
+    joinColumns = @JoinColumn(name = "id_usuario"),
     inverseJoinColumns = @JoinColumn(name = "id_produto")
   )
   private List<Produto> listaProduto;
-  
+
+
   public List<Produto> getListaProduto() {
     return listaProduto;
   }
@@ -113,10 +119,6 @@ public class Usuario extends DefaultEntity {
     this.email = email;
   }
 
-    public Perfil getPerfil() {
-    return perfil;
-  }
-
   public List<Endereco> getListaEndereco() {
     return listaEndereco;
   }
@@ -141,11 +143,13 @@ public class Usuario extends DefaultEntity {
     this.nomeImagem = nomeImagem;
   }
 
-  public List<Perfil> getTiposCadastros() {
-    return tiposCadastros;
-  }
+public List<TipoUsuario> getTipoUsuario() {
+    return tipoUsuario;
+}
 
-  public void setTiposCadastros(List<Perfil> tiposCadastros) {
-    this.tiposCadastros = tiposCadastros;
-  }
+public void setTipoUsuario(List<TipoUsuario> tipoUsuario) {
+    this.tipoUsuario = tipoUsuario;
+}
+
+  
 }

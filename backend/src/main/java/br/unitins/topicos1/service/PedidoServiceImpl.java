@@ -10,7 +10,7 @@ import br.unitins.topicos1.dto.PedidoPatchStatusDTO;
 import br.unitins.topicos1.dto.PedidoResponseDTO;
 import br.unitins.topicos1.model.Boleto;
 import br.unitins.topicos1.model.CartaoDeCredito;
-import br.unitins.topicos1.model.Cliente;
+import br.unitins.topicos1.model.Usuario;
 import br.unitins.topicos1.model.Empresa;
 import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.ItemDaVenda;
@@ -21,7 +21,7 @@ import br.unitins.topicos1.model.Pix;
 import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.Status;
 import br.unitins.topicos1.model.StatusDoPedido;
-import br.unitins.topicos1.repository.ClienteRepository;
+import br.unitins.topicos1.repository.UsuarioRepository;
 import br.unitins.topicos1.repository.EmpresaRepository;
 import br.unitins.topicos1.repository.EnderecoRepository;
 import br.unitins.topicos1.repository.LoteRepository;
@@ -53,7 +53,7 @@ public class PedidoServiceImpl implements PedidoService {
   Emitter<String> cardRequestEmitter;
   
   @Inject
-  ClienteRepository repository;
+  UsuarioRepository repository;
 
   @Inject
   PedidoRepository repositoryPedido;
@@ -79,7 +79,7 @@ public class PedidoServiceImpl implements PedidoService {
     // Carrega os dados da empresa.
     Empresa empresa = repositoryEmpresa.findById(Long.valueOf(1));
 
-    // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+    // Verifica o id do usuario. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
     if (!verificaUsuario1(id)) {
       throw new GeneralErrorException(
         "400",
@@ -89,9 +89,9 @@ public class PedidoServiceImpl implements PedidoService {
       );
     }
 
-    // Verifica o cliente. Caso o id inexista no banco de dados, o sistema não realiza a operação.
-    Cliente cliente = repository.findById(id);
-    if (!verificaUsuario2(cliente)) {
+    // Verifica o usuario. Caso o id inexista no banco de dados, o sistema não realiza a operação.
+    Usuario usuario = repository.findById(id);
+    if (!verificaUsuario2(usuario)) {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
@@ -103,7 +103,7 @@ public class PedidoServiceImpl implements PedidoService {
     Pedido pedido = new Pedido();
     //pedido.setCodigoDeRastreamento(dto.codigoDeRastreamento());
 
-    pedido.setCliente(cliente);
+    pedido.setUsuario(usuario);
 
     pedido.setItemDaVenda(new ArrayList<ItemDaVenda>());
     Double valorCompra = 0.0;
@@ -239,15 +239,15 @@ public class PedidoServiceImpl implements PedidoService {
       );
     }
 
-    // Retorna true se o dto.idEndereco() é de um endereço que pertença ao cliente.
-    if (verificaEnderecoCliente(cliente, endereco)) {
+    // Retorna true se o dto.idEndereco() é de um endereço que pertença ao usuario.
+    if (verificaEnderecoUsuario(usuario, endereco)) {
       pedido.setEndereco(endereco);
     } else {
       throw new GeneralErrorException(
         "400",
         "Bad Request",
         "PedidoServiceImpl(insert)",
-        "O id passado como índice de endereço não pertence ao cliente!"
+        "O id passado como índice de endereço não pertence ao usuario!"
       );
     }
 
@@ -286,7 +286,7 @@ public class PedidoServiceImpl implements PedidoService {
         nomeArquivo = GerarBoleto.geraBoletoFinal(
         dto.formaDePagamento().diasVencimento(),
         valorCompra,
-        cliente,
+        usuario,
         empresa,
         endereco
       );
@@ -307,7 +307,7 @@ public class PedidoServiceImpl implements PedidoService {
         ModalidadePagamento.valueOf(dto.formaDePagamento().modalidade())
       );
       pagamento.setValorPago(valorCompra);
-      pagamento.setNomeCliente(cliente.getNome());
+      pagamento.setNomeUsuario(usuario.getNome());
       pagamento.setNomeRecebedor(empresa.getNomeFantasia());
       pagamento.setChaveRecebedor(empresa.getChavePixAleatoria());
       pagamento.setDataHoraGeracao(LocalDateTime.now());
@@ -359,31 +359,31 @@ public class PedidoServiceImpl implements PedidoService {
    
     //if(pedido.getFormaDePagamento().getModalidade().getId() == 0)
     if(pedido.getFormaDePagamento() instanceof CartaoDeCredito)
-    enviaDadosCartao((CartaoDeCredito) pedido.getFormaDePagamento(), cliente.getNome(), cliente.getCpf(), pedido.getId());
+    enviaDadosCartao((CartaoDeCredito) pedido.getFormaDePagamento(), usuario.getNome(), usuario.getCpf(), pedido.getId());
 
     return PedidoResponseDTO.valueOf(pedido);
   }
 
   @Override
   @Transactional
-  public void deletePedidoByCliente(Long idCliente, Long idPedido) {
-    // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
-    if (!verificaUsuario1(idCliente)) {
+  public void deletePedidoByUsuario(Long idUsuario, Long idPedido) {
+    // Verifica o id do usuario. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+    if (!verificaUsuario1(idUsuario)) {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
-        "PedidoServiceImpl(deletePedidoByCliente)",
+        "PedidoServiceImpl(deletePedidoByUsuario)",
         "id do usuário é nulo ou tem valor inferior a 1."
       );
     }
 
-    // Verifica o cliente. Caso o id inexista no banco de dados, o sistema não realiza a operação.
-    Cliente cliente = repository.findById(idCliente);
-    if (!verificaUsuario2(cliente)) {
+    // Verifica o usuario. Caso o id inexista no banco de dados, o sistema não realiza a operação.
+    Usuario usuario = repository.findById(idUsuario);
+    if (!verificaUsuario2(usuario)) {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
-        "PedidoServiceImpl(deletePedidoByCliente)",
+        "PedidoServiceImpl(deletePedidoByUsuario)",
         "id do usuário não existe no banco de dados."
       );
     }
@@ -393,7 +393,7 @@ public class PedidoServiceImpl implements PedidoService {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
-        "PedidoServiceImpl(deletePedidoByCliente)",
+        "PedidoServiceImpl(deletePedidoByUsuario)",
         "id do pedido é nulo ou tem valor inferior a 1."
       );
     }
@@ -404,16 +404,16 @@ public class PedidoServiceImpl implements PedidoService {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
-        "PedidoServiceImpl(deletePedidoByCliente)",
+        "PedidoServiceImpl(deletePedidoByUsuario)",
         "id do pedido não existe no banco de dados."
       );
     }
 
-    if (!podeDeletar(cliente, pedido)) {
+    if (!podeDeletar(usuario, pedido)) {
       throw new GeneralErrorException(
         "400",
         "Bad Request",
-        "PedidoServiceImpl(deletePedidoByCliente)",
+        "PedidoServiceImpl(deletePedidoByUsuario)",
         "O pedido não pode ser desfeito!"
       );
     }
@@ -425,7 +425,7 @@ public class PedidoServiceImpl implements PedidoService {
       throw new GeneralErrorException(
         "500",
         "Server Error",
-        "PedidoServiceImpl(deletePedidoByCliente)",
+        "PedidoServiceImpl(deletePedidoByUsuario)",
         "Não consegui apagar o pedido no banco de dados!"
       );
     }
@@ -620,9 +620,9 @@ public class PedidoServiceImpl implements PedidoService {
   }
 
   @Override
-  public List<PedidoResponseDTO> findPedidoByCliente(Long idcliente) {
+  public List<PedidoResponseDTO> findPedidoByUsuario(Long idusuario) {
     return repositoryPedido
-      .findAll(idcliente)
+      .findAll(idusuario)
       .stream()
       .map(p -> PedidoResponseDTO.valueOf(p))
       .toList();
@@ -634,7 +634,7 @@ public class PedidoServiceImpl implements PedidoService {
     PedidoPatchEnderecoDTO dto,
     Long id
   ) {
-    // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+    // Verifica o id do usuario. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
     if (!verificaUsuario1(id)) {
       throw new GeneralErrorException(
         "400",
@@ -644,9 +644,9 @@ public class PedidoServiceImpl implements PedidoService {
       );
     }
 
-    // Verifica o cliente. Caso o id inexista no banco de dados, o sistema não realiza a operação.
-    Cliente cliente = repository.findById(id);
-    if (!verificaUsuario2(cliente)) {
+    // Verifica o usuario. Caso o id inexista no banco de dados, o sistema não realiza a operação.
+    Usuario usuario = repository.findById(id);
+    if (!verificaUsuario2(usuario)) {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
@@ -676,23 +676,23 @@ public class PedidoServiceImpl implements PedidoService {
       );
     }
 
-    // Verifica se o pedido pertence ao cliente. Caso o pedido não pertença ao cliente, o sistema não realiza a operação.
-    if (!verificaPedido3(cliente, pedido)) {
+    // Verifica se o pedido pertence ao usuario. Caso o pedido não pertença ao usuario, o sistema não realiza a operação.
+    if (!verificaPedido3(usuario, pedido)) {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
         "PedidoServiceImpl(updateEndereco)",
-        "Este pedido não pertence a este cliente."
+        "Este pedido não pertence a este usuario."
       );
     }
 
-    // Verifica se o endereço pertence ao cliente. Caso o endereço não pertença ao cliente, o sistema não realiza a operação.
-    if (!verificaEndereco3(cliente, dto.idEndereco())) {
+    // Verifica se o endereço pertence ao usuario. Caso o endereço não pertença ao usuario, o sistema não realiza a operação.
+    if (!verificaEndereco3(usuario, dto.idEndereco())) {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
         "PedidoServiceImpl(updateEndereco)",
-        "O novo endereço não pertence a este cliente."
+        "O novo endereço não pertence a este usuario."
       );
     }
 
@@ -723,9 +723,9 @@ public class PedidoServiceImpl implements PedidoService {
 
   @Override
   @Transactional
-  public DesejoResponseDTO insertDesejos(Long idProduto, Long idCliente) {
-    Cliente cliente = repository.findById(idCliente);
-    if (!verificaUsuario2(cliente)) {
+  public DesejoResponseDTO insertDesejos(Long idProduto, Long idUsuario) {
+    Usuario usuario = repository.findById(idUsuario);
+    if (!verificaUsuario2(usuario)) {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
@@ -753,33 +753,33 @@ public class PedidoServiceImpl implements PedidoService {
           "id do produto não existe no banco de dados."
         );
       }
-      if(cliente.getListaProduto() == null) {
-        cliente.setListaProduto(new ArrayList<Produto>());
-        cliente.getListaProduto().add(produto);
+      if(usuario.getListaProduto() == null) {
+        usuario.setListaProduto(new ArrayList<Produto>());
+        usuario.getListaProduto().add(produto);
       } else {
-        for(Produto prod : cliente.getListaProduto()) {
+        for(Produto prod : usuario.getListaProduto()) {
           if(prod.getId() == produto.getId()) {
             throw new GeneralErrorException(
           "400",
           "Bad Resquest",
           "PedidoServiceImpl(insertDesejos)",
-          "Produto já existe na lista de desejos deste cliente."
+          "Produto já existe na lista de desejos deste usuario."
         );
           }
         }
-        cliente.getListaProduto().add(produto);
+        usuario.getListaProduto().add(produto);
       }
 
         
     
     /* try {
-      repository.persist(cliente);
+      repository.persist(usuario);
     } catch (Exception e) {
       throw new GeneralErrorException(
         "500",
         "Server Error",
         "PedidoServiceImpl(insertDesejos)",
-        "O produto não pôde ser inserido na lista de desejos do Cliente no banco de dados."
+        "O produto não pôde ser inserido na lista de desejos do Usuario no banco de dados."
       );
     } */
     return DesejoResponseDTO.valueOf(produto);
@@ -788,9 +788,9 @@ public class PedidoServiceImpl implements PedidoService {
   
   @Override
   @Transactional
-  public void deleteDesejos(Long idProduto, Long idCliente) {
-    Cliente cliente = repository.findById(idCliente);
-    if (!verificaUsuario2(cliente)) {
+  public void deleteDesejos(Long idProduto, Long idUsuario) {
+    Usuario usuario = repository.findById(idUsuario);
+    if (!verificaUsuario2(usuario)) {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
@@ -821,7 +821,7 @@ public class PedidoServiceImpl implements PedidoService {
 
       
       Boolean chave = true;
-      for(Produto prod : cliente.getListaProduto()) {
+      for(Produto prod : usuario.getListaProduto()) {
         if(prod.getId() == idProduto) {
           chave = false;
         }
@@ -832,17 +832,17 @@ public class PedidoServiceImpl implements PedidoService {
           "400",
           "Bad Resquest",
           "PedidoServiceImpl(deleteDesejos)",
-          "Produto não existe na lista de desejos do cliente."
+          "Produto não existe na lista de desejos do usuario."
         );
       }
 
-      cliente.getListaProduto().remove(produto);
+      usuario.getListaProduto().remove(produto);
       
   }
 
-  private Boolean verificaEnderecoCliente(Cliente cliente, Endereco endereco) {
-    for (Endereco end : cliente.getListaEndereco()) {
-      // O pedido repassado ao método pertence ao Cliente repassado ao método.
+  private Boolean verificaEnderecoUsuario(Usuario usuario, Endereco endereco) {
+    for (Endereco end : usuario.getListaEndereco()) {
+      // O pedido repassado ao método pertence ao Usuario repassado ao método.
       if (end.getId() == endereco.getId()) {
         return true;
       }
@@ -882,8 +882,8 @@ public class PedidoServiceImpl implements PedidoService {
     return true;
   }
 
-  private Boolean verificaUsuario2(Cliente cliente) {
-    if (cliente == null) {
+  private Boolean verificaUsuario2(Usuario usuario) {
+    if (usuario == null) {
       return false;
     } else {
       return true;
@@ -910,8 +910,8 @@ public class PedidoServiceImpl implements PedidoService {
     }
   }
 
-  private Boolean verificaEndereco3(Cliente cliente, Long idEndereco) {
-    for (Endereco end : cliente.getListaEndereco()) {
+  private Boolean verificaEndereco3(Usuario usuario, Long idEndereco) {
+    for (Endereco end : usuario.getListaEndereco()) {
       if (end.getId() == idEndereco) {
         return true;
       }
@@ -939,9 +939,9 @@ public class PedidoServiceImpl implements PedidoService {
     }
   }
 
-  private Boolean verificaPedido3(Cliente cliente, Pedido pedido) {
-    for (Pedido pedidoteste : repositoryPedido.findAll(cliente.getId())) {
-      // O pedido repassado ao método pertence ao Cliente repassado ao método.
+  private Boolean verificaPedido3(Usuario usuario, Pedido pedido) {
+    for (Pedido pedidoteste : repositoryPedido.findAll(usuario.getId())) {
+      // O pedido repassado ao método pertence ao Usuario repassado ao método.
       if (pedidoteste.getId() == pedido.getId()) {
         return true;
       }
@@ -973,9 +973,9 @@ public class PedidoServiceImpl implements PedidoService {
     return false;
   }
 
-  private Boolean podeDeletar(Cliente cliente, Pedido pedido) {
-    for (Pedido pedidoteste : repositoryPedido.findAll(cliente.getId())) {
-      // O pedido repassado ao método pertence ao Cliente repassado ao método.
+  private Boolean podeDeletar(Usuario usuario, Pedido pedido) {
+    for (Pedido pedidoteste : repositoryPedido.findAll(usuario.getId())) {
+      // O pedido repassado ao método pertence ao Usuario repassado ao método.
       if (pedidoteste.getId() == pedido.getId()) {
         // Coletando o Status de número mais elevado neste pedido
         Integer chaveDelecao = 0;
@@ -1086,14 +1086,14 @@ public class PedidoServiceImpl implements PedidoService {
         }
       }
     }
-    // O pedido repassado ao método não pertence ao Cliente repassado ao método.
+    // O pedido repassado ao método não pertence ao Usuario repassado ao método.
     return false;
   }
 
-  private void enviaDadosCartao(CartaoDeCredito pagamento, String clienteNome, String cpf, Long idPedido) {
+  private void enviaDadosCartao(CartaoDeCredito pagamento, String usuarioNome, String cpf, Long idPedido) {
     String dadosCartao;
     String dataHora[] = pagamento.getDataHoraPagamento().toString().split("\\.");
-    dadosCartao = clienteNome + "+" + pagamento.getNumeroCartao() + "+" + pagamento.getAnoValidade().toString() + "+" + pagamento.getMesValidade().toString() + "+" + pagamento.getCodSeguranca().toString() + "+" + dataHora[0] + "+" + pagamento.getValorPago().toString() + "+" + cpf + "+" + idPedido.toString();
+    dadosCartao = usuarioNome + "+" + pagamento.getNumeroCartao() + "+" + pagamento.getAnoValidade().toString() + "+" + pagamento.getMesValidade().toString() + "+" + pagamento.getCodSeguranca().toString() + "+" + dataHora[0] + "+" + pagamento.getValorPago().toString() + "+" + cpf + "+" + idPedido.toString();
 
    
     String dadoCriptografado;

@@ -4,7 +4,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.application.ErrorTP1;
-import br.unitins.topicos1.dto.ClienteDTO;
+import br.unitins.topicos1.dto.UsuarioDTO;
 import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
@@ -16,7 +16,7 @@ import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.form.ArchiveForm;
-import br.unitins.topicos1.service.ClienteService;
+import br.unitins.topicos1.service.UsuarioService;
 import br.unitins.topicos1.service.FileService;
 import br.unitins.topicos1.service.FuncionarioService;
 import jakarta.annotation.security.RolesAllowed;
@@ -48,7 +48,7 @@ JsonWebToken jwt;
 private FuncionarioService serviceFuncionario;
 
 @Inject
-private ClienteService serviceCliente;
+private UsuarioService serviceUsuario;
 
 @Inject
 FileService fileService;
@@ -130,39 +130,39 @@ public Response getFuncionario() {
   }
 
   @GET
-  @Path("/search/cliente/all")
+  @Path("/search/usuario/all")
   @RolesAllowed({"Func", "Admin"})
-  public Response findbyAllCliente() {
-    return Response.ok(serviceCliente.findByAllCliente()).build();
+  public Response findbyAllUsuario() {
+    return Response.ok(serviceUsuario.findByAllUsuario()).build();
   }
 
   @GET
-  @Path("/search/cliente/id/{id}")
+  @Path("/search/usuario/id/{id}")
   @RolesAllowed({"Func", "Admin"})
-  public Response findByIdCliente(@PathParam("id") Long id) {
-    return Response.ok(serviceCliente.findByIdCliente(id)).build();
+  public Response findByIdUsuario(@PathParam("id") Long id) {
+    return Response.ok(serviceUsuario.findByIdUsuario(id)).build();
   }
 
   @GET
-  @Path("/search/cliente/nome/{nome}")
+  @Path("/search/usuario/nome/{nome}")
   @RolesAllowed({"Func", "Admin"})
-  public Response findByNameCliente(@PathParam("nome") String nome) {
-    return Response.ok(serviceCliente.findByNameCliente(nome)).build();
+  public Response findByNameUsuario(@PathParam("nome") String nome) {
+    return Response.ok(serviceUsuario.findByNameUsuario(nome)).build();
   }
 
   @GET
-  @Path("/search/cliente/cpf/{cpf}")
+  @Path("/search/usuario/cpf/{cpf}")
   @RolesAllowed({"Func", "Admin"})
-  public Response findByCpfCliente(@PathParam("cpf") String cpf) {
-    return Response.ok(serviceCliente.findByCpfCliente(cpf)).build();
+  public Response findByCpfUsuario(@PathParam("cpf") String cpf) {
+    return Response.ok(serviceUsuario.findByCpfUsuario(cpf)).build();
   }
 
   @PUT
   @Transactional
-  @Path("put/cliente/{id}")
+  @Path("put/usuario/{id}")
   @RolesAllowed({"Func", "Admin"})
-  public Response updateCliente(@Valid ClienteDTO dto, @PathParam("id") Long id) {
-    serviceCliente.updateCliente(dto, id);
+  public Response updateUsuario(@Valid UsuarioDTO dto, @PathParam("id") Long id) {
+    serviceUsuario.updateUsuario(dto, id);
     return Response.status(Status.NO_CONTENT).build();
   }
 
@@ -191,8 +191,8 @@ public Response getFuncionario() {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
 
-    Long idCliente = serviceFuncionario.findByLogin(login).id();
-    return Response.status(200).entity(serviceFuncionario.insertTelefoneFuncionario(tel, idCliente)).build();
+    Long idUsuario = serviceFuncionario.findByLogin(login).id();
+    return Response.status(200).entity(serviceFuncionario.insertTelefoneFuncionario(tel, idUsuario)).build();
   }
 
   @PUT
@@ -202,8 +202,8 @@ public Response getFuncionario() {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
 
-    Long idCliente = serviceFuncionario.findByLogin(login).id();
-    return Response.status(200).entity(serviceFuncionario.updateTelefoneFuncionario(tel, idCliente)).build();
+    Long idUsuario = serviceFuncionario.findByLogin(login).id();
+    return Response.status(200).entity(serviceFuncionario.updateTelefoneFuncionario(tel, idUsuario)).build();
   }
 
   @PUT
@@ -213,8 +213,8 @@ public Response getFuncionario() {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
 
-    Long idCliente = serviceFuncionario.findByLogin(login).id();
-    return Response.status(200).entity(serviceFuncionario.updateEnderecoFuncionario(end, idCliente)).build();
+    Long idUsuario = serviceFuncionario.findByLogin(login).id();
+    return Response.status(200).entity(serviceFuncionario.updateEnderecoFuncionario(end, idUsuario)).build();
   }
 
   @POST
@@ -224,8 +224,8 @@ public Response getFuncionario() {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
 
-    Long idCliente = serviceFuncionario.findByLogin(login).id();
-    return Response.status(200).entity(serviceFuncionario.insertEnderecoFuncionario(end, idCliente)).build();
+    Long idUsuario = serviceFuncionario.findByLogin(login).id();
+    return Response.status(200).entity(serviceFuncionario.insertEnderecoFuncionario(end, idUsuario)).build();
   }
 
   @DELETE
@@ -239,10 +239,10 @@ public Response getFuncionario() {
 
   @DELETE
   @Transactional
-  @Path("/delete/cliente/{id}")
+  @Path("/delete/usuario/{id}")
   @RolesAllowed({"Func", "Admin"})
-  public Response deleteCliente(@PathParam("id") Long id) {
-    serviceCliente.deleteCliente(id);
+  public Response deleteUsuario(@PathParam("id") Long id) {
+    serviceUsuario.deleteUsuario(id);
     return Response.status(Status.NO_CONTENT).build();
   }
 

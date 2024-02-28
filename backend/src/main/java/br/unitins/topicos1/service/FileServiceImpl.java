@@ -1,13 +1,13 @@
 package br.unitins.topicos1.service;
 
 import br.unitins.topicos1.application.GeneralErrorException;
-import br.unitins.topicos1.dto.ClienteResponseDTO;
+import br.unitins.topicos1.dto.UsuarioResponseDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
-import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Funcionario;
 import br.unitins.topicos1.model.Produto;
-import br.unitins.topicos1.repository.ClienteRepository;
+import br.unitins.topicos1.model.Usuario;
+import br.unitins.topicos1.repository.UsuarioRepository;
 import br.unitins.topicos1.repository.FuncionarioRepository;
 import br.unitins.topicos1.repository.ProdutoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,7 +31,7 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService {
 
   @Inject
-  ClienteRepository repositoryCliente;
+  UsuarioRepository repositoryUsuario;
 
   @Inject
   FuncionarioRepository repositoryFuncionario;
@@ -339,11 +339,11 @@ public class FileServiceImpl implements FileService {
   }
 
   @Transactional
-  public ClienteResponseDTO updateNomeImagemC(Long id, String nomeImagem) {
-    Cliente cliente = repositoryCliente.findById(id);
+  public UsuarioResponseDTO updateNomeImagemC(Long id, String nomeImagem) {
+    Usuario usuario = repositoryUsuario.findById(id);
 
-    if (cliente.getNomeImagem() != null) {
-      String spath = PATH_USER_IMAGE + cliente.getNomeImagem();
+    if (usuario.getNomeImagem() != null) {
+      String spath = PATH_USER_IMAGE + usuario.getNomeImagem();
       Path path = Paths.get(spath);
       try {
         Files.delete(path);
@@ -358,9 +358,9 @@ public class FileServiceImpl implements FileService {
     }
 
     // Adicionando o nome do arquivo de imagem
-    cliente.setNomeImagem(nomeImagem);
+    usuario.setNomeImagem(nomeImagem);
 
-    return ClienteResponseDTO.valueOf(cliente);
+    return UsuarioResponseDTO.valueOf(usuario);
   }
 
   @Transactional
