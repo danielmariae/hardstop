@@ -16,6 +16,7 @@ import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
+import br.unitins.topicos1.dto.TipoUsuarioDTO;
 import br.unitins.topicos1.model.*;
 import br.unitins.topicos1.model.Usuario;
 import br.unitins.topicos1.repository.UsuarioRepository;
@@ -25,6 +26,8 @@ import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,18 +124,32 @@ usuario.getListaProduto().clear();
 
   @Override
   @Transactional
-  public UsuarioResponseDTO updateUsuario(UsuarioDTO clt, Long id) {
+  public UsuarioResponseDTO updateUsuario(UsuarioDTO usu, Long id) {
     Usuario usuario = repository.findById(id);
 
-    usuario.setNome(clt.nome());
+    usuario.setNome(usu.nome());
     usuario.setDataNascimento(
-      UsuarioFormatador.validaDataNascimento(clt.dataNascimento())
+      UsuarioFormatador.validaDataNascimento(usu.dataNascimento())
     );
-    usuario.setCpf(UsuarioFormatador.validaCpf(clt.cpf()));
-    usuario.setSexo(clt.sexo());
-    usuario.setLogin(clt.login());
-    usuario.setSenha(hashservice.getHashSenha(clt.senha()));
-    usuario.setEmail(clt.email());
+    usuario.setCpf(UsuarioFormatador.validaCpf(usu.cpf()));
+    usuario.setSexo(usu.sexo());
+    usuario.setLogin(usu.login());
+    usuario.setSenha(hashservice.getHashSenha(usu.senha()));
+    usuario.setEmail(usu.email());
+
+    int ia = 0;
+    int ja = 0;
+    for(TipoUsuario tipo1 : usuario.getTipoUsuario()){
+      ia++;
+      ja=0;
+      for(TipoUsuarioDTO tipo : usu.tiposUsuario()){
+        ja++;
+        if(ia==ja){
+          tipo1.setDataCriacao(tipo.dataCriacao());
+          tipo1.setPerfil(Perfil.valueOf(tipo.idTipoPerfil()));
+        }
+      }
+    }
 
     int i = 0;
     int j = 0;
@@ -140,7 +157,7 @@ usuario.getListaProduto().clear();
     for (Telefone tele1 : usuario.getListaTelefone()) {
       i++;
       j = 0;
-      for (TelefoneDTO tele : clt.listaTelefone()) {
+      for (TelefoneDTO tele : usu.listaTelefone()) {
         j++;
         if (i == j) {
           tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
@@ -158,7 +175,7 @@ usuario.getListaProduto().clear();
     for (Endereco endereco : usuario.getListaEndereco()) {
       ie++;
       je = 0;
-      for (EnderecoDTO end1 : clt.listaEndereco()) {
+      for (EnderecoDTO end1 : usu.listaEndereco()) {
         je++;
         if (ie == je) {
           endereco.setNome(end1.nome());
@@ -362,8 +379,20 @@ usuario.getListaProduto().clear();
     usuario.setLogin(dto.login());
     usuario.setSenha(hashservice.getHashSenha(dto.senha()));
     usuario.setEmail(dto.email());
-    usuario.setTipoUsuario(new ArrayList<TipoUsuario>());
     
+    if(dto.tiposUsuario() != null &&  !dto.tiposUsuario().isEmpty()){
+      try {
+        usuario.setTipoUsuario(new ArrayList<TipoUsuario>()); 
+      } catch (Exception e) {
+        throw new GeneralErrorException("500", "Internal Server Error", "UsuarioServiceImpl(insert)", "Tente novamente mais tarde.");
+      }
+      for (TipoUsuarioDTO tipo : dto.tiposUsuario()){
+        TipoUsuario tipoUsuario = new TipoUsuario();
+        tipoUsuario.setDataCriacao(LocalDateTime.now());
+        tipoUsuario.setPerfil(Perfil.valueOf(tipo.idTipoPerfil()));
+        usuario.getTipoUsuario().add(tipoUsuario);
+      }
+    }
 
     if (dto.listaTelefone() != null && !dto.listaTelefone().isEmpty()) {
       try {

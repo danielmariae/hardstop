@@ -34,7 +34,7 @@ JwtService jwtService;
 
 @POST
 @Path("usuario/")
-public Response loginC(@Valid LoginDTO dto) {
+public Response loginU(@Valid LoginDTO dto) {
 
     String hashSenha = hashService.getHashSenha(dto.senha());
 

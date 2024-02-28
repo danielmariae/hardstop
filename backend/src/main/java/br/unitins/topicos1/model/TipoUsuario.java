@@ -11,6 +11,10 @@ public class TipoUsuario extends DefaultEntity {
     @Enumerated(EnumType.ORDINAL)
     private Perfil perfil;
 
+    
+    public TipoUsuario() {
+    }
+
     public TipoUsuario(LocalDateTime dataCriacao, Perfil perfil) {
         this.dataCriacao = dataCriacao;
         this.perfil = perfil;
