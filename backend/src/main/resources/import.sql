@@ -21,19 +21,19 @@ $$; */
 
 insert into empresa (nomeReal, nomeFantasia, nomeResponsavel, cnpj, cpf, chavePixAleatoria, email, nomeBanco, codigoBanco, numeroConta, numeroAgencia, isEmpresa) values('Leandro Armações Ilimitadas Ltda', 'LAILPALMAS', 'Leandro Guimarães Garcia', '81.478.733/0001-38', '73522652363', 'a87a052f-64f7-4496-9399-8f898c416f28', 'leocid25@gmail.com', 'Banco do Brasil', '001', '124911-8', '1867-8', 'true');
 
-insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Katia de Ruim', 'Barão de Cotegipe', '15', 's/l', 'Sul', 'Perto da igreja Assembléia', '64532098', 'Rialma', 'GO', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Katia de Ruim', 'Barão de Cotegipe', '15', 'Sul', 'Perto da igreja Assembléia', '64532098', 'Rialma', 'GO', 'Brasil');
 
-insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Flávio de Boa', 'Palmares da Cruz', '88', 's/l', 'Norte', 'Perto do supermercado Real', '38432422', 'Ponte Alta', 'TO', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Flávio de Boa', 'Palmares da Cruz', '88', 'Norte', 'Perto do supermercado Real', '38432422', 'Ponte Alta', 'TO', 'Brasil');
 
-insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('.Net.Com', 'Aida Aguiar', 's/n', '18', 'Santa Efigênia', 'Centro', '77532043', 'Sao Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('.Net.Com', 'Aida Aguiar',  '18', 'Santa Efigênia', 'Centro', '77532043', 'Sao Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Arruda de Alencar', 'Martins Pontes', 's/n', '55', 'Butantã', 'Sul', '73828382', 'Sao Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Arruda de Alencar', 'Martins Pontes', '55', 'Butantã', 'Sul', '73828382', 'Sao Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Marta de Cesare', 'dos Potiguares', '567', 's/l', 'Anhangabaú', 'Centro', '70987213', 'Sao Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Marta de Cesare', 'dos Potiguares', '567', 'Anhangabaú', 'Centro', '70987213', 'Sao Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, logradouro, numero, lote, bairro, complemento, cep, localidade, uf, pais) values('Mãe da Katia de Ruim', 'Sermão de mãe', 's/n', '58', 'Oeste', 'Ao lado da igreja do Véu', '73245787', 'Araraquara', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Mãe da Katia de Ruim', 'Sermão de mãe', '58', 'Oeste', 'Ao lado da igreja do Véu', '73245787', 'Araraquara', 'SP', 'Brasil');
 
-insert into endereco (nome, logradouro, numero, lote, bairro, cep, localidade, uf, pais) values('Leandro Armações Ilimitadas Ltda', 'rua dos Guaytacazes', '1000', 's/l', 'Santa Efigênia', '77226654', 'Sao Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, cep, localidade, uf, pais) values('Leandro Armações Ilimitadas Ltda', 'rua dos Guaytacazes', '1000', 'Santa Efigênia', '77226654', 'Sao Paulo', 'SP', 'Brasil');
 
 -- senha 123VaA_
 insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email, perfil) values('Katia de Ruim', '2010-08-08', '23576472720', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com', '0');
@@ -99,7 +99,7 @@ insert into itemDaVenda (preco, quantidade, produto_id) values(900.0, 3, 1);
 insert into itemDaVenda (preco, quantidade, produto_id) values(1200.0, 1, 2);
 insert into itemDaVenda (preco, quantidade, produto_id) values(1000.0, 2, 3);
 
-insert into formaDePagamento (forma_de_pagamento, modalidade, valorPago) values('CARTAO_DE_CREDITO',0, 5900);
+insert into formaDePagamento (forma_de_pagamento, modalidade, valorPago) values(0,0, 5900);
 insert into cartaodecredito (id, anovalidade, codseguranca, mesvalidade, datahorapagamento, numerocartao) values(1, 24, 237, 3, '2023-10-01 16:11:26', '345690872106');
 insert into pedido (id_formaDePagamento, id_endereco, id_cliente) values(1, 1, 1);
 
