@@ -1,16 +1,12 @@
 package br.unitins.topicos1.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-public class Cliente extends DefaultEntity {
+public class Usuario extends DefaultEntity {
 
   private String nome;
   private LocalDate dataNascimento;
@@ -19,7 +15,14 @@ public class Cliente extends DefaultEntity {
   private String login;
   private String senha;
   private String email;
-  private final Perfil perfil = Perfil.USER;
+
+  @ManyToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinTable(
+          name = "usuario_endereco",
+          inverseJoinColumns = @JoinColumn(name="id_perfil"),
+          joinColumns = @JoinColumn(name = "id_usuario")
+  )
+  private List<Perfil> tiposCadastros;
   private String nomeImagem;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -138,4 +141,11 @@ public class Cliente extends DefaultEntity {
     this.nomeImagem = nomeImagem;
   }
 
+  public List<Perfil> getTiposCadastros() {
+    return tiposCadastros;
+  }
+
+  public void setTiposCadastros(List<Perfil> tiposCadastros) {
+    this.tiposCadastros = tiposCadastros;
+  }
 }
