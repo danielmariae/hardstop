@@ -108,10 +108,10 @@
     <version>2.4</version>
 </dependency>
   <!-- Dependência do Quarkus para o Kafka -->
-<dependency>
+<!-- <dependency>
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
-</dependency>
+</dependency> -->
 <!-- Dependência do Quarkus para PartType -->
 <dependency>
       <groupId>io.quarkus</groupId>

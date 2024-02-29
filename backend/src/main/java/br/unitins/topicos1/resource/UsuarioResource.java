@@ -41,7 +41,8 @@ public class UsuarioResource {
   }
 
   @GET
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
+  @Path("me")
   public Response getUsuario() {
 
     // obtendo o login pelo token jwt
@@ -51,7 +52,7 @@ public class UsuarioResource {
   }
 
   @PATCH
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   @Path("patch/nome/")
   public Response updateNome(@Valid PatchNomeDTO nome) {
 
@@ -64,7 +65,7 @@ public class UsuarioResource {
   }
 
   @PATCH
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   @Path("patch/cpf/")
   public Response updateCpf(@Valid PatchCpfDTO cpf) {
 
@@ -77,7 +78,7 @@ public class UsuarioResource {
   }
 
   @PATCH
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   @Path("patch/login/")
   public Response updateLogin(@Valid PatchLoginDTO novoLogin) {
 
@@ -90,7 +91,7 @@ public class UsuarioResource {
   }
 
   @PATCH
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   @Path("patch/email/")
   public Response updateEmail(@Valid PatchEmailDTO email) {
 
@@ -103,7 +104,7 @@ public class UsuarioResource {
   }
 
   @PATCH
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   @Path("patch/senha/")
   public Response updateSenha(@Valid PatchSenhaDTO senha) {
 
@@ -116,7 +117,7 @@ public class UsuarioResource {
   }
 
   @POST
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   @Path("/insert/pedidos/")
   public Response insert(@Valid PedidoDTO dto) {
 
@@ -129,7 +130,7 @@ public class UsuarioResource {
   }
 
   @POST
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   @Path("/insert/desejos/")
   public Response insertDesejos(Long idProduto) {
 
@@ -143,7 +144,7 @@ public class UsuarioResource {
 
   @POST
   @Path("post/telefone/")
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   public Response insertTelefoneUsuario(@Valid TelefoneDTO tel) {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
@@ -154,7 +155,7 @@ public class UsuarioResource {
 
   @PUT
   @Path("put/telefone/")
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   public Response updateTelefoneUsuario(@Valid TelefonePatchDTO tel) {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
@@ -165,7 +166,7 @@ public class UsuarioResource {
 
   @PUT
   @Path("put/endereco/")
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   public Response updateEnderecoUsuario(@Valid EnderecoPatchDTO end) {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
@@ -176,7 +177,7 @@ public class UsuarioResource {
 
   @POST
   @Path("post/endereco/")
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   public Response insertEnderecoUsuario(@Valid EnderecoDTO end) {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
@@ -187,7 +188,7 @@ public class UsuarioResource {
 
   @DELETE
   @Path("/delete/")
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   public Response deleteUsuario() {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
@@ -199,7 +200,7 @@ public class UsuarioResource {
 
   @GET
   @Path("/search/listaDesejos/")
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   public Response findListaDesejosUsuario() {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
@@ -210,7 +211,7 @@ public class UsuarioResource {
 
   @DELETE
   @Path("/delete/pedido/")
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   public Response deletePedidoByUsuario(Long idPedido) {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
@@ -221,7 +222,7 @@ public class UsuarioResource {
   }
 
   @DELETE
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   @Path("/delete/desejos/")
   public Response deleteDesejos(Long idProduto) {
 
@@ -237,7 +238,7 @@ public class UsuarioResource {
 
   @PATCH
   @Path("/patch/pedido/endereco/")
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   public Response updateEndereco(@Valid PedidoPatchEnderecoDTO dto) {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
@@ -248,7 +249,7 @@ public class UsuarioResource {
 
   @GET
   @Path("/search/pedidos/")
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   public Response findPedidoByUsuario() {
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
@@ -259,7 +260,7 @@ public class UsuarioResource {
 
   @PATCH
   @Path("/upload/imagem")
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   public Response salvarImagem(@MultipartForm ArchiveForm form) {
     String nomeImagem;
@@ -279,7 +280,7 @@ public class UsuarioResource {
 
   @GET
   @Path("/download/imagem/{nomeImagem}")
-  @RolesAllowed({"User"})
+  @RolesAllowed({"User", "Admin", "Func"})
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   public Response download(@PathParam("nomeImagem") String nomeImagem){
     return Response

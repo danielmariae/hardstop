@@ -24,9 +24,9 @@ public class Usuario extends DefaultEntity {
 
   @OneToMany
   @JoinTable(
-          name = "tipo_usuario",
-          joinColumns = @JoinColumn(name = "id_tipo"),
-          inverseJoinColumns = @JoinColumn(name = "id_usuario")
+          name = "usuario_tipo",
+          joinColumns = @JoinColumn(name = "id_usuario"),
+          inverseJoinColumns = @JoinColumn(name = "id_tipo")
   )
   private List<TipoUsuario> tipoUsuario;
 

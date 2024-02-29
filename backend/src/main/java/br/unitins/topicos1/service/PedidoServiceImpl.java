@@ -42,15 +42,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.microprofile.reactive.messaging.Channel;
-import org.eclipse.microprofile.reactive.messaging.Emitter;
-import org.eclipse.microprofile.reactive.messaging.Incoming;
+// import org.eclipse.microprofile.reactive.messaging.Channel;
+// import org.eclipse.microprofile.reactive.messaging.Emitter;
+// import org.eclipse.microprofile.reactive.messaging.Incoming;
 
 @ApplicationScoped
 public class PedidoServiceImpl implements PedidoService {
 
-  @Channel("card-out")
-  Emitter<String> cardRequestEmitter;
+  // @Channel("card-out")
+  // Emitter<String> cardRequestEmitter;
   
   @Inject
   UsuarioRepository repository;
@@ -1099,7 +1099,7 @@ public class PedidoServiceImpl implements PedidoService {
     String dadoCriptografado;
     try {
       dadoCriptografado = Criptografia.criptografar(dadosCartao);
-      cardRequestEmitter.send(dadoCriptografado);
+      // cardRequestEmitter.send(dadoCriptografado);
     } catch (Exception e) {
      throw new GeneralErrorException(
                     "400",
@@ -1112,7 +1112,7 @@ public class PedidoServiceImpl implements PedidoService {
     
   }
 
-    @Incoming("card-in")
+    // @Incoming("card-in")
     @Transactional
     public void alteraStatusCompraCredito(ObjetoRetorno objR) {
 

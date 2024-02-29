@@ -36,10 +36,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-@Path("/funcionariologado")
+@Path("/adm")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class FuncionarioLogadoResource {
+public class UsuarioAdminResource {
 
 @Inject
 JsonWebToken jwt;
@@ -168,7 +168,7 @@ public Response getFuncionario() {
 
   @POST
   @Transactional
-  @Path("/insert/funcionario")
+  @Path("/insert/usuarioadm")
   @RolesAllowed("Admin")
   public Response insertFuncionario(@Valid FuncionarioDTO dto) {
     FuncionarioDTO retorno =  serviceFuncionario.insertFuncionario(dto);
@@ -178,7 +178,7 @@ public Response getFuncionario() {
   @PUT
   @Transactional
   @RolesAllowed("Admin")
-  @Path("put/funcionario/{id}")
+  @Path("put/usuarioadm/{id}")
   public Response updateFuncionario(@Valid FuncionarioDTO dto, @PathParam("id") Long id) {
     serviceFuncionario.updateFuncionario(dto, id);
     return Response.status(Status.NO_CONTENT).build();
@@ -230,7 +230,7 @@ public Response getFuncionario() {
 
   @DELETE
   @Transactional
-  @Path("/delete/funcionario/{id}")
+  @Path("/delete/usuarioadm/{id}")
   @RolesAllowed("Admin")
   public Response deleteFuncionario(@PathParam("id") Long id) {
     serviceFuncionario.deleteFuncionario(id);
@@ -247,28 +247,28 @@ public Response getFuncionario() {
   }
 
   @GET
-  @Path("/search/funcionario/all")
+  @Path("/search/usuarioadm/all")
   @RolesAllowed({"Func", "Admin"})
   public Response findByAllFuncionario() {
     return Response.ok(serviceFuncionario.findByAllFuncionario()).build();
   }
 
   @GET
-  @Path("/search/funcionario/id/{id}")
+  @Path("/search/usuarioadm/id/{id}")
   @RolesAllowed({"Func", "Admin"})
   public Response findByIdFuncionario(@PathParam("id") Long id) {
     return Response.ok(serviceFuncionario.findByIdFuncionario(id)).build();
   }
 
   @GET
-  @Path("/search/funcionario/nome/{nome}")
+  @Path("/search/usuarioadm/nome/{nome}")
   @RolesAllowed({"Func", "Admin"})
   public Response findByNameFuncionario(@PathParam("nome") String nome) {
     return Response.ok(serviceFuncionario.findByNameFuncionario(nome)).build();
   }
 
   @GET
-  @Path("/search/funcionario/cpf/{cpf}")
+  @Path("/search/usuarioadm/cpf/{cpf}")
   @RolesAllowed({"Func", "Admin"})
   public Response findByCpfFuncionario(@PathParam("cpf") String cpf) {
     return Response.ok(serviceFuncionario.findByCpfFuncionario(cpf)).build();
