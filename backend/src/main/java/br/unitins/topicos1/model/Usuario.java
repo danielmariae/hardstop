@@ -22,7 +22,7 @@ public class Usuario extends DefaultEntity {
   private String email;
   private String nomeImagem;
 
-  @OneToMany
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinTable(
           name = "usuario_tipo",
           joinColumns = @JoinColumn(name = "id_usuario"),

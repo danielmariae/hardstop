@@ -10,10 +10,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class PedidoRepository implements PanacheRepository<Pedido>{
     
     public List<Pedido> findAll(String login) {
-        return find("cliente.login = ?1", login).list();
+        return find("usuario.login = ?1", login).list();
     }
     
     public List<Pedido> findAll(Long idUsuario) {
-        return find("cliente.id = ?1", idUsuario).list();
+        return find("usuario.id = ?1", idUsuario).list();
     }
 }

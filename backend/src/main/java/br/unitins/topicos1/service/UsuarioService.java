@@ -1,9 +1,8 @@
 package br.unitins.topicos1.service;
 
 
-import br.unitins.topicos1.dto.UsuarioDTO;
-import br.unitins.topicos1.dto.PatchSenhaDTO;
-import br.unitins.topicos1.dto.UsuarioResponseDTO;
+import java.util.List;
+
 import br.unitins.topicos1.dto.DesejoResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
@@ -11,16 +10,18 @@ import br.unitins.topicos1.dto.PatchCpfDTO;
 import br.unitins.topicos1.dto.PatchEmailDTO;
 import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
+import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
-
-
-import java.util.List;
+import br.unitins.topicos1.dto.UsuarioDTO;
+import br.unitins.topicos1.dto.UsuarioPadraoDTO;
+import br.unitins.topicos1.dto.UsuarioResponseDTO;
 
 public interface UsuarioService {
-  // Cadastra um novo cliente
+  // Cadastra um novo funcionário ou cliente (tanto faz)!
   public UsuarioResponseDTO insertUsuario(UsuarioDTO dto);
-
+  // Cadastra um novo cliente 
+  public UsuarioResponseDTO insertUsuarioPadrao(UsuarioPadraoDTO dto);
   // Substitui todas as informações relacionadas a um cliente com determinado id
   public UsuarioResponseDTO updateUsuario(UsuarioDTO dto, Long id);
 

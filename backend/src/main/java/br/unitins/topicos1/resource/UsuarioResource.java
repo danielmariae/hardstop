@@ -1,23 +1,44 @@
 package br.unitins.topicos1.resource;
 
 
+import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+
 import br.unitins.topicos1.application.ErrorTP1;
-import br.unitins.topicos1.dto.*;
+import br.unitins.topicos1.dto.EnderecoDTO;
+import br.unitins.topicos1.dto.EnderecoPatchDTO;
+import br.unitins.topicos1.dto.PatchCpfDTO;
+import br.unitins.topicos1.dto.PatchEmailDTO;
+import br.unitins.topicos1.dto.PatchLoginDTO;
+import br.unitins.topicos1.dto.PatchNomeDTO;
+import br.unitins.topicos1.dto.PatchSenhaDTO;
+import br.unitins.topicos1.dto.PedidoDTO;
+import br.unitins.topicos1.dto.PedidoPatchEnderecoDTO;
+import br.unitins.topicos1.dto.TelefoneDTO;
+import br.unitins.topicos1.dto.TelefonePatchDTO;
+import br.unitins.topicos1.dto.UsuarioDTO;
+import br.unitins.topicos1.dto.UsuarioPadraoDTO;
 import br.unitins.topicos1.model.form.ArchiveForm;
-import br.unitins.topicos1.service.UsuarioService;
 import br.unitins.topicos1.service.FileService;
 import br.unitins.topicos1.service.PedidoService;
+import br.unitins.topicos1.service.UsuarioService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
-@Path("/usuario")
+@Path("/usuario/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class UsuarioResource {
@@ -36,13 +57,20 @@ public class UsuarioResource {
 
   @POST
   @Transactional
-  public Response insertUsuario(@Valid UsuarioDTO dto) {
+  @Path("newuser/")
+  public Response insertUsuarioPadrao(@Valid UsuarioPadraoDTO dto) {
+    return Response.status(201).entity(service.insertUsuarioPadrao(dto)).build();
+  }
+  
+  @POST
+  @Transactional
+  @RolesAllowed({"Admin", "Func"})
+  public Response insertUsuario(@Valid UsuarioDTO dto){
     return Response.status(201).entity(service.insertUsuario(dto)).build();
   }
 
   @GET
   @RolesAllowed({"User", "Admin", "Func"})
-  @Path("me")
   public Response getUsuario() {
 
     // obtendo o login pelo token jwt

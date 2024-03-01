@@ -1,12 +1,15 @@
 package br.unitins.topicos1.service;
 
-import br.unitins.topicos1.Formatadores.UsuarioFormatador;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jrimum.domkee.pessoa.CEP;
+
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
+import br.unitins.topicos1.Formatadores.UsuarioFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
-import br.unitins.topicos1.dto.UsuarioDTO;
-import br.unitins.topicos1.dto.PatchSenhaDTO;
-import br.unitins.topicos1.dto.UsuarioResponseDTO;
 import br.unitins.topicos1.dto.DesejoResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
@@ -14,24 +17,28 @@ import br.unitins.topicos1.dto.PatchCpfDTO;
 import br.unitins.topicos1.dto.PatchEmailDTO;
 import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
+import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.dto.TipoUsuarioDTO;
-import br.unitins.topicos1.model.*;
+import br.unitins.topicos1.dto.UsuarioDTO;
+import br.unitins.topicos1.dto.UsuarioPadraoDTO;
+import br.unitins.topicos1.dto.UsuarioResponseDTO;
+import br.unitins.topicos1.model.Endereco;
+import br.unitins.topicos1.model.Pedido;
+import br.unitins.topicos1.model.Perfil;
+import br.unitins.topicos1.model.StatusDoPedido;
+import br.unitins.topicos1.model.Telefone;
+import br.unitins.topicos1.model.TipoTelefone;
+import br.unitins.topicos1.model.TipoUsuario;
 import br.unitins.topicos1.model.Usuario;
-import br.unitins.topicos1.repository.UsuarioRepository;
 import br.unitins.topicos1.repository.EnderecoRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
+import br.unitins.topicos1.repository.UsuarioRepository;
 import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jrimum.domkee.pessoa.CEP;
 
 @ApplicationScoped
 public class UsuarioServiceImpl implements UsuarioService {
@@ -101,6 +108,8 @@ if(!verificaUsuario2(usuario)) {
 
 // Desconecta o usuario da lista de desejos de produtos.
 usuario.getListaProduto().clear();
+usuario.getListaEndereco().clear();
+usuario.getListaTelefone().clear();
 
   // podeDeletar verifica se todos os pedidos foram finalizados, retornando true ou false.
       if(!podeDeletar(repositoryPedido.findAll(id))) {
@@ -441,6 +450,87 @@ usuario.getListaProduto().clear();
     
     return UsuarioResponseDTO.valueOf(usuario);
   }
+
+  public UsuarioResponseDTO insertUsuarioPadrao(UsuarioPadraoDTO dto) {
+
+    Usuario usuario = null;
+
+    try {
+      usuario = new Usuario();
+    } catch (Exception e) {
+      throw new GeneralErrorException("500", "Internal Server Error", "UsuarioServiceImpl(insert)", "Não consegui alocar memória para o novo Usuario. Tente novamente mais tarde! " +  e.getCause());
+    }
+
+    usuario.setNome(dto.nome());
+    usuario.setDataNascimento(
+    UsuarioFormatador.validaDataNascimento(dto.dataNascimento()));
+    verificaCpf(UsuarioFormatador.validaCpf(dto.cpf()));
+    usuario.setCpf(UsuarioFormatador.validaCpf(dto.cpf()));
+    usuario.setSexo(dto.sexo());
+    verificaLogin(dto.login());
+    usuario.setLogin(dto.login());
+    usuario.setSenha(hashservice.getHashSenha(dto.senha()));
+    usuario.setEmail(dto.email());
+    
+    try {
+      usuario.setTipoUsuario(new ArrayList<TipoUsuario>()); 
+    } catch (Exception e) {
+      throw new GeneralErrorException("500", "Internal Server Error", "UsuarioServiceImpl(insert)", "Tente novamente mais tarde.");
+    }
+
+    TipoUsuario tipoUsuario = new TipoUsuario();
+    tipoUsuario.setDataCriacao(LocalDateTime.now());
+    tipoUsuario.setPerfil(Perfil.valueOf(0));
+    usuario.getTipoUsuario().add(tipoUsuario);
+    
+    if (dto.listaTelefone() != null && !dto.listaTelefone().isEmpty()) {
+      try {
+        usuario.setListaTelefone(new ArrayList<Telefone>());
+      } catch (Exception e) {
+        throw new GeneralErrorException("500", "Internal Server Error", "UsuarioServiceImpl(insert)", "Não consegui alocar memória para a lista telefônica do novo Usuario. Tente novamente mais tarde! " +  e.getCause());
+      }
+      
+      for (TelefoneDTO tel : dto.listaTelefone()) {
+        Telefone telefone = new Telefone();
+        telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
+        telefone.setDdd(tel.ddd());
+        telefone.setNumeroTelefone(
+        TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+        usuario.getListaTelefone().add(telefone);
+      }
+    }
+
+    if (dto.listaEndereco() != null && !dto.listaEndereco().isEmpty()) {
+      try {
+        usuario.setListaEndereco(new ArrayList<Endereco>());
+      } catch (Exception e) {
+        throw new GeneralErrorException("500", "Internal Server Error", "UsuarioServiceImpl(insert)", "Não consegui alocar memória para a lista de endereços do novo Usuario. Tente novamente mais tarde! " +  e.getCause());
+      }
+      
+      for (EnderecoDTO end : dto.listaEndereco()) {
+        Endereco endereco = new Endereco();
+        endereco.setNome(end.nome());
+        endereco.setLogradouro(end.logradouro());
+        endereco.setNumeroLote(end.numeroLote());
+        endereco.setBairro(end.bairro());
+        endereco.setComplemento(end.complemento());
+        endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+        endereco.setLocalidade(end.localidade());
+        endereco.setUF(end.uf());
+        endereco.setPais(end.pais());
+        usuario.getListaEndereco().add(endereco);
+      }
+    }
+
+    try {
+      repository.persist(usuario);
+    } catch (Exception e) {
+      throw new GeneralErrorException("500", "Internal Server Error", "UsuarioServiceImpl(insert)", "Não consegui persistir os dados do usuario no repositório " + e.getCause());
+    }
+    
+    return UsuarioResponseDTO.valueOf(usuario);
+  }
+  
 
   public List<DesejoResponseDTO> findListaDesejosUsuario(Long id) {
 
