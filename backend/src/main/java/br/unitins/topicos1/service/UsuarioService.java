@@ -18,6 +18,8 @@ import br.unitins.topicos1.dto.UsuarioPadraoDTO;
 import br.unitins.topicos1.dto.UsuarioResponseDTO;
 
 public interface UsuarioService {
+  public List<UsuarioResponseDTO> findAllFuncionario();
+  public boolean isFuncionario(UsuarioResponseDTO usuario);
   // Cadastra um novo funcionário ou cliente (tanto faz)!
   public UsuarioResponseDTO insertUsuario(UsuarioDTO dto);
   // Cadastra um novo cliente 

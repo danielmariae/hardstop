@@ -37,6 +37,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 @Path("/usuario/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -317,4 +318,49 @@ public class UsuarioResource {
             .build();
 
   }
+
+  @GET
+  @Path("/search/usuario/all")
+  @RolesAllowed({"Func", "Admin"})
+  public Response findbyAllUsuario() {
+    return Response.ok(service.findByAllUsuario()).build();
+  }
+
+  @GET
+  @Path("/search/usuario/allfuncionarios")
+  @RolesAllowed({"Func", "Admin"})
+  public Response findByAllFuncionarios() {
+    return Response.ok(service.findAllFuncionario()).build();
+  }
+
+  @GET
+  @Path("/search/usuario/id/{id}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response findByIdUsuario(@PathParam("id") Long id) {
+    return Response.ok(service.findByIdUsuario(id)).build();
+  }
+
+  @GET
+  @Path("/search/usuario/nome/{nome}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response findByNameUsuario(@PathParam("nome") String nome) {
+    return Response.ok(service.findByNameUsuario(nome)).build();
+  }
+
+  @GET
+  @Path("/search/usuario/cpf/{cpf}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response findByCpfUsuario(@PathParam("cpf") String cpf) {
+    return Response.ok(service.findByCpfUsuario(cpf)).build();
+  }
+
+  @PUT
+  @Transactional
+  @Path("put/usuario/{id}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response updateUsuario(@Valid UsuarioDTO dto, @PathParam("id") Long id) {
+    service.updateUsuario(dto, id);
+    return Response.status(Status.NO_CONTENT).build();
+  }
+
 }

@@ -90,6 +90,26 @@ public class UsuarioServiceImpl implements UsuarioService {
       .toList();
   }
 
+  public List<UsuarioResponseDTO> findAllFuncionario(){
+    List<UsuarioResponseDTO> listaTodos = repository.listAll().stream().map(u -> UsuarioResponseDTO.valueOf((u))).toList();
+    for (UsuarioResponseDTO usuario : listaTodos) {
+      if(!isFuncionario(usuario))
+        listaTodos.remove(usuario);  
+    }
+    return listaTodos;
+  }
+
+  public boolean isFuncionario(UsuarioResponseDTO usuario){
+    for (TipoUsuarioDTO tipo : usuario.tipoUsuario()) {
+      if(tipo.idTipoPerfil() != 1 && tipo.idTipoPerfil() != 2){
+        return true;
+      }else{
+        return false;
+      }
+    }
+    return false;
+  }
+
   @Override
   @Transactional
   // Método para deletar o usuario junto com todos os seus relacionamentos.

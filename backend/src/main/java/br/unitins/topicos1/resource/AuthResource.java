@@ -3,7 +3,7 @@ package br.unitins.topicos1.resource;
 import br.unitins.topicos1.dto.UsuarioResponseDTO;
 import br.unitins.topicos1.dto.LoginDTO;
 import br.unitins.topicos1.service.UsuarioService;
-import br.unitins.topicos1.service.FuncionarioService;
+// import br.unitins.topicos1.service.FuncionarioService;
 import br.unitins.topicos1.service.HashService;
 import br.unitins.topicos1.service.JwtService;
 import jakarta.inject.Inject;
@@ -23,8 +23,8 @@ public class AuthResource {
 @Inject
 UsuarioService serviceU;
 
-@Inject
-FuncionarioService serviceF;
+// @Inject
+// FuncionarioService serviceF;
 
 @Inject
 HashService hashService;
