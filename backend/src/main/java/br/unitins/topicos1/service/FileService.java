@@ -2,7 +2,7 @@ package br.unitins.topicos1.service;
 
 import java.io.IOException;
 
-import br.unitins.topicos1.dto.UsuarioResponseDTO;
+import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import jakarta.ws.rs.core.StreamingOutput;
@@ -19,7 +19,7 @@ public interface FileService {
 
     FuncionarioResponseDTO updateNomeImagemF(Long id, String nomeImagem);
 
-    UsuarioResponseDTO updateNomeImagemC(Long id, String nomeImagem);
+    ClienteResponseDTO updateNomeImagemC(Long id, String nomeImagem);
 
     ProdutoResponseDTO updateNomeImagemP(Long id, String nomeImagem);
 

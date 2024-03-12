@@ -1,13 +1,13 @@
 package br.unitins.topicos1.service;
 
 import br.unitins.topicos1.application.GeneralErrorException;
-import br.unitins.topicos1.dto.UsuarioResponseDTO;
+import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.model.Funcionario;
 import br.unitins.topicos1.model.Produto;
-import br.unitins.topicos1.model.Usuario;
-import br.unitins.topicos1.repository.UsuarioRepository;
+import br.unitins.topicos1.model.Cliente;
+import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.FuncionarioRepository;
 import br.unitins.topicos1.repository.ProdutoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,7 +31,7 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService {
 
   @Inject
-  UsuarioRepository repositoryUsuario;
+  ClienteRepository repositoryCliente;
 
   @Inject
   FuncionarioRepository repositoryFuncionario;
@@ -46,7 +46,7 @@ public class FileServiceImpl implements FileService {
     File.separator +
     "images" +
     File.separator +
-    "usuario" +
+    "cliente" +
     File.separator;
 
   private final String PATH_PRODUTO_IMAGE =
@@ -66,7 +66,7 @@ public class FileServiceImpl implements FileService {
     File.separator +
     "documents" +
     File.separator +
-    "usuario" +
+    "cliente" +
     File.separator;
 
   private final String PATH_USER_VIDEOS =
@@ -76,7 +76,7 @@ public class FileServiceImpl implements FileService {
     File.separator +
     "videos" +
     File.separator +
-    "usuario" +
+    "cliente" +
     File.separator;
 
   private static final String PATH_USER_PIX =
@@ -86,7 +86,7 @@ public class FileServiceImpl implements FileService {
     File.separator +
     "pix" +
     File.separator +
-    "usuario" +
+    "cliente" +
     File.separator;
 
   private static final String PATH_USER_BOLETO =
@@ -96,7 +96,7 @@ public class FileServiceImpl implements FileService {
     File.separator +
     "boleto" +
     File.separator +
-    "usuario" +
+    "cliente" +
     File.separator;
 
   private static final List<String> SUPPORTED_IMAGE_TYPES = Arrays.asList(
@@ -339,11 +339,11 @@ public class FileServiceImpl implements FileService {
   }
 
   @Transactional
-  public UsuarioResponseDTO updateNomeImagemC(Long id, String nomeImagem) {
-    Usuario usuario = repositoryUsuario.findById(id);
+  public ClienteResponseDTO updateNomeImagemC(Long id, String nomeImagem) {
+    Cliente cliente = repositoryCliente.findById(id);
 
-    if (usuario.getNomeImagem() != null) {
-      String spath = PATH_USER_IMAGE + usuario.getNomeImagem();
+    if (cliente.getNomeImagem() != null) {
+      String spath = PATH_USER_IMAGE + cliente.getNomeImagem();
       Path path = Paths.get(spath);
       try {
         Files.delete(path);
@@ -358,9 +358,9 @@ public class FileServiceImpl implements FileService {
     }
 
     // Adicionando o nome do arquivo de imagem
-    usuario.setNomeImagem(nomeImagem);
+    cliente.setNomeImagem(nomeImagem);
 
-    return UsuarioResponseDTO.valueOf(usuario);
+    return ClienteResponseDTO.valueOf(cliente);
   }
 
   @Transactional

@@ -1,8 +1,10 @@
 package br.unitins.topicos1.resource;
 
-import br.unitins.topicos1.dto.UsuarioResponseDTO;
+import br.unitins.topicos1.dto.ClienteResponseDTO;
+import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.LoginDTO;
-import br.unitins.topicos1.service.UsuarioService;
+import br.unitins.topicos1.service.ClienteService;
+import br.unitins.topicos1.service.FuncionarioService;
 // import br.unitins.topicos1.service.FuncionarioService;
 import br.unitins.topicos1.service.HashService;
 import br.unitins.topicos1.service.JwtService;
@@ -20,28 +22,39 @@ import jakarta.ws.rs.core.Response;
 @Consumes(MediaType.APPLICATION_JSON)
 
 public class AuthResource {
-@Inject
-UsuarioService serviceU;
 
-// @Inject
-// FuncionarioService serviceF;
+    @Inject
+    ClienteService serviceC;
 
-@Inject
-HashService hashService;
+    @Inject
+    FuncionarioService serviceF;
 
-@Inject
-JwtService jwtService;
+    @Inject
+    HashService hashService;
 
-@POST
-@Path("usuario/")
-public Response loginU(@Valid LoginDTO dto) {
+    @Inject
+    JwtService jwtService;
 
-    String hashSenha = hashService.getHashSenha(dto.senha());
+    @POST
+    @Path("login/")
+    public Response loginU(@Valid LoginDTO dto) {
+        String hashSenha = hashService.getHashSenha(dto.senha());
 
-    UsuarioResponseDTO result = serviceU.findByLoginAndSenha(dto.login(), hashSenha);
+        ClienteResponseDTO result = serviceC.findByLoginAndSenha(dto.login(), hashSenha);
 
-    String token = jwtService.generateJwt(result);
+        String token = jwtService.generateJwt(result);
 
-    return Response.ok().header("Authorization", token).build();
-}
+        return Response.ok().header("Authorization", token).build();
+    }
+
+    public Response loginF(@Valid LoginDTO dto) {
+        String hashSenha = hashService.getHashSenha(dto.senha());
+    
+        FuncionarioResponseDTO result = serviceF.findByLoginAndSenha(dto.login(), hashSenha);
+    
+        String token = jwtService.generateJwt(result);
+    
+        return Response.ok().header("Authorization", token).build();
+    }
+    
 }

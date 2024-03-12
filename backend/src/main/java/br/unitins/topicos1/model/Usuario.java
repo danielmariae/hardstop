@@ -1,155 +1,138 @@
-package br.unitins.topicos1.model;
+// package br.unitins.topicos1.model;
 
-import java.time.LocalDate;
-import java.util.List;
+// import java.time.LocalDate;
+// import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+// import jakarta.persistence.CascadeType;
+// import jakarta.persistence.Entity;
+// import jakarta.persistence.JoinColumn;
+// import jakarta.persistence.JoinTable;
+// import jakarta.persistence.ManyToMany;
+// import jakarta.persistence.OneToMany;
 
-@Entity
-public class Usuario extends DefaultEntity {
+// @Entity
+// public class Usuario extends DefaultEntity {
 
-  private String nome;
-  private LocalDate dataNascimento;
-  private String cpf;
-  private String sexo;
-  private String login;
-  private String senha;
-  private String email;
-  private String nomeImagem;
+//   private String nome;
+//   private LocalDate dataNascimento;
+//   private String cpf;
+//   private String sexo;
+//   private String login;
+//   private String senha;
+//   private String email;
+//   private String nomeImagem;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinTable(
-          name = "usuario_tipo",
-          joinColumns = @JoinColumn(name = "id_usuario"),
-          inverseJoinColumns = @JoinColumn(name = "id_tipo")
-  )
-  private List<TipoUsuario> tipoUsuario;
+//   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//   @JoinTable(
+//           name = "usuario_tipo",
+//           joinColumns = @JoinColumn(name = "id_usuario"),
+//           inverseJoinColumns = @JoinColumn(name = "id_tipo")
+//   )
+//   private List<TipoUsuario> tipoUsuario;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinTable(
-    name = "usuario_endereco",
-    joinColumns = @JoinColumn(name = "id_usuario"),
-    inverseJoinColumns = @JoinColumn(name = "id_endereco")
-  )
-  private List<Endereco> listaEndereco;
+//   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//   @JoinTable(
+//     name = "usuario_endereco",
+//     joinColumns = @JoinColumn(name = "id_usuario"),
+//     inverseJoinColumns = @JoinColumn(name = "id_endereco")
+//   )
+//   private List<Endereco> listaEndereco;
 
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinTable(
-    name = "usuario_telefone",
-    joinColumns = @JoinColumn(name = "id_usuario"),
-    inverseJoinColumns = @JoinColumn(name = "id_telefone")
-  )
-  private List<Telefone> listaTelefone;
+//   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//   @JoinTable(
+//     name = "usuario_telefone",
+//     joinColumns = @JoinColumn(name = "id_usuario"),
+//     inverseJoinColumns = @JoinColumn(name = "id_telefone")
+//   )
+//   private List<Telefone> listaTelefone;
 
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-  @JoinTable(
-    name = "lista_de_desejos",
-    joinColumns = @JoinColumn(name = "id_usuario"),
-    inverseJoinColumns = @JoinColumn(name = "id_produto")
-  )
-  private List<Produto> listaProduto;
+//   public String getNome() {
+//     return nome;
+//   }
 
+//   public void setNome(String nome) {
+//     this.nome = nome;
+//   }
 
-  public List<Produto> getListaProduto() {
-    return listaProduto;
-  }
+//   public LocalDate getDataNascimento() {
+//     return dataNascimento;
+//   }
 
-  public void setListaProduto(List<Produto> listaProduto) {
-    this.listaProduto = listaProduto;
-  }
+//   public void setDataNascimento(LocalDate dataNascimento) {
+//     this.dataNascimento = dataNascimento;
+//   }
 
-  public String getNome() {
-    return nome;
-  }
+//   public String getCpf() {
+//     return cpf;
+//   }
 
-  public void setNome(String nome) {
-    this.nome = nome;
-  }
+//   public void setCpf(String cpf) {
+//     this.cpf = cpf;
+//   }
 
-  public LocalDate getDataNascimento() {
-    return dataNascimento;
-  }
+//   public String getSexo() {
+//     return sexo;
+//   }
 
-  public void setDataNascimento(LocalDate dataNascimento) {
-    this.dataNascimento = dataNascimento;
-  }
+//   public void setSexo(String sexo) {
+//     this.sexo = sexo;
+//   }
 
-  public String getCpf() {
-    return cpf;
-  }
+//   public String getLogin() {
+//     return login;
+//   }
 
-  public void setCpf(String cpf) {
-    this.cpf = cpf;
-  }
+//   public void setLogin(String login) {
+//     this.login = login;
+//   }
 
-  public String getSexo() {
-    return sexo;
-  }
+//   public String getSenha() {
+//     return senha;
+//   }
 
-  public void setSexo(String sexo) {
-    this.sexo = sexo;
-  }
+//   public void setSenha(String senha) {
+//     this.senha = senha;
+//   }
 
-  public String getLogin() {
-    return login;
-  }
+//   public String getEmail() {
+//     return email;
+//   }
 
-  public void setLogin(String login) {
-    this.login = login;
-  }
+//   public void setEmail(String email) {
+//     this.email = email;
+//   }
 
-  public String getSenha() {
-    return senha;
-  }
+//   public List<Endereco> getListaEndereco() {
+//     return listaEndereco;
+//   }
 
-  public void setSenha(String senha) {
-    this.senha = senha;
-  }
+//   public void setListaEndereco(List<Endereco> listaEndereco) {
+//     this.listaEndereco = listaEndereco;
+//   }
 
-  public String getEmail() {
-    return email;
-  }
+//   public List<Telefone> getListaTelefone() {
+//     return listaTelefone;
+//   }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+//   public void setListaTelefone(List<Telefone> listaTelefone) {
+//     this.listaTelefone = listaTelefone;
+//   }
 
-  public List<Endereco> getListaEndereco() {
-    return listaEndereco;
-  }
+//   public String getNomeImagem() {
+//     return this.nomeImagem;
+//   }
 
-  public void setListaEndereco(List<Endereco> listaEndereco) {
-    this.listaEndereco = listaEndereco;
-  }
+//   public void setNomeImagem(String nomeImagem) {
+//     this.nomeImagem = nomeImagem;
+//   }
 
-  public List<Telefone> getListaTelefone() {
-    return listaTelefone;
-  }
+// public List<TipoUsuario> getTipoUsuario() {
+//     return tipoUsuario;
+// }
 
-  public void setListaTelefone(List<Telefone> listaTelefone) {
-    this.listaTelefone = listaTelefone;
-  }
-
-  public String getNomeImagem() {
-    return this.nomeImagem;
-  }
-
-  public void setNomeImagem(String nomeImagem) {
-    this.nomeImagem = nomeImagem;
-  }
-
-public List<TipoUsuario> getTipoUsuario() {
-    return tipoUsuario;
-}
-
-public void setTipoUsuario(List<TipoUsuario> tipoUsuario) {
-    this.tipoUsuario = tipoUsuario;
-}
+// public void setTipoUsuario(List<TipoUsuario> tipoUsuario) {
+//     this.tipoUsuario = tipoUsuario;
+// }
 
   
-}
+// }

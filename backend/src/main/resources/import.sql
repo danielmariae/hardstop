@@ -37,22 +37,17 @@ insert into endereco (nome, logradouro, numerolote, bairro, cep, localidade, uf,
 
 -- ## Clientes ##
 -- senha 123VaA_
-insert into usuario (nome, datanascimento, cpf, sexo, login, senha, email) values('Katia de Ruim', '2010-08-08', '23576472720', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com');
-insert into tipousuario (perfil, datacriacao) values('0', '2023-10-01 16:11:26');
-insert into usuario_tipo (id_usuario, id_tipo) values(1, 1);
+insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email) values('Katia de Ruim', '2010-08-08', '23576472720', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com');
 -- senha 1a2B3!
-insert into usuario (nome, datanascimento, cpf, sexo, login, senha, email) values('Flavio de Boa', '2007-10-02', '20275068536', 'M', 'flavio1234', 'pTOqkVzjpPAXcO0Iau1rmMLSxHsi/CSmyX7a+k1h9oDcYjh2k2s+GQfTRhK9JECbQFkezUT2unji0ww04h7KDQ==', 'flavio1234@gmail.com');
-insert into tipousuario (perfil, datacriacao) values('0', '2023-10-02 16:11:26');
-insert into usuario_tipo (id_usuario, id_tipo) values(2, 2);
+insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email) values('Flavio de Boa', '2007-10-02', '20275068536', 'M', 'flavio1234', 'pTOqkVzjpPAXcO0Iau1rmMLSxHsi/CSmyX7a+k1h9oDcYjh2k2s+GQfTRhK9JECbQFkezUT2unji0ww04h7KDQ==', 'flavio1234@gmail.com');
+
 -- ## Funcionarios ##
 -- senha bVgH_-2
-insert into usuario (nome, datanascimento, cpf, sexo, login, senha, email) values('Arruda de Alencar', '2000-09-12', '48202498783', 'M', 'arrudaalencar', '1dFLdP3297AHwCVMOu5ScNEXaWxFW2TO7uj60UQY+PktBgoem0kVhF8b3FqvZDXn2eyOCHQab6aCK0oYGgm/2w==', 'arrudaalencar@gmail.com');
-insert into tipousuario (perfil, datacriacao) values('1', '2023-10-03 16:11:26');
-insert into usuario_tipo (id_usuario, id_tipo) values(3, 3);
+insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Arruda de Alencar', '2000-09-12', '48202498783', 'M', 4, 'arrudaalencar', '1dFLdP3297AHwCVMOu5ScNEXaWxFW2TO7uj60UQY+PktBgoem0kVhF8b3FqvZDXn2eyOCHQab6aCK0oYGgm/2w==', 1, 'arrudaalencar@gmail.com');
+
 -- senha GfT12-
-insert into usuario (nome, datanascimento, cpf, sexo, login, senha, email) values('Marta de Cesare', '2001-11-30', '19452476141', 'F', 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 'martacesare@gmail.com');
-insert into tipousuario (perfil, datacriacao) values('2', '2023-10-04 16:11:26');
-insert into usuario_tipo (id_usuario, id_tipo) values(4, 4);
+insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Marta de Cesare', '2001-11-30', '19452476141', 'F', 5, 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 2,  'martacesare@gmail.com');
+
 
 insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '2022/34539382', 'www.net.com.br');
 
@@ -64,17 +59,15 @@ insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '11', '964531
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '11', '988885432');
 
 -- CLIENTES
-insert into usuario_endereco (id_usuario, id_endereco) values(1,1);
-insert into usuario_endereco (id_usuario, id_endereco) values(1,6);
-insert into usuario_endereco (id_usuario, id_endereco) values(2,2);
-insert into usuario_telefone (id_usuario, id_telefone) values(1,1);
-insert into usuario_telefone (id_usuario, id_telefone) values(2,3);
+insert into cliente_endereco (id_cliente, id_endereco) values(1,1);
+insert into cliente_endereco (id_cliente, id_endereco) values(1,6);
+insert into cliente_endereco (id_cliente, id_endereco) values(2,2);
+insert into cliente_telefone (id_cliente, id_telefone) values(1,1);
+insert into cliente_telefone (id_cliente, id_telefone) values(2,3);
 
 -- FUNCIONÁRIOS 
-insert into usuario_endereco (id_usuario, id_endereco) values(3,4);
-insert into usuario_telefone (id_usuario, id_telefone) values(3,4);
-insert into usuario_endereco (id_usuario, id_endereco) values(4,5);
-insert into usuario_telefone (id_usuario, id_telefone) values(4,5);
+insert into funcionario_telefone (id_funcionario, id_telefone) values(1,4);
+insert into funcionario_telefone (id_funcionario, id_telefone) values(2,5);
 
 insert into empresa_endereco (id_empresa, id_endereco) values(1,7);
 insert into empresa_telefone (id_empresa, id_telefone) values(1,5);
@@ -110,12 +103,12 @@ insert into itemDaVenda (preco, quantidade, produto_id) values(1000.0, 2, 3);
 
 insert into formaDePagamento (modalidade, valorPago) values(0, 5900);
 insert into cartaodecredito (id, anovalidade, codseguranca, mesvalidade, datahorapagamento, numerocartao) values(1, 24, 237, 3, '2023-10-01 16:11:26', '345690872106');
-insert into pedido (id_formaDePagamento, id_endereco, id_usuario) values(1, 1, 1);
-
+insert into pedido (id_formaDePagamento, id_endereco, id_cliente) values(1, 1, 1);
+s
 
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,1);
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,2);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,1);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,2);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,3);
-insert into lista_de_desejos (id_usuario, id_produto) values(2,1);
+insert into lista_de_desejos (id_cliente, id_produto) values(2,1);
