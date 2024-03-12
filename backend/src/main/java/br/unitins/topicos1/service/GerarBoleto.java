@@ -38,7 +38,7 @@ import com.github.braully.boleto.RemessaArquivo;
 import com.github.braully.boleto.RetornoArquivo;
 import com.github.braully.boleto.TituloArquivo;
 import br.unitins.topicos1.model.Empresa;
-import br.unitins.topicos1.model.Usuario;
+import br.unitins.topicos1.model.Cliente;
 
 
 @ApplicationScoped
@@ -47,7 +47,7 @@ public class GerarBoleto {
         private static final String PATH_USER_BOLETO = System.getProperty("user.home") +
         File.separator + "quarkus" +
         File.separator + "boleto" +
-        File.separator + "usuario" +
+        File.separator + "cliente" +
         File.separator;
 
 
@@ -109,7 +109,7 @@ public class GerarBoleto {
         int contadorRegistroLote = 1;
         //Detalhes do boleto #1  
         // Boleto emitido pela empresa ACME S.A. ltada
-        // Para o usuario: Fulano de Tal cpf: 000.000.000-00
+        // Para o cliente: Fulano de Tal cpf: 000.000.000-00
         // Valor R$ 0,01 com vencimento na data de 13/12/2024
         remessa.addNovoDetalheSegmentoP()
                 //Dados da cobrança
@@ -128,7 +128,7 @@ public class GerarBoleto {
                 .carteira("00");
 
         remessa.addNovoDetalheSegmentoQ()
-                //Dados do usuario
+                //Dados do cliente
                 .sacado("Fulano de Tal", "00000000000")
                 .banco("0", "Banco")
                 .cedente("ACME S.A LTDA.", "1")
@@ -138,7 +138,7 @@ public class GerarBoleto {
                 .carteira("00");
 
         //Detalhes do boleto #2 Boleto emitido pela empresa ACME S.A. ltada
-        // Para o usuario: Ciclano de Tal cpf: 11111111111
+        // Para o cliente: Ciclano de Tal cpf: 11111111111
         // Valor R$ 2,50 com vencimento na data de hoje
         remessa.addNovoDetalheSegmentoP()
                 .valor(2.50)
@@ -231,22 +231,22 @@ public class GerarBoleto {
 
 
 
-public static String geraBoletoFinal(Integer intervalo, Double valorCompra, Usuario usuario, Empresa empresa, br.unitins.topicos1.model.Endereco enderecoUsuario) throws IOException {
+public static String geraBoletoFinal(Integer intervalo, Double valorCompra, Cliente cliente, Empresa empresa, br.unitins.topicos1.model.Endereco enderecoCliente) throws IOException {
 
         // Cedente
     Cedente cedente = new Cedente(empresa.getNomeReal(), empresa.getCnpj());
 
     // Sacado
-    Sacado sacado = new Sacado(usuario.getNome(), usuario.getCpf());
+    Sacado sacado = new Sacado(cliente.getNome(), cliente.getCpf());
 
     // Endereço do sacado
         Endereco endereco = new Endereco();
-    endereco.setUF(enderecoUsuario.getUF());
-    endereco.setLocalidade(enderecoUsuario.getLocalidade());
-    endereco.setCep(enderecoUsuario.getCep());
-    endereco.setBairro(enderecoUsuario.getBairro());
-    endereco.setLogradouro(enderecoUsuario.getLogradouro());
-    endereco.setNumero(enderecoUsuario.getNumeroLote());
+    endereco.setUF(enderecoCliente.getUF());
+    endereco.setLocalidade(enderecoCliente.getLocalidade());
+    endereco.setCep(enderecoCliente.getCep());
+    endereco.setBairro(enderecoCliente.getBairro());
+    endereco.setLogradouro(enderecoCliente.getLogradouro());
+    endereco.setNumero(enderecoCliente.getNumeroLote());
 
     sacado.addEndereco(endereco); 
 

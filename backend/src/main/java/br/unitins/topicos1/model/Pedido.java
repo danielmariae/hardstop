@@ -25,8 +25,8 @@ public class Pedido extends DefaultEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
-    private Usuario usuario;
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(
@@ -44,7 +44,7 @@ public class Pedido extends DefaultEntity {
     )
     private List<ItemDaVenda> itemDaVenda;
 
-    // Não posso usar CascadeType.REMOVE porque endereço é uma entidade compartilhada com várias outras entidades como Usuario, Funcionário, Fornecedor e Logística
+    // Não posso usar CascadeType.REMOVE porque endereço é uma entidade compartilhada com várias outras entidades como Cliente, Funcionário, Fornecedor e Logística
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "id_endereco")
     private Endereco endereco;
@@ -57,12 +57,12 @@ public class Pedido extends DefaultEntity {
     @JoinColumn(name = "id_logistica")
     private Logistica logistica;
 
-    public Usuario getUsuario() {
-        return this.usuario;
+    public Cliente getCliente() {
+        return this.cliente;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     public Logistica getLogistica() {

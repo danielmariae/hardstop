@@ -8,7 +8,7 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("PIX")
 public class Pix extends FormaDePagamento{
-    private String nomeUsuario;
+    private String nomeCliente;
     private String nomeRecebedor;
     private String chaveRecebedor;
     private LocalDateTime dataHoraGeracao;
@@ -34,11 +34,11 @@ public class Pix extends FormaDePagamento{
     public void setDataHoraEfetivadoPagamento(LocalDateTime dataHoraEfetivadoPagamento) {
         this.dataHoraEfetivadoPagamento = dataHoraEfetivadoPagamento;
     }
-    public String getNomeUsuario() {
-        return nomeUsuario;
+    public String getNomeCliente() {
+        return nomeCliente;
     }
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
     }
     public String getNomeRecebedor() {
         return nomeRecebedor;

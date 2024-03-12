@@ -36,10 +36,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-@Path("/funcionariologado")
+@Path("/funcionario")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class FuncionarioLogadoResource {
+public class FuncionarioResource {
 
 @Inject
 JsonWebToken jwt;
@@ -304,19 +304,5 @@ public Response getFuncionario() {
       .header("Content-Disposition", "attachment; filename=" + nomeImagem)
       .build();
 
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+    } 
 }

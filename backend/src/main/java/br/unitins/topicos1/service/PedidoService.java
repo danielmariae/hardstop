@@ -17,7 +17,7 @@ public interface PedidoService {
 public PedidoResponseDTO insert(PedidoDTO dto, @PathParam("id") Long id);
 
 // Apaga todos os pedidos de um determinado cliente
-public void deletePedidoByUsuario(Long idUsuario, Long idPedido);
+public void deletePedidoByCliente(Long idCliente, Long idPedido);
 
     // Altera o status de um pedido
   public PedidoResponseDTO updateStatusDoPedido(PedidoPatchStatusDTO ppsdto);
@@ -26,11 +26,11 @@ public void deletePedidoByUsuario(Long idUsuario, Long idPedido);
   public EnderecoResponseDTO updateEndereco(PedidoPatchEnderecoDTO dto, Long id);
 
     // Retorna todos os pedidos relacionados a um cliente específico
-  public List<PedidoResponseDTO> findPedidoByUsuario(Long idUsuario);
+  public List<PedidoResponseDTO> findPedidoByCliente(Long idCliente);
 
-  // Insere produtos na lista de desejos do Usuario
-  public DesejoResponseDTO insertDesejos(Long idProduto, Long idUsuario);
+  // Insere produtos na lista de desejos do Cliente
+  public DesejoResponseDTO insertDesejos(Long idProduto, Long idCliente);
 
-  // Remove produtos na lista de desejos do Usuario
-  public void deleteDesejos(Long idProduto, Long idUsuario);
+  // Remove produtos na lista de desejos do Cliente
+  public void deleteDesejos(Long idProduto, Long idCliente);
 }
