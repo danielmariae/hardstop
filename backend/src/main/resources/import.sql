@@ -104,7 +104,7 @@ insert into itemDaVenda (preco, quantidade, produto_id) values(1000.0, 2, 3);
 insert into formaDePagamento (modalidade, valorPago) values(0, 5900);
 insert into cartaodecredito (id, anovalidade, codseguranca, mesvalidade, datahorapagamento, numerocartao) values(1, 24, 237, 3, '2023-10-01 16:11:26', '345690872106');
 insert into pedido (id_formaDePagamento, id_endereco, id_cliente) values(1, 1, 1);
-s
+
 
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,1);
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,2);
