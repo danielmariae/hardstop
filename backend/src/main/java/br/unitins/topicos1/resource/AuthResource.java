@@ -1,3 +1,6 @@
+// Crtl K e depois Crtl U para descomentar
+// Crtl A, depois Ctrl K e depois Crtl C
+
 package br.unitins.topicos1.resource;
 
 import br.unitins.topicos1.dto.ClienteResponseDTO;
@@ -5,7 +8,6 @@ import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.LoginDTO;
 import br.unitins.topicos1.service.ClienteService;
 import br.unitins.topicos1.service.FuncionarioService;
-// import br.unitins.topicos1.service.FuncionarioService;
 import br.unitins.topicos1.service.HashService;
 import br.unitins.topicos1.service.JwtService;
 import jakarta.inject.Inject;

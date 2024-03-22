@@ -21,6 +21,7 @@ public class Cliente extends DefaultEntity {
   private String email;
   private final Perfil perfil = Perfil.USER;
   private String nomeImagem;
+  private Integer idEndPrincipal;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinTable(
@@ -137,5 +138,19 @@ public class Cliente extends DefaultEntity {
   public void setNomeImagem(String nomeImagem) {
     this.nomeImagem = nomeImagem;
   }
+
+    /**
+     * @return Integer return the idEndPrincipal
+     */
+    public Integer getIdEndPrincipal() {
+        return idEndPrincipal;
+    }
+
+    /**
+     * @param idEndPrincipal the idEndPrincipal to set
+     */
+    public void setIdEndPrincipal(Integer idEndPrincipal) {
+        this.idEndPrincipal = idEndPrincipal;
+    }
 
 }

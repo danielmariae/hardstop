@@ -9,7 +9,6 @@ import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.Formatadores.FuncionarioFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
-import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.PatchCpfDTO;

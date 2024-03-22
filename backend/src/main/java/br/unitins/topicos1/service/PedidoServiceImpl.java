@@ -358,11 +358,11 @@ public class PedidoServiceImpl implements PedidoService {
     } 
    
     //if(pedido.getFormaDePagamento().getModalidade().getId() == 0)
-    if(pedido.getFormaDePagamento() instanceof CartaoDeCredito)
-    enviaDadosCartao((CartaoDeCredito) pedido.getFormaDePagamento(), cliente.getNome(), cliente.getCpf(), pedido.getId());
+  //   if(pedido.getFormaDePagamento() instanceof CartaoDeCredito)
+  //   enviaDadosCartao((CartaoDeCredito) pedido.getFormaDePagamento(), cliente.getNome(), cliente.getCpf(), pedido.getId());
 
-    return PedidoResponseDTO.valueOf(pedido);
-  }
+     return PedidoResponseDTO.valueOf(pedido);
+   }
 
   @Override
   @Transactional
@@ -1090,27 +1090,27 @@ public class PedidoServiceImpl implements PedidoService {
     return false;
   }
 
-  private void enviaDadosCartao(CartaoDeCredito pagamento, String clienteNome, String cpf, Long idPedido) {
-    String dadosCartao;
-    String dataHora[] = pagamento.getDataHoraPagamento().toString().split("\\.");
-    dadosCartao = clienteNome + "+" + pagamento.getNumeroCartao() + "+" + pagamento.getAnoValidade().toString() + "+" + pagamento.getMesValidade().toString() + "+" + pagamento.getCodSeguranca().toString() + "+" + dataHora[0] + "+" + pagamento.getValorPago().toString() + "+" + cpf + "+" + idPedido.toString();
+  // private void enviaDadosCartao(CartaoDeCredito pagamento, String clienteNome, String cpf, Long idPedido) {
+  //   String dadosCartao;
+  //   String dataHora[] = pagamento.getDataHoraPagamento().toString().split("\\.");
+  //   dadosCartao = clienteNome + "+" + pagamento.getNumeroCartao() + "+" + pagamento.getAnoValidade().toString() + "+" + pagamento.getMesValidade().toString() + "+" + pagamento.getCodSeguranca().toString() + "+" + dataHora[0] + "+" + pagamento.getValorPago().toString() + "+" + cpf + "+" + idPedido.toString();
 
    
-    String dadoCriptografado;
-    try {
-      dadoCriptografado = Criptografia.criptografar(dadosCartao);
-      // cardRequestEmitter.send(dadoCriptografado);
-    } catch (Exception e) {
-     throw new GeneralErrorException(
-                    "400",
-                    "Bad Resquest",
-                    "PedidoServiceImpl(enviaDadosCartao)",
-                    "Não consegui criptografar a String. " + e.getMessage()
-                  );
-    }
+    // String dadoCriptografado;
+    // try {
+    //   dadoCriptografado = Criptografia.criptografar(dadosCartao);
+    //   cardRequestEmitter.send(dadoCriptografado);
+    // } catch (Exception e) {
+    //  throw new GeneralErrorException(
+    //                 "400",
+    //                 "Bad Resquest",
+    //                 "PedidoServiceImpl(enviaDadosCartao)",
+    //                 "Não consegui criptografar a String. " + e.getMessage()
+    //               );
+    // }
 
     
-  }
+  // }
 
     // @Incoming("card-in")
     @Transactional

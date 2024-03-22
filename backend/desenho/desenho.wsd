@@ -1,0 +1,188 @@
+@startuml Desenho
+
+class Endereco {
+    - id: Long
+    - nome: String
+    - logradouro: String
+    - numero: String
+    - lote: String
+    - bairro: String
+    - complemento: String
+    - cep: String
+    - localidade: String
+    - unidadeFederativa: String
+    - pais: String
+}
+
+class Telefone {
+    - id: Long
+    - ddd: String
+    - numero: String
+}
+
+class Cliente {
+    - id: Long
+    - nome: String
+    - dataNascimento: LocalDate
+    - cpf: String
+    - sexo: String
+    - login: String
+    - senha: String
+    - email: String
+    - perfil: Perfil
+    - nomeImagem: String
+    - idEnderecoPrincipal: Long
+}
+
+class Funcionario {
+    - id: Long
+    - nome: String
+    - dataNascimento: date
+    - cpf: String
+    - sexo: String
+    - login: String
+    - senha: String
+    - email: String
+    - perfil: Perfil
+    - nomeImagem: String
+}
+
+class PlacaMae {
+    - id: Long
+    - nome: String
+    - modelo: String
+    - cpu: String
+    - chipset: String
+    - memoria: String
+    - bios: String
+    - grafico: String
+    - lan: String
+    - slots: String
+    - armazenamento: String
+    - marca: String
+    - descricao: String
+    - codigoDeBarra: String
+    - imagem: String
+    - altura: Double
+    - largura: Double
+    - comprimento: Double
+    - peso: Double
+    - custoCompra: Double
+    - valorVenda: Double
+    - quantidade: Long
+    - nomeImagem: String
+}
+
+class Lote {
+    - id : Long
+    - Lote : String
+}
+
+class Pedido {
+    - id: Long
+    - codigoDeRastreamento : String
+}
+
+class ItemDaVenda {
+    - preco: Double
+    - quantidade: Long
+}
+
+class Pix {
+    - id: Long
+    - nomeCliente: String
+    - nomeRecebedor: String
+    - chaveRecebedor: String
+    - valor: Double
+}
+
+class CartaoDeCredito {
+    - id: Long
+    - numeroCartao: String
+    - mesValidade: Long
+    - anoValidade: Long
+    - codSeguranca : Long
+    - valor: Double
+}
+
+class Boleto {
+    - id: Long
+    - nomeBanco: String
+    - dataHoraGeracao: LocalDateTime
+    - dataHoraLimite: LocalDateTime
+    - valor: Double
+}
+
+class FormaDePagamento {
+    - id : Long
+    - nomeCliente : String
+}
+
+enum Status {
+    + AguardandoPagamento : String
+    + Pago : String
+    + RetiradoDoEstoque : String
+    + RecebidoPelaTransportadora : String
+    + Entregue : String
+    + Devolvido : String
+    + Desistido : String
+}
+
+enum TipoTelefone {
+    + FixoResidencial : String
+    + FixoComercial : String
+    + CelularParticular : String
+    + CelularComercial : String
+    + TelefoneDeOutraPessoa : String
+}
+
+class StatusDoPedido {
+    - id : Long
+    - dataHora: LocalDateTime
+}
+
+class Logistica {
+    - id : Long
+    - nomeFantasia : String
+    - nomeRegistro : String
+    - endSite : String
+}
+
+class Fornecedor {
+    - id : Long
+    - nomeFantasia : String
+    - nomeRegistro : String
+    - endSite : String
+}
+
+class Classificacao {
+    - id : Long
+    - nome : String
+}
+
+Cliente "1" *--> "*" Endereco
+Cliente "1" *--> "*" Telefone
+Funcionario "1" *--> "1" Endereco
+Funcionario "1" *--> "1" Telefone
+Pedido "*" *--> "1" Endereco
+Pedido "1" *--> "*" ItemDaVenda
+ItemDaVenda "*" o--> "1" Produto
+Cliente "*" --> "*" Produto : ListaDesejos
+Pix  --|> FormaDePagamento
+CartaoDeCredito --|> FormaDePagamento
+Boleto --|> FormaDePagamento
+Pedido "1" *--> "*" StatusDoPedido
+StatusDoPedido "*" o--> "1" Status
+Telefone "1" o--> "1" TipoTelefone
+Pedido "*" *--> "1" Cliente
+Produto "*" o--> "1" Classificacao
+Pedido "*" *--> "1" FormaDePagamento
+Pedido "*" o--> "1" Logistica
+Produto "*" --> "*" Lote
+Lote "*" *--> "1" Fornecedor
+Logistica "1" *--> "1" Endereco
+Logistica "1" *--> "1" Telefone
+Fornecedor "1" *--> "1" Endereco
+Fornecedor "1" *--> "1" Telefone
+
+@enduml

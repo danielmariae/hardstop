@@ -11,9 +11,18 @@ import jakarta.persistence.Entity;
 public class Produto extends DefaultEntity {
 
     private String nome;
+    private String modelo;
+    private String cpu;
+    private String chipset;
+    private String memoria;
+    private String bios;
+    private String grafico;
+    private String lan;
+    private String slots;
+    private String armazenamento;
+    private String marca;
     private String descricao;
     private String codigoBarras;
-    private String marca;
     private Double altura;
     private Double largura;
     private Double comprimento;
@@ -37,14 +46,6 @@ public class Produto extends DefaultEntity {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
     }
 
     public String getCodigoBarras() {
@@ -142,6 +143,148 @@ public class Produto extends DefaultEntity {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+
+    /**
+     * @return String return the descricao
+     */
+    public String getDescricao() {
+        return descricao;
+    }
+
+    /**
+     * @param descricao the descricao to set
+     */
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+
+    /**
+     * @return String return the modelo
+     */
+    public String getModelo() {
+        return modelo;
+    }
+
+    /**
+     * @param modelo the modelo to set
+     */
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    /**
+     * @return String return the cpu
+     */
+    public String getCpu() {
+        return cpu;
+    }
+
+    /**
+     * @param cpu the cpu to set
+     */
+    public void setCpu(String cpu) {
+        this.cpu = cpu;
+    }
+
+    /**
+     * @return String return the chipset
+     */
+    public String getChipset() {
+        return chipset;
+    }
+
+    /**
+     * @param chipset the chipset to set
+     */
+    public void setChipset(String chipset) {
+        this.chipset = chipset;
+    }
+
+    /**
+     * @return String return the memoria
+     */
+    public String getMemoria() {
+        return memoria;
+    }
+
+    /**
+     * @param memoria the memoria to set
+     */
+    public void setMemoria(String memoria) {
+        this.memoria = memoria;
+    }
+
+    /**
+     * @return String return the bios
+     */
+    public String getBios() {
+        return bios;
+    }
+
+    /**
+     * @param bios the bios to set
+     */
+    public void setBios(String bios) {
+        this.bios = bios;
+    }
+
+    /**
+     * @return String return the grafico
+     */
+    public String getGrafico() {
+        return grafico;
+    }
+
+    /**
+     * @param grafico the grafico to set
+     */
+    public void setGrafico(String grafico) {
+        this.grafico = grafico;
+    }
+
+    /**
+     * @return String return the lan
+     */
+    public String getLan() {
+        return lan;
+    }
+
+    /**
+     * @param lan the lan to set
+     */
+    public void setLan(String lan) {
+        this.lan = lan;
+    }
+
+    /**
+     * @return String return the slots
+     */
+    public String getSlots() {
+        return slots;
+    }
+
+    /**
+     * @param slots the slots to set
+     */
+    public void setSlots(String slots) {
+        this.slots = slots;
+    }
+
+    /**
+     * @return String return the armazenamento
+     */
+    public String getArmazenamento() {
+        return armazenamento;
+    }
+
+    /**
+     * @param armazenamento the armazenamento to set
+     */
+    public void setArmazenamento(String armazenamento) {
+        this.armazenamento = armazenamento;
     }
 
 }
