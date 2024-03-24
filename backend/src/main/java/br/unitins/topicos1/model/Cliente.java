@@ -112,7 +112,7 @@ public class Cliente extends DefaultEntity {
   }
 
     public Perfil getPerfil() {
-    return perfil;
+    return this.perfil;
   }
 
   public List<Endereco> getListaEndereco() {

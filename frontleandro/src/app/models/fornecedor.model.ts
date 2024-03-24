@@ -6,6 +6,6 @@ export class Fornecedor {
     nomeFantasia!: string;
     cnpj!: string;
     endSite!: string;
-    endereco!: Endereco;
+    endereco!: Endereco[];
     telefone!: Telefone[];
 }

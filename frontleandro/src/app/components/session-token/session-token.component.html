@@ -1,0 +1,29 @@
+<div>
+    <h2>Login Funcionário</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="loginF()">
+      <div>
+        <label for="username">Usuário:</label>
+        <input type="text" id="usernameF" formControlName="username" required>
+      </div>
+      <div>
+        <label for="password">Senha:</label>
+        <input type="password" id="passwordF" formControlName="password" required>
+      </div>
+      <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    </form>
+    <h2>Login Cliente</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="loginC()">
+      <div>
+        <label for="username">Usuário:</label>
+        <input type="text" id="usernameC" formControlName="username" required>
+      </div>
+      <div>
+        <label for="password">Senha:</label>
+        <input type="password" id="passwordC" formControlName="password" required>
+      </div>
+      <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    </form>
+  </div>
+  

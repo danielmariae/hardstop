@@ -21,7 +21,7 @@ public class JwtServiceImpl implements JwtService {
         Instant expiryDate = now.plus(EXPIRATION_TIME);
 
         Set<String> roles = new HashSet<String>();
-        roles.add(dto.perfil().getLabel());
+        roles.add("User");
 
         return Jwt.issuer("hardstop-jwt")
         .subject(dto.login())
