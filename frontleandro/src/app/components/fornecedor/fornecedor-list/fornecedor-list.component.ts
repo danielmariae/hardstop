@@ -7,13 +7,14 @@ import { Component, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { Fornecedor } from "../../../models/fornecedor.model";
 import { FornecedorService } from "../../../services/fornecedor.service";
+import { CommonModule } from '@angular/common';
 
 
 
 @Component({
     selector: 'app-fornecedor-list',
     standalone: true,
-    imports: [NgFor, MatTableModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterModule],
+    imports: [NgFor, MatTableModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterModule, CommonModule],
     templateUrl: './fornecedor-list.component.html',
     styleUrl: './fornecedor-list.component.css'
 })

@@ -1,17 +1,16 @@
-// import { CEP } from "cep-promise";
+import { CEP } from "./cep.model";
 
-type cep = {
 
-}
-export class Endereco{
+type UnidadeFederativa = {}
+export class ListaEndereco{
+    id!: number;
     nome!: string;
     logradouro!: string;
     numeroLote!: string;
     bairro!: string;
     complemento!: string;
-    // cep!: CEP;
-    cep!: cep;
+    cep!: CEP;
     localidade!: string;
-    uf!: string;
+    uf!: UnidadeFederativa;
     pais!: string;
 }

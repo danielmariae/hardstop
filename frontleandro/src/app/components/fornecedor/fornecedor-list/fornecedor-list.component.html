@@ -9,10 +9,11 @@
 
 <table mat-table [dataSource]="fornecedores" class="mat-elevation-z8">
 
+
     <!-- Position Column -->
     <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef> No. </th>
-        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        <td mat-cell *matCellDef="let element; let i=index"> {{i + 1}} </td>
     </ng-container>
 
     <!-- Nome Column -->
@@ -36,13 +37,31 @@
     <!-- Endereco Column -->
     <ng-container matColumnDef="endereco">
         <th mat-header-cell *matHeaderCellDef> Endereço </th>
-        <td mat-cell *matCellDef="let element"> {{element.endereco}} </td>
+        <td mat-cell *matCellDef="let element"> 
+            <ul>
+                <li *ngFor="let endereco of element.listaEndereco">
+                    Rua {{ endereco.logradouro }}, {{ endereco.numeroLote }}<br>
+                    {{ endereco.bairro }} - {{ endereco.localidade }}/{{ endereco.uf }}<br>
+                    {{ endereco.cep.cep }}<br>
+                    {{ endereco.pais }}<br><br>
+                </li>
+            </ul> 
+        </td>
     </ng-container>
 
     <!-- Telefone Column -->
     <ng-container matColumnDef="telefone">
         <th mat-header-cell *matHeaderCellDef> Telefone </th>
-        <td mat-cell *matCellDef="let element"> {{element.telefone}} </td>
+        <td mat-cell *matCellDef="let element"> 
+            <ul>
+                <li *ngFor="let telefone of element.listaTelefone; let last = last">
+                 Número: ({{ telefone.ddd }}) {{ telefone.numeroTelefone }} <br>
+                 Tipo: {{ telefone.tipo }}
+                 <!-- Adicione a linha horizontal se não for o último telefone -->
+                <hr *ngIf="!last">
+                </li>
+            </ul>
+        </td>
     </ng-container>
 
     <!-- Acao Column -->

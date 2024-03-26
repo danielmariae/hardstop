@@ -1,5 +1,6 @@
-export class Telefone{
-    tipo!: number;
+export class ListaTelefone{
+    id!: number;
     ddd!: string;
     numeroTelefone!: string;
+    tipo!: string;
 }

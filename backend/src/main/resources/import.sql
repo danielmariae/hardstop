@@ -52,11 +52,12 @@ insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, se
 insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '2022/34539382', 'www.net.com.br');
 
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '62', '987450019');
-insert into telefone (tipoTelefone, ddd, numerotelefone) values(0, '62', '33249087');
-insert into telefone (tipoTelefone, ddd, numerotelefone) values(0, '63', '997843201');
-insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '11', '978530098');
-insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '11', '964531234');
-insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '11', '988885432');
+insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '62', '33249087');
+insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '63', '997843201');
+insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '11', '978530098');
+insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '11', '964531234');
+insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '11', '33740932');
+insert into telefone (tipoTelefone, ddd, numerotelefone) values(3, '11', '988885432');
 
 -- CLIENTES
 insert into cliente_endereco (id_cliente, id_endereco) values(1,1);
@@ -70,10 +71,11 @@ insert into funcionario_telefone (id_funcionario, id_telefone) values(1,4);
 insert into funcionario_telefone (id_funcionario, id_telefone) values(2,5);
 
 insert into empresa_endereco (id_empresa, id_endereco) values(1,7);
-insert into empresa_telefone (id_empresa, id_telefone) values(1,5);
+insert into empresa_telefone (id_empresa, id_telefone) values(1,2);
 
 insert into fornecedor_endereco (id_fornecedor, id_endereco) values(1,3);
 insert into fornecedor_telefone (id_fornecedor, id_telefone) values(1,6);   
+insert into fornecedor_telefone (id_fornecedor, id_telefone) values(1,7);
 
 insert into statusDoPedido (dataHora, status) values('2023-10-01 16:11:26', 0);
 insert into statusDoPedido (dataHora, status) values('2023-10-04 20:23:35', 1);
