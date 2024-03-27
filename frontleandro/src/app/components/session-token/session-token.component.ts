@@ -62,7 +62,6 @@ export class SessionTokenComponent implements OnInit {
       this.sessionTokenService.saveSessionToken(token);
       this.loginForm.reset();
       this.errorMessage = '';
-      // Redirecionar o usuário para a página de perfil, por exemplo
     },
     error: (error) => {
       console.log('Erro:', error);

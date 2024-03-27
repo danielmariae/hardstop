@@ -79,33 +79,28 @@ public class FornecedorServiceImpl implements FornecedorService {
             fornecedor.setNomeFantasia(dto.nomeFantasia());
             fornecedor.setCnpj(dto.cnpj());
             fornecedor.setEndSite(dto.endSite());
-            int i = 0;
-            int j = 0;
+         
 
-            for (Telefone tele1 : fornecedor.getListaTelefone()) {
-                i++;
-                j = 0;
-                for (TelefoneDTO tele : dto.listaTelefone()) {
-                    j++;
-                    if (i == j) {
-                        tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
-                        tele1.setDdd(tele.ddd());
-                        tele1.setNumeroTelefone(
-                                TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone())
-                        );
-                    }
-                }
+
+            List<Telefone> tel = fornecedor.getListaTelefone();
+            tel.clear();
+            for (TelefoneDTO tele : dto.listaTelefone()) {
+                Telefone tele1 = new Telefone();
+                tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
+                tele1.setDdd(tele.ddd());
+                tele1.setNumeroTelefone(TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone()));
+                tel.add(tele1);
             }
+            
+            
 
-            int ie = 0;
-            int je = 0;
+            List<Endereco> end = fornecedor.getListaEndereco();
+            end.clear();
 
-            for (Endereco endereco : fornecedor.getListaEndereco()) {
-                ie++;
-                je = 0;
+           
                 for (EnderecoDTO end1 : dto.listaEndereco()) {
-                    je++;
-                    if (ie == je) {
+                    
+                        Endereco endereco = new Endereco();
                         endereco.setNome(end1.nome());
                         endereco.setLogradouro(end1.logradouro());
                         endereco.setNumeroLote(end1.numeroLote());
@@ -115,10 +110,9 @@ public class FornecedorServiceImpl implements FornecedorService {
                         endereco.setLocalidade(end1.localidade());
                         endereco.setUF(end1.uf());
                         endereco.setPais(end1.pais());
-                    }
+                        end.add(endereco);
                 }
-            }
-    
+           
         //repository.persist(fornecedor);
         return FornecedorResponseDTO.valueOf(fornecedor);
     }

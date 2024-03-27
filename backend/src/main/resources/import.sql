@@ -25,7 +25,7 @@ insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, lo
 
 insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Flávio de Boa', 'Palmares da Cruz', '88', 'Norte', 'Perto do supermercado Real', '38432422', 'Ponte Alta', 'TO', 'Brasil');
 
-insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('.Net.Com', 'Aida Aguiar',  '18', 'Santa Efigênia', 'Centro', '77532043', 'Sao Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('.Net.Com', 'Aida Aguiar',  '18', 'Santa Efigênia', 'Proximo Açai', '77532043', 'Sao Paulo', 'SP', 'Brasil');
 
 insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Arruda de Alencar', 'Martins Pontes', '55', 'Butantã', 'Sul', '73828382', 'Sao Paulo', 'SP', 'Brasil');
 
@@ -34,6 +34,8 @@ insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, lo
 insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Mãe da Katia de Ruim', 'Sermão de mãe', '58', 'Oeste', 'Ao lado da igreja do Véu', '73245787', 'Araraquara', 'SP', 'Brasil');
 
 insert into endereco (nome, logradouro, numerolote, bairro, cep, localidade, uf, pais) values('Leandro Armações Ilimitadas Ltda', 'rua dos Guaytacazes', '1000', 'Santa Efigênia', '77226654', 'Sao Paulo', 'SP', 'Brasil');
+
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('.Hardware.Com', 'Gal Costa',  '374', 'das Acacias', 's/c', '76093120', 'Brasilia', 'DF', 'Brasil');
 
 -- ## Clientes ##
 -- senha 123VaA_
@@ -49,7 +51,8 @@ insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, se
 insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Marta de Cesare', '2001-11-30', '19452476141', 'F', 5, 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 2,  'martacesare@gmail.com');
 
 
-insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '2022/34539382', 'www.net.com.br');
+insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '20229087654321', 'www.net.com.br');
+insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Hardware.Com', '20197352940123', 'www.hardware.com.br');
 
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '62', '987450019');
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '62', '33249087');
@@ -58,6 +61,7 @@ insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '11', '978530
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '11', '964531234');
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '11', '33740932');
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(3, '11', '988885432');
+insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '61', '922704321');
 
 -- CLIENTES
 insert into cliente_endereco (id_cliente, id_endereco) values(1,1);
@@ -77,6 +81,9 @@ insert into fornecedor_endereco (id_fornecedor, id_endereco) values(1,3);
 insert into fornecedor_telefone (id_fornecedor, id_telefone) values(1,6);   
 insert into fornecedor_telefone (id_fornecedor, id_telefone) values(1,7);
 
+insert into fornecedor_endereco (id_fornecedor, id_endereco) values(2,8);
+insert into fornecedor_telefone (id_fornecedor, id_telefone) values(2,8);
+
 insert into statusDoPedido (dataHora, status) values('2023-10-01 16:11:26', 0);
 insert into statusDoPedido (dataHora, status) values('2023-10-04 20:23:35', 1);
 insert into classificacao (nome) values('Processadores');
@@ -85,7 +92,7 @@ insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comp
 insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidade, classificacao_id, version) values('Processador Intel Core i5 12 gen', 'Processador Intel Core i5 12 gen', 'PICI512gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 1200.0, 5, 1, 1);
 insert into produto (nome, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidade, classificacao_id, version) values('Processador AMD Xeon7 11 gen', 'Processador AMD Xeon7 11 gen', 'PAMDX711gen07102023', 'AMD', 0.5, 0.5, 0.5, 0.25, 1000.0, 4, 1, 1);
 
-insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Hardware.Com', '2020/376937201', 'www.hardware.com.br');
+
 insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 1, '2023-10-01 16:11:26', 1, 500.0, 1000.0, 100);
 insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 1, '2023-10-02 15:14:01', 2, 600.0, 1200.0, 50);
 insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidade) values('f1_p1_lt15', 1, '2023-10-03 09:47:50', 3, 500.0, 1000.0, 20);

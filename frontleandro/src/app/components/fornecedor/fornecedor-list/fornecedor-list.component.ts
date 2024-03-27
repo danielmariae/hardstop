@@ -8,7 +8,7 @@ import { RouterModule } from "@angular/router";
 import { Fornecedor } from "../../../models/fornecedor.model";
 import { FornecedorService } from "../../../services/fornecedor.service";
 import { CommonModule } from '@angular/common';
-
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -23,13 +23,33 @@ export class FornecedorListComponent implements OnInit {
     displayedColumns: string[] = ['id', 'nomeFantasia', 'cnpj', 'endSite', 'endereco', 'telefone', 'acao'];
     fornecedores: Fornecedor[] = [];
 
-    constructor(private fornecedorService: FornecedorService) {
+    constructor(private fornecedorService: FornecedorService, private router: Router) {
 
     }
 
     ngOnInit(): void {
+
+        this.carregarFornecedores(); // Carrega os fornecedores ao inicializar o componente
+
+        // Inscreva-se para receber notificações de novos fornecedores
+        this.fornecedorService.fornecedorInserido$.subscribe(() => {
+          this.carregarFornecedores(); // Recarrega os fornecedores ao receber uma notificação
+          this.router.navigate(['fornecedores']);
+        });
+    }
+
+    carregarFornecedores(): void {
         this.fornecedorService.findAll().subscribe(data => {
             this.fornecedores = data;
-        })
+        });
     }
+
+    // adicionarFornecedor(novoFornecedor: Fornecedor): void {
+    //     this.fornecedorService.insert(novoFornecedor).subscribe(() => {
+    //         // Após a inserção bem-sucedida, recarrega a lista de fornecedores
+    //         this.carregarFornecedores();
+    //     });
+    // }
+
+
 }

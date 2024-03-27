@@ -32,7 +32,7 @@ public class FornecedorResource {
 
     @PUT
     @RolesAllowed({"Func", "Admin"})
-    @Path("/put/{id}")
+    @Path("/{id}")
     public Response update(@Valid FornecedorDTO dto, @PathParam("id") Long id)
     {
         service.update(dto, id);
@@ -55,7 +55,7 @@ public class FornecedorResource {
     }
 
     @GET
-    @Path("/search/id/{id}")
+    @Path("/{id}")
     @RolesAllowed({"Func", "Admin"})
     public Response findById(@PathParam("id") Long id) {
         return Response.ok(service.findById(id)).build();

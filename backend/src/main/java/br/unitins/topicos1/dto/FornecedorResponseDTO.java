@@ -4,6 +4,7 @@ import java.util.List;
 import br.unitins.topicos1.model.Fornecedor;
 
 public record FornecedorResponseDTO(
+  Long id,
   String nomeFantasia,
   String cnpj,
   String endSite,
@@ -13,6 +14,7 @@ public record FornecedorResponseDTO(
 
   public static FornecedorResponseDTO valueOf(Fornecedor fornecedor) {
       return new FornecedorResponseDTO(
+        fornecedor.getId(),
         fornecedor.getNomeFantasia(),
         fornecedor.getCnpj(),
         fornecedor.getEndSite(),

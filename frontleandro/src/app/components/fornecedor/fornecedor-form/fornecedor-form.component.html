@@ -1,0 +1,44 @@
+<form [formGroup]="fornecedorForm" (ngSubmit)="salvarFornecedor()">
+  <label for="nomeFantasia">Nome Fantasia:</label>
+  <input type="text" id="nomeFantasia" formControlName="nomeFantasia">
+
+  <label for="cnpj">CNPJ:</label>
+  <input type="text" id="cnpj" formControlName="cnpj">
+
+  <label for="endSite">Site:</label>
+  <input type="text" id="endSite" formControlName="endSite">
+
+  <div formArrayName="telefones">
+    <div *ngFor="let telefone of telefones.controls; let i = index" [formGroupName]="i">
+      <input formControlName="ddd" placeholder="DDD">
+      <input formControlName="numeroTelefone" placeholder="Número">
+      <input formControlName="tipo" placeholder="Tipo">
+      <button type="button" (click)="removerTelefone(i)">Remover</button>
+    </div>
+    <button type="button" (click)="adicionarTelefone()">Adicionar Telefone</button>
+  </div>
+
+  <div formArrayName="enderecos">
+    <div *ngFor="let endereco of enderecos.controls; let i = index" [formGroupName]="i">
+      <input formControlName="nome" placeholder="Nome">
+      <input formControlName="logradouro" placeholder="Logradouro">
+      <input formControlName="numeroLote" placeholder="Número/Lote">
+      <input formControlName="bairro" placeholder="Bairro">
+      <input formControlName="complemento" placeholder="Complemento">
+      <div [formGroupName]="'cep'">
+        <input formControlName="prefixo" placeholder="CEP Prefixo">
+        <input formControlName="sufixo" placeholder="CEP Sufixo">
+        <input formControlName="cep" placeholder="CEP">
+      </div>
+      <input formControlName="localidade" placeholder="Localidade">
+      <input formControlName="uf" placeholder="UF">
+      <input formControlName="pais" placeholder="País">
+      <button type="button" (click)="removerEndereco(i)">Remover</button>
+    </div>
+    <button type="button" (click)="adicionarEndereco()">Adicionar Endereço</button>
+  </div>
+<!--
+  <button type="submit" [disabled]="fornecedorForm.invalid">Salvar</button>
+  -->
+  <button type="submit">Salvar</button>
+</form>

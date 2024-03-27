@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -25,6 +25,22 @@ export class SessionTokenService {
   clearSessionToken() {
     localStorage.removeItem('sessionToken');
   }
+  
+  getSessionHeader(): HttpHeaders | null {
+    const token = this.getSessionToken();
+    
+        // Verifique se o token de sessão está disponível
+        if (token) {
+          // Se estiver disponível, adicione-o ao cabeçalho da requisição
+          //const headers = new HttpHeaders().set('Authorization', sessionToken.token);
+          const headers = new HttpHeaders({
+            'Authorization': 'Bearer ' + token
+          });
+          return headers;
+        } else {
+          return null;
+  }
+}
 
   // Método para verificar se o usuário está autenticado
   isAuthenticated(): Observable<boolean> {
