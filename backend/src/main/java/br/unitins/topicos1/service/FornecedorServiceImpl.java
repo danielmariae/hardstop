@@ -2,11 +2,13 @@ package br.unitins.topicos1.service;
 
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
+import br.unitins.topicos1.Formatadores.FornLogFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.*;
 import br.unitins.topicos1.model.*;
 import br.unitins.topicos1.repository.FornecedorRepository;
 import br.unitins.topicos1.validation.ValidationException;
+import br.unitins.topicos1.validation.ConstraintViolationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -27,7 +29,8 @@ public class FornecedorServiceImpl implements FornecedorService {
         Fornecedor fornecedor = new Fornecedor();
         fornecedor.setNomeFantasia(dto.nomeFantasia());
         verificaCnpj(dto.cnpj());
-        fornecedor.setCnpj(dto.cnpj());
+        fornecedor.setCnpj(
+            FornLogFormatador.fornlogformatador(dto.cnpj()));
         fornecedor.setEndSite(dto.endSite());
         if (dto.listaEndereco() != null && !dto.listaEndereco().isEmpty()) {
             try {
@@ -43,7 +46,7 @@ public class FornecedorServiceImpl implements FornecedorService {
                 endereco.setNumeroLote(end.numeroLote());
                 endereco.setBairro(end.bairro());
                 endereco.setComplemento(end.complemento());
-                endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+                endereco.setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
                 endereco.setLocalidade(end.localidade());
                 endereco.setUF(end.uf());
                 endereco.setPais(end.pais());
@@ -61,7 +64,7 @@ public class FornecedorServiceImpl implements FornecedorService {
                    telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
                    telefone.setDdd(tel.ddd());
                    telefone.setNumeroTelefone(
-                           TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+                           TelefoneFormatador.formataNumeroTelefone(tel.numeroTelefone()));
                    fornecedor.getListaTelefone().add(telefone);
                }
            }
@@ -79,18 +82,17 @@ public class FornecedorServiceImpl implements FornecedorService {
     public FornecedorResponseDTO update(FornecedorDTO dto, Long id) {
             Fornecedor fornecedor = repository.findById(id);
             fornecedor.setNomeFantasia(dto.nomeFantasia());
-            fornecedor.setCnpj(dto.cnpj());
+            fornecedor.setCnpj(
+                FornLogFormatador.fornlogformatador(dto.cnpj()));
             fornecedor.setEndSite(dto.endSite());
-         
-
-
             List<Telefone> tel = fornecedor.getListaTelefone();
             tel.clear();
             for (TelefoneDTO tele : dto.listaTelefone()) {
                 Telefone tele1 = new Telefone();
                 tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
                 tele1.setDdd(tele.ddd());
-                tele1.setNumeroTelefone(TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone()));
+                tele1.setNumeroTelefone(
+                    TelefoneFormatador.formataNumeroTelefone(tele.numeroTelefone()));
                 tel.add(tele1);
             }
             
@@ -108,7 +110,7 @@ public class FornecedorServiceImpl implements FornecedorService {
                         endereco.setNumeroLote(end1.numeroLote());
                         endereco.setBairro(end1.bairro());
                         endereco.setComplemento(end1.complemento());
-                        endereco.setCep(new CEP(EnderecoFormatador.validaCep(end1.cep().getCep())));
+                        endereco.setCep(new CEP(EnderecoFormatador.formataCep(end1.cep().getCep())));
                         endereco.setLocalidade(end1.localidade());
                         endereco.setUF(end1.uf());
                         endereco.setPais(end1.pais());
@@ -136,7 +138,11 @@ public class FornecedorServiceImpl implements FornecedorService {
     @Override
     @Transactional
     public void delete(Long id) {
-        repository.deleteById(id);
+        if(repository.deleteById(id)) {
+
+        } else {
+            throw new ConstraintViolationException("fornecedor", "Não pode apagar esse fornecedor"); 
+        }
     }
 
     private void verificaCnpj(String cnpj) {

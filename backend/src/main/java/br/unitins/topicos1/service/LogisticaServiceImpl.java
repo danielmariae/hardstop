@@ -42,7 +42,7 @@ public class LogisticaServiceImpl implements LogisticaService {
                 endereco.setNumeroLote(end.numeroLote());
                 endereco.setBairro(end.bairro());
                 endereco.setComplemento(end.complemento());
-                endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+                endereco.setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
                 endereco.setLocalidade(end.localidade());
                 endereco.setUF(end.uf());
                 endereco.setPais(end.pais());
@@ -60,7 +60,7 @@ public class LogisticaServiceImpl implements LogisticaService {
                    telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
                    telefone.setDdd(tel.ddd());
                    telefone.setNumeroTelefone(
-                    TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+                    TelefoneFormatador.formataNumeroTelefone(tel.numeroTelefone()));
                    logistica.getListaTelefone().add(telefone);
                }
            }
@@ -92,7 +92,7 @@ public class LogisticaServiceImpl implements LogisticaService {
                         tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
                         tele1.setDdd(tele.ddd());
                         tele1.setNumeroTelefone(
-                        TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone())
+                        TelefoneFormatador.formataNumeroTelefone(tele.numeroTelefone())
                         );
                     }
                 }
@@ -112,7 +112,7 @@ public class LogisticaServiceImpl implements LogisticaService {
                         endereco.setNumeroLote(end1.numeroLote());
                         endereco.setBairro(end1.bairro());
                         endereco.setComplemento(end1.complemento());
-                        endereco.setCep(new CEP(EnderecoFormatador.validaCep(end1.cep().getCep())));
+                        endereco.setCep(new CEP(EnderecoFormatador.formataCep(end1.cep().getCep())));
                         endereco.setLocalidade(end1.localidade());
                         endereco.setUF(end1.uf());
                         endereco.setPais(end1.pais());

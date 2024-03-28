@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './fornecedor-form.component.css'
 })
 export class FornecedorComponent {
+  errorMessage: string = '';
   fornecedorForm: FormGroup;
   tiposTelefone: any[];
   uf: any[];
@@ -114,10 +115,19 @@ export class FornecedorComponent {
     };
 
     // Chame o serviço para inserir o fornecedor
-    this.fornecedorService.insert(novoFornecedor).subscribe(() => {
-      console.log(novoFornecedor);
+    this.fornecedorService.insert(novoFornecedor).subscribe({
+      next: (response) => {
+      console.log('Resultado:', response);
       // Lógica após a inserção bem-sucedida
       this.fornecedorService.notificarFornecedorInserido(); // Notificar outros componentes
-    });
+      },
+      error: (error) => {
+        // Este callback é executado quando ocorre um erro durante a emissão do valor
+        console.error('Erro:', error);
+        // Aqui você pode lidar com o erro de acordo com sua lógica de negócio
+        // Por exemplo, exibir uma mensagem de erro para o usuário
+        window.alert(error);
+      }
+  });
   }
 }

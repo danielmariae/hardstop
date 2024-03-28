@@ -100,9 +100,9 @@ public class FuncionarioServiceImpl implements FuncionarioService {
 
     funcionario.setNome(func.nome());
     funcionario.setDataNascimento(
-      FuncionarioFormatador.validaDataNascimento(func.dataNascimento())
+      FuncionarioFormatador.formataDataNascimento(func.dataNascimento())
     );
-    funcionario.setCpf(FuncionarioFormatador.validaCpf(func.cpf()));
+    funcionario.setCpf(FuncionarioFormatador.formataCpf(func.cpf()));
     funcionario.setSexo(func.sexo());
     funcionario.setLogin(func.login());
     funcionario.setSenha(hashservice.getHashSenha(func.senha()));
@@ -120,7 +120,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
           tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
           tele1.setDdd(tele.ddd());
           tele1.setNumeroTelefone(
-            TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone())
+            TelefoneFormatador.formataNumeroTelefone(tele.numeroTelefone())
           );
         }
       }
@@ -134,7 +134,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         endereco.setNumeroLote(func.endereco().numeroLote());
         endereco.setBairro(func.endereco().bairro());
         endereco.setComplemento(func.endereco().complemento());
-        endereco.setCep(new CEP(EnderecoFormatador.validaCep(func.endereco().cep().getCep())));
+        endereco.setCep(new CEP(EnderecoFormatador.formataCep(func.endereco().cep().getCep())));
         endereco.setLocalidade(func.endereco().localidade());
         endereco.setUF(func.endereco().uf());
         endereco.setPais(func.endereco().pais());
@@ -159,8 +159,8 @@ public class FuncionarioServiceImpl implements FuncionarioService {
   @Transactional
   public String updateCpf(PatchCpfDTO cpf, Long id) {
     Funcionario funcionario = repository.findById(id);
-    verificaCpf(FuncionarioFormatador.validaCpf(cpf.cpf()));
-    funcionario.setCpf(FuncionarioFormatador.validaCpf(cpf.cpf()));
+    verificaCpf(FuncionarioFormatador.formataCpf(cpf.cpf()));
+    funcionario.setCpf(FuncionarioFormatador.formataCpf(cpf.cpf()));
     return "Cpf alterado com sucesso.";
   }
 
@@ -203,7 +203,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     Telefone telefone = new Telefone();
     telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
     telefone.setDdd(tel.ddd());
-    telefone.setNumeroTelefone(TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+    telefone.setNumeroTelefone(TelefoneFormatador.formataNumeroTelefone(tel.numeroTelefone()));
     funcionario.getListaTelefone().add(telefone);
     repository.persist(funcionario);
     return FuncionarioResponseDTO.valueOf(funcionario);
@@ -226,7 +226,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
           if (tele1.getId() == tel.id()) {
             tele1.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
             tele1.setDdd(tel.ddd());
-            tele1.setNumeroTelefone(TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+            tele1.setNumeroTelefone(TelefoneFormatador.formataNumeroTelefone(tel.numeroTelefone()));
             chave = false;
           }   
       }
@@ -251,7 +251,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         funcionario.getEndereco().setLogradouro(end.logradouro());
         funcionario.getEndereco().setNumeroLote(end.numeroLote());
         funcionario.getEndereco().setBairro(end.bairro());
-        funcionario.getEndereco().setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+        funcionario.getEndereco().setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
         funcionario.getEndereco().setComplemento(end.complemento());
         funcionario.getEndereco().setLocalidade(end.localidade());
         funcionario.getEndereco().setUF(end.uf());
@@ -277,7 +277,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     endereco.setNumeroLote(end.numeroLote());
     endereco.setBairro(end.bairro());
     endereco.setComplemento(end.complemento());
-    endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+    endereco.setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
     endereco.setLocalidade(end.localidade());
     endereco.setUF(end.uf());
     endereco.setPais(end.pais());
@@ -291,9 +291,9 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     Funcionario funcionario = new Funcionario();
     funcionario.setNome(dto.nome());
     funcionario.setDataNascimento(
-      FuncionarioFormatador.validaDataNascimento(dto.dataNascimento())
+      FuncionarioFormatador.formataDataNascimento(dto.dataNascimento())
     );
-    funcionario.setCpf(FuncionarioFormatador.validaCpf(dto.cpf()));
+    funcionario.setCpf(FuncionarioFormatador.formataCpf(dto.cpf()));
     funcionario.setSexo(dto.sexo());
     funcionario.setLogin(dto.login());
     funcionario.setSenha(hashservice.getHashSenha(dto.senha()));
@@ -308,7 +308,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
         telefone.setDdd(tel.ddd());
         telefone.setNumeroTelefone(
-          TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone())
+          TelefoneFormatador.formataNumeroTelefone(tel.numeroTelefone())
         );
         funcionario.getListaTelefone().add(telefone);
       }
@@ -319,7 +319,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     endereco.setNumeroLote(dto.endereco().numeroLote());
     endereco.setBairro(dto.endereco().bairro());
     endereco.setComplemento(dto.endereco().complemento());
-    endereco.setCep(new CEP(EnderecoFormatador.validaCep(dto.endereco().cep().getCep())));
+    endereco.setCep(new CEP(EnderecoFormatador.formataCep(dto.endereco().cep().getCep())));
     endereco.setLocalidade(dto.endereco().localidade());
     endereco.setUF(dto.endereco().uf());
     endereco.setPais(dto.endereco().pais());

@@ -59,7 +59,7 @@
             <ul>
                 <li *ngFor="let telefone of element.listaTelefone; let last = last">
                  Número: ({{ telefone.ddd }}) {{ telefone.numeroTelefone }} <br>
-                 Tipo: {{ telefone.tipo }}
+                 Tipo: {{ tiposTelefoneMap.get(telefone.tipo) }}
                  <!-- Adicione a linha horizontal se não for o último telefone -->
                 <hr *ngIf="!last">
                 </li>

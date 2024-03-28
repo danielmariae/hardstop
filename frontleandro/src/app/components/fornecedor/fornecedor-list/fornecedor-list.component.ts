@@ -22,6 +22,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class FornecedorListComponent implements OnInit {
     displayedColumns: string[] = ['id', 'nomeFantasia', 'cnpj', 'endSite', 'endereco', 'telefone', 'acao'];
     fornecedores: Fornecedor[] = [];
+    tiposTelefoneMap: Map<number, string> = new Map<number, string>();
 
     constructor(private fornecedorService: FornecedorService,
         private router: Router,
@@ -29,7 +30,7 @@ export class FornecedorListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
+        this.carregarTiposTelefone();
         this.carregarFornecedores(); // Carrega os fornecedores ao inicializar o componente
 
         // Inscreva-se para receber notificações de novos fornecedores
@@ -39,15 +40,47 @@ export class FornecedorListComponent implements OnInit {
         });
     }
 
+    carregarTiposTelefone() {
+        this.fornecedorService.getTipoTelefone().subscribe({
+          next: (tiposTelefone) => {
+            // Mapear os tipos de telefone para o mapa
+            tiposTelefone.forEach(tipo => {
+              this.tiposTelefoneMap.set(tipo.id, tipo.descricao);
+            });
+          },
+          error: (error) => {
+            console.error('Erro ao carregar tipos de telefone:', error);
+            // Lide com o erro conforme necessário
+          }
+        });
+    }
+
     carregarFornecedores(): void {
-        this.fornecedorService.findAll().subscribe(data => {
-            this.fornecedores = data;
+        this.fornecedorService.findAll().subscribe({
+            next: (response) => {
+                console.log('Resultado:', response);
+                this.fornecedores = response;
+            },
+            error: (error) => {
+                // Este callback é executado quando ocorre um erro durante a emissão do valor
+                console.error('Erro:', error);
+                // Aqui você pode lidar com o erro de acordo com sua lógica de negócio
+                // Por exemplo, exibir uma mensagem de erro para o usuário
+                window.alert(error);
+            } 
+
         });
     }
 
     apagarFornecedor(id: number): void {
-        this.fornecedorService.delete(id).subscribe(data => {
-            this.fornecedorService.notificarFornecedorInserido();
+        this.fornecedorService.delete(id).subscribe({
+          next:  (response) => {
+                this.fornecedorService.notificarFornecedorInserido();
+            },
+            error: (error) => {
+            console.error(error);
+            window.alert(error); // Exibe a mensagem de erro usando window.alert()
+            }
         });
     }
 }

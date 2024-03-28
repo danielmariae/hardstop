@@ -3,9 +3,11 @@ package br.unitins.topicos1.Formatadores;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import br.unitins.topicos1.validation.ValidationException;
+
 public class ClienteFormatador {
 
-    public static LocalDate validaDataNascimento(String dataNascimento) {
+    public static LocalDate formataDataNascimento(String dataNascimento) {
         
       if(dataNascimento.matches("[0-9]{2}[-/.\s][0-9]{2}[-/.\s][0-9]{4}")) {
         String[] datasplit = dataNascimento.split("[-/.\s]");
@@ -22,23 +24,32 @@ public class ClienteFormatador {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(data, formatter);
         return date;
-    } else {
-        return null;
+    } else if(dataNascimento.matches("[0-9]{8}")){
+      String ano = dataNascimento.substring(0, 4);
+      String mes = dataNascimento.substring(4, 6);
+      String dia = dataNascimento.substring(6);
+      String data = ano.concat("-").concat(mes).concat("-").concat(dia);
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+      LocalDate date = LocalDate.parse(data, formatter);
+      return date;
+      } else {
+      throw new ValidationException("dataDeNascimento", "Digite uma data de nascimento em um formato válido"); 
       }
     }
 
-public static String validaCpf(String cpf) {
+public static String formataCpf(String cpf) {
     if(cpf.matches("[0-9]{3}[-/.\s][0-9]{3}[-/.\s][0-9]{3}[-/.\s][0-9]{2}")) {
-        String parte1cpf, parte2cpf, parte3cpf, parte4cpf;
-        parte1cpf = cpf.substring(0,3);
-        parte2cpf = cpf.substring(4,7);
-        parte3cpf = cpf.substring(8,11);
-        parte4cpf = cpf.substring(12,14);
-        return (parte1cpf.concat(parte2cpf).concat(parte3cpf).concat(parte4cpf));
+        // String parte1cpf, parte2cpf, parte3cpf, parte4cpf;
+        // parte1cpf = cpf.substring(0,3);
+        // parte2cpf = cpf.substring(4,7);
+        // parte3cpf = cpf.substring(8,11);
+        // parte4cpf = cpf.substring(12,14);
+        // return (parte1cpf.concat(parte2cpf).concat(parte3cpf).concat(parte4cpf));
+        return cpf.replaceAll("[^0-9]", "");
       } else if(cpf.matches("[0-9]{11}")) {
       return cpf;
       }
-      return null;
+      throw new ValidationException("cpf", "O cpf precisa ter exatamente 11 números!");
 }
 
 

@@ -130,9 +130,9 @@ cliente.getListaProduto().clear();
 
     cliente.setNome(clt.nome());
     cliente.setDataNascimento(
-      ClienteFormatador.validaDataNascimento(clt.dataNascimento())
+      ClienteFormatador.formataDataNascimento(clt.dataNascimento())
     );
-    cliente.setCpf(ClienteFormatador.validaCpf(clt.cpf()));
+    cliente.setCpf(ClienteFormatador.formataCpf(clt.cpf()));
     cliente.setSexo(clt.sexo());
     cliente.setLogin(clt.login());
     cliente.setSenha(hashservice.getHashSenha(clt.senha()));
@@ -150,7 +150,7 @@ cliente.getListaProduto().clear();
           tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
           tele1.setDdd(tele.ddd());
           tele1.setNumeroTelefone(
-            TelefoneFormatador.validaNumeroTelefone(tele.numeroTelefone())
+            TelefoneFormatador.formataNumeroTelefone(tele.numeroTelefone())
           );
         }
       }
@@ -170,7 +170,7 @@ cliente.getListaProduto().clear();
           endereco.setNumeroLote(end1.numeroLote());
           endereco.setBairro(end1.bairro());
           endereco.setComplemento(end1.complemento());
-          endereco.setCep(new CEP(EnderecoFormatador.validaCep(end1.cep().getCep())));
+          endereco.setCep(new CEP(EnderecoFormatador.formataCep(end1.cep().getCep())));
           endereco.setLocalidade(end1.localidade());
           endereco.setUF(end1.uf());
           endereco.setPais(end1.pais());
@@ -194,8 +194,8 @@ cliente.getListaProduto().clear();
   @Transactional
   public String updateCpf(PatchCpfDTO cpf, Long id) {
     Cliente cliente = repository.findById(id);
-    verificaCpf(ClienteFormatador.validaCpf(cpf.cpf()));
-    cliente.setCpf(ClienteFormatador.validaCpf(cpf.cpf()));
+    verificaCpf(ClienteFormatador.formataCpf(cpf.cpf()));
+    cliente.setCpf(ClienteFormatador.formataCpf(cpf.cpf()));
     return "Cpf alterado com sucesso.";
   }
 
@@ -239,7 +239,7 @@ cliente.getListaProduto().clear();
         Telefone telefone = new Telefone();
         telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
         telefone.setDdd(tel.ddd());
-        telefone.setNumeroTelefone(TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+        telefone.setNumeroTelefone(TelefoneFormatador.formataNumeroTelefone(tel.numeroTelefone()));
         cliente.getListaTelefone().add(telefone);
     repository.persist(cliente);
     return ClienteResponseDTO.valueOf(cliente);
@@ -262,7 +262,7 @@ cliente.getListaProduto().clear();
           if (tele1.getId() == tel.id()) {
             tele1.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
             tele1.setDdd(tel.ddd());
-            tele1.setNumeroTelefone(TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+            tele1.setNumeroTelefone(TelefoneFormatador.formataNumeroTelefone(tel.numeroTelefone()));
             chave = false;
           }   
       }
@@ -296,7 +296,7 @@ cliente.getListaProduto().clear();
             endereco.setLogradouro(end.logradouro());
             endereco.setNumeroLote(end.numeroLote());
             endereco.setBairro(end.bairro());
-            endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+            endereco.setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
             endereco.setComplemento(end.complemento());
             endereco.setLocalidade(end.localidade());
             endereco.setUF(end.uf());
@@ -329,7 +329,7 @@ cliente.getListaProduto().clear();
       endereco.setNumeroLote(end.numeroLote());
       endereco.setBairro(end.bairro());
       endereco.setComplemento(end.complemento());
-      endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+      endereco.setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
       endereco.setLocalidade(end.localidade());
       endereco.setUF(end.uf());
       endereco.setPais(end.pais());
@@ -358,9 +358,9 @@ cliente.getListaProduto().clear();
 
     cliente.setNome(dto.nome());
     cliente.setDataNascimento(
-    ClienteFormatador.validaDataNascimento(dto.dataNascimento()));
-    verificaCpf(ClienteFormatador.validaCpf(dto.cpf()));
-    cliente.setCpf(ClienteFormatador.validaCpf(dto.cpf()));
+    ClienteFormatador.formataDataNascimento(dto.dataNascimento()));
+    verificaCpf(ClienteFormatador.formataCpf(dto.cpf()));
+    cliente.setCpf(ClienteFormatador.formataCpf(dto.cpf()));
     cliente.setSexo(dto.sexo());
     verificaLogin(dto.login());
     cliente.setLogin(dto.login());
@@ -379,7 +379,7 @@ cliente.getListaProduto().clear();
         telefone.setTipoTelefone(TipoTelefone.valueOf(tel.tipo()));
         telefone.setDdd(tel.ddd());
         telefone.setNumeroTelefone(
-        TelefoneFormatador.validaNumeroTelefone(tel.numeroTelefone()));
+        TelefoneFormatador.formataNumeroTelefone(tel.numeroTelefone()));
         cliente.getListaTelefone().add(telefone);
       }
     }
@@ -398,7 +398,7 @@ cliente.getListaProduto().clear();
         endereco.setNumeroLote(end.numeroLote());
         endereco.setBairro(end.bairro());
         endereco.setComplemento(end.complemento());
-        endereco.setCep(new CEP(EnderecoFormatador.validaCep(end.cep().getCep())));
+        endereco.setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
         endereco.setLocalidade(end.localidade());
         endereco.setUF(end.uf());
         endereco.setPais(end.pais());

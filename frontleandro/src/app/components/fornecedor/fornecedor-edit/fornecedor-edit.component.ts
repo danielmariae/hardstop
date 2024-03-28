@@ -192,14 +192,9 @@ removerEndereco(index: number): void {
   // }
 
   cancelarEdicao(): void {
-    // Limpa o formulário
-    //this.fornecedorForm.reset();
-
     // Redireciona o usuário para outra rota
     this.router.navigate(['fornecedores']);
-
-    // Ou executa qualquer outra lógica necessária
-}
+  }
 
 
   salvarAlteracoes(): void {
@@ -216,11 +211,18 @@ removerEndereco(index: number): void {
     };
 
     // Lógica para salvar as alterações do fornecedor
-    this.fornecedorService.update(novoFornecedor).subscribe(() => {
+    this.fornecedorService.update(novoFornecedor).subscribe({
+      next: (response) => {
         console.log(novoFornecedor);
         this.fornecedorService.notificarFornecedorInserido(); // Notificar outros componentes
-      // Redireciona para a página de lista de fornecedores após a atualização
-      //this.router.navigate(['/fornecedores']);
+      },
+      error: (error) => {
+       // Este callback é executado quando ocorre um erro durante a emissão do valor
+       console.error('Erro:', error);
+       // Aqui você pode lidar com o erro de acordo com sua lógica de negócio
+       // Por exemplo, exibir uma mensagem de erro para o usuário
+       window.alert(error);
+      }
     });
   }
 }
