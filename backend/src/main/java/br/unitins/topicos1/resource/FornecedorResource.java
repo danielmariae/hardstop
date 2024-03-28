@@ -40,7 +40,7 @@ public class FornecedorResource {
     }
 
     @DELETE
-    @Path("/delete/{id}")
+    @Path("/{id}")
     @RolesAllowed({"Func", "Admin"})
     public Response delete(@PathParam("id") Long id){
         service.delete(id);

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FornecedorService } from '../../../services/fornecedor.service';
 import { Fornecedor } from '../../../models/fornecedor.model';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Importe FormsModule
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 
@@ -17,6 +17,8 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 export class FornecedorEditComponent implements OnInit {
   fornecedor: Fornecedor;
   fornecedorForm: FormGroup;
+  tiposTelefone: any[];
+  uf: any[];
 
   constructor(
     private route: ActivatedRoute,
@@ -24,6 +26,8 @@ export class FornecedorEditComponent implements OnInit {
     private fornecedorService: FornecedorService,
     private formBuilder: FormBuilder
   ) {
+    this.tiposTelefone = [];
+    this.uf = [];
     this.fornecedor = new Fornecedor(); // Inicialização no construtor
     this.fornecedorForm = this.formBuilder.group({
       nomeFantasia: [''],
@@ -37,6 +41,15 @@ export class FornecedorEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.fornecedorService.getTipoTelefone().subscribe(data => {
+      this.tiposTelefone = data;
+    });
+
+    this.fornecedorService.getUF().subscribe(data => {
+      this.uf = data;
+    });
+
     const idParam = this.route.snapshot.paramMap.get('id');
     console.log(idParam);
     const fornecedorId = idParam ? +idParam : null;
@@ -180,10 +193,10 @@ removerEndereco(index: number): void {
 
   cancelarEdicao(): void {
     // Limpa o formulário
-    this.fornecedorForm.reset();
+    //this.fornecedorForm.reset();
 
     // Redireciona o usuário para outra rota
-    this.router.navigate(['formularios']);
+    this.router.navigate(['fornecedores']);
 
     // Ou executa qualquer outra lógica necessária
 }

@@ -74,7 +74,7 @@
             <button mat-icon-button color="primary" routerLink="/fornecedores/edit/{{ element.id }}">
                 <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn">
+            <button mat-icon-button color="warn" (click)="apagarFornecedor(element.id)">
                 <mat-icon>delete</mat-icon>
             </button>
         </td>

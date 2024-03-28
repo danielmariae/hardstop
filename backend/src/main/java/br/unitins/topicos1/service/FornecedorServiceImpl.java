@@ -6,6 +6,7 @@ import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.*;
 import br.unitins.topicos1.model.*;
 import br.unitins.topicos1.repository.FornecedorRepository;
+import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -25,6 +26,7 @@ public class FornecedorServiceImpl implements FornecedorService {
     public FornecedorResponseDTO insert(FornecedorDTO dto) {
         Fornecedor fornecedor = new Fornecedor();
         fornecedor.setNomeFantasia(dto.nomeFantasia());
+        verificaCnpj(dto.cnpj());
         fornecedor.setCnpj(dto.cnpj());
         fornecedor.setEndSite(dto.endSite());
         if (dto.listaEndereco() != null && !dto.listaEndereco().isEmpty()) {
@@ -136,5 +138,11 @@ public class FornecedorServiceImpl implements FornecedorService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    private void verificaCnpj(String cnpj) {
+        if(repository.findByCnpj(cnpj) != null) {
+            throw new ValidationException("cnpj", "Este cnpj já existe no sistema. Usuário já está cadastrado no sistema.");
+  }
+}
 
 }

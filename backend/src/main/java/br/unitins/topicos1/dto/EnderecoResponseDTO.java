@@ -1,7 +1,6 @@
 package br.unitins.topicos1.dto;
 
 import org.jrimum.domkee.pessoa.CEP;
-import org.jrimum.domkee.pessoa.UnidadeFederativa;
 
 import br.unitins.topicos1.model.Endereco;
 
@@ -14,7 +13,7 @@ public record EnderecoResponseDTO(
   String complemento,
   CEP cep,
   String localidade,
-  UnidadeFederativa uf,
+  String uf,
   String pais
 ) {
   public static EnderecoResponseDTO valueOf(Endereco endereco) {
@@ -27,7 +26,7 @@ public record EnderecoResponseDTO(
       endereco.getComplemento(),
       endereco.getCep(),
       endereco.getLocalidade(),
-      endereco.getUF(),
+      endereco.getUF().getSigla(),
       endereco.getPais()
     );
   }

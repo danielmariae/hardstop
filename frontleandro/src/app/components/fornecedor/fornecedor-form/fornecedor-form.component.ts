@@ -2,21 +2,25 @@ import { Fornecedor } from '../../../models/fornecedor.model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators } from '@angular/forms';
 import { FornecedorService } from '../../../services/fornecedor.service'; 
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-fornecedor',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './fornecedor-form.component.html',
   styleUrl: './fornecedor-form.component.css'
 })
 export class FornecedorComponent {
   fornecedorForm: FormGroup;
+  tiposTelefone: any[];
+  uf: any[];
 
   constructor(private formBuilder: FormBuilder, private fornecedorService: FornecedorService,
     private router: Router, private activatedRoute: ActivatedRoute) {
+    this.tiposTelefone = [];
+    this.uf = [];
     // Inicializar fornecedorForm no construtor
     this.fornecedorForm = formBuilder.group({
         id: [null],
@@ -29,18 +33,13 @@ export class FornecedorComponent {
   }
   
   ngOnInit(): void {
-    // Nada a fazer aqui no momento
-    // this.initializeForm();
-  }
+    this.fornecedorService.getTipoTelefone().subscribe(data => {
+      this.tiposTelefone = data;
+    });
 
-  initializeForm() {
-    const fornecedor: Fornecedor = this.activatedRoute.snapshot.data['fornecedor'];
-    this.fornecedorForm = this.formBuilder.group({
-        id: [(fornecedor && fornecedor.id) ? fornecedor.id : null],
-        nomeFantasia: [(fornecedor && fornecedor.nomeFantasia) ? fornecedor.nomeFantasia : ''],
-        cnpj: [(fornecedor && fornecedor.cnpj) ? fornecedor.cnpj : ''],
-        endSite: [(fornecedor && fornecedor.endSite) ? fornecedor.endSite : '']
-      });
+    this.fornecedorService.getUF().subscribe(data => {
+      this.uf = data;
+    });
   }
 
   get telefones(): FormArray {
@@ -60,7 +59,7 @@ export class FornecedorComponent {
       id:[null],
       ddd: [''],
       numeroTelefone: [''],
-      tipo: [''],
+      tipo: [null],
     });
   }
 
@@ -90,10 +89,15 @@ export class FornecedorComponent {
         cep: ['']
       }),
       localidade: [''],
-      uf: [''],
+      uf: [null],
       pais: ['']
     });
   }
+
+  cancelarInsercao(): void {
+    // Redireciona o usuário para outra rota
+    this.router.navigate(['fornecedores']);
+}
 
   salvarFornecedor(): void {
     if (this.fornecedorForm.invalid) {
@@ -101,7 +105,7 @@ export class FornecedorComponent {
     }
 
     const novoFornecedor: Fornecedor = {
-      id: this.fornecedorForm.value.id, // Pode definir como necessário
+      id: this.fornecedorForm.value.id,
       nomeFantasia: this.fornecedorForm.value.nomeFantasia,
       cnpj: this.fornecedorForm.value.cnpj,
       endSite: this.fornecedorForm.value.endSite,
@@ -109,9 +113,9 @@ export class FornecedorComponent {
       listaEndereco: this.fornecedorForm.value.enderecos
     };
 
-    console.log(novoFornecedor);
     // Chame o serviço para inserir o fornecedor
     this.fornecedorService.insert(novoFornecedor).subscribe(() => {
+      console.log(novoFornecedor);
       // Lógica após a inserção bem-sucedida
       this.fornecedorService.notificarFornecedorInserido(); // Notificar outros componentes
     });

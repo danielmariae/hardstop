@@ -3,37 +3,7 @@
   <input formControlName="nomeFantasia" placeholder="Nome da empresa">
   <input formControlName="cnpj" placeholder="cnpj">
   <input formControlName="endSite" placeholder="Endereço do Site">
-    <!-- <label for="nomeFantasia">Nome Fantasia:</label>
-    <input type="text" id="nomeFantasia" [(ngModel)]="fornecedor.nomeFantasia" name="nomeFantasia">
-    <br><input formControlName="ddd" placeholder="DDD">
-    <label for="cnpj">CNPJ:</label>
-    <input type="text" id="cnpj" [(ngModel)]="fornecedor.cnpj" name="cnpj">
-    <br>
-    <label for="endSite">Endereço do Site:</label>
-    <input type="text" id="endSite" [(ngModel)]="fornecedor.endSite" name="endSite">
-    <br> -->
-
-    <!-- Lista de telefones -->
-     <!-- <h3>Telefones:</h3>
-    <div *ngFor="let telefone of fornecedor.listaTelefone; let i = index">
-      <label for="ddd{{i}}">DDD:</label>
-      <input type="text" id="ddd{{i}}" [(ngModel)]="telefone.ddd" name="ddd{{i}}">
-      <label for="numeroTelefone{{i}}">Número:</label>
-      <input type="text" id="numeroTelefone{{i}}" [(ngModel)]="telefone.numeroTelefone" name="numeroTelefone{{i}}">
-      <label for="tipo{{i}}">Tipo:</label>
-      <input type="text" id="tipo{{i}}" [(ngModel)]="telefone.tipo" name="tipo{{i}}">
-    </div>
-
-     <div formArrayName="telefones">
-      <div *ngFor="let telefone of telefones.controls; let i = index" [formGroupName]="i">
-        <input formControlName="ddd" placeholder="DDD">
-        <input formControlName="numeroTelefone" placeholder="Número">
-        <input formControlName="tipo" placeholder="Tipo">
-        <button type="button" (click)="removerTelefone(i)">Remover</button>
-      </div>
-      <button type="button" (click)="adicionarTelefone()">Adicionar Telefone</button>
-    </div>
-   -->
+   
      <!-- Campos de telefone -->
   <h3>Telefones:</h3>
     <div formArrayName="telefones">
@@ -41,7 +11,11 @@
         <div [formGroupName]="i">
           <input formControlName="ddd" placeholder="DDD">
           <input formControlName="numeroTelefone" placeholder="Número">
-          <input formControlName="tipo" placeholder="Tipo">
+          <select formControlName="tipo">
+            <option disabled selected value="">Selecione um tipo de telefone</option>
+            <option *ngFor="let tipos of tiposTelefone" [value]="tipos.id">{{ tipos.descricao }}</option>
+          </select>
+    
           <button type="button" (click)="removerTelefone(i)">Remover</button>
         </div>
       </div>
@@ -64,45 +38,15 @@
           <input formControlName="cep" placeholder="CEP">
          </div>   
         <input formControlName="localidade" placeholder="Localidade">
-        <input formControlName="uf" placeholder="UF">
+        <select formControlName="uf">
+          <option disabled selected value="">Selecione um Estado</option>
+          <option *ngFor="let ufs of uf" [value]="ufs.sigla">{{ ufs.nome }}</option>
+        </select>  
         <input formControlName="pais" placeholder="País">
-
-
-
-
-        <!-- <label for="nome{{i}}">Nome:</label>
-        <input type="text" id="nome{{i}}" formControlName="nome">
-        <label for="logradouro{{i}}">Logradouro:</label>
-        <input type="text" id="logradouro{{i}}" formControlName="logradouro">
-        <label for="numeroLote{{i}}">Número/Lote:</label>
-        <input type="text" id="numeroLote{{i}}" formControlName="numeroLote">  -->
         <button type="button" (click)="removerEndereco(i)">Remover</button>
       </div>
     </div>
   </div>
-
-
-
-    
-    <!-- Lista de endereços -->
-    <!-- <h3>Endereços:</h3>
-    <div *ngFor="let endereco of fornecedor.listaEndereco; let i = index">
-      <label for="nome{{i}}">Nome:</label>
-      <input type="text" id="nome{{i}}" [(ngModel)]="endereco.nome" name="nome{{i}}">
-      <label for="logradouro{{i}}">Logradouro:</label>
-      <input type="text" id="logradouro{{i}}" [(ngModel)]="endereco.logradouro" name="logradouro{{i}}">
-      <label for="numeroLote{{i}}">Número/Lote:</label>
-      <input type="text" id="numeroLote{{i}}" [(ngModel)]="endereco.numeroLote" name="numeroLote{{i}}">
-      <!-- Campos para o CEP
-      <label for="prefixoCEP{{i}}">CEP Prefixo:</label>
-      <input type="text" id="prefixoCEP{{i}}" [(ngModel)]="endereco.cep.prefixo" name="prefixoCEP{{i}}">
-      <label for="sufixoCEP{{i}}">CEP Sufixo:</label>
-      <input type="text" id="sufixoCEP{{i}}" [(ngModel)]="endereco.cep.sufixo" name="sufixoCEP{{i}}">
-      <label for="valorCEP{{i}}">CEP:</label>
-      <input type="text" id="valorCEP{{i}}" [(ngModel)]="endereco.cep.cep" name="valorCEP{{i}}">
-       Campos para o CEP 
-    </div> -->
-
     <!-- Botão para adicionar endereço -->
     <button type="button" (click)="adicionarEndereco()">Adicionar Endereço</button>
 
