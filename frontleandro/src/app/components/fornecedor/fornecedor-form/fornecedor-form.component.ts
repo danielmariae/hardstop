@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators } fr
 import { FornecedorService } from '../../../services/fornecedor.service'; 
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { NavigationService } from '../../../services/NavigationService';
 
 @Component({
   selector: 'app-fornecedor',
@@ -19,7 +20,8 @@ export class FornecedorComponent {
   uf: any[];
 
   constructor(private formBuilder: FormBuilder, private fornecedorService: FornecedorService,
-    private router: Router, private activatedRoute: ActivatedRoute) {
+    private router: Router, private activatedRoute: ActivatedRoute,
+    private navigationService: NavigationService) {
     this.tiposTelefone = [];
     this.uf = [];
     // Inicializar fornecedorForm no construtor
@@ -96,8 +98,8 @@ export class FornecedorComponent {
   }
 
   cancelarInsercao(): void {
-    // Redireciona o usuário para outra rota
-    this.router.navigate(['fornecedores']);
+    // Redireciona o usuário para a rota anterior
+    this.navigationService.navigateBack();
 }
 
   salvarFornecedor(): void {
@@ -114,18 +116,15 @@ export class FornecedorComponent {
       listaEndereco: this.fornecedorForm.value.enderecos
     };
 
-    // Chame o serviço para inserir o fornecedor
+    // Chamando o serviço para inserir o fornecedor
     this.fornecedorService.insert(novoFornecedor).subscribe({
       next: (response) => {
       console.log('Resultado:', response);
-      // Lógica após a inserção bem-sucedida
       this.fornecedorService.notificarFornecedorInserido(); // Notificar outros componentes
       },
       error: (error) => {
         // Este callback é executado quando ocorre um erro durante a emissão do valor
         console.error('Erro:', error);
-        // Aqui você pode lidar com o erro de acordo com sua lógica de negócio
-        // Por exemplo, exibir uma mensagem de erro para o usuário
         window.alert(error);
       }
   });

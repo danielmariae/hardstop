@@ -6,7 +6,8 @@ import { SessionTokenComponent } from './components/session-token/session-token.
 import { HomeComponent } from './components/home/home.component';
 import { AuthResolver } from './components/session-token/resolver/session-token.resolver';
 import { FornecedorEditComponent } from './components/fornecedor/fornecedor-edit/fornecedor-edit.component';
-// import { fornecedorResolver } from './components/fornecedor/resolver/fornecedor-resolver';
+import { FornecedorEscolhidoComponent } from './components/fornecedor/fornecedor-escolhido/fornecedor-escolhido.component';
+
 
 export const routes: Routes = [
     { path: 'loginF', component: SessionTokenComponent },
@@ -15,8 +16,7 @@ export const routes: Routes = [
     { path: 'fornecedores', component: FornecedorListComponent, title: 'Lista de Fornecedores'},
     { path: 'fornecedores/new', component: FornecedorComponent, title: 'Formulario de Fornecedores'},
     { path: 'fornecedores/edit/:id', component: FornecedorEditComponent, title: 'Edição de Dados de Fornecedores' },
-
-    //{path: 'fornecedores/edit/:id', component: FornecedorFormComponent, resolve: {fornecedor: fornecedorResolver}},
+    {path: 'fornecedores/:id', component: FornecedorEscolhidoComponent, title: 'Fornecedor Escolhido'}
 ];
 
 @NgModule({

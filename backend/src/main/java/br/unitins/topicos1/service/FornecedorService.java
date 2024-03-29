@@ -28,6 +28,9 @@ public interface FornecedorService {
     public FornecedorResponseDTO findById(Long id);
 
     // LISTAR TODOS:
+    public List<FornecedorResponseDTO> findTodos();
+
+    // LISTAR DE FORMA PAGINADA
     public List<FornecedorResponseDTO> findByAll(int page, int pageSize);
 
     // CONTADOR:

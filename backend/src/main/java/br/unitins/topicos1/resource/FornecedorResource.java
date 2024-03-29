@@ -75,6 +75,12 @@ public class FornecedorResource {
     }
 
     @GET
+    @RolesAllowed({"Func", "Admin"})
+    public Response findTodos() {
+        return Response.ok(service.findTodos()).build();
+    }
+
+    @GET
     @Path("/count")
     public Long count() {
         return service.count();

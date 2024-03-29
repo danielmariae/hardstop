@@ -5,6 +5,7 @@ import { Fornecedor } from '../../../models/fornecedor.model';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { NavigationService } from '../../../services/NavigationService';
 
 
 @Component({
@@ -14,17 +15,21 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
   templateUrl: './fornecedor-edit.component.html',
   styleUrls: ['./fornecedor-edit.component.css']
 })
+
 export class FornecedorEditComponent implements OnInit {
   fornecedor: Fornecedor;
   fornecedorForm: FormGroup;
   tiposTelefone: any[];
   uf: any[];
+  enderecoAnterior: string = '';
+  id: number = 0;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private fornecedorService: FornecedorService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private navigationService: NavigationService
   ) {
     this.tiposTelefone = [];
     this.uf = [];
@@ -35,12 +40,13 @@ export class FornecedorEditComponent implements OnInit {
       endSite: [''],
       telefones: this.formBuilder.array([]),
       enderecos: this.formBuilder.array([]),
-
-    });
-    
+    }); 
   }
 
   ngOnInit(): void {
+
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    //this.enderecoAnterior = this.navigationService
 
     this.fornecedorService.getTipoTelefone().subscribe(data => {
       this.tiposTelefone = data;
@@ -50,11 +56,10 @@ export class FornecedorEditComponent implements OnInit {
       this.uf = data;
     });
 
-    const idParam = this.route.snapshot.paramMap.get('id');
-    console.log(idParam);
-    const fornecedorId = idParam ? +idParam : null;
-    if (fornecedorId !== null) {
-        this.fornecedorService.findById(fornecedorId).subscribe(fornecedor => {
+    //const idParam = this.route.snapshot.paramMap.get('id');
+    console.log(this.id);
+    if (this.id !== null) {
+        this.fornecedorService.findById(this.id).subscribe(fornecedor => {
           this.fornecedor = fornecedor;
 
           // Inserindo valores nos campos de nome, cnpj e endSite
@@ -128,17 +133,17 @@ removerEndereco(index: number): void {
 }
 
   cancelarEdicao(): void {
-    // Redireciona o usuário para outra rota
-    this.router.navigate(['fornecedores']);
+    // Redireciona o usuário para outra rota anterior
+    this.navigationService.navigateBack();
   }
 
 
   salvarAlteracoes(): void {
-
-    const idParam = Number(this.route.snapshot.paramMap.get('id'));
-    console.log(idParam);
+    
+    // const idParam = Number(this.route.snapshot.paramMap.get('id'));
+    console.log(this.id);
     const novoFornecedor: Fornecedor = {
-      id: idParam, // Pode definir como necessário
+      id: this.id, // Pode definir como necessário
       nomeFantasia: this.fornecedorForm.value.nomeFantasia,
       cnpj: this.fornecedorForm.value.cnpj,
       endSite: this.fornecedorForm.value.endSite,
@@ -150,7 +155,11 @@ removerEndereco(index: number): void {
     this.fornecedorService.update(novoFornecedor).subscribe({
       next: (response) => {
         console.log(novoFornecedor);
-        this.fornecedorService.notificarFornecedorInserido(); // Notificar outros componentes
+        if(this.navigationService.getPreviousEndPoint() === 'fornecedores') {
+          this.fornecedorService.notificarFornecedorInserido(); // Notificar outros componentes
+        } else {
+          this.navigationService.navigateBack();
+        }
       },
       error: (error) => {
        // Este callback é executado quando ocorre um erro durante a emissão do valor

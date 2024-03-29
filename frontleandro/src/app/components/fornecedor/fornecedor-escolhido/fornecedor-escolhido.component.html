@@ -1,31 +1,15 @@
-<mat-toolbar color="primary">
+<!-- <h1>Teste</h1>
+<mat-option *ngFor="let fornecedor of filteredOptions | async" [value]="fornecedor">
+    {{ fornecedor.nomeFantasia }}
+  </mat-option> -->
+
+  <mat-toolbar color="primary">
     <div class="flex-container">
-        <span class="toolbar-title">Lista de Fornecedores</span>
-        <button mat-fab color="accent" (click)="inserirFornecedor()">
-            <mat-icon>add</mat-icon>
-        </button>
-    </div>
-    <div class="autocomplete-container">
-        <form class="example-form">
-            <mat-form-field class="example-full-width">
-                <mat-label>Insira um CNPJ válido</mat-label>
-                <input type="text"
-                    placeholder="Pick one"
-                    aria-label="Number"
-                    matInput
-                    [formControl]="myControl"
-                    [matAutocomplete]="auto">
-                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selecionarFornecedor($event.option.value)">
-                    <mat-option *ngFor="let fornecedor of filteredOptions | async" [value]="fornecedor">
-                        {{ fornecedor.cnpj }}
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
-        </form>
+        <span class="toolbar-title">Fornecedor</span>
     </div>
 </mat-toolbar>
 
-<table mat-table [dataSource]="fornecedores" class="mat-elevation-z8">
+<table mat-table [dataSource]="[fornecedor]" class="mat-elevation-z8">
 
     <!-- Position Column -->
     <ng-container matColumnDef="id">
@@ -102,10 +86,3 @@
 
 
 </table>
-
-<mat-paginator
-    [pageSizeOptions] = "[2,4,8,16]"
-    [pageSize] = "pageSize"
-    [length] = "totalRecords"
-    (page) = "paginar($event)">
-</mat-paginator>

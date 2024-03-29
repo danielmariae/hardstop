@@ -130,6 +130,14 @@ public class FornecedorServiceImpl implements FornecedorService {
         return FornecedorResponseDTO.valueOf(repository.findById(id));
     }
 
+    public List<FornecedorResponseDTO> findTodos() {
+       return repository
+                .listAll()
+                .stream()
+                .map(FornecedorResponseDTO::valueOf)
+                .toList();
+    } 
+
     @Override
     public List<FornecedorResponseDTO> findByAll(int page, int pageSize) {
 
