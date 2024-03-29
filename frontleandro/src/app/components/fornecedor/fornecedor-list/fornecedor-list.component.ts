@@ -9,17 +9,23 @@ import { Fornecedor } from "../../../models/fornecedor.model";
 import { FornecedorService } from "../../../services/fornecedor.service";
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
+import { PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @Component({
     selector: 'app-fornecedor-list',
     standalone: true,
-    imports: [NgFor, MatTableModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterModule, CommonModule],
+    imports: [NgFor, MatTableModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterModule, CommonModule, MatPaginatorModule],
     templateUrl: './fornecedor-list.component.html',
     styleUrl: './fornecedor-list.component.css'
 })
 
 export class FornecedorListComponent implements OnInit {
+    // variaveis de controle de paginacao
+    totalRecords = 0;
+    page = 0;
+    pageSize = 0;
     displayedColumns: string[] = ['id', 'nomeFantasia', 'cnpj', 'endSite', 'endereco', 'telefone', 'acao'];
     fornecedores: Fornecedor[] = [];
     tiposTelefoneMap: Map<number, string> = new Map<number, string>();
@@ -30,14 +36,31 @@ export class FornecedorListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.carregarTiposTelefone();
-        this.carregarFornecedores(); // Carrega os fornecedores ao inicializar o componente
+      this.carregarTiposTelefone();
+      this.pageSize = 2; // Este foi o menor número que definimos no arquivo html
+      this.atualizarDadosDaPagina();
 
-        // Inscreva-se para receber notificações de novos fornecedores
-        this.fornecedorService.fornecedorInserido$.subscribe(() => {
-          this.carregarFornecedores(); // Recarrega os fornecedores ao receber uma notificação
-          this.router.navigate(['fornecedores']);
-        });
+      // Inscreva-se para receber notificações de novos fornecedores
+      this.fornecedorService.fornecedorInserido$.subscribe(() => {
+        this.carregarFornecedores(this.page, this.pageSize); // Recarrega os fornecedores ao receber uma notificação
+        this.router.navigate(['fornecedores']);
+      });
+    }
+
+    // Método para paginar os resultados
+    paginar(event: PageEvent) : void {
+      this.page = event.pageIndex;
+      this.pageSize = event.pageSize;
+      this.atualizarDadosDaPagina();
+    }
+
+    atualizarDadosDaPagina(): void {
+      this.carregarFornecedores(this.page, this.pageSize);
+    
+      this.fornecedorService.count().subscribe(data => {
+        this.totalRecords = data;
+        console.log(this.totalRecords);
+      });
     }
 
     carregarTiposTelefone() {
@@ -55,8 +78,8 @@ export class FornecedorListComponent implements OnInit {
         });
     }
 
-    carregarFornecedores(): void {
-        this.fornecedorService.findAll().subscribe({
+    carregarFornecedores(page: number, pageSize: number): void {
+        this.fornecedorService.findAll(this.page, this.pageSize).subscribe({
             next: (response) => {
                 console.log('Resultado:', response);
                 this.fornecedores = response;
@@ -64,8 +87,6 @@ export class FornecedorListComponent implements OnInit {
             error: (error) => {
                 // Este callback é executado quando ocorre um erro durante a emissão do valor
                 console.error('Erro:', error);
-                // Aqui você pode lidar com o erro de acordo com sua lógica de negócio
-                // Por exemplo, exibir uma mensagem de erro para o usuário
                 window.alert(error);
             } 
 

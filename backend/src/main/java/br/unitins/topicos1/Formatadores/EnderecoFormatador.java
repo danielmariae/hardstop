@@ -12,7 +12,7 @@ public class EnderecoFormatador {
          } else if(cep.matches(("[0-9]{8}"))) {
            return cep;
          } else {
-            throw new ValidationException("cep", "O cep precisa ter exatamente 5 números e um formato válido!");      
+            throw new ValidationException("cep", "O cep precisa ter exatamente 8 números e um formato válido! Formatos válidos, ex: 76543-012 ou 76543012");      
         }
     }
 }

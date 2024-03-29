@@ -33,7 +33,7 @@ public class ClienteFormatador {
       LocalDate date = LocalDate.parse(data, formatter);
       return date;
       } else {
-      throw new ValidationException("dataDeNascimento", "Digite uma data de nascimento em um formato válido"); 
+      throw new ValidationException("dataDeNascimento", "Digite uma data de nascimento em um formato válido! Formatos válidos: 12-05-2022 ou 12/05/2022 ou 2022/05/12 ou 2022-05-12 ou 20220512"); 
       }
     }
 
@@ -49,7 +49,7 @@ public static String formataCpf(String cpf) {
       } else if(cpf.matches("[0-9]{11}")) {
       return cpf;
       }
-      throw new ValidationException("cpf", "O cpf precisa ter exatamente 11 números!");
+      throw new ValidationException("cpf", "O cpf precisa ter exatamente 11 números e estar em formato válido! Formatos válidos: 123.456.789-10 ou 12345678910");
 }
 
 

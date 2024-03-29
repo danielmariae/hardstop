@@ -127,70 +127,6 @@ removerEndereco(index: number): void {
   this.enderecos.removeAt(index);
 }
 
-
-  // get telefones(): FormArray {
-  //   return this.fornecedorForm.get('telefones') as FormArray;
-  // }
-
-  // adicionarTelefone(): void {
-  //   this.telefones.push(this.criarTelefoneFormGroup());
-  // }
-
-  // removerTelefone(index: number): void {
-  //   this.telefones.removeAt(index);
-  // }
-
-  // criarTelefoneFormGroup(): FormGroup {
-  //   return this.formBuilder.group({
-  //     id:[null],
-  //     ddd: [''],
-  //     numeroTelefone: [''],
-  //     tipo: [''],
-  //   });
-  // }
-
-  // adicionarTelefone(): void {
-  //   // Obtenha uma referência ao array de telefones no formulário
-  //   const telefonesArray = this.fornecedorForm.get('listaTelefone') as FormArray;
-  
-  //   // Crie um FormGroup para representar o novo telefone
-  //   const novoTelefoneFormGroup = this.formBuilder.group({
-  //     id: [null], // ou defina o valor inicial do id, se necessário
-  //     ddd: [''], // campo de ddd, requerido
-  //     numeroTelefone: [''], // campo de número de telefone, requerido
-  //     tipo: [''] // campo de tipo de telefone, opcional
-  //   });
-  
-  //   // Adicione o novo FormGroup ao array de telefones no formulário
-  //   telefonesArray.push(novoTelefoneFormGroup);
-  // }
-  
-  // adicionarEndereco(): void {
-  //   // Obtém o FormArray correspondente aos endereços
-  //   const enderecosArray = this.fornecedorForm.get('listaEndereco') as FormArray;
-  
-  //   // Cria um novo FormGroup para representar um endereço vazio
-  //   const novoEnderecoFormGroup = this.formBuilder.group({
-  //     id: [null], // Defina o valor inicial como null ou deixe em branco, dependendo da sua lógica
-  //     nome: [''], // Exemplo de campo obrigatório
-  //     logradouro: [''], // Exemplo de campo obrigatório
-  //     numeroLote: [''],
-  //     bairro: [''],
-  //     complemento: [''],
-  //     cep: this.formBuilder.group({
-  //       prefixo: ['', Validators.required],
-  //       sufixo: [null],
-  //       cep: ['', Validators.required]
-  //     }),
-  //     localidade: ['', Validators.required],
-  //     uf: ['', Validators.required],
-  //     pais: ['', Validators.required]
-  //   });
-  
-  //   // Adiciona o novo FormGroup ao FormArray de endereços
-  //   enderecosArray.push(novoEnderecoFormGroup);
-  // }
-
   cancelarEdicao(): void {
     // Redireciona o usuário para outra rota
     this.router.navigate(['fornecedores']);
@@ -209,7 +145,7 @@ removerEndereco(index: number): void {
       listaTelefone: this.fornecedorForm.value.telefones,
       listaEndereco: this.fornecedorForm.value.enderecos
     };
-
+    
     // Lógica para salvar as alterações do fornecedor
     this.fornecedorService.update(novoFornecedor).subscribe({
       next: (response) => {

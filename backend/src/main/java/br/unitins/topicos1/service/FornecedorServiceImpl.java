@@ -8,14 +8,18 @@ import br.unitins.topicos1.dto.*;
 import br.unitins.topicos1.model.*;
 import br.unitins.topicos1.repository.FornecedorRepository;
 import br.unitins.topicos1.validation.ValidationException;
-import br.unitins.topicos1.validation.ConstraintViolationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-
 import org.jrimum.domkee.pessoa.CEP;
+import org.postgresql.util.PSQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import java.util.*;
 
 @ApplicationScoped
 public class FornecedorServiceImpl implements FornecedorService {
@@ -127,22 +131,42 @@ public class FornecedorServiceImpl implements FornecedorService {
     }
 
     @Override
-    public List<FornecedorResponseDTO> findByAll() {
-        return repository
-                .listAll()
-                .stream()
-                .map(FornecedorResponseDTO::valueOf)
-                .toList();
+    public List<FornecedorResponseDTO> findByAll(int page, int pageSize) {
+
+        List<Fornecedor> list = repository
+            .findAll()
+            .page(page, pageSize)
+            .list();
+        return list
+            .stream()
+            .map(f -> FornecedorResponseDTO.valueOf(f))
+            .collect(Collectors.toList());
+        // return repository
+        //         .listAll()
+        //         .stream()
+        //         .map(FornecedorResponseDTO::valueOf)
+        //         .toList();
     }
 
     @Override
-    @Transactional
-    public void delete(Long id) {
-        if(repository.deleteById(id)) {
+    public long count() {
+        return repository.count();
+    }
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    @Transactional
+    public void delete(Long id) throws PSQLException {
+
+        Fornecedor entity = entityManager.find(Fornecedor.class, id);
+        if (entity != null) {
+            entityManager.remove(entity);
         } else {
-            throw new ConstraintViolationException("fornecedor", "Não pode apagar esse fornecedor"); 
+            throw new EntityNotFoundException("Fornecedor não encontrado");
         }
+   
     }
 
     private void verificaCnpj(String cnpj) {

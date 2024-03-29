@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, Subject, throwError, catchError } from 'rxjs';
 import { Fornecedor } from '../models/fornecedor.model';
 import { SessionTokenService } from './session-token.service';
@@ -23,13 +23,39 @@ export class FornecedorService {
       this.fornecedorInseridoSubject.next();
     }
 
-    findAll(): Observable<Fornecedor[]> {
-        
-        const headers = this.sessionTokenService.getSessionHeader();
-    
+    findAll(page?: number, pageSize?: number): Observable<Fornecedor[]> {
+
+      const headers = this.sessionTokenService.getSessionHeader();
+      // let params = {};
+      // if(page !== undefined && pageSize !== undefined) {
+      //   params = {
+      //     page: page.toString(),
+      //     pageSize: pageSize.toString()
+      //   };
+      // }
+
+      if(page !== undefined && pageSize !== undefined) {
+      const params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+
         if(headers) {
           // Faça a requisição HTTP com o token de autenticação no cabeçalho
-          return this.httpClient.get<Fornecedor[]>(this.baseUrl, { headers })
+          return this.httpClient.get<Fornecedor[]>(this.baseUrl, {headers: headers, params: params})
+          .pipe(
+            catchError(this.handleError)
+          );
+        } else {
+          // Se o token de sessão não estiver disponível, faça a requisição sem o token de autenticação
+          return this.httpClient.get<Fornecedor[]>(this.baseUrl, {params})
+          .pipe(
+            catchError(this.handleError)
+          );
+        }
+      } else {
+        if(headers) {
+          // Faça a requisição HTTP com o token de autenticação no cabeçalho
+          return this.httpClient.get<Fornecedor[]>(this.baseUrl, {headers})
           .pipe(
             catchError(this.handleError)
           );
@@ -40,8 +66,14 @@ export class FornecedorService {
             catchError(this.handleError)
           );
         }
+      }
     }
       
+    count() : Observable<number> {
+      return this.httpClient.get<number>(`${this.baseUrl}/count`);
+    }
+
+
       findById(id: number): Observable<Fornecedor> {
         const headers = this.sessionTokenService.getSessionHeader();
         const url = `${this.baseUrl}/${id}`; // Concatena o ID à URL base

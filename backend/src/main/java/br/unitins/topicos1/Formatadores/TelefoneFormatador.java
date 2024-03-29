@@ -12,7 +12,7 @@ public class TelefoneFormatador {
          } else if(numeroTelefone.matches(("[0-9]{9}")))    {
            return numeroTelefone;
          } else {
-              throw new ValidationException("numeroTelefone", "O número de telefone precisa ter exatamente 9 números e precisa ter fomatação válida!");  
+              throw new ValidationException("numeroTelefone", "O número de telefone precisa ter exatamente 9 números e precisa ter fomatação válida! Formatação válida: 97865-1234 ou 978651234");  
          }
     }
 }

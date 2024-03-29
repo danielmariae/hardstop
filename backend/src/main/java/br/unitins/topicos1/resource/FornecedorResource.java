@@ -9,7 +9,12 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.postgresql.util.PSQLException;
 
 @Path("/fornecedores")
 @Produces(MediaType.APPLICATION_JSON)
@@ -43,15 +48,36 @@ public class FornecedorResource {
     @Path("/{id}")
     @RolesAllowed({"Func", "Admin"})
     public Response delete(@PathParam("id") Long id){
-        service.delete(id);
-        return Response.status(Response.Status.NO_CONTENT).build();
+        try {
+            service.delete(id);
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } catch (PSQLException e) {
+            // Trate a exceção específica de violação de restrição de chave estrangeira
+            Map<String, Object> responseBod = new HashMap<>();
+            responseBod.put("message", e.getCause().getCause().getLocalizedMessage());
+            return Response.status(Response.Status.BAD_REQUEST).entity(responseBod).build();
+        } catch (Exception e) {
+            // Outras exceções que podem ocorrer durante a exclusão
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("message", e.getCause().getCause().getLocalizedMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(responseBody).build();
+            // return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Ocorreu um erro durante a exclusão do fornecedor.").build();
+        }
     }
 
     @GET
     @RolesAllowed({"Func", "Admin"})
+    public Response findAll(
+        @QueryParam("page") @DefaultValue("0") int page,
+        @QueryParam("pageSize") @DefaultValue("100") int pageSize) {
 
-    public Response findAll() {
-        return Response.ok(service.findByAll()).build();
+        return Response.ok(service.findByAll(page, pageSize)).build();
+    }
+
+    @GET
+    @Path("/count")
+    public Long count() {
+        return service.count();
     }
 
     @GET

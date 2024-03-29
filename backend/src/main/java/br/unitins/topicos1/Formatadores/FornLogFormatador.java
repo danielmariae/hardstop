@@ -10,6 +10,6 @@ public class FornLogFormatador {
         } else if(cnpj.matches("[0-9]{14}")) {
             return cnpj;
         }
-            throw new ValidationException("cnpj", "O cnpj precisa ter exatamente 14 números e precisa estar em uma fomatação válida!");  
+            throw new ValidationException("cnpj", "O cnpj precisa ter exatamente 14 números e precisa estar em uma fomatação válida! Formatos válidos: 12.345.678/0001-90 ou 12345678000190");  
         }
 }
