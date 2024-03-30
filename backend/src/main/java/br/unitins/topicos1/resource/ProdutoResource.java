@@ -7,7 +7,6 @@ import br.unitins.topicos1.application.ErrorTP1;
 import br.unitins.topicos1.dto.ProdutoDTO;
 import br.unitins.topicos1.dto.ProdutoFornecedorPatch;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
-import br.unitins.topicos1.dto.ProdutoValorPatch;
 import br.unitins.topicos1.model.form.ArchiveForm;
 import br.unitins.topicos1.service.FileService;
 import br.unitins.topicos1.service.ProdutoService;
@@ -16,12 +15,14 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -50,13 +51,6 @@ public class ProdutoResource {
         return Response.status(201).entity(retorno).build();
     }
 
-    @PATCH
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/patch/valorVenda/{id}")
-    public Response updateValorVendaProduto(ProdutoValorPatch dto) {
-        return Response.ok().entity(service.updateValorVenda(dto)).build();
-    }
-
     @DELETE
     @RolesAllowed({"Func", "Admin"})
     @Path("/delete/{id}")
@@ -66,9 +60,24 @@ public class ProdutoResource {
     }
 
     @GET
-    @Path("/search/all/")
-    public Response findAll() {
-        return Response.ok(service.findByAll()).build();
+    @RolesAllowed({"Func", "Admin"})
+    public Response findAll(
+        @QueryParam("page") @DefaultValue("0") int page,
+        @QueryParam("pageSize") @DefaultValue("100") int pageSize) {
+
+        return Response.ok(service.findByAll(page, pageSize)).build();
+    }
+
+    @GET
+    @Path("/count")
+    public Long count() {
+        return service.count();
+    }
+
+    @GET
+    @RolesAllowed({"Func", "Admin"})
+    public Response findTodos() {
+        return Response.ok(service.findTodos()).build();
     }
 
     @GET
@@ -89,6 +98,19 @@ public class ProdutoResource {
     public Response findByName(@PathParam("nome") String nome) {
         return Response.ok(service.findByName(nome)).build();
     }
+
+    @GET
+    @Path("/search/nome/{idClassificacao}")
+    public Response findByClassificacao(@PathParam("idClassificacao") Long id) {
+        return Response.ok(service.findByClassificacao(id)).build();
+    }
+
+    @GET
+    @Path("/classificacao")
+    public Response retornaClassificacao() {
+        return Response.ok(service.retornaClassificacao()).build();
+    }
+
 
     @POST
     @Path("/search/fornecedor")

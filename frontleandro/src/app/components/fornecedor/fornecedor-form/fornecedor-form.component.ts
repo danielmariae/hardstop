@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators } fr
 import { FornecedorService } from '../../../services/fornecedor.service'; 
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { NavigationService } from '../../../services/NavigationService';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'app-fornecedor',

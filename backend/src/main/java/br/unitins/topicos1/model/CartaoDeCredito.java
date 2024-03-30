@@ -2,11 +2,13 @@ package br.unitins.topicos1.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.DiscriminatorValue;
+// import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
-@DiscriminatorValue("CARTAO_DE_CREDITO")
+// @DiscriminatorValue("CARTAO_DE_CREDITO") Caso eu tivesse escolhido a opção SINGLE_TABLE na classe pai ao invés de JOINED
+@PrimaryKeyJoinColumn(name = "formaPagamento_id") // Cria uma chave estrangeira que precisa ter exatamente o mesmo valor do id da classe pai que contem o restante das informações
 public class CartaoDeCredito extends FormaDePagamento{
 
     private String numeroCartao;

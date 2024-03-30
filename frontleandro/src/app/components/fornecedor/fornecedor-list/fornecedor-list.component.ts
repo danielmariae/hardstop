@@ -16,7 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Observable, of } from 'rxjs';
 import { startWith, map, catchError, toArray } from 'rxjs/operators';
-import { NavigationService } from '../../../services/NavigationService';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
     selector: 'app-fornecedor-list',
@@ -28,15 +28,19 @@ import { NavigationService } from '../../../services/NavigationService';
 })
 
 export class FornecedorListComponent implements OnInit {
+// Variáveis relacionadas com a caixa de busca
   myControl = new FormControl('');
   filteredOptions: Observable<Fornecedor[]>;
+todosFornecedores: Fornecedor[] = [];
     // variaveis de controle de paginacao
     totalRecords = 0;
     page = 0;
     pageSize = 0;
+fornecedores: Fornecedor[] = [];
+// Variável relacionada com as colunas da página html
     displayedColumns: string[] = ['id', 'nomeFantasia', 'cnpj', 'endSite', 'endereco', 'telefone', 'acao'];
-    fornecedores: Fornecedor[] = [];
-    todosFornecedores: Fornecedor[] = [];
+    
+    
     tiposTelefoneMap: Map<number, string> = new Map<number, string>();
 
     constructor(private fornecedorService: FornecedorService,

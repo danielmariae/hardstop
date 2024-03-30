@@ -32,11 +32,14 @@ public class LoteServiceImpl implements LoteService {
 
     @Override
     @Transactional
+    // Chegaram mais unidades de um mesmo produto, de um fornecedor diferente e/ou por um custo de compra diferente e/ou por um valor de venda diferente. Neste caso preciso criar um novo Lote. Este novo Lote ficará inativo até que o estoque do produto acabe. Caso o estoque já tenha acabado, este Lote será automaticamente ativado.
     public LoteResponseDTO insert(LoteDTO dto) {
 
         Lote lote = new Lote();
         lote.setLote(dto.lote());
-        lote.setQuantidade(dto.quantidade());
+        lote.setQuantidadeUnidades(dto.quantidadeUnidades());
+        lote.setQuantidadeNaoConvencional(dto.quantidadeNaoConvencional());
+        lote.setUnidadeDeMedida(dto.unidadeDeMedida());
         lote.setValorVenda(dto.valorVenda());
         lote.setCustoCompra(dto.custoCompra());
         lote.setFornecedor(repositoryFornecedor.findById(dto.idFornecedor()));
@@ -51,13 +54,16 @@ public class LoteServiceImpl implements LoteService {
             "LoteServiceImpl(insert)",
             "Não consegui persistir o lote no banco de dados.");
         }
-        if(repositoryProduto.findById(dto.idProduto()).getQuantidade() == 0) {
+        // O estoque do produto já acabou. O Lote recém inserido será automaticamente ativado.
+        if(repositoryProduto.findById(dto.idProduto()).getQuantidadeUnidades() == 0 || repositoryProduto.findById(dto.idProduto()).getQuantidadeNaoConvencional() == 0) {
             LocalDateTime agora = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             String dataFormatada = agora.format(formatter);
             LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
+            // Ativa o Lote
             lote.setDataHoraChegadaLote(novoDateTime);
-            ProdutoPatchDTO prodpatch = new ProdutoPatchDTO(dto.idProduto(), dto.valorVenda(), dto.quantidade(), lote.getId());
+            ProdutoPatchDTO prodpatch = new ProdutoPatchDTO(dto.idProduto(), dto.valorVenda(), dto.quantidadeUnidades(), dto.quantidadeNaoConvencional(), lote.getId());
+            // O método abaixo altera os valores de venda, quantidade e id do Lote atual no produto em questão. O Lote torna-se ativado e o produto agora aponta para ele.
             serviceProduto.update(prodpatch);
         }
         /* try {
@@ -78,13 +84,15 @@ public class LoteServiceImpl implements LoteService {
     @Override
     @Transactional
     // Chegaram mais unidades do mesmo produto, do mesmo fornecedor, pelo mesmo custo de compra e irei manter o mesmo valor de venda. Neste caso só altero a quantidade e mais nada.
-    public LoteResponseDTO updateQuantidade(LotePatchDTO dto) {
+    public LoteResponseDTO updateQuantidade(LotePatchQDTO dto) {
         Lote lote = repository.findById(dto.id());
+
+        if(dto.quantidadeUnidades() != null) {
 
         if(lote != null) {
            try {
-            lote.getProduto().setQuantidade(lote.getProduto().getQuantidade()+dto.quantidade());
-            lote.setQuantidade(lote.getQuantidade()+dto.quantidade());
+            lote.getProduto().setQuantidadeUnidades(lote.getProduto().getQuantidadeUnidades()+dto.quantidadeUnidades());
+            lote.setQuantidadeUnidades(lote.getQuantidadeUnidades()+dto.quantidadeUnidades());
          } catch (OptimisticLockException e) {
             throw new GeneralErrorException(
         "500",
@@ -101,8 +109,80 @@ public class LoteServiceImpl implements LoteService {
         "O id passado como índice de lote não existe no banco de dados."
       );
         }
+    } else {
+        if(lote != null) {
+            try {
+             lote.getProduto().setQuantidadeNaoConvencional(lote.getProduto().getQuantidadeNaoConvencional()+dto.quantidadeNaoConvencional());
+             lote.setQuantidadeNaoConvencional(lote.getQuantidadeNaoConvencional()+dto.quantidadeNaoConvencional());
+          } catch (OptimisticLockException e) {
+             throw new GeneralErrorException(
+         "500",
+         "Server Error",
+         "LoteServiceImpl(updateQuantidade)",
+         "Não consegui realizar o insert de Lote por conta de concorrência no banco de dados. Tente novamente." + e);
+         } 
+             return LoteResponseDTO.valueOf(lote);
+         } else {
+             throw new GeneralErrorException(
+         "400",
+         "Bad Request",
+         "LoteServiceImpl(updateQuantidade)",
+         "O id passado como índice de lote não existe no banco de dados."
+       );
+         }
+    }
     }
  
+
+    @Override
+    @Transactional
+    // Quero simplesmente alterar o valor de venda de um produto. Neste caso sou obrigado a criar um novo Lote (novo id, nova String para designar o novo Lote e novo valor de venda do produto),absorvendo os demais dados do Lote atual e fechar o Lote atual.
+    public LoteResponseDTO updateValorVenda(LotePatchVDTO dto) {
+        Lote lote = repository.findById(dto.id());
+        Lote loteN = new Lote();
+        if(lote != null) {
+            try {
+        
+        loteN.setLote(dto.lote());
+        loteN.setQuantidadeUnidades(lote.getQuantidadeUnidades());
+        loteN.setQuantidadeNaoConvencional(lote.getQuantidadeNaoConvencional());
+        loteN.setUnidadeDeMedida(lote.getUnidadeDeMedida());
+        loteN.setValorVenda(dto.valorVenda());
+        loteN.setCustoCompra(lote.getCustoCompra());
+        loteN.setFornecedor(lote.getFornecedor());
+        loteN.setProduto(lote.getProduto());
+
+
+        LocalDateTime agora = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String dataFormatada = agora.format(formatter);
+        LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
+        // Ativa o novo Lote que absorveu os dados do Lote anterior que será desativado.
+        loteN.setDataHoraChegadaLote(novoDateTime);
+        // Desativa o Lote anterior
+        lote.setDataHoraUltimoVendido(novoDateTime);
+
+        
+            // Atualiza o valor de venda no Produto
+            loteN.getProduto().setValorVenda(dto.valorVenda());
+         } catch (OptimisticLockException e) {
+            throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "LoteServiceImpl(updateValorVenda)",
+        "Não consegui realizar o insert de Lote por algum motivo. Tente novamente." + e);
+        } 
+            return LoteResponseDTO.valueOf(loteN);
+        } else {
+            throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "LoteServiceImpl(updateValorVenda)",
+        "O id passado como índice de lote não existe no banco de dados."
+      );
+        } 
+    }
+
     @Override
     public LoteResponseDTO findById(Long id) {
         return LoteResponseDTO.valueOf(repository.findById(id));
@@ -151,16 +231,19 @@ public class LoteServiceImpl implements LoteService {
     }
 
     public LoteResponseDTO ativaLote(Long idProduto) {
-        Lote lote;
+        // O for abaixo coleta todos os lotes relacionados ao Produto de idProduto
         for(Lote lt : repository.findAll(idProduto)) {
+            // O if abaixo encontra o último Lote cadastrado contendo o Produto de idProduto. Esse Lote em questão já está cadastrado no sistema, porém ainda não está ativado pois possui dataHoraChegadaLote == null
           if(lt.getDataHoraChegadaLote() == null) {
-            lote = lt;
+            Lote lote = lt;
             LocalDateTime agora = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             String dataFormatada = agora.format(formatter);
             LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
+            // Ativa o Lote
             lote.setDataHoraChegadaLote(novoDateTime);
-            ProdutoPatchDTO prodpatch = new ProdutoPatchDTO(lote.getProduto().getId(), lote.getValorVenda(), lote.getQuantidade(), lote.getId());
+            ProdutoPatchDTO prodpatch = new ProdutoPatchDTO(lote.getProduto().getId(), lote.getValorVenda(), lote.getQuantidadeUnidades(), lote.getQuantidadeNaoConvencional(), lote.getId());
+            // O método abaixo altera os valores de venda, quantidade e id do Lote atual no produto em questão. O Lote torna-se ativado e o produto agora aponta para ele.
             serviceProduto.update(prodpatch);
             return LoteResponseDTO.valueOf(lote);
           }

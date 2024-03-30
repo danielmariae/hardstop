@@ -10,7 +10,9 @@ import jakarta.persistence.ManyToOne;
         private String lote;
         private LocalDateTime dataHoraChegadaLote;
         private LocalDateTime dataHoraUltimoVendido;
-        private Integer quantidade;
+        private Integer quantidadeUnidades;
+        private Double quantidadeNaoConvencional;
+        private String unidadeDeMedida;
         private Double custoCompra;
         private Double valorVenda;
 
@@ -53,15 +55,6 @@ import jakarta.persistence.ManyToOne;
             this.produto = produto;
         }
 
-
-    public Integer getQuantidade() {
-        return this.quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
     public Double getCustoCompra() {
         return this.custoCompra;
     }
@@ -78,6 +71,50 @@ import jakarta.persistence.ManyToOne;
         this.valorVenda = valorVenda;
     }
     
+
+    /**
+     * @return Integer return the quantidadeUnidades
+     */
+    public Integer getQuantidadeUnidades() {
+        return quantidadeUnidades;
+    }
+
+    /**
+     * @param quantidadeUnidades the quantidadeUnidades to set
+     */
+    public void setQuantidadeUnidades(Integer quantidadeUnidades) {
+        this.quantidadeUnidades = quantidadeUnidades;
+    }
+
+
+    /**
+     * @return Double return the quantidadeNaoConvencional
+     */
+    public Double getQuantidadeNaoConvencional() {
+        return quantidadeNaoConvencional;
+    }
+
+    /**
+     * @param quantidadeNaoConvencional the quantidadeNaoConvencional to set
+     */
+    public void setQuantidadeNaoConvencional(Double quantidadeNaoConvencional) {
+        this.quantidadeNaoConvencional = quantidadeNaoConvencional;
+    }
+
+    /**
+     * @return String return the unidadeDeMedida
+     */
+    public String getUnidadeDeMedida() {
+        return unidadeDeMedida;
+    }
+
+    /**
+     * @param unidadeDeMedida the unidadeDeMedida to set
+     */
+    public void setUnidadeDeMedida(String unidadeDeMedida) {
+        this.unidadeDeMedida = unidadeDeMedida;
+    }
+
 }
   
 

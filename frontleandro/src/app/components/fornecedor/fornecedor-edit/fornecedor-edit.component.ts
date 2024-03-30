@@ -5,7 +5,7 @@ import { Fornecedor } from '../../../models/fornecedor.model';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { NavigationService } from '../../../services/NavigationService';
+import { NavigationService } from '../../../services/navigation.service';
 
 
 @Component({

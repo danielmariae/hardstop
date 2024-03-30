@@ -2,7 +2,8 @@ package br.unitins.topicos1.service;
 
 
 import br.unitins.topicos1.dto.LoteDTO;
-import br.unitins.topicos1.dto.LotePatchDTO;
+import br.unitins.topicos1.dto.LotePatchQDTO;
+import br.unitins.topicos1.dto.LotePatchVDTO;
 import br.unitins.topicos1.dto.LoteResponseDTO;
 
 import java.util.List;
@@ -11,7 +12,9 @@ public interface LoteService {
     LoteResponseDTO insert(LoteDTO dto);
 
     // ATUALIZAR LOTE:
-    LoteResponseDTO updateQuantidade(LotePatchDTO dto);
+    // Cuidado ao utilizar updateQuantidade - esse método somente deve ser usado quando chegam novas unidades de um produto mantendo TODOS os dados anteriores para Lote e Produto sem alteração. Neste caso o método soma a quantidade de produtos que chegou à quantidade pré-existente de produtos e atualiza esses dados em Lote e Produto.
+    LoteResponseDTO updateQuantidade(LotePatchQDTO dto);
+    LoteResponseDTO updateValorVenda(LotePatchVDTO dto);
 
     // DELETAR LOTE:
     void delete(Long id);

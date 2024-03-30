@@ -110,7 +110,7 @@ public class PedidoServiceImpl implements PedidoService {
     for (ItemDaVendaDTO idv : dto.itemDaVenda()) {
       ItemDaVenda item = new ItemDaVenda();
       item.setPreco(idv.preco());
-      item.setQuantidade(idv.quantidade());
+      item.setQuantidadeUnidades(idv.quantidadeUnidades());
 
       // Verifica o id do prduto. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
       if (!verificaProduto1(idv.idProduto())) {
@@ -134,14 +134,14 @@ public class PedidoServiceImpl implements PedidoService {
       }
       Integer quant;
       try{
-        quant = produto.getQuantidade() - idv.quantidade();
+        quant = produto.getQuantidadeUnidades() - idv.quantidadeUnidades();
         if(quant > 0) {
-          produto.setQuantidade(quant);
+          produto.setQuantidadeUnidades(quant);
           item.setProduto(produto);
           pedido.getItemDaVenda().add(item);
-          valorCompra = valorCompra + idv.quantidade() * idv.preco();
+          valorCompra = valorCompra + idv.quantidadeUnidades() * idv.preco();
         } else if(quant == 0) {
-          produto.setQuantidade(0);
+          produto.setQuantidadeUnidades(0);
           LocalDateTime agora = LocalDateTime.now();
           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
           String dataFormatada = agora.format(formatter);
@@ -149,7 +149,7 @@ public class PedidoServiceImpl implements PedidoService {
           produto.getLoteAtual().setDataHoraUltimoVendido(novoDateTime);
           item.setProduto(produto);
           pedido.getItemDaVenda().add(item);
-          valorCompra = valorCompra + idv.quantidade() * idv.preco();
+          valorCompra = valorCompra + idv.quantidadeUnidades() * idv.preco();
         } else if(quant < 0) {
           throw new GeneralErrorException(
           "400",
@@ -503,7 +503,7 @@ public class PedidoServiceImpl implements PedidoService {
       // Devolve o produto separado ao estoque
       for (ItemDaVenda idv : pedido.getItemDaVenda()) {
 
-        idv.getProduto().setQuantidade(idv.getProduto().getQuantidade()+idv.getQuantidade());
+        idv.getProduto().setQuantidadeUnidades(idv.getProduto().getQuantidadeUnidades()+idv.getQuantidadeUnidades());
         idv.getProduto().getLoteAtual().setDataHoraUltimoVendido(null);
         /*
         EntityManager em = emf.createEntityManager();
@@ -1004,7 +1004,7 @@ public class PedidoServiceImpl implements PedidoService {
                   .createNativeQuery(sql1)
                   .setParameter(1, idv.getProduto().getId());
                 Integer quantidade = (Integer) query.getSingleResult();
-                Integer quantFinal = quantidade + idv.getQuantidade();
+                Integer quantFinal = quantidade + idv.getQuantidadeUnidades();
 
                 String sql4 =
                   "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
@@ -1045,7 +1045,7 @@ public class PedidoServiceImpl implements PedidoService {
                   .createNativeQuery(sql1)
                   .setParameter(1, idv.getProduto().getId());
                 Integer quantidade = (Integer) query.getSingleResult();
-                Integer quantFinal = quantidade + idv.getQuantidade();
+                Integer quantFinal = quantidade + idv.getQuantidadeUnidades();
 
                 String sql4 =
                   "UPDATE produto SET quantidade = ?1 WHERE id = ?2";

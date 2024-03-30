@@ -7,6 +7,7 @@ import { HomeComponent } from './components/home/home.component';
 import { AuthResolver } from './components/session-token/resolver/session-token.resolver';
 import { FornecedorEditComponent } from './components/fornecedor/fornecedor-edit/fornecedor-edit.component';
 import { FornecedorEscolhidoComponent } from './components/fornecedor/fornecedor-escolhido/fornecedor-escolhido.component';
+import { ProdutoListComponent } from './components/produto/produto-list/produto-list.component';
 
 
 export const routes: Routes = [
@@ -16,7 +17,8 @@ export const routes: Routes = [
     { path: 'fornecedores', component: FornecedorListComponent, title: 'Lista de Fornecedores'},
     { path: 'fornecedores/new', component: FornecedorComponent, title: 'Formulario de Fornecedores'},
     { path: 'fornecedores/edit/:id', component: FornecedorEditComponent, title: 'Edição de Dados de Fornecedores' },
-    {path: 'fornecedores/:id', component: FornecedorEscolhidoComponent, title: 'Fornecedor Escolhido'}
+    {path: 'fornecedores/:id', component: FornecedorEscolhidoComponent, title: 'Fornecedor Escolhido'},
+    {path: 'produtos', component: ProdutoListComponent, title: 'Lista de Produtos'}
 ];
 
 @NgModule({

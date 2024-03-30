@@ -7,7 +7,9 @@ public record LoteResponseDTO(
     String lote,
     Long idFornecedor,
     Long idProduto,
-    Integer quantidade,
+    Integer quantidadeUnidades,
+    Double quantidadeNaoConvencional,
+    String unidadeDeMedida,
     Double custoCompra,
     Double valorVenda
 ) {
@@ -17,7 +19,9 @@ public record LoteResponseDTO(
             lote.getLote(),
             lote.getFornecedor().getId(),
             lote.getProduto().getId(),
-            lote.getQuantidade(),
+            lote.getQuantidadeUnidades(),
+            lote.getQuantidadeNaoConvencional(),
+            lote.getUnidadeDeMedida(),
             lote.getCustoCompra(),
             lote.getValorVenda()
             );

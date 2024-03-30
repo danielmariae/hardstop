@@ -7,6 +7,7 @@ import br.unitins.topicos1.model.Produto;
 public record ProdutoResponseDTO(     
     Long id,
     String nome,
+    String modelo,
     String descricao,
     String codigoBarras,
     String marca,
@@ -15,13 +16,16 @@ public record ProdutoResponseDTO(
     Double comprimento,
     Double peso,
     Double valorVenda,
-    Integer quantidade,
+    Integer quantidadeUnidades,
+    Double quantidadeNaoConvencional,
+    String unidadeDeMedida,
     Classificacao classificacao
     ) {
         public static ProdutoResponseDTO valueOf(Produto produto){
             return new ProdutoResponseDTO(
                 produto.getId(), 
-                produto.getNome(), 
+                produto.getNome(),
+                produto.getModelo(), 
                 produto.getDescricao(), 
                 produto.getCodigoBarras(), 
                 produto.getMarca(), 
@@ -30,8 +34,10 @@ public record ProdutoResponseDTO(
                 produto.getComprimento(), 
                 produto.getPeso(), 
                 produto.getValorVenda(), 
-                produto.getQuantidade(),
-                produto.getClassificacao()      
+                produto.getQuantidadeUnidades(),
+                produto.getQuantidadeNaoConvencional(),
+                produto.getUnidadeDeMedida(),
+                produto.getClassificacao()     
             );
         }
     }

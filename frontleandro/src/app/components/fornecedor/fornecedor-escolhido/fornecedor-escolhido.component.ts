@@ -17,7 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Observable, of } from 'rxjs';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
-import { NavigationService } from '../../../services/NavigationService';
+import { NavigationService } from '../../../services/navigation.service';
 
 
 @Component({

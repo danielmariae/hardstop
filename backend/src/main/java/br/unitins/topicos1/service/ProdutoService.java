@@ -5,7 +5,7 @@ import br.unitins.topicos1.dto.ProdutoDTO;
 import br.unitins.topicos1.dto.ProdutoFornecedorPatch;
 import br.unitins.topicos1.dto.ProdutoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
-import br.unitins.topicos1.dto.ProdutoValorPatch;
+import br.unitins.topicos1.model.Classificacao;
 import br.unitins.topicos1.model.Fornecedor;
 
 
@@ -29,13 +29,22 @@ public interface ProdutoService {
     // PROCURAR POR NOME:
     List<ProdutoResponseDTO> findByName(String nome);
 
-    // LISTAR TODOS:
-    List<ProdutoResponseDTO> findByAll();
+    // PROCURAR POR CLASSIFICAÇÃO
+    List<ProdutoResponseDTO> findByClassificacao(Long idClassificacao);
 
-    // UPDATE VALOR DE VENDA DO PRODUTO
-    ProdutoResponseDTO updateValorVenda(ProdutoValorPatch dto);
+    // PROCURAR POR CLASSIFICAÇÃO
+    List<Classificacao> retornaClassificacao();
+
+    // LISTAR TODOS:
+    public List<ProdutoResponseDTO> findTodos();
+
+    // LISTAR DE FORMA PAGINADA
+    List<ProdutoResponseDTO> findByAll(int page, int pageSize);
 
     // ENCONTRAR O FORNECEDOR DE UM PRODUTO ESTRAGADO
     Fornecedor encontraFornecedor(ProdutoFornecedorPatch dto);
+
+    // CONTADOR:
+    public long count();
 
 }

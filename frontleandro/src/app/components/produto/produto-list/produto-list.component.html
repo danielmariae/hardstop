@@ -1,0 +1,97 @@
+<mat-toolbar color="primary">
+    <div class="flex-container">
+        <span class="toolbar-title">Lista de Produtos</span>
+        <button mat-fab color="accent" (click)="inserirProduto()">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+    <div class="autocomplete-container">
+        <form class="example-form">
+            <mat-form-field class="example-full-width">
+                <mat-label>Insira um nome de produto</mat-label>
+                <input type="text"
+                    placeholder="Pick one"
+                    aria-label="Number"
+                    matInput
+                    [formControl]="myControl"
+                    [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selecionarProduto($event.option.value)">
+                    <mat-option *ngFor="let produto of filteredOptions | async" [value]="produto">
+                        {{ produto.nome }}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </form>
+    </div>
+</mat-toolbar>
+
+<table mat-table [dataSource]="produtos" class="mat-elevation-z8">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> No. </th>
+      <!--  <td mat-cell *matCellDef="let element; let i=index"> {{i + 1}} </td> -->
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <!-- Nome Column -->
+    <ng-container matColumnDef="descricao">
+        <th mat-header-cell *matHeaderCellDef> Descricao </th>
+        <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+    </ng-container>
+
+    <!-- Cnpj Column -->
+    <ng-container matColumnDef="classificacao">
+        <th mat-header-cell *matHeaderCellDef> classificacao </th>
+        <td mat-cell *matCellDef="let element"> {{element.classificacao.nome}} </td>
+    </ng-container>
+
+    <!-- EndSite Column -->
+    <ng-container matColumnDef="modelo">
+        <th mat-header-cell *matHeaderCellDef> Modelo </th>
+        <td mat-cell *matCellDef="let element"> {{element.modelo}} </td>
+    </ng-container>
+
+    <!-- Endereco Column -->
+    <ng-container matColumnDef="marca">
+        <th mat-header-cell *matHeaderCellDef> Marca </th>
+        <td mat-cell *matCellDef="let element"> {{element.marca}} </td>
+    </ng-container>
+
+    <!-- Telefone Column -->
+    <ng-container matColumnDef="quantidade">
+        <th mat-header-cell *matHeaderCellDef> Quantidade </th>
+        <td mat-cell *matCellDef="let element"> {{element.quantidadeUnidades}} </td>
+    </ng-container>
+
+    <!-- Telefone Column -->
+    <ng-container matColumnDef="valorVenda">
+        <th mat-header-cell *matHeaderCellDef> Valor </th>
+        <td mat-cell *matCellDef="let element"> {{element.valorVenda}} </td>
+    </ng-container>
+
+    <!-- Acao Column -->
+    <ng-container matColumnDef="acao">
+        <th mat-header-cell *matHeaderCellDef> Ação </th>
+        <td mat-cell *matCellDef="let element">
+            <button mat-icon-button color="primary" (click)="editarProduto(element.id)">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="apagarProduto(element.id)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+</table>
+
+<mat-paginator
+    [pageSizeOptions] = "[2,4,8,16]"
+    [pageSize] = "pageSize"
+    [length] = "totalRecords"
+    (page) = "paginar($event)">
+</mat-paginator>

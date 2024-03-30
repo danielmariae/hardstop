@@ -11,8 +11,10 @@ public record LoteDTO(
     Long idFornecedor,
     @NotNull(message = "O campo idProduto não pode ser nulo")
     Long idProduto,
-    @NotNull(message = "O campo quantidade não pode ser nulo")
-    Integer quantidade,
+    //@NotNull(message = "O campo quantidade não pode ser nulo")
+    Integer quantidadeUnidades,
+    Double quantidadeNaoConvencional,
+    String unidadeDeMedida,
     @NotNull(message = "O campo Custo da compra não pode ser nulo")
     @Digits(integer = 6, fraction = 3, message = "Por favor, digite um número válido")
     Double custoCompra,

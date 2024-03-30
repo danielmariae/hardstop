@@ -7,7 +7,9 @@ import jakarta.persistence.ManyToOne;
 public class ItemDaVenda extends DefaultEntity {
     
     private Double preco;
-    private Integer quantidade;
+    private Integer quantidadeUnidades;
+    private Double quantidadeNaoConvencional;
+    private String unidadeDeMedida;
 
 @ManyToOne
     private Produto produto;
@@ -24,11 +26,49 @@ public class ItemDaVenda extends DefaultEntity {
     public void setPreco(Double preco) {
         this.preco = preco;
     }
-    public Integer getQuantidade() {
-        return quantidade;
+
+
+    /**
+     * @return Integer return the quantidadeUnidades
+     */
+    public Integer getQuantidadeUnidades() {
+        return quantidadeUnidades;
     }
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
+
+    /**
+     * @param quantidadeUnidades the quantidadeUnidades to set
+     */
+    public void setQuantidadeUnidades(Integer quantidadeUnidades) {
+        this.quantidadeUnidades = quantidadeUnidades;
+    }
+
+    /**
+     * @return Double return the quantidadeNaoConvencional
+     */
+    public Double getQuantidadeNaoConvencional() {
+        return quantidadeNaoConvencional;
+    }
+
+    /**
+     * @param quantidadeNaoConvencional the quantidadeNaoConvencional to set
+     */
+    public void setQuantidadeNaoConvencional(Double quantidadeNaoConvencional) {
+        this.quantidadeNaoConvencional = quantidadeNaoConvencional;
+    }
+
+
+    /**
+     * @return String return the unidadeDeMedida
+     */
+    public String getUnidadeDeMedida() {
+        return unidadeDeMedida;
+    }
+
+    /**
+     * @param unidadeDeMedida the unidadeDeMedida to set
+     */
+    public void setUnidadeDeMedida(String unidadeDeMedida) {
+        this.unidadeDeMedida = unidadeDeMedida;
     }
 
 }

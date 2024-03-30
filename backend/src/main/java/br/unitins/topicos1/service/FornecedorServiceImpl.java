@@ -149,11 +149,6 @@ public class FornecedorServiceImpl implements FornecedorService {
             .stream()
             .map(f -> FornecedorResponseDTO.valueOf(f))
             .collect(Collectors.toList());
-        // return repository
-        //         .listAll()
-        //         .stream()
-        //         .map(FornecedorResponseDTO::valueOf)
-        //         .toList();
     }
 
     @Override

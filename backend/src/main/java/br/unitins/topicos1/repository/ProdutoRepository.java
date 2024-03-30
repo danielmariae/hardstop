@@ -13,6 +13,10 @@ public class ProdutoRepository implements PanacheRepository<Produto> {
         return find("UPPER(nome) LIKE UPPER(?1) ", "%"+nome+"%").list();
     }
 
+    public List<Produto> findByClassificacao(Long idClassificacao) {
+        return find("classificacao_id = ?1", idClassificacao).list();
+    }
+
     public Produto findByCodigoBarras(String codigoBarras){
         try {
             return find("codigo_barras = ?1", codigoBarras).singleResult();

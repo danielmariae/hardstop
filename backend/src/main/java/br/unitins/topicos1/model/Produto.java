@@ -6,20 +6,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Version;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 
 @Entity
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Produto extends DefaultEntity {
 
     private String nome;
     private String modelo;
-    private String cpu;
-    private String chipset;
-    private String memoria;
-    private String bios;
-    private String grafico;
-    private String lan;
-    private String slots;
-    private String armazenamento;
     private String marca;
     private String descricao;
     private String codigoBarras;
@@ -28,7 +23,11 @@ public class Produto extends DefaultEntity {
     private Double comprimento;
     private Double peso;
     private Double valorVenda;
-    private Integer quantidade;
+    // QuantidadeUnidades trata de produtos que apresentam quantidades unitárias para venda como por exemplo 1 pacote de arroz ou 10 cartelas de cigarro. O seu uso impede o uso, ao mesmo tempo, dos atributos quantidadeNaoConvencional e unidadeDeMedida.
+    private Integer quantidadeUnidades;
+    // QuantidadeNaoConvencional e unidadeDeMedida trata de quantidades não convencionais de medição como por exemplo 2.5 Kg ou 1.3 metros. Estes dois atributos sempre andam juntos
+    private Double quantidadeNaoConvencional;
+    private String unidadeDeMedida;
     private List<String> nomeImagem;
 
     @OneToOne
@@ -104,14 +103,6 @@ public class Produto extends DefaultEntity {
         this.valorVenda = valorVenda;
     }
 
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
     public List<String> getNomeImagem() {
         return nomeImagem;
     }
@@ -128,7 +119,6 @@ public class Produto extends DefaultEntity {
         this.classificacao = classificacao;
     }
    
-
     public Lote getLoteAtual() {
         return this.loteAtual;
     }
@@ -145,7 +135,6 @@ public class Produto extends DefaultEntity {
         this.version = version;
     }
 
-
     /**
      * @return String return the descricao
      */
@@ -159,7 +148,6 @@ public class Produto extends DefaultEntity {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-
 
     /**
      * @return String return the modelo
@@ -176,115 +164,46 @@ public class Produto extends DefaultEntity {
     }
 
     /**
-     * @return String return the cpu
+     * @return Integer return the quantidadeUnidades
      */
-    public String getCpu() {
-        return cpu;
+    public Integer getQuantidadeUnidades() {
+        return quantidadeUnidades;
     }
 
     /**
-     * @param cpu the cpu to set
+     * @param quantidadeUnidades the quantidadeUnidades to set
      */
-    public void setCpu(String cpu) {
-        this.cpu = cpu;
+    public void setQuantidadeUnidades(Integer quantidadeUnidades) {
+        this.quantidadeUnidades = quantidadeUnidades;
     }
 
     /**
-     * @return String return the chipset
+     * @return Double return the quantidadeNaoConvencional
      */
-    public String getChipset() {
-        return chipset;
+    public Double getQuantidadeNaoConvencional() {
+        return quantidadeNaoConvencional;
     }
 
     /**
-     * @param chipset the chipset to set
+     * @param quantidadeNaoConvencional the quantidadeNaoConvencional to set
      */
-    public void setChipset(String chipset) {
-        this.chipset = chipset;
+    public void setQuantidadeNaoConvencional(Double quantidadeNaoConvencional) {
+        this.quantidadeNaoConvencional = quantidadeNaoConvencional;
+    }
+
+
+    /**
+     * @return String return the unidadeDeMedida
+     */
+    public String getUnidadeDeMedida() {
+        return unidadeDeMedida;
     }
 
     /**
-     * @return String return the memoria
+     * @param unidadeDeMedida the unidadeDeMedida to set
      */
-    public String getMemoria() {
-        return memoria;
-    }
-
-    /**
-     * @param memoria the memoria to set
-     */
-    public void setMemoria(String memoria) {
-        this.memoria = memoria;
-    }
-
-    /**
-     * @return String return the bios
-     */
-    public String getBios() {
-        return bios;
-    }
-
-    /**
-     * @param bios the bios to set
-     */
-    public void setBios(String bios) {
-        this.bios = bios;
-    }
-
-    /**
-     * @return String return the grafico
-     */
-    public String getGrafico() {
-        return grafico;
-    }
-
-    /**
-     * @param grafico the grafico to set
-     */
-    public void setGrafico(String grafico) {
-        this.grafico = grafico;
-    }
-
-    /**
-     * @return String return the lan
-     */
-    public String getLan() {
-        return lan;
-    }
-
-    /**
-     * @param lan the lan to set
-     */
-    public void setLan(String lan) {
-        this.lan = lan;
-    }
-
-    /**
-     * @return String return the slots
-     */
-    public String getSlots() {
-        return slots;
-    }
-
-    /**
-     * @param slots the slots to set
-     */
-    public void setSlots(String slots) {
-        this.slots = slots;
-    }
-
-    /**
-     * @return String return the armazenamento
-     */
-    public String getArmazenamento() {
-        return armazenamento;
-    }
-
-    /**
-     * @param armazenamento the armazenamento to set
-     */
-    public void setArmazenamento(String armazenamento) {
-        this.armazenamento = armazenamento;
+    public void setUnidadeDeMedida(String unidadeDeMedida) {
+        this.unidadeDeMedida = unidadeDeMedida;
     }
 
 }

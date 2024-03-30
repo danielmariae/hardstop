@@ -1,7 +1,8 @@
 package br.unitins.topicos1.resource;
 
 import br.unitins.topicos1.dto.LoteDTO;
-import br.unitins.topicos1.dto.LotePatchDTO;
+import br.unitins.topicos1.dto.LotePatchQDTO;
+import br.unitins.topicos1.dto.LotePatchVDTO;
 import br.unitins.topicos1.dto.LoteResponseDTO;
 import br.unitins.topicos1.service.LoteService;
 import jakarta.annotation.security.RolesAllowed;
@@ -42,9 +43,16 @@ public class LoteResource {
     @PATCH
     @RolesAllowed({"Func", "Admin"})
     @Path("/patch/quantidade")
-    public Response updateQuantidade(@Valid LotePatchDTO dto)
+    public Response updateQuantidade(@Valid LotePatchQDTO dto)
     {
         return Response.status(201).entity(service.updateQuantidade(dto)).build();
+    }
+
+        @PATCH
+    @RolesAllowed({"Func", "Admin"})
+    @Path("/patch/valorVenda")
+    public Response updateValorVenda(@Valid LotePatchVDTO dto) {
+        return Response.ok().entity(service.updateValorVenda(dto)).build();
     }
 
     @DELETE

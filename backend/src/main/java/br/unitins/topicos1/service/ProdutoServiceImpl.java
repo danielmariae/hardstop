@@ -4,13 +4,13 @@ package br.unitins.topicos1.service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
+import java.util.stream.Collectors;
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.ProdutoDTO;
 import br.unitins.topicos1.dto.ProdutoFornecedorPatch;
 import br.unitins.topicos1.dto.ProdutoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
-import br.unitins.topicos1.dto.ProdutoValorPatch;
+import br.unitins.topicos1.model.Classificacao;
 import br.unitins.topicos1.model.Fornecedor;
 import br.unitins.topicos1.model.Lote;
 import br.unitins.topicos1.model.Produto;
@@ -46,13 +46,13 @@ public class ProdutoServiceImpl implements ProdutoService {
         Produto produto = new Produto();
         produto.setNome(dto.nome());
         produto.setDescricao(dto.descricao());
+        produto.setModelo(dto.modelo());
         produto.setCodigoBarras(dto.codigoBarras());
         produto.setMarca(dto.marca());
         produto.setAltura(dto.altura());
         produto.setLargura(dto.largura());
         produto.setComprimento(dto.comprimento());
         produto.setPeso(dto.peso());
-        produto.setClassificacao(repositoryClassificacao.findById(dto.idClassificacao())); 
         
         repository.persist(produto);
         return ProdutoResponseDTO.valueOf(produto);
@@ -60,15 +60,18 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     @Transactional
+    // Este método é chamado de forma automatizada pelo método ativaLote de LoteService
     public ProdutoResponseDTO update(ProdutoPatchDTO dto) {
         Produto produto = repository.findById(dto.id());
 
-        if(produto.getQuantidade() == 0) {
+        if(dto.quantidadeUnidades() != null) {
+          // Este if verifica se a quantidade desse produto em estoque é zero. Isso é necessário para que não ocorra mistura de Lotes diferentes (adicionar as novas unidades de um produto que vieram do Fornecedor B, às unidades preexistentes desse mesmo produto que vieram do Fornecedor A). Para o caso onde as novas unidades de um produto vem do mesmo fornecedor, obtidas pelo mesmo preço e mantidas no mesmo valor, existe o método updateQuantidade de LoteService.
+        if(produto.getQuantidadeUnidades() == 0) {
 
           try {
           produto.setValorVenda(dto.valorVenda());
           produto.setLoteAtual(repositoryLote.findById(dto.idLoteProduto()));
-          produto.setQuantidade(dto.quantidade());
+          produto.setQuantidadeUnidades(dto.quantidadeUnidades());
           
           } catch (OptimisticLockException e) {
               throw new GeneralErrorException(
@@ -85,6 +88,33 @@ public class ProdutoServiceImpl implements ProdutoService {
             "ProdutoServiceImpl(update)",
             "Não posso realizar update se a quantidade de produto em estoque for diferente de zero.");
         }
+      } else {
+
+        if(produto.getQuantidadeNaoConvencional() == 0) {
+
+          try {
+          produto.setValorVenda(dto.valorVenda());
+          produto.setLoteAtual(repositoryLote.findById(dto.idLoteProduto()));
+          produto.setQuantidadeNaoConvencional(dto.quantidadeNaoConvencional());
+          
+          } catch (OptimisticLockException e) {
+              throw new GeneralErrorException(
+          "500",
+          "Server Error",
+          "ProdutoServiceImpl(update)",
+          "Não consegui realizar o update do produto por conta de concorrência no banco de dados. Tente novamente." + e);
+          }
+
+        } else {
+          throw new GeneralErrorException(
+            "400",
+            "Bad Resquest",
+            "ProdutoServiceImpl(update)",
+            "Não posso realizar update se a quantidade de produto em estoque for diferente de zero.");
+        }
+
+
+      }
 
 
        /* 
@@ -127,15 +157,6 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     @Transactional
-    public ProdutoResponseDTO updateValorVenda(ProdutoValorPatch dto) {
-        Produto produto = repository.findById(dto.id());
-
-        produto.setValorVenda(dto.valor());
-        return ProdutoResponseDTO.valueOf(produto);
-    }
-
-    @Override
-    @Transactional
     public void delete(Long id) {
       try {
         repository.deleteById(id);
@@ -168,13 +189,43 @@ public class ProdutoServiceImpl implements ProdutoService {
         .toList();
     }
 
+    public List<ProdutoResponseDTO> findByClassificacao(Long idClassificacao) {
+      return repository
+      .findByClassificacao(idClassificacao)
+      .stream()
+      .map(p -> ProdutoResponseDTO.valueOf(p))
+      .toList();
+  }
+
+  public List<Classificacao> retornaClassificacao() {
+    return repositoryClassificacao
+                .listAll();
+                
+  }
+     public List<ProdutoResponseDTO> findTodos() {
+       return repository
+                .listAll()
+                .stream()
+                .map(ProdutoResponseDTO::valueOf)
+                .toList();
+    } 
+
     @Override
-    public List<ProdutoResponseDTO> findByAll() {
-        return repository
-        .listAll()
-        .stream()
-        .map(p -> ProdutoResponseDTO.valueOf(p))
-        .toList();
+    public List<ProdutoResponseDTO> findByAll(int page, int pageSize) {
+        List<Produto> list = repository
+            .findAll()
+            .page(page, pageSize)
+            .list();
+        return list
+            .stream()
+            .map(f -> ProdutoResponseDTO.valueOf(f))
+            .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public long count() {
+        return repository.count();
     }
 
     public Fornecedor encontraFornecedor(ProdutoFornecedorPatch dto) {
