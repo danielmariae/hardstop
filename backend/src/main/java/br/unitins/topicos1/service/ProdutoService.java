@@ -1,6 +1,9 @@
 package br.unitins.topicos1.service;
 
 import java.util.List;
+
+import br.unitins.topicos1.dto.ProcessadorDTO;
+import br.unitins.topicos1.dto.ProcessadorResponseDTO;
 import br.unitins.topicos1.dto.ProdutoDTO;
 import br.unitins.topicos1.dto.ProdutoFornecedorPatch;
 import br.unitins.topicos1.dto.ProdutoPatchDTO;
@@ -13,6 +16,9 @@ public interface ProdutoService {
 
     // INSERIR NOVO PRODUTO:
     ProdutoResponseDTO insert(ProdutoDTO dto);
+
+    // INSERIR NOVO PRODUTO:
+    ProcessadorResponseDTO insertProcessador(ProcessadorDTO dto);
 
     // ATUALIZAR DETALHES DO PRODUTO E CLASSIFICAÇÃO JUNTO:
     ProdutoResponseDTO update(ProdutoPatchDTO dto);

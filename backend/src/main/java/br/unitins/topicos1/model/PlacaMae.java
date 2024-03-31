@@ -14,7 +14,6 @@ public class PlacaMae extends Produto {
     private String lan;
     private String slots;
     private String armazenamento;
-    private String garantiaMeses;
 
     /**
      * @return String return the cpu
@@ -126,20 +125,6 @@ public class PlacaMae extends Produto {
      */
     public void setArmazenamento(String armazenamento) {
         this.armazenamento = armazenamento;
-    }
-
-    /**
-     * @return String return the garantiaMeses
-     */
-    public String getGarantiaMeses() {
-        return garantiaMeses;
-    }
-
-    /**
-     * @param garantiaMeses the garantiaMeses to set
-     */
-    public void setGarantiaMeses(String garantiaMeses) {
-        this.garantiaMeses = garantiaMeses;
     }
 
 }

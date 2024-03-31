@@ -1,23 +1,41 @@
 <mat-toolbar color="primary">
     <div class="flex-container">
         <span class="toolbar-title">Lista de Produtos</span>
-        <button mat-fab color="accent" (click)="inserirProduto()">
+        <button mat-fab color="accent">
             <mat-icon>add</mat-icon>
         </button>
     </div>
     <div class="autocomplete-container">
         <form class="example-form">
             <mat-form-field class="example-full-width">
-                <mat-label>Insira um nome de produto</mat-label>
+                <mat-label>Selecione um produto</mat-label>
                 <input type="text"
                     placeholder="Pick one"
                     aria-label="Number"
                     matInput
                     [formControl]="myControl"
-                    [matAutocomplete]="auto">
-                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selecionarProduto($event.option.value)">
+                    [matAutocomplete]="autoprod">
+                    <mat-autocomplete #autoprod="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selecionarProduto($event.option.value)">
                     <mat-option *ngFor="let produto of filteredOptions | async" [value]="produto">
                         {{ produto.nome }}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </form>
+    </div>
+    <div class="autoclass">
+        <form class="exclass">
+            <mat-form-field class="exfullclass">
+                <mat-label>Inserir Novos Produtos</mat-label>
+                <input type="text"
+                    placeholder="Pick one"
+                    aria-label="Number"
+                    matInput
+                    [formControl]="myControlClass"
+                    [matAutocomplete]="autoclass">
+                    <mat-autocomplete #autoclass="matAutocomplete" [displayWith]="displayClass" (optionSelected)="selecionarClassificacao($event.option.value)">
+                    <mat-option *ngFor="let classificacao of filteredOptionsClass | async" [value]="classificacao">
+                        {{ classificacao.nome }}
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>

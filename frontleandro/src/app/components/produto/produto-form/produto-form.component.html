@@ -1,0 +1,100 @@
+<form [formGroup]="produtoForm" (ngSubmit)="salvarProduto()">
+  <div class="form-group">
+    <label for="nome">Nome:</label>
+    <input type="text" formControlName="nome" id="nome">
+  </div>
+
+  <div class="form-group">
+    <label for="modelo">Modelo:</label>
+    <input type="text" formControlName="modelo" id="modelo">
+  </div>
+
+  <div class="form-group">
+    <label for="marca">Marca:</label>
+    <input type="text" formControlName="marca" id="marca">
+  </div>
+
+  <div class="form-group">
+    <label for="descricao">Descrição:</label>
+    <textarea formControlName="descricao" id="descricao"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="codigoBarras">Código de Barras:</label>
+    <input type="text" formControlName="codigoBarras" id="codigoBarras">
+  </div>
+
+  <div class="form-group">
+    <label for="altura">Altura:</label>
+    <input type="number" formControlName="altura" id="altura">
+  </div>
+
+  <div class="form-group">
+    <label for="largura">Largura:</label>
+    <input type="number" formControlName="largura" id="largura">
+  </div>
+
+  <div class="form-group">
+    <label for="comprimento">Comprimento:</label>
+    <input type="number" formControlName="comprimento" id="comprimento">
+  </div>
+
+  <div class="form-group">
+    <label for="peso">Peso:</label>
+    <input type="number" formControlName="peso" id="peso">
+  </div>
+
+  <div class="form-group">
+    <label for="valorVenda">Valor de Venda:</label>
+    <input type="number" formControlName="valorVenda" id="valorVenda">
+  </div>
+
+  <div class="form-group">
+    <label for="quantidade">Quantidade:</label>
+    <input type="number" formControlName="quantidadeUnidades" id="quantidadeUnidades">
+  </div>
+
+  <div class="form-group">
+    <label for="quantidade">Quantidade Não Convencional:</label>
+    <input type="number" formControlName="quantidadeNaoConvencional" id="quantidadeNaoConvencional">
+  </div>
+
+  <div class="form-group">
+    <label for="unidadeDeMedida">Unidade de Medida:</label>
+    <input type="text" formControlName="unidadeDeMedida" id="unidadeDeMedida">
+  </div>
+
+  <div class="form-group">
+    <label for="classificacao">Classificação:</label>
+    <select formControlName="classificacao">
+      <option disabled selected value="">Selecione uma classificacao</option>
+      <option *ngFor="let tipo of classificacao" [value]="tipo.id">{{tipo.nome}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="nomeImagem">Procurar Imagem:</label>
+    <div formArrayName="nomeImagem">
+      <div *ngFor="let figura of nomeImagem.controls; let i = index" [formGroupName]="i">
+    <input type="text" formControlName="nomeImagem" id="nomeImagem{{i}}">
+    <button type="button" (click)="removerNomeImagens(i)">Remover</button>
+    </div>
+    <button type="button" (click)="adicionarNomeImagens()">Adicionar Imagens</button>
+  </div>
+
+  </div>
+
+  <!-- Exibir campos específicos de PlacaMae se o produto for uma PlacaMae -->
+  <ng-container *ngIf="tipoProduto === 'placas mãe'">
+    <app-placaMae-form [placaMae]="placaMae"></app-placaMae-form>
+  </ng-container>
+
+  <!-- Exibir campos específicos de Processador se o produto for um Processador -->
+  <ng-container *ngIf="tipoProduto === 'processadores'">
+    <app-processador-form [processador]="processador"></app-processador-form>
+  </ng-container>
+  
+  <button type="submit">Salvar</button>
+  <button (click)="cancelarInsercao()">Cancelar</button>
+
+</form>

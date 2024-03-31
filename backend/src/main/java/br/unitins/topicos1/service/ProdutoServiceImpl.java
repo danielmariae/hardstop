@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import br.unitins.topicos1.application.GeneralErrorException;
+import br.unitins.topicos1.dto.ProcessadorDTO;
+import br.unitins.topicos1.dto.ProcessadorResponseDTO;
 import br.unitins.topicos1.dto.ProdutoDTO;
 import br.unitins.topicos1.dto.ProdutoFornecedorPatch;
 import br.unitins.topicos1.dto.ProdutoPatchDTO;
@@ -13,6 +15,7 @@ import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.model.Classificacao;
 import br.unitins.topicos1.model.Fornecedor;
 import br.unitins.topicos1.model.Lote;
+import br.unitins.topicos1.model.Processador;
 import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.repository.ClassificacaoRepository;
 import br.unitins.topicos1.repository.LoteRepository;
@@ -57,6 +60,48 @@ public class ProdutoServiceImpl implements ProdutoService {
         repository.persist(produto);
         return ProdutoResponseDTO.valueOf(produto);
     }
+
+      @Transactional
+     // Primeiro cadastro o produto. Em seguida cadastro o lote.
+     public ProcessadorResponseDTO insertProcessador(ProcessadorDTO dto) {
+      System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
+      Processador produto = new Processador();
+      System.out.println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+      produto.setNome(dto.nome());
+      produto.setDescricao(dto.descricao());
+      produto.setModelo(dto.modelo());
+      produto.setCodigoBarras(dto.codigoBarras());
+      produto.setMarca(dto.marca());
+      produto.setAltura(dto.altura());
+      produto.setLargura(dto.largura());
+      produto.setComprimento(dto.comprimento());
+      produto.setPeso(dto.peso());
+      System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCc");
+      produto.setNomeImagem(dto.nomeImagem());
+      System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+      produto.setClassificacao(repositoryClassificacao.findById(dto.classificacao()));
+      System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+      produto.setSoquete(dto.soquete());
+      produto.setPistas(dto.pistas());
+      produto.setCompatibilidadeChipset(dto.compatibilidadeChipset());
+      produto.setBloqueado(dto.bloqueado());
+      produto.setCanaisMemoria(dto.canaisMemoria());
+      produto.setCapacidadeMaxMemoria(dto.capacidadeMaxMemoria());
+      produto.setPontenciaBase(dto.pontenciaBase());
+      produto.setPotenciaMaxima(dto.potenciaMaxima());
+      produto.setFrequenciaBase(dto.frequenciaBase());
+      produto.setFrequenciaMaxima(dto.frequenciaMaxima());
+      produto.setTamanhoCacheL3(dto.tamanhoCacheL3());
+      produto.setTamanhoCacheL2(dto.tamanhoCacheL2());
+      produto.setNumNucleosFisicos(dto.numNucleosFisicos());
+      produto.setNumThreads(dto.numThreads());
+      produto.setVelMaxMemoria(dto.velMaxMemoria());
+      produto.setConteudoEmbalagem(dto.conteudoEmbalagem());
+      System.out.println("1111111111111111111111111111111111111111111111111111111111111");
+      repository.persist(produto);
+      System.out.println("22222222222222222222222222222222222222222222222222222222222222");
+      return ProcessadorResponseDTO.valueOf(produto);
+  }
 
     @Override
     @Transactional

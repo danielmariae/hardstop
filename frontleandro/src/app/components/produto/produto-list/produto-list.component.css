@@ -1,7 +1,7 @@
 .autocomplete-container {
     position: absolute;
-    top: 5px; /* Ajuste conforme necessário */
-    left: 10px; /* Ajuste conforme necessário */
+    top: 5px; 
+    left: 10px; 
   }
   
   .example-form {
@@ -11,10 +11,26 @@
   }
   
   .example-full-width {
+    width: 120%;
+  }
+
+  .autoclass {
+    position: absolute;
+    top: 5px; /* Ajuste conforme necessário */
+    right: 50px; /* Ajuste conforme necessário */
+  }
+  
+  .exclass {
+    min-width: 150px;
+    max-width: 500px;
     width: 100%;
   }
   
-  .toolbar-title {
+  .exfullclass {
+    width: 120%;
+  }
+  
+   .toolbar-title {
       flex: 1;
       text-align: center;
     }
@@ -22,35 +38,11 @@
     .flex-container {
       display: flex;
       align-items: center;
-      justify-content: space-between; /* Isso garante que o título e o botão permaneçam no canto esquerdo */
+      justify-content: space-between; 
       width: 100%;
-    }
+    } 
     
-    .mat-column-id {
-      width: 5em;
-      border-right: 1px solid currentColor;
-      padding-right: 24px;
-      text-align: center;
-    }
-    .mat-column-nomeFantasia {
-      width: 20%;
-    }
-    .mat-column-cnpj {
-      text-align: center;
-      min-width: 5em;
-    }
-    .mat-column-endSite {
-      text-align: center;
-      min-width: 5em;
-    }
-    .mat-column-endereco {
-      text-align: center;
-      width: 20%;
-    }
-    .mat-column-telefone {
-      text-align: center;
-      min-width: 5em;
-    }
+  
     .mat-column-acao {
       text-align: center;
       min-width: 10em;

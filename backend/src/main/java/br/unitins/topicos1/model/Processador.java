@@ -23,8 +23,6 @@ public class Processador extends Produto {
     private String numThreads;
     private String velMaxMemoria;
     private String conteudoEmbalagem;
-    private String garantiaMeses;
-    
 
     /**
      * @return String return the soquete
@@ -248,20 +246,6 @@ public class Processador extends Produto {
      */
     public void setConteudoEmbalagem(String conteudoEmbalagem) {
         this.conteudoEmbalagem = conteudoEmbalagem;
-    }
-
-    /**
-     * @return String return the garantiaMeses
-     */
-    public String getGarantiaMeses() {
-        return garantiaMeses;
-    }
-
-    /**
-     * @param garantiaMeses the garantiaMeses to set
-     */
-    public void setGarantiaMeses(String garantiaMeses) {
-        this.garantiaMeses = garantiaMeses;
     }
 
 }

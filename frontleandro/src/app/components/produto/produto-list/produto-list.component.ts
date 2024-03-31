@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Component, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Produto } from '../../../models/Produto.model';
+import { Classificacao, Produto } from '../../../models/Produto.model';
 import { ProdutoService } from '../../../services/produto.service';
 import { NgFor, CommonModule, AsyncPipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -28,10 +28,16 @@ import { NavigationService } from '../../../services/navigation.service';
 })
 
 export class ProdutoListComponent implements OnInit {
+
     // Variáveis relacionadas com a caixa de busca
     myControl = new FormControl('');
     filteredOptions: Observable<Produto[]>;
     todosProdutos: Produto[] = [];
+
+    myControlClass = new FormControl('');
+    filteredOptionsClass: Observable<Classificacao[]>;
+    todasClassificacoes: Classificacao[] = [];
+
     // variaveis de controle de paginacao
     totalRecords = 0;
     page = 0;
@@ -45,22 +51,32 @@ export class ProdutoListComponent implements OnInit {
         private router: Router, private route: ActivatedRoute,
         private navigationService: NavigationService) {
 
-          // Implementando o buscador para fornecedor
+          // Implementando o buscador para produto
           this.filteredOptions = this.myControl.valueChanges.pipe(
             startWith(''),
             map(value => typeof value === 'string' ? value : value ? (value as Produto).nome : ''),
             map(cnpj => cnpj ? this._filter(cnpj) : this.todosProdutos.slice())
           );
+
+          // Implementando o buscador para classificacao
+          this.filteredOptionsClass = this.myControlClass.valueChanges.pipe(
+            startWith(''),
+            map(value => typeof value === 'string' ? value : value ? (value as Classificacao).nome : ''),
+            map(nome => nome ? this.class_filter(nome) : this.todasClassificacoes.slice())
+          );
+
     }
 
     // Implementando o buscador para produto
     private _filter(value: string): Produto[] {
         const filterValue = value.toLowerCase();
+console.log(filterValue);
         return this.todosProdutos.filter(option => option.nome.toLowerCase().includes(filterValue));
       }
     
       // Implementando o buscador para produto
       displayFn(produto: Produto): string {
+        console.log(produto.nome);
         return produto && produto.nome ? produto.nome : '';
       }
   
@@ -69,6 +85,26 @@ export class ProdutoListComponent implements OnInit {
       selecionarProduto(produto: Produto) {
         console.log(produto);
         this.router.navigate(['/produtos', produto.id]);
+      }
+
+      // Implementando o buscador para classificacao
+      private class_filter(value: string): Classificacao[] {
+        const filterValue = value.toLowerCase();
+console.log(filterValue);
+        return this.todasClassificacoes.filter(option => option.nome.toLowerCase().includes(filterValue));
+      }
+
+      displayClass(classificacao: Classificacao): string {
+        console.log(classificacao);
+        return classificacao && classificacao.nome ? classificacao.nome : '';
+      }
+
+      // Método para chamar o endpoint para inserção de novo Fornecedor
+      selecionarClassificacao(classificacao: Classificacao) {
+        console.log(classificacao.nome);
+        const enderecoEdicao: string = 'produtos/new/' + classificacao.nome.toLowerCase();
+        console.log(enderecoEdicao);
+        this.navigationService.navigateTo(enderecoEdicao);
       }
   
       ngOnInit() {
@@ -79,6 +115,17 @@ export class ProdutoListComponent implements OnInit {
         this.produtoService.findTodos().subscribe({
           next: (todosProdutos: Produto[]) => {
             this.todosProdutos = todosProdutos;
+          },
+          error: (error) => {
+            console.error('Erro ao carregar produtos:', error);
+          }
+        });
+
+        // Implementando o buscador para classificacao
+        this.produtoService.getClassificacao().subscribe({
+          next: (todasClassificacoes: Classificacao[]) => {
+            this.todasClassificacoes = todasClassificacoes;
+		console.log(todasClassificacoes);
           },
           error: (error) => {
             console.error('Erro ao carregar produtos:', error);
@@ -144,12 +191,6 @@ paginar(event: PageEvent) : void {
  editarProduto(id: number): void {
     const enderecoEdicao: string = "produtos/edit/" + id.toString();
     this.navigationService.navigateTo(enderecoEdicao);
-}
-
-// Método para chamar o endpoint para inserção de novo Fornecedor
-inserirProduto(): void {
-  const enderecoEdicao: string = "produtos/new";
-  this.navigationService.navigateTo(enderecoEdicao);
 }
 
 }

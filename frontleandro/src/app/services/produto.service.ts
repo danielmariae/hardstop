@@ -111,24 +111,36 @@ export class ProdutoService {
     }
 
     // Método para inserir uma nova instância de Produto no banco de dados do servidor
-    insert(produto: Produto): Observable<Produto> {
+    insert(produto: Produto, tipoProduto: string): Observable<any> {
 
+       let url: string;
+
+        if(tipoProduto == 'processadores') {
+            url = this.baseUrl + '/insert/processador'; // Concatena o ID à URL base
+        } else if(tipoProduto == 'placas mãe') {
+            url = this.baseUrl + '/insert/placamae'; // Concatena o ID à URL base
+        } else {
+            url = this.baseUrl + '/insert'; // Concatena o ID à URL base 
+        }
         const headers = this.sessionTokenService.getSessionHeader();
 
         if (headers) {
             // Faz a requisição HTTP com o token de autenticação no cabeçalho
             console.log(produto);
-            return this.httpClient.post<Produto>(this.baseUrl, produto, { headers })
+            console.log(url);
+            return this.httpClient.post<any>(url, produto, { headers })
                 .pipe(
                     catchError(this.handleError)
                 );
+            console.log(tipoProduto);
         } else {
             console.log(produto);
             // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-            return this.httpClient.post<Produto>(this.baseUrl, produto)
+            return this.httpClient.post<any>(url, produto)
                 .pipe(
                     catchError(this.handleError)
                 );
+            console.log(tipoProduto);
         }
     }
 

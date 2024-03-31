@@ -4,6 +4,8 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.application.ErrorTP1;
+import br.unitins.topicos1.dto.ProcessadorDTO;
+import br.unitins.topicos1.dto.ProcessadorResponseDTO;
 import br.unitins.topicos1.dto.ProdutoDTO;
 import br.unitins.topicos1.dto.ProdutoFornecedorPatch;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
@@ -41,15 +43,32 @@ public class ProdutoResource {
 
     @Inject
     JsonWebToken jwt;
-
     
     @POST
     @RolesAllowed({"Func", "Admin"})
-    @Path("/insert/")
+    @Path("/insert/produto")
     public Response insert (@Valid ProdutoDTO dto){
         ProdutoResponseDTO retorno = service.insert(dto);
         return Response.status(201).entity(retorno).build();
     }
+
+    @POST
+    @RolesAllowed({"Func", "Admin"})
+    @Path("/insert/processador")
+    public Response insert (@Valid ProcessadorDTO dto){
+        System.out.println("777777777777777777777777777777777777777777777777777777777");
+        ProcessadorResponseDTO retorno = service.insertProcessador(dto);
+        return Response.status(201).entity(retorno).build();
+    }
+
+    // @POST
+    // @RolesAllowed({"Func", "Admin"})
+    // @Path("/insert/placamae")
+    // public Response insert (@Valid PlacaMaeDTO dto){
+    //     PlacaMaeResponseDTO retorno = service.insertPlacaMae(dto);
+    //     return Response.status(201).entity(retorno).build();
+    // }
+
 
     @DELETE
     @RolesAllowed({"Func", "Admin"})

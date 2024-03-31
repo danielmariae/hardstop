@@ -10,8 +10,11 @@ export class Produto {
     comprimento!: number;
     peso!: number;
     valorVenda!: number;
-    quantidade!: number;
-    nomeImagem!: string[];
+    quantidadeUnidades!: number;
+    quantidadeNaoConvencional!: number;
+    unidadeDeMedida!: string;
+    nomeImagem!: string[] | null;
+    classificacao!: number
 }
 
 export class PlacaMae extends Produto {
@@ -24,7 +27,6 @@ export class PlacaMae extends Produto {
     lan!: string;
     slots!: string;
     armazenamento!: string;
-    garantiaMeses!: string;
 }
 
 export class Processador extends Produto {
@@ -45,6 +47,9 @@ export class Processador extends Produto {
     numThreads!: string;
     velMaxMemoria!: string;
     conteudoEmbalagem!: string;
-    garantiaMeses!: string;
+}
 
+export class Classificacao {
+    id!: number;
+    nome!: string
 }
