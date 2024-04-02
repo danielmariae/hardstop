@@ -1,6 +1,9 @@
 package br.unitins.topicos1.dto;
 
 import java.util.List;
+
+import br.unitins.topicos1.model.Classificacao;
+// import br.unitins.topicos1.model.Classificacao;
 import jakarta.validation.constraints.NotBlank;
 
 public record ProcessadorDTO(
@@ -36,7 +39,8 @@ public record ProcessadorDTO(
     Double quantidadeNaoConvencional,
     //@NotBlank(message = "O campo unidade de medida não pode ser nulo.")
     String unidadeDeMedida,
-    Long classificacao,
+    Classificacao classificacao,
+    // Long classificacao,
     List<String> nomeImagem,
     String soquete,
     String pistas,

@@ -79,7 +79,8 @@ public class ProdutoServiceImpl implements ProdutoService {
       System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCc");
       produto.setNomeImagem(dto.nomeImagem());
       System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
-      produto.setClassificacao(repositoryClassificacao.findById(dto.classificacao()));
+      produto.setClassificacao(dto.classificacao());
+      //produto.setClassificacao(repositoryClassificacao.findById(dto.classificacao()));
       System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
       produto.setSoquete(dto.soquete());
       produto.setPistas(dto.pistas());

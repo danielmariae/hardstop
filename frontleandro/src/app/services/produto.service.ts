@@ -167,7 +167,7 @@ export class ProdutoService {
     delete(id: number): Observable<any> {
 
         const headers = this.sessionTokenService.getSessionHeader();
-        const url = `${this.baseUrl}/${id}`; // Concatena o ID à URL base
+        const url = `${this.baseUrl}/delete/${id}`; // Concatena o ID à URL base
 
         if (headers) {
             // Faz a requisição HTTP com o token de autenticação no cabeçalho

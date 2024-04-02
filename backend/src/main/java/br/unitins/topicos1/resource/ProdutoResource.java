@@ -19,7 +19,6 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -56,7 +55,6 @@ public class ProdutoResource {
     @RolesAllowed({"Func", "Admin"})
     @Path("/insert/processador")
     public Response insert (@Valid ProcessadorDTO dto){
-        System.out.println("777777777777777777777777777777777777777777777777777777777");
         ProcessadorResponseDTO retorno = service.insertProcessador(dto);
         return Response.status(201).entity(retorno).build();
     }
@@ -138,14 +136,15 @@ public class ProdutoResource {
         return Response.ok(service.encontraFornecedor(dto)).build();
     }
 
-    @PATCH
+    @POST
     @Path("/upload/imagem/id/{id}")
-    @RolesAllowed({"Func", "Admin"})
+    //@RolesAllowed({"Func", "Admin"})
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response salvarImagem(@PathParam("id") Long id, @MultipartForm ArchiveForm form) {
+    // public Response salvarImagem(@MultipartForm ArchiveForm form) {
         String nomeImagem;
         try {
-           nomeImagem = fileService.salvarP(form.getNomeArquivo(), form.getArquivo()); 
+           nomeImagem = fileService.salvarP(form.getNomeArquivo(), form.getArquivo());
         } catch (Exception e) {
             ErrorTP1 error = new ErrorTP1("409", e.getMessage());
             return Response.status(Status.CONFLICT).entity(error).build();

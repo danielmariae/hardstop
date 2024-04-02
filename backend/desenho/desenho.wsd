@@ -20,6 +20,39 @@ class Telefone {
     - numero: String
 }
 
+class Processador {
+    - produto_id: Long
+    - soquete: String
+    - pistas: String
+    - bloqueado: String
+    - compatibilidadeChipset: String
+    - canaisMemoria: String
+    - capacidadeMaxMemoria: String
+    - pontenciaBase: String
+    - potenciaMaxima: String
+    - frequenciaBase: String
+    - frequenciaMaxima: String
+    - tamanhoCacheL3: String
+    - tamanhoCacheL2: String
+    - numNucleosFisicos: String
+    - numThreads: String
+    - velMaxMemoria: String
+    - conteudoEmbalagem: String
+}
+
+class PlacaMae {
+    - produto_id: Long
+    - cpu: String
+    - chipset: String
+    - memoria: String
+    - bios: String
+    - grafico: String
+    - lan: String
+    - slots: String
+    - armazenamento: String
+
+}
+
 class Cliente {
     - id: Long
     - nome: String
@@ -47,18 +80,10 @@ class Funcionario {
     - nomeImagem: String
 }
 
-class PlacaMae {
+class Produto {
     - id: Long
     - nome: String
     - modelo: String
-    - cpu: String
-    - chipset: String
-    - memoria: String
-    - bios: String
-    - grafico: String
-    - lan: String
-    - slots: String
-    - armazenamento: String
     - marca: String
     - descricao: String
     - codigoDeBarra: String
@@ -168,6 +193,8 @@ Pedido "*" *--> "1" Endereco
 Pedido "1" *--> "*" ItemDaVenda
 ItemDaVenda "*" o--> "1" Produto
 Cliente "*" --> "*" Produto : ListaDesejos
+Processador --|> Produto
+PlacaMae --|> Produto
 Pix  --|> FormaDePagamento
 CartaoDeCredito --|> FormaDePagamento
 Boleto --|> FormaDePagamento

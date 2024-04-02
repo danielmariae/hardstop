@@ -29,7 +29,6 @@ form {
     box-sizing: border-box; /* Considera o padding e a borda como parte do tamanho */
   }
   
-  
   /* Estilo para os elementos dentro do ng-container, se necessário */
   /* ng-container {
     

@@ -70,40 +70,33 @@ export class ProdutoListComponent implements OnInit {
     // Implementando o buscador para produto
     private _filter(value: string): Produto[] {
         const filterValue = value.toLowerCase();
-console.log(filterValue);
         return this.todosProdutos.filter(option => option.nome.toLowerCase().includes(filterValue));
       }
     
       // Implementando o buscador para produto
       displayFn(produto: Produto): string {
-        console.log(produto.nome);
         return produto && produto.nome ? produto.nome : '';
       }
   
       // Implementando o buscador para produto
       // Enviando o produto selecionado para uma página onde somente ele aparece
       selecionarProduto(produto: Produto) {
-        console.log(produto);
         this.router.navigate(['/produtos', produto.id]);
       }
 
       // Implementando o buscador para classificacao
       private class_filter(value: string): Classificacao[] {
         const filterValue = value.toLowerCase();
-console.log(filterValue);
         return this.todasClassificacoes.filter(option => option.nome.toLowerCase().includes(filterValue));
       }
 
       displayClass(classificacao: Classificacao): string {
-        console.log(classificacao);
         return classificacao && classificacao.nome ? classificacao.nome : '';
       }
 
       // Método para chamar o endpoint para inserção de novo Fornecedor
       selecionarClassificacao(classificacao: Classificacao) {
-        console.log(classificacao.nome);
         const enderecoEdicao: string = 'produtos/new/' + classificacao.nome.toLowerCase();
-        console.log(enderecoEdicao);
         this.navigationService.navigateTo(enderecoEdicao);
       }
   
@@ -125,7 +118,6 @@ console.log(filterValue);
         this.produtoService.getClassificacao().subscribe({
           next: (todasClassificacoes: Classificacao[]) => {
             this.todasClassificacoes = todasClassificacoes;
-		console.log(todasClassificacoes);
           },
           error: (error) => {
             console.error('Erro ao carregar produtos:', error);
@@ -155,7 +147,6 @@ paginar(event: PageEvent) : void {
     this.carregarProdutos(this.page, this.pageSize);
     this.produtoService.count().subscribe(data => {
       this.totalRecords = data;
-      console.log(this.totalRecords);
     });
   }
 
@@ -163,7 +154,6 @@ paginar(event: PageEvent) : void {
   carregarProdutos(page: number, pageSize: number): void {
     this.produtoService.findAll(this.page, this.pageSize).subscribe({
         next: (response) => {
-            console.log('Resultado:', response);
             this.produtos = response;
         },
         error: (error) => {
