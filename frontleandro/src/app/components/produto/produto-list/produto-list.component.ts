@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Component, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { Classificacao, Produto } from '../../../models/Produto.model';
+import { Classificacao, Produto } from '../../../models/produto.model';
 import { ProdutoService } from '../../../services/produto.service';
 import { NgFor, CommonModule, AsyncPipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Processador } from '../../../../models/Produto.model';
+import { Processador } from '../../../../models/produto.model';
 import { CommonModule } from '@angular/common';
 import { ProdutoService } from '../../../../services/produto.service';
 

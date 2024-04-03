@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators, For
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavigationService } from '../../../services/navigation.service';
-import { Produto, PlacaMae, Processador, Classificacao } from '../../../models/Produto.model';
+import { Produto, PlacaMae, Processador, Classificacao } from '../../../models/produto.model';
 import { ProdutoService } from '../../../services/produto.service';
 import { PlacaMaeFormComponent } from '../produto-form/placaMae-form/placaMae-form.component';
 import { ProcessadorFormComponent } from '../produto-form/processador-form/processador-form.component';
