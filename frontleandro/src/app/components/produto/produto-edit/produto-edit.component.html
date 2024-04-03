@@ -64,7 +64,7 @@
       <input type="text" formControlName="unidadeDeMedida" id="unidadeDeMedida">
     </div>
   
-    <!-- <div formArrayName="arquivos">
+    <div formArrayName="arquivos">
       <div *ngFor="let arquivo of arquivos.controls; let i = index">
         <div [formGroupName]="i">
           <label>{{ arquivo.value.name }}</label>
@@ -76,7 +76,7 @@
     <button type="button" (click)="fileInput.click()">Escolher Arquivos</button>
     <ul>
       <li *ngFor="let arquivo of arquivosSelecionados">{{ arquivo.name }} <button type="button" (click)="removerArquivoSelecionado(arquivo)">Remover</button></li>
-    </ul> -->
+    </ul>
   
     <!-- Exibir campos específicos de PlacaMae se o produto for uma PlacaMae -->
     <ng-container *ngIf="tipoProduto === 'placas mãe'">
