@@ -105,14 +105,7 @@ export class ProdutoListComponent implements OnInit {
         // Este foi o menor número que definimos no arquivo html
         this.pageSize = 2; 
         // Implementando o buscador para produtos
-        this.produtoService.findTodos().subscribe({
-          next: (todosProdutos: Produto[]) => {
-            this.todosProdutos = todosProdutos;
-          },
-          error: (error) => {
-            console.error('Erro ao carregar produtos:', error);
-          }
-        });
+       this.buscarTodosProdutos();
 
         // Implementando o buscador para classificacao
         this.produtoService.getClassificacao().subscribe({
@@ -130,11 +123,24 @@ export class ProdutoListComponent implements OnInit {
         // Inscrevendo para receber notificações de novos produtos
         this.produtoService.produtoInserido$.subscribe(() => {
             // Recarrega os produtos ao receber uma notificação
-          this.carregarProdutos(this.page, this.pageSize); 
+          this.carregarProdutos(this.page, this.pageSize);
+          this.buscarTodosProdutos(); 
           this.router.navigate(['produtos']);
         });
       }
   
+// Buscando todos os produtos para carregar na lista de buscador de produtos
+buscarTodosProdutos(): void {
+  this.produtoService.findTodos().subscribe({
+    next: (todosProdutos: Produto[]) => {
+      this.todosProdutos = todosProdutos;
+    },
+    error: (error) => {
+      console.error('Erro ao carregar produtos:', error);
+    }
+  });
+}
+
 // Método para paginar os resultados
 paginar(event: PageEvent) : void {
     this.page = event.pageIndex;
@@ -177,7 +183,7 @@ paginar(event: PageEvent) : void {
     });
 }
 
- // Método para chamar o endpoint para edição de um Fornecedor escolhido
+ // Método para chamar o endpoint para edição de um Produto escolhido
  editarProduto(id: number): void {
     const enderecoEdicao: string = "produtos/edit/" + id.toString();
     this.navigationService.navigateTo(enderecoEdicao);

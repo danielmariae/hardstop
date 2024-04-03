@@ -4,11 +4,16 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.application.ErrorTP1;
+import br.unitins.topicos1.dto.PlacaMaeDTO;
+import br.unitins.topicos1.dto.PlacaMaeResponseDTO;
 import br.unitins.topicos1.dto.ProcessadorDTO;
 import br.unitins.topicos1.dto.ProcessadorResponseDTO;
 import br.unitins.topicos1.dto.ProdutoDTO;
 import br.unitins.topicos1.dto.ProdutoFornecedorPatch;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
+import br.unitins.topicos1.model.PlacaMae;
+import br.unitins.topicos1.model.Processador;
+import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.form.ArchiveForm;
 import br.unitins.topicos1.service.FileService;
 import br.unitins.topicos1.service.ProdutoService;
@@ -20,6 +25,7 @@ import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -59,14 +65,40 @@ public class ProdutoResource {
         return Response.status(201).entity(retorno).build();
     }
 
-    // @POST
-    // @RolesAllowed({"Func", "Admin"})
-    // @Path("/insert/placamae")
-    // public Response insert (@Valid PlacaMaeDTO dto){
-    //     PlacaMaeResponseDTO retorno = service.insertPlacaMae(dto);
-    //     return Response.status(201).entity(retorno).build();
-    // }
+    @POST
+    @RolesAllowed({"Func", "Admin"})
+    @Path("/insert/placaMae")
+    public Response insert (@Valid PlacaMaeDTO dto){
+        PlacaMaeResponseDTO retorno = service.insertPlacaMae(dto);
+        return Response.status(201).entity(retorno).build();
+    }
 
+    @PUT
+    @RolesAllowed({"Func", "Admin"})
+    @Path("/update/produto/{id}")
+    public Response update(@Valid ProdutoDTO dto, @PathParam("id") Long id)
+    {
+        service.update(dto, id);
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @PUT
+    @RolesAllowed({"Func", "Admin"})
+    @Path("/update/processador/{id}")
+    public Response update(@Valid ProcessadorDTO dto, @PathParam("id") Long id)
+    {
+        service.updateProcessador(dto, id);
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @PUT
+    @RolesAllowed({"Func", "Admin"})
+    @Path("/update/placaMae/{id}")
+    public Response update(@Valid PlacaMaeDTO dto, @PathParam("id") Long id)
+    {
+        service.updatePlacaMae(dto, id);
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
 
     @DELETE
     @RolesAllowed({"Func", "Admin"})
@@ -100,7 +132,16 @@ public class ProdutoResource {
     @GET
     @Path("/search/id/{id}")
     public Response findById(@PathParam("id") Long id) {
-        return Response.ok(service.findById(id)).build();
+        Produto produto = service.findById(id);
+        if(produto instanceof PlacaMae) {
+            PlacaMae placaMae = (PlacaMae) produto;
+            return Response.ok(PlacaMaeResponseDTO.valueOf(placaMae)).build();
+        } else if(produto instanceof Processador) {
+            Processador processador = (Processador) produto;
+            return Response.ok(ProcessadorResponseDTO.valueOf(processador)).build();
+        } else {
+            return Response.ok(ProdutoResponseDTO.valueOf(produto)).build();
+        }
     }
 
     @GET

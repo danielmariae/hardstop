@@ -2,14 +2,14 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { NavigationService } from '../../../services/navigation.service';
-import { Produto, PlacaMae, Processador, Classificacao } from '../../../models/Produto.model';
-import { ProdutoService } from '../../../services/produto.service';
-import { PlacaMaeFormComponent } from './placaMae-form/placaMae-form.component';
-import { ProcessadorFormComponent } from './processador-form/processador-form.component';
-import { ProcessadorFormService } from './processador-form/processador-form-service.component';
+import { NavigationService } from '../../../../services/navigation.service';
+import { Produto, PlacaMae, Processador, Classificacao } from '../../../../models/Produto.model';
+import { ProdutoService } from '../../../../services/produto.service';
+import { PlacaMaeFormComponent } from '../placaMae-form/placaMae-form.component';
+import { ProcessadorFormComponent } from '../processador-form/processador-form.component';
+// import { ProcessadorFormService } from '../processador-form/processador-form-service.component';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { SessionTokenService } from '../../../services/session-token.service';
+import { SessionTokenService } from '../../../../services/session-token.service';
 
 @Component({
     selector: 'app-produto-form',
@@ -27,15 +27,17 @@ export class ProdutoFormComponent implements OnInit {
 
   @Input() produto: Produto = new Produto();
   produtoForm: FormGroup;
-  novaPlacaMae!: PlacaMae;
-  novoProcessador!: Processador;
+  // novaPlacaMae!: PlacaMae;
+  // novoProcessador!: Processador;
   classificacao: Classificacao[] = [];
   selectedFile!: File;
 
+  // Relacionado com Property 'placaMae' does not exist on type 'ProdutoFormComponent' no arquivo html.
   get placaMae(): PlacaMae {
     return this.produto as PlacaMae;
   }
 
+  // Relacionado com Property 'processador' does not exist on type 'ProdutoFormComponent' no arquivo html.
   get processador(): Processador {
     return this.produto as Processador;
   }
@@ -44,7 +46,6 @@ export class ProdutoFormComponent implements OnInit {
     private produtoService: ProdutoService,
     private route: ActivatedRoute,
     private navigationService: NavigationService,
-    private processadorFormService: ProcessadorFormService,
     private http: HttpClient,
     private sessionTokenService: SessionTokenService,
     ) {
@@ -85,6 +86,7 @@ export class ProdutoFormComponent implements OnInit {
   uploadFiles(idProduto: number) {
     const formData = new FormData();
     let url: string; // Declaração e inicialização da variável url
+    if(this.arquivosSelecionados.length != 0){
     for (let i = 0; i < this.arquivosSelecionados.length; i++) {
       formData.append('nomeImagem', this.arquivosSelecionados[i].name);
       const reader = new FileReader();
@@ -106,7 +108,8 @@ export class ProdutoFormComponent implements OnInit {
       }
     });
   };
-    }
+} 
+}
     // Limpa os arquivos selecionados após o envio
     this.arquivosSelecionados = [];
   }
@@ -126,6 +129,7 @@ export class ProdutoFormComponent implements OnInit {
     // Recuperando o nome do produto dos parâmetros da rota
     this.route.params.subscribe(params => {
         this.tipoProduto = params['tipoProduto'];
+        console.log(this.tipoProduto);
       });
 
      // Implementando o buscador para classificacao
@@ -179,11 +183,10 @@ salvarProduto(): void {
       nomeImagem: null,
     }
 
-    // Se o tipo de produto for processadores, obtenho também os valores do formulário do componente de processador
-    if (this.tipoProduto === 'processadores') {
-      const detalhesProcessador = this.processadorFormService.getProcessadorFormValue();
-      // Ajuntando os detalhes do produto e do processador
-      Object.assign(detalhesProduto, detalhesProcessador);
+    // Otenho também os valores do formulário específicos para o componente do produto a ser inserido
+      const detalhesTipoProduto = this.produtoService.getProdutoFormValue();
+      // Ajuntando os detalhes do produto pai e do produto filho
+      Object.assign(detalhesProduto, detalhesTipoProduto);
 
 
       this.produtoService.insert(detalhesProduto, this.tipoProduto).subscribe ({
@@ -199,7 +202,6 @@ salvarProduto(): void {
                   window.alert(error);
                 }
             });
-    }
   }
 
 cancelarInsercao(): void {

@@ -2,6 +2,8 @@ package br.unitins.topicos1.service;
 
 import java.util.List;
 
+import br.unitins.topicos1.dto.PlacaMaeDTO;
+import br.unitins.topicos1.dto.PlacaMaeResponseDTO;
 import br.unitins.topicos1.dto.ProcessadorDTO;
 import br.unitins.topicos1.dto.ProcessadorResponseDTO;
 import br.unitins.topicos1.dto.ProdutoDTO;
@@ -10,6 +12,7 @@ import br.unitins.topicos1.dto.ProdutoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.model.Classificacao;
 import br.unitins.topicos1.model.Fornecedor;
+import br.unitins.topicos1.model.Produto;
 
 
 public interface ProdutoService {
@@ -20,6 +23,18 @@ public interface ProdutoService {
     // INSERIR NOVO PRODUTO:
     ProcessadorResponseDTO insertProcessador(ProcessadorDTO dto);
 
+    // INSERIR NOVO PRODUTO:
+    PlacaMaeResponseDTO insertPlacaMae(PlacaMaeDTO dto);
+
+    // ATUALIZAR UM PRODUTO
+    void update(ProdutoDTO dto, Long id);
+
+    // ATUALIZAR UM PRODUTO
+    void updateProcessador(ProcessadorDTO dto, Long id);
+
+    // ATUALIZAR UM PRODUTO
+    void updatePlacaMae(PlacaMaeDTO dto, Long id);
+
     // ATUALIZAR DETALHES DO PRODUTO E CLASSIFICAÇÃO JUNTO:
     ProdutoResponseDTO update(ProdutoPatchDTO dto);
 
@@ -27,7 +42,7 @@ public interface ProdutoService {
     void delete(Long id);
 
     // PROCURAR POR ID:
-    ProdutoResponseDTO findById(Long id);
+    Produto findById(Long id);
 
     // PROCURAR POR CÓDIGO DE BARRAS:
     ProdutoResponseDTO findByCodigoBarras(String cpf);

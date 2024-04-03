@@ -59,7 +59,7 @@ insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '62', '332490
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '63', '997843201');
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '11', '978530098');
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '11', '964531234');
-insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '11', '33740932');
+insert into telefone (tipoTelefone, ddd, numerotelefone) values(1, '11', '337409321');
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(3, '11', '988885432');
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '61', '922704321');
 
@@ -91,9 +91,15 @@ insert into classificacao (nome) values('Processadores');
 insert into classificacao (nome) values('Placas Mãe');
 
 insert into produto (nome, modelo, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidadeUnidades, classificacao_id, version) values('Processador Intel Core i7 11 gen', 'XYZ-FGH12', 'Processador Intel Core i7 11 gen', 'PICI711gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 1000.0, 10, 1, 1);
+insert into processador (produto_id, bloqueado, canaismemoria) values (1, 'não', '256');
 insert into produto (nome, modelo, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidadeUnidades, classificacao_id, version) values('Processador Intel Core i5 12 gen', 'CVBN-KLo34','Processador Intel Core i5 12 gen', 'PICI512gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 1200.0, 5, 1, 1);
+insert into processador (produto_id, bloqueado, canaismemoria) values (2, 'não', '512');
 insert into produto (nome, modelo, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidadeUnidades, classificacao_id, version) values('Processador AMD Xeon7 11 gen', 'ZEN5-100R', 'Processador AMD Xeon7 11 gen', 'PAMDX711gen07102023', 'AMD', 0.5, 0.5, 0.5, 0.25, 1000.0, 4, 1, 1);
+insert into processador (produto_id, bloqueado, canaismemoria) values (3, 'não', '512');
 insert into produto (nome, modelo, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidadeUnidades, classificacao_id, version) values('Placa Mãe Asus', 'AAA-CGH04', 'Placa mãe ASUS para Inte Core a partir da 13 gen', 'PMA13gen30032024', 'ASUS', 0.5, 0.5, 0.5, 0.25, 1500.0, 31, 2, 1);
+insert into placamae (produto_id, armazenamento) values (4, '32 MB');
+
+
 
 insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidadeUnidades) values('f1_p1_lt15', 1, '2023-10-01 16:11:26', 1, 500.0, 1000.0, 100);
 insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidadeUnidades) values('f1_p1_lt15', 1, '2023-10-02 15:14:01', 2, 600.0, 1200.0, 50);

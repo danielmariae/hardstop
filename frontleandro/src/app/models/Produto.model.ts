@@ -15,7 +15,6 @@ export class Produto {
     unidadeDeMedida!: string;
     nomeImagem!: string[] | null;
     classificacao!: Classificacao | undefined;
-    // classificacao!: number;
 }
 
 export class PlacaMae extends Produto {

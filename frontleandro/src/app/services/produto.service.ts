@@ -9,17 +9,28 @@ import { SessionTokenService } from './session-token.service';
 })
 
 export class ProdutoService {
+    private produtoFormValue: any = {};
     produto: Produto = new Produto();
     private baseUrl = 'http://localhost:8080/produtos';
 
-    // Comunicar os componentes do Angular sobre alguma mudança e direcionar para a página de lista de produtos
+    // Comunica os componentes do Angular sobre alguma mudança e direciona para a página de lista de produtos
     private produtoInseridoSubject = new Subject<void>();
     produtoInserido$ = this.produtoInseridoSubject.asObservable();
 
 
     constructor(private httpClient: HttpClient, private sessionTokenService: SessionTokenService) { }
 
-    // Comunicar os componentes do Angular sobre alguma mudança e direcionar para a página de lista de produtos
+     // Atualiza os valores do formulário do componente de produto
+    updateProdutoFormValue(formValue: any) {
+    this.produtoFormValue = formValue;
+  }
+
+    // Obtém os valores do formulário do componente de produto
+    getProdutoFormValue() {
+        return this.produtoFormValue;
+    }
+
+    // Comunica os componentes do Angular sobre alguma mudança e direcionar para a página de lista de produtos
     notificarProdutoInserido(): void {
         this.produtoInseridoSubject.next();
     }
@@ -93,7 +104,7 @@ export class ProdutoService {
     // Método para trazer uma única instância de Produto do banco de dados do servidor de acordo com seu id
     findById(id: number): Observable<Produto> {
         const headers = this.sessionTokenService.getSessionHeader();
-        const url = `${this.baseUrl}/${id}`; // Concatena o ID à URL base
+        const url = `${this.baseUrl}/search/id/${id}`; // Concatena o ID à URL base
 
         if (headers) {
             // Faz a requisição HTTP com o token de autenticação no cabeçalho
@@ -116,11 +127,11 @@ export class ProdutoService {
        let url: string;
 
         if(tipoProduto == 'processadores') {
-            url = this.baseUrl + '/insert/processador'; // Concatena o ID à URL base
+            url = this.baseUrl + '/insert/processador'; 
         } else if(tipoProduto == 'placas mãe') {
-            url = this.baseUrl + '/insert/placamae'; // Concatena o ID à URL base
+            url = this.baseUrl + '/insert/placaMae'; 
         } else {
-            url = this.baseUrl + '/insert'; // Concatena o ID à URL base 
+            url = this.baseUrl + '/insert'; // É apenas Produto do tipo puro 
         }
         const headers = this.sessionTokenService.getSessionHeader();
 
@@ -145,10 +156,18 @@ export class ProdutoService {
     }
 
     // Método para alterar uma única instância de Produto no banco de dados do servidor
-    update(produto: Produto): Observable<Produto> {
+    update(produto: Produto, tipoProduto: string, id: number): Observable<Produto> {
+        let url: string;
+
+        if(tipoProduto == 'processadores') {
+            url = this.baseUrl + '/update/processador/' + id; 
+        } else if(tipoProduto == 'placas mãe') {
+            url = this.baseUrl + '/update/placaMae/' + id; 
+        } else {
+            url = this.baseUrl + '/update/produto/' + id; // É apenas Produto do tipo puro 
+        }
 
         const headers = this.sessionTokenService.getSessionHeader();
-        const url = `${this.baseUrl}/${produto.id}`; // Concatena o ID à URL base
 
         if (headers) {
             return this.httpClient.put<Produto>(url, produto, { headers })
