@@ -6,6 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "build-bulma": "sass --load-path=node_modules styles.scss styles.css",
+    "start-bulma": "npm run build-bulma -- --watch",
     "test": "ng test"
   },
   "private": true,
@@ -20,7 +22,9 @@
     "@angular/platform-browser": "^17.1.0",
     "@angular/platform-browser-dynamic": "^17.1.0",
     "@angular/router": "^17.1.0",
+    "bulma": "^1.0.0",
     "rxjs": "~7.8.0",
+    "sass": "^1.72.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },

@@ -1,1 +1,25 @@
-<router-outlet />
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <h1 id="hardstoplogo">HARDSTOP</h1>
+      </a>
+      <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbar-menu" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item">Favoritos</a>
+        <a class="navbar-item">Carrinho</a>
+        <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-light">Conta</a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <router-outlet/>
