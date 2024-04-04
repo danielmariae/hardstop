@@ -1,29 +1,39 @@
-<div>
-    <h2>Login Funcionário</h2>
+<div class="container columns">
+  <div class="column">
+    <h1 class="title is-4">Login Funcionário</h1>
     <form [formGroup]="loginForm" (ngSubmit)="loginF()">
-      <div>
-        <label for="username">Usuário:</label>
-        <input type="text" id="usernameF" formControlName="username" required>
+      <div class="field">
+        <label class="label" for="username">Usuário:</label>
+        <input class="input" placeholder="Digite aqui seu nome de usuário" type="text" id="usernameF" formControlName="username" required>
       </div>
       <div>
-        <label for="password">Senha:</label>
-        <input type="password" id="passwordF" formControlName="password" required>
+        <label class="label" for="password">Senha:</label>
+        <input class="input" placeholder="Digite aqui sua senha" type="password" id="passwordF" formControlName="password" required>
       </div>
-      <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
-      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+        <br>
+      <div class="buttons">
+        <button class="button is-primary" type="submit" [disabled]="loginForm.invalid">Entrar</button>
+      </div>
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>  
     </form>
-    <h2>Login Cliente</h2>
-    <form [formGroup]="loginForm" (ngSubmit)="loginC()">
-      <div>
-        <label for="username">Usuário:</label>
-        <input type="text" id="usernameC" formControlName="username" required>
-      </div>
-      <div>
-        <label for="password">Senha:</label>
-        <input type="password" id="passwordC" formControlName="password" required>
-      </div>
-      <button type="submit" [disabled]="loginForm.invalid">Entrar</button>
-      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-    </form>
-  </div>
-  
+    </div>
+    <div class="column">
+      <h4 class="title is-4">Login Cliente</h4>
+      <form [formGroup]="loginForm" (ngSubmit)="loginC()">
+        <div class="field">
+          <label class="label" for="username">Usuário:</label>
+          <input class="input" placeholder="Digite aqui seu usuário" type="text" id="usernameC" formControlName="username" required>
+        </div>
+        <div class="field">
+          <label class="label" for="password">Senha:</label>
+          <input class="input" placeholder="Digite aqui sua senha" type="password" id="passwordC" formControlName="password" required>
+        </div>
+        <br>
+        <div class="buttons">
+          <button class="button is-primary" type="submit" [disabled]="loginForm.invalid">Entrar</button>
+        </div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>  
+        <br>
+        </form>
+    </div>  
+</div>
