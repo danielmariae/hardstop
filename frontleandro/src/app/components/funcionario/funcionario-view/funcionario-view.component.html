@@ -1,0 +1,143 @@
+<h1 class="title is-1 centralizador">Ver funcionario</h1>
+    <div class="container box">
+    <h2 class="title is-3"> Dados pessoais </h2>
+    <div class="columns">
+      <div class="column">
+      <label class="field label" for="nome">Nome:</label>
+      <p>{{funcionario.nome}}</p>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+          <label class="field label" for="cpf">CPF:</label>
+          {{funcionario.cpf}}
+        </div>
+      <div class="column">
+        <label class="field label">Data de Nascimento:</label>
+        {{funcionario.dataNascimento}}
+      </div>
+      <div class="column">
+        <label class="field label" for="sexo">Sexo:</label>
+        {{funcionario.sexo}}
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <label class="field label" for="email">Email:</label>
+        {{funcionario.email}}
+      </div>
+      <div class="column">
+        <label class="field label" for="login">Nome de Usuário:</label>
+        {{funcionario.login}}
+      </div>
+      <div class="column">
+        <label class="field label" for="senha">Senha:</label>
+        {{funcionario.senha}}
+      </div>
+      <div class="column">
+        <label class="field label" for="senha">Perfil:</label>
+        {{funcionario.perfil}}
+      </div>
+    </div>
+    </div>
+    
+        <div class="container box">
+          <h2 class="title is-3"> Telefones </h2> 
+          <div *ngIf="telefones"> 
+          <div *ngFor="let telefone of funcionario.listaTelefone">  
+            <div class="columns">
+              <div class="column">
+                <label class="field label">DDD:</label>
+                {{telefone.ddd}}
+              </div> 
+              <div class="column">
+                <label class="field label">Número:</label>
+                {{telefone.numeroTelefone}}
+              </div>
+              <div class="column">
+                <label class="field label">Selecione tipo de telefone:</label>
+                <p>{{telefone.tipo}}</p>
+              </div>
+        </div>
+        <br>
+      </div>
+    </div>
+    </div>
+    
+    <div class="container box">
+      <h2 class="title is-3">Endereços</h2>  
+    
+      <div *ngIf="funcionario.listaEndereco" formArrayName="enderecos">
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Nome:</label>
+              {{ funcionario.listaEndereco.nome }}
+            </div>
+            <div class="column">
+              <label class="field label">Logradouro:</label>
+              {{ funcionario.listaEndereco.logradouro }}
+            </div>
+            <div class="column is-one-quarter">
+              <label class="field label">Número/Lote: </label>
+              {{ funcionario.listaEndereco.numeroLote }}
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Bairro: </label>
+              {{ funcionario.listaEndereco.bairro }}
+            </div>
+            <div class="column">
+              <label class="field label">Complemento: </label>
+              {{ funcionario.listaEndereco.complemento }}
+            </div>
+          </div>
+          <div class="columns" *ngIf="funcionario.listaEndereco.cep">
+            <div class="column">
+              <label class="field label">CEP Prefixo:</label>
+              {{ funcionario.listaEndereco.cep.prefixo }}
+            </div>
+            <div class="column">
+              <label class="field label">CEP Sufixo:</label>
+              {{ funcionario.listaEndereco.cep.sufixo }}
+            </div>
+            <div class="column">
+              <label class="field label">CEP:</label>
+              {{ funcionario.listaEndereco.cep.cep }}
+            </div>  
+          </div>
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Localidade</label>
+              {{ funcionario.listaEndereco.localidade }}
+            </div>
+            <div class="column">
+              <label class="field label">UF:</label>
+              {{ funcionario.listaEndereco.uf }}
+            </div>
+            <div class="column">
+              <label class="field label">País</label>
+              <p>{{ funcionario.listaEndereco.pais }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div *ngIf="!funcionario.listaEndereco">
+        <p>Nenhum endereço cadastrado.</p>
+      </div>
+    <br>
+    <div class="container box">
+      <div class="button is-primary is-default espacador-direito">
+        <button type="button" (click)="editarFuncionario(funcionario.id)">Editar</button>
+       </div>
+       <div class="button is-danger is-default">
+        <button type="button" (click)="apagarFuncionario(funcionario.id)">Apagar</button>
+       </div>
+
+   
+    </div>
+
+  <!--
+    <button type="submit" [disabled]="fornecedorForm.invalid">Salvar</button>
+    -->

@@ -1,0 +1,141 @@
+<h1 class="title is-1 centralizador">Ver cliente</h1>
+    <div class="container box">
+    <h2 class="title is-3"> Dados pessoais </h2>
+    <div class="columns">
+      <div class="column">
+      <label class="field label" for="nome">Nome:</label>
+      <p>{{cliente.nome}}</p>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+          <label class="field label" for="cpf">CPF:</label>
+          {{cliente.cpf}}
+        </div>
+      <div class="column">
+        <label class="field label">Data de Nascimento:</label>
+        {{cliente.dataNascimento}}
+      </div>
+      <div class="column">
+        <label class="field label" for="sexo">Sexo:</label>
+        {{cliente.sexo}}
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <label class="field label" for="email">Email:</label>
+        {{cliente.email}}
+      </div>
+      <div class="column">
+        <label class="field label" for="login">Nome de Usuário:</label>
+        {{cliente.login}}
+      </div>
+      <div class="column">
+        <label class="field label" for="senha">Senha:</label>
+        {{cliente.senha}}
+      </div>
+    </div>
+    </div>
+    
+        <div class="container box">
+          <h2 class="title is-3"> Telefones </h2> 
+          <div *ngIf="telefones"> 
+          <div *ngFor="let telefone of cliente.listaTelefone">  
+            <div class="columns">
+              <div class="column">
+                <label class="field label">DDD:</label>
+                {{telefone.ddd}}
+              </div> 
+              <div class="column">
+                <label class="field label">Número:</label>
+                {{telefone.numeroTelefone}}
+              </div>
+              <div class="column">
+                <label class="field label">Selecione tipo de telefone:</label>
+                <p>{{telefone.tipo}}</p>
+              </div>
+        </div>
+        <br>
+      </div>
+    </div>
+    </div>
+    
+    <div class="container box">
+      <h2 class="title is-3">Endereços</h2>  
+    
+      <div *ngIf="cliente.listaEndereco && cliente.listaEndereco.length" formArrayName="enderecos">
+        <div *ngFor="let endereco of cliente.listaEndereco">
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Nome:</label>
+              {{ endereco.nome }}
+            </div>
+            <div class="column">
+              <label class="field label">Logradouro:</label>
+              {{ endereco.logradouro }}
+            </div>
+            <div class="column is-one-quarter">
+              <label class="field label">Número/Lote: </label>
+              {{ endereco.numeroLote }}
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Bairro: </label>
+              {{ endereco.bairro }}
+            </div>
+            <div class="column">
+              <label class="field label">Complemento: </label>
+              {{ endereco.complemento }}
+            </div>
+          </div>
+          <div class="columns" *ngIf="endereco.cep">
+            <div class="column">
+              <label class="field label">CEP Prefixo:</label>
+              {{ endereco.cep.prefixo }}
+            </div>
+            <div class="column">
+              <label class="field label">CEP Sufixo:</label>
+              {{ endereco.cep.sufixo }}
+            </div>
+            <div class="column">
+              <label class="field label">CEP:</label>
+              {{ endereco.cep.cep }}
+            </div>  
+          </div>
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Localidade</label>
+              {{ endereco.localidade }}
+            </div>
+            <div class="column">
+              <label class="field label">UF:</label>
+              {{ endereco.uf }}
+            </div>
+            <div class="column">
+              <label class="field label">País</label>
+              <p>{{ endereco.pais }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div *ngIf="!cliente.listaEndereco || cliente.listaEndereco.length === 0">
+        <p>Nenhum endereço cadastrado.</p>
+      </div>
+    </div>
+    <br>
+    <div class="container box">
+      <div class="button is-primary is-default espacador-direito">
+        <button type="button" (click)="editarCliente(cliente.id)">Editar</button>
+       </div>
+       <div class="button is-danger is-default">
+        <button type="button" (click)="apagarCliente(cliente.id)">Apagar</button>
+       </div>
+
+   
+    </div>
+
+  <!--
+    <button type="submit" [disabled]="fornecedorForm.invalid">Salvar</button>
+    -->

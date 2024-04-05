@@ -1,3 +1,7 @@
+#lista-produtos-h1{
+  text-align: center;
+}
+
 .autocomplete-container {
     position: absolute;
     top: 5px; 
@@ -46,4 +50,8 @@
     .mat-column-acao {
       text-align: center;
       min-width: 10em;
+    }
+
+    #espacador-texto{
+      margin-right: 2%;
     }

@@ -26,5 +26,12 @@ public interface LogisticaService {
     public LogisticaResponseDTO findById(Long id);
 
     // LISTAR TODOS:
-    public List<LogisticaResponseDTO> findByAll();
+    public List<LogisticaResponseDTO> findAll();
+
+        // LISTAR DE FORMA PAGINADA
+        public List<LogisticaResponseDTO> findByAll(int page, int pageSize);
+
+        // CONTADOR:
+        public long count();
+    
 }

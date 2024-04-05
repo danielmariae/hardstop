@@ -24,6 +24,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
@@ -31,6 +32,7 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -269,5 +271,67 @@ FileService fileService;
     .header("Content-Disposition", "attachment; filename=" + nomeImagem)
     .build();
 
+  }
+
+  @DELETE
+  @Transactional
+  @Path("/{id}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response deleteById(@PathParam("id") Long id) {
+    service.deleteCliente(id);
+    return Response.status(Status.NO_CONTENT).build();
+  }
+
+  
+  @GET
+  @Path("/all")
+  @RolesAllowed({"Func", "Admin"})
+  public Response findbyAll() {
+    return Response.ok(service.findByAllCliente()).build();
+  }
+
+  @GET
+  @RolesAllowed({"Func", "Admin"})
+  public Response findAll(
+      @QueryParam("page") @DefaultValue("0") int page,
+      @QueryParam("pageSize") @DefaultValue("100") int pageSize) {
+
+      return Response.ok(service.findByAll(page, pageSize)).build();
+  }
+
+  @GET
+  @Path("/{id}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response findById(@PathParam("id") Long id) {
+    return Response.ok(service.findByIdCliente(id)).build();
+  }
+
+  @GET
+  @Path("/count")
+  public Long count() {
+      return service.count();
+  }
+
+  @GET
+  @Path("/nome/{nome}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response findByName(@PathParam("nome") String nome) {
+    return Response.ok(service.findByNameCliente(nome)).build();
+  }
+
+  @GET
+  @Path("/cpf/{cpf}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response findByCpfCliente(@PathParam("cpf") String cpf) {
+    return Response.ok(service.findByCpfCliente(cpf)).build();
+  }
+
+  @PUT
+  @Transactional
+  @Path("/{id}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response updateCliente(@Valid ClienteDTO dto, @PathParam("id") Long id) {
+    service.updateCliente(dto, id);
+    return Response.status(Status.NO_CONTENT).build();
   }
 }

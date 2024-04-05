@@ -1,11 +1,16 @@
 package br.unitins.topicos1.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.jrimum.domkee.pessoa.CEP;
+
 import br.unitins.topicos1.Formatadores.ClienteFormatador;
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.ClienteDTO;
-import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.DesejoResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
@@ -14,6 +19,7 @@ import br.unitins.topicos1.dto.PatchCpfDTO;
 import br.unitins.topicos1.dto.PatchEmailDTO;
 import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
+import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Cliente;
@@ -29,10 +35,6 @@ import br.unitins.topicos1.validation.ValidationException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jrimum.domkee.pessoa.CEP;
 
 @ApplicationScoped
 public class ClienteServiceImpl implements ClienteService {
@@ -505,5 +507,22 @@ private void verificaCpf(String cpf) {
           return true;
       }
     }
+    @Override
+    public List<ClienteResponseDTO> findByAll(int page, int pageSize) {
+
+      List<Cliente> list = repository
+          .findAll()
+          .page(page, pageSize)
+          .list();
+      return list
+          .stream()
+          .map(c -> ClienteResponseDTO.valueOf(c))
+          .collect(Collectors.toList());
+  }
+
+  @Override
+  public long count() {
+      return repository.count();
+  }
 
 }

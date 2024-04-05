@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, Subject, throwError, catchError } from 'rxjs';
-import { PlacaMae, Processador, Produto } from '../models/Produto.model';
+import { PlacaMae, Processador, Produto } from '../models/produto.model';
 import { SessionTokenService } from './session-token.service';
 import { Fornecedor } from '../models/fornecedor.model';
 

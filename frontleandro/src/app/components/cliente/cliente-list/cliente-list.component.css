@@ -1,0 +1,57 @@
+#lista-clientes-h1{
+  text-align: center;
+}
+
+.autocomplete-container {
+    position: absolute;
+    top: 5px; 
+    left: 10px; 
+  }
+  
+  .example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .example-full-width {
+    width: 120%;
+  }
+
+  .autoclass {
+    position: absolute;
+    top: 5px; /* Ajuste conforme necessário */
+    right: 50px; /* Ajuste conforme necessário */
+  }
+  
+  .exclass {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  .exfullclass {
+    width: 120%;
+  }
+  
+   .toolbar-title {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .flex-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between; 
+      width: 100%;
+    } 
+    
+  
+    .mat-column-acao {
+      text-align: center;
+      min-width: 10em;
+    }
+
+    #espacador-texto{
+      margin-right: 2%;
+    }

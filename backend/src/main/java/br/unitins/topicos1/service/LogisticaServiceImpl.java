@@ -1,18 +1,26 @@
 package br.unitins.topicos1.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.jrimum.domkee.pessoa.CEP;
+
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
-import br.unitins.topicos1.dto.*;
-import br.unitins.topicos1.model.*;
+import br.unitins.topicos1.dto.EnderecoDTO;
+import br.unitins.topicos1.dto.LogisticaDTO;
+import br.unitins.topicos1.dto.LogisticaResponseDTO;
+import br.unitins.topicos1.dto.TelefoneDTO;
+import br.unitins.topicos1.model.Endereco;
+import br.unitins.topicos1.model.Logistica;
+import br.unitins.topicos1.model.Telefone;
+import br.unitins.topicos1.model.TipoTelefone;
 import br.unitins.topicos1.repository.LogisticaRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-
-import org.jrimum.domkee.pessoa.CEP;
-
-import java.util.*;
 
 @ApplicationScoped
 public class LogisticaServiceImpl implements LogisticaService {
@@ -130,7 +138,7 @@ public class LogisticaServiceImpl implements LogisticaService {
     }
 
     @Override
-    public List<LogisticaResponseDTO> findByAll() {
+    public List<LogisticaResponseDTO> findAll() {
         return repository
                 .listAll()
                 .stream()
@@ -143,5 +151,23 @@ public class LogisticaServiceImpl implements LogisticaService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    public List<LogisticaResponseDTO> findByAll(int page, int pageSize) {
+
+        List<Logistica> list = repository
+            .findAll()
+            .page(page, pageSize)
+            .list();
+        return list
+            .stream()
+            .map(c -> LogisticaResponseDTO.valueOf(c))
+            .collect(Collectors.toList());
+    }
+    
+    @Override
+    public long count() {
+        return repository.count();
+    }
+    
 
 }

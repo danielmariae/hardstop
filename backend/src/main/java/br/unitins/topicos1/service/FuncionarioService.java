@@ -72,4 +72,10 @@ public interface FuncionarioService {
   //Autenticação de usuário
   public FuncionarioResponseDTO findByLogin(String login);
 
+    // LISTAR DE FORMA PAGINADA
+    public List<FuncionarioResponseDTO> findByAll(int page, int pageSize);
+
+    // CONTADOR:
+    public long count();
+
 }

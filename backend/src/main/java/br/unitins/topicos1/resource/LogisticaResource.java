@@ -50,7 +50,7 @@ public class LogisticaResource {
     @GET
     @RolesAllowed({"Func", "Admin"})
     public Response findAll() {
-        return Response.ok(service.findByAll()).build();
+        return Response.ok(service.findAll()).build();
     }
 
     @GET
@@ -59,4 +59,20 @@ public class LogisticaResource {
     public Response findById(@PathParam("id") Long id) {
         return Response.ok(service.findById(id)).build();
     }
+
+    @GET
+    @RolesAllowed({"Func", "Admin"})
+    public Response findAll(
+        @QueryParam("page") @DefaultValue("0") int page,
+        @QueryParam("pageSize") @DefaultValue("100") int pageSize) {
+  
+        return Response.ok(service.findByAll(page, pageSize)).build();
+    }
+  
+  @GET
+  @Path("/count")
+  public Long count() {
+      return service.count();
+  }
+
 }
