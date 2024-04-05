@@ -101,14 +101,14 @@ insert into placamae (produto_id, armazenamento) values (4, '32 MB');
 
 
 
-insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidadeUnidades) values('f1_p1_lt15', 1, '2023-10-01 16:11:26', 1, 500.0, 1000.0, 100);
-insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidadeUnidades) values('f1_p1_lt15', 1, '2023-10-02 15:14:01', 2, 600.0, 1200.0, 50);
-insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidadeUnidades) values('f1_p1_lt15', 1, '2023-10-03 09:47:50', 3, 500.0, 1000.0, 20);
-insert into lote (lote, fornecedor_id, dataHoraChegadaLote, dataHoraUltimoVendido, produto_id, custoCompra, valorVenda, quantidadeUnidades) values('f2_p2_lt14', 2, '2022-01-01 16:11:26', '2023-09-30 16:11:26', 1, 700.0, 1400.0, 50);
-insert into lote (lote, fornecedor_id, dataHoraChegadaLote, dataHoraUltimoVendido, produto_id, custoCompra, valorVenda, quantidadeUnidades) values('f2_p2_lt14', 2, '2022-01-01 16:11:26', '2023-10-01 16:11:26', 2, 800.0, 1600.0, 50);
-insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidadeUnidades) values('f1_p1_lt14', 2, '2022-01-01 16:11:26', 4, 750.0, 1500.0, 31);
-insert into lote (lote, fornecedor_id, produto_id, custoCompra, valorVenda, quantidadeUnidades) values('f1_p1_lt15', 2, 1, 500.0, 1000.0, 5);
-insert into lote (lote, fornecedor_id, produto_id, custoCompra, valorVenda, quantidadeUnidades) values('f1_p1_lt15', 2, 2, 600.0, 1200.0, 15);
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidadeUnidades, statusDoLote, dataHoraAtivacaoLote) values('f1_p1_lt15', 1, '2023-10-01 16:11:26', 1, 500.0, 1000.0, 100, 1, '2023-10-01 16:11:26');
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidadeUnidades, statusDoLote, dataHoraAtivacaoLote) values('f1_p1_lt15', 1, '2023-10-02 15:14:01', 2, 600.0, 1200.0, 50, 1, '2023-10-02 15:14:01');
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidadeUnidades, statusDoLote, dataHoraAtivacaoLote) values('f1_p1_lt15', 1, '2023-10-03 09:47:50', 3, 500.0, 1000.0, 20, 1, '2023-10-03 09:47:50');
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote, dataHoraUltimoVendido, produto_id, custoCompra, valorVenda, quantidadeUnidades, statusDoLote, dataHoraAtivacaoLote) values('f2_p2_lt14', 2, '2022-01-01 16:11:26', '2023-09-30 16:11:26', 1, 700.0, 1400.0, 50, 0, '2022-01-01 16:11:26');
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote, dataHoraUltimoVendido, produto_id, custoCompra, valorVenda, quantidadeUnidades, statusDoLote, dataHoraAtivacaoLote) values('f2_p2_lt14', 2, '2022-01-01 16:11:26', '2023-10-01 16:11:26', 2, 800.0, 1600.0, 50, 0, '2022-01-01 16:11:26');
+insert into lote (lote, fornecedor_id, dataHoraChegadaLote, produto_id, custoCompra, valorVenda, quantidadeUnidades, statusDoLote, dataHoraAtivacaoLote) values('f1_p1_lt14', 2, '2022-01-01 16:11:26', 4, 750.0, 1500.0, 31, 1, '2022-01-01 16:11:26');
+insert into lote (lote, fornecedor_id, produto_id, custoCompra, valorVenda, quantidadeUnidades, statusDoLote, dataHoraChegadaLote) values('f1_p1_lt15', 2, 1, 500.0, 1000.0, 5, 2, '2024-03-04 09:23:55');
+insert into lote (lote, fornecedor_id, produto_id, custoCompra, valorVenda, quantidadeUnidades, statusDoLote, dataHoraChegadaLote) values('f1_p1_lt15', 2, 2, 600.0, 1200.0, 15, 2, '2024-02-10 13:24:16');
 
 update produto set loteAtual_id = 1 where id = 1;
 update produto set loteAtual_id = 2 where id = 2;

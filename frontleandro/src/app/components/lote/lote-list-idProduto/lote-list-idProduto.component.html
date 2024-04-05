@@ -1,0 +1,109 @@
+<mat-toolbar color="primary">
+    <div class="flex-container">
+      <span class="toolbar-title">Lista de Lotes</span>
+    </div>
+  </mat-toolbar>
+
+    <table mat-table [dataSource]="lotes" class="mat-elevation-z8">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> No. </th>
+        <!--  <td mat-cell *matCellDef="let element; let i=index"> {{i + 1}} </td> -->
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+  
+      <!-- Nome Column -->
+      <ng-container matColumnDef="lote">
+        <th mat-header-cell *matHeaderCellDef> Lote </th>
+        <td mat-cell *matCellDef="let element"> {{element.lote}} </td>
+      </ng-container>
+  
+      <!-- Telefone Column -->
+      <ng-container matColumnDef="descricaoStatusDoLote">
+        <th mat-header-cell *matHeaderCellDef> Status </th>
+        <td mat-cell *matCellDef="let element"> {{element.descricaoStatusDoLote}} </td>
+      </ng-container>
+  
+      <!-- Cnpj Column -->
+      <ng-container matColumnDef="cnpjFornecedor">
+        <th mat-header-cell *matHeaderCellDef> Fornecedor(Cnpj) </th>
+        <td mat-cell *matCellDef="let element"> {{element.cnpjFornecedor}} </td>
+      </ng-container>
+  
+      <!-- EndSite Column -->
+      <ng-container matColumnDef="modeloProduto">
+        <th mat-header-cell *matHeaderCellDef> Produto(Modelo) </th>
+        <td mat-cell *matCellDef="let element"> {{element.modeloProduto}} </td>
+      </ng-container>
+
+      <!-- Endereco Column -->
+      <ng-container matColumnDef="quantidadeUnidades">
+        <th mat-header-cell *matHeaderCellDef> Quantidade </th>
+        <td mat-cell *matCellDef="let element"> {{element.quantidadeUnidades}} </td>
+      </ng-container>
+  
+      <!-- Telefone Column -->
+      <ng-container matColumnDef="custoCompra">
+        <th mat-header-cell *matHeaderCellDef> Custo </th>
+        <td mat-cell *matCellDef="let element"> {{element.custoCompra}} </td>
+      </ng-container>
+  
+      <!-- Telefone Column -->
+      <ng-container matColumnDef="valorVenda">
+        <th mat-header-cell *matHeaderCellDef> Valor </th>
+        <td mat-cell *matCellDef="let element"> {{element.valorVenda}} </td>
+      </ng-container>
+  
+      <!-- Telefone Column -->
+      <ng-container matColumnDef="garantiaMeses">
+        <th mat-header-cell *matHeaderCellDef> Garantia </th>
+        <td mat-cell *matCellDef="let element"> {{element.garantiaMeses}} </td>
+      </ng-container>
+  
+  <!-- Telefone Column -->
+  <ng-container matColumnDef="dataHoraChegadaLote">
+    <th mat-header-cell *matHeaderCellDef> DataHoraChegada </th>
+    <td mat-cell *matCellDef="let element"> {{element.dataHoraChegadaLote}} </td>
+  </ng-container>
+
+  <!-- Telefone Column -->
+  <ng-container matColumnDef="dataHoraAtivacaoLote">
+    <th mat-header-cell *matHeaderCellDef> DataHoraAtivação </th>
+    <td mat-cell *matCellDef="let element"> {{element.dataHoraAtivacaoLote}} </td>
+  </ng-container>
+
+  <!-- Telefone Column -->
+  <ng-container matColumnDef="dataHoraUltimoVendido">
+    <th mat-header-cell *matHeaderCellDef> DataHoraDesativação </th>
+    <td mat-cell *matCellDef="let element"> {{element.dataHoraUltimoVendido}} </td>
+  </ng-container>
+  
+      <!-- Acao Column -->
+      <ng-container matColumnDef="acao">
+        <th mat-header-cell *matHeaderCellDef> Ação </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Lote já finalizado não pode ser Editado. Lote ativo no momento pode ter sua quantidade alterada desde que mantenha todos os valores dos atributos de Lote intactos. Lote Lote cadastrado esperando para ser ativado pode ser editado porque ainda não foi ativado  -->
+          <button [disabled]="element.descricaoStatusDoLote == 'Lote já foi finalizado'" mat-icon-button matTooltip="Editar" color="primary" >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <!-- Apenas Lote cadastrado esperando para ser ativado pode ser ativado! -->
+          <button [disabled]="element.descricaoStatusDoLote !== 'Lote cadastrado esperando para ser ativado'" mat-icon-button color="warn" matTooltip="Ativar Lote" (click)="ativarLote(element.id)">
+            <mat-icon>settings</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+      <!-- (click)="editarProduto(element.id)
+      (click)="apagarProduto(element.id) -->
+    </table>
+
+    <mat-paginator
+    [pageSizeOptions] = "[2,4,8,16]"
+    [pageSize] = "pageSize"
+    [length] = "totalRecords"
+    (page) = "paginar($event)">
+</mat-paginator>

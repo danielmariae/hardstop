@@ -10,6 +10,10 @@ import { FornecedorEscolhidoComponent } from './components/fornecedor/fornecedor
 import { ProdutoListComponent } from './components/produto/produto-list/produto-list.component';
 import { ProdutoFormComponent } from './components/produto/produto-form/produto-form/produto-form.component';
 import { ProdutoEditComponent } from './components/produto/produto-edit/produto-edit.component';
+import { LoteFormComponent } from './components/lote/lote-form/lote-form.component';
+import { LoteListComponent } from './components/lote/lote-list-idProduto/lote-list-idProduto.component';
+import { ProdutoEscolhidoComponent } from './components/produto/produto-escolhido/produto-escolhido.component';
+import { ProdutoGarantiaComponent } from './components/produto/produto-garantia/produto-garantia.component';
 
 
 export const routes: Routes = [
@@ -23,6 +27,10 @@ export const routes: Routes = [
     {path: 'produtos', component: ProdutoListComponent, title: 'Lista de Produtos'},
     { path: 'produtos/new/:tipoProduto', component: ProdutoFormComponent, title: 'Formulario de Cadastro de Produtos'},
     {path: 'produtos/edit/:id', component: ProdutoEditComponent, title: 'Edicao de Produtos'},
+    {path: 'lotes/new', component: LoteFormComponent, title: 'Insercao de Lotes' },
+    {path: 'lotes/:id', component: LoteListComponent, title: 'Lista de Lotes por Produto'},
+    {path: 'produtos/:id', component: ProdutoEscolhidoComponent, title: 'Produto Escolhido'},
+    {path: 'produtos/garantia/:id', component: ProdutoGarantiaComponent, title: 'Fornecedor de Produto Defeituoso'},
 ];
 
 @NgModule({

@@ -1,0 +1,78 @@
+<form [formGroup]="loteForm" (ngSubmit)="salvarLote()">
+
+  <div class="autocomplete-container">
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <mat-label>Selecione um produto</mat-label>
+        <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl"
+          [matAutocomplete]="autoprod">
+        <mat-autocomplete #autoprod="matAutocomplete" [displayWith]="displayFn"
+          (optionSelected)="selecionarProduto($event.option.value)">
+          <mat-option *ngFor="let produto of filteredOptions | async" [value]="produto">
+            {{ produto.nome }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+  </div>
+  <div class="autoclass">
+    <form class="exclass">
+      <mat-form-field class="exfullclass">
+        <mat-label>Selecione um fornecedor</mat-label>
+        <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControlClass"
+          [matAutocomplete]="autoclass">
+        <mat-autocomplete #autoclass="matAutocomplete" [displayWith]="displayClass"
+          (optionSelected)="selecionarFornecedor($event.option.value)">
+          <mat-option *ngFor="let fornecedor of filteredOptionsClass | async" [value]="fornecedor">
+            {{ fornecedor.cnpj }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div class="form-group">
+    <label for="lote">Insira o lote:</label>
+    <input type="text" formControlName="lote" id="lote">
+  </div>
+
+  <div class="form-group">
+    <label for="dataHoraChegadaLote">Data e Hora da chegada do Produto:</label>
+    <input type="datetime-local" formControlName="dataHoraChegadaLote" id="dataHoraChegadaLote">
+  </div>
+
+  <div class="form-group">
+    <label for="quantidadeUnidades">Insira a quantidade de unidades:</label>
+    <input type="number" formControlName="quantidadeUnidades" id="quantidadeUnidades" (ngModelChange)="atualizaCampos()">
+  </div>
+
+  <div class="form-group">
+    <label for="quantidadeNaoConvencional">Insira a quantidade de unidades não convencionais:</label>
+    <input type="number" formControlName="quantidadeNaoConvencional" id="quantidadeNaoConvencional" (ngModelChange)="atualizaCampos()">
+  </div>
+
+  <div class="form-group">
+    <label for="unidadeDeMedida">Insira a unidade de medida da quantidade de unidades não convencionais:</label>
+    <input type="text" formControlName="unidadeDeMedida" id="unidadeDeMedida" (ngModelChange)="atualizaCampos()">
+  </div>
+
+  <div class="form-group">
+    <label for="custoCompra">Insira o valor pago ao fornecedor pelo produto:</label>
+    <input type="number" formControlName="custoCompra" id="custoCompra">
+  </div>
+
+  <div class="form-group">
+    <label for="valorVenda">Insira o valor de venda do produto:</label>
+    <input type="number" formControlName="valorVenda" id="valorVenda">
+  </div>
+
+  <div class="form-group">
+    <label for="garantiaMeses">Insira o tempo de garantia em meses:</label>
+    <input type="number" formControlName="garantiaMeses" id="garantiaMeses">
+  </div>
+
+
+  <button type="submit">Salvar</button>
+  <button (click)="cancelarInsercao()">Cancelar</button>
+
+</form>

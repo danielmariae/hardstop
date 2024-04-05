@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 
 import org.jrimum.domkee.pessoa.UnidadeFederativa;
 
+import br.unitins.topicos1.dto.StatusDoLoteDTO;
 import br.unitins.topicos1.dto.TipoTelefoneDTO;
 import br.unitins.topicos1.dto.UnidadeFederativaDTO;
+import br.unitins.topicos1.model.StatusDoLote;
 import br.unitins.topicos1.model.TipoTelefone;
 import jakarta.annotation.security.PermitAll;
 import jakarta.ws.rs.Consumes;
@@ -38,6 +40,15 @@ public class EnviarModelo {
         return Arrays.asList(UnidadeFederativa.values())
             .stream()
             .map(uf -> UnidadeFederativaDTO.valueOf(uf))
+            .collect(Collectors.toList());
+    }
+
+    @GET
+    @Path("/statusDoLote")
+    public List<StatusDoLoteDTO> obtertStatusDoLote() {
+        return Arrays.asList(StatusDoLote.values())
+            .stream()
+            .map(statusDoLote -> StatusDoLoteDTO.valueOf(statusDoLote))
             .collect(Collectors.toList());
     }
 }

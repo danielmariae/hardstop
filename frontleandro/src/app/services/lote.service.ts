@@ -3,63 +3,32 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Observable, Subject, throwError, catchError } from 'rxjs';
 import { PlacaMae, Processador, Produto } from '../models/Produto.model';
 import { SessionTokenService } from './session-token.service';
-import { Fornecedor } from '../models/fornecedor.model';
+import { LoteEnvia } from '../models/loteEnvia.model';
+import { LoteRecebe } from '../models/loteRecebe.model';
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class ProdutoService {
-    private produtoFormValue: any = {};
-    produto: Produto = new Produto();
-    private baseUrl = 'http://localhost:8080/produtos';
+export class LoteService {
 
-    // Comunica os componentes do Angular sobre alguma mudança e direciona para a página de lista de produtos
-    private produtoInseridoSubject = new Subject<void>();
-    produtoInserido$ = this.produtoInseridoSubject.asObservable();
+    private baseUrl = 'http://localhost:8080/lotes';
 
 
     constructor(private httpClient: HttpClient, private sessionTokenService: SessionTokenService) { }
 
-     // Atualiza os valores do formulário do componente de produto
-    updateProdutoFormValue(formValue: any) {
-    this.produtoFormValue = formValue;
-  }
 
-    // Obtém os valores do formulário do componente de produto
-    getProdutoFormValue() {
-        return this.produtoFormValue;
+    // Método para realizar contagens. Envolvido com a paginação
+    count(): Observable<number> {
+        return this.httpClient.get<number>(`${this.baseUrl}/count`);
     }
 
-    // Comunica os componentes do Angular sobre alguma mudança e direcionar para a página de lista de produtos
-    notificarProdutoInserido(): void {
-        this.produtoInseridoSubject.next();
-    }
-
-    // Método para trazer todas as instâncias de Produto do banco de dados do servidor
-    findTodos(): Observable<Produto[]> {
+    // Método para trazer todas as instâncias de Lote de um dado produto de acordo com a paginação
+    findByIdProduto(id: number, page?: number, pageSize?: number): Observable<LoteRecebe[]> {
 
         const headers = this.sessionTokenService.getSessionHeader();
-
-        if (headers) {
-            // Faz a requisição HTTP com o token de autenticação no cabeçalho
-            return this.httpClient.get<Produto[]>(this.baseUrl, { headers })
-                .pipe(
-                    catchError(this.handleError)
-                );
-        } else {
-            // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-            return this.httpClient.get<Produto[]>(this.baseUrl)
-                .pipe(
-                    catchError(this.handleError)
-                );
-        }
-    }
-
-    // Método para trazer todas as instâncias de Produto de acordo com a paginação
-    findAll(page?: number, pageSize?: number): Observable<Produto[]> {
-
-        const headers = this.sessionTokenService.getSessionHeader();
+        const url = `${this.baseUrl}/search/idProduto/${id}`; // Concatena o ID à URL base
+        console.log(id);
 
         if (page !== undefined && pageSize !== undefined) {
             const params = new HttpParams()
@@ -68,13 +37,13 @@ export class ProdutoService {
 
             if (headers) {
                 // Faz a requisição HTTP com o token de autenticação no cabeçalho
-                return this.httpClient.get<Produto[]>(this.baseUrl, { headers: headers, params: params })
+                return this.httpClient.get<LoteRecebe[]>(url, { headers: headers, params: params })
                     .pipe(
                         catchError(this.handleError)
                     );
             } else {
                 // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-                return this.httpClient.get<Produto[]>(this.baseUrl, { params })
+                return this.httpClient.get<LoteRecebe[]>(url, { params })
                     .pipe(
                         catchError(this.handleError)
                     );
@@ -82,13 +51,13 @@ export class ProdutoService {
         } else {
             if (headers) {
                 // Faz a requisição HTTP com o token de autenticação no cabeçalho
-                return this.httpClient.get<Produto[]>(this.baseUrl, { headers })
+                return this.httpClient.get<LoteRecebe[]>(url, { headers })
                     .pipe(
                         catchError(this.handleError)
                     );
             } else {
                 // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-                return this.httpClient.get<Produto[]>(this.baseUrl)
+                return this.httpClient.get<LoteRecebe[]>(url)
                     .pipe(
                         catchError(this.handleError)
                     );
@@ -96,96 +65,48 @@ export class ProdutoService {
         }
     }
 
-    // Método para realizar contagens. Envolvido com a paginação
-    count(): Observable<number> {
-        return this.httpClient.get<number>(`${this.baseUrl}/count`);
-    }
-
-
-    // Método para trazer uma única instância de Produto do banco de dados do servidor de acordo com seu id
-    findById(id: number): Observable<any> {
+    // Método para trazer uma única instância de Lote do banco de dados do servidor de acordo com seu id
+    findById(id: number): Observable<LoteRecebe> {
         const headers = this.sessionTokenService.getSessionHeader();
         const url = `${this.baseUrl}/search/id/${id}`; // Concatena o ID à URL base
 
         if (headers) {
             // Faz a requisição HTTP com o token de autenticação no cabeçalho
-            return this.httpClient.get<any>(url, { headers })
+            return this.httpClient.get<LoteRecebe>(url, { headers })
                 .pipe(
                     catchError(this.handleError)
                 );
         } else {
             // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-            return this.httpClient.get<any>(url)
-                .pipe(
-                    catchError(this.handleError)
-                );
-        }
-    }
-   
-    findProdutoEstragado(idProduto: number,  dataHoraVenda: string): Observable<Fornecedor> {
-        const headers = this.sessionTokenService.getSessionHeader();
-        const url = `${this.baseUrl}/search/fornecedor`; 
-
-        const params = {
-            idProduto: +idProduto,
-            dataHoraVenda
-        }
-
-    //     let params = new HttpParams()
-    // .set('idProduto', idProduto.toString())
-    // .set('dataHoraVenda', dataHoraVenda);
-
-    console.log(params);
-        if (headers) {
-            // Faz a requisição HTTP com o token de autenticação no cabeçalho
-            return this.httpClient.get<Fornecedor>(url, { headers: headers, params: params })
-                .pipe(
-                    catchError(this.handleError)
-                );
-        } else {
-            // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-            return this.httpClient.get<Fornecedor>(url, {params})
+            return this.httpClient.get<LoteRecebe>(url)
                 .pipe(
                     catchError(this.handleError)
                 );
         }
     }
 
-    // Método para inserir uma nova instância de Produto no banco de dados do servidor
-    insert(produto: Produto, tipoProduto: string): Observable<any> {
+    // Método para inserir uma nova instância de Lote no banco de dados do servidor
+    insert(lote: LoteEnvia): Observable<LoteEnvia> {
 
-       let url: string;
-
-        if(tipoProduto == 'processadores') {
-            url = this.baseUrl + '/insert/processador'; 
-        } else if(tipoProduto == 'placas mãe') {
-            url = this.baseUrl + '/insert/placaMae'; 
-        } else {
-            url = this.baseUrl + '/insert'; // É apenas Produto do tipo puro 
-        }
+        const url = `${this.baseUrl}/insert/lote`; // Concatena o ID à URL base
         const headers = this.sessionTokenService.getSessionHeader();
 
         if (headers) {
             // Faz a requisição HTTP com o token de autenticação no cabeçalho
-            console.log(produto);
-            console.log(url);
-            return this.httpClient.post<any>(url, produto, { headers })
+            return this.httpClient.post<any>(url, lote, { headers })
                 .pipe(
                     catchError(this.handleError)
                 );
-            console.log(tipoProduto);
         } else {
-            console.log(produto);
             // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-            return this.httpClient.post<any>(url, produto)
+            return this.httpClient.post<any>(url, lote)
                 .pipe(
                     catchError(this.handleError)
                 );
-            console.log(tipoProduto);
         }
     }
 
-    // Método para alterar uma única instância de Produto no banco de dados do servidor
+    // Método para alterar uma única instância de Lote no banco de dados do servidor
     update(produto: Produto, tipoProduto: string, id: number): Observable<Produto> {
         let url: string;
 
@@ -212,7 +133,29 @@ export class ProdutoService {
         }
     }
 
-    // Método para apagar uma única instância de Produto do banco de dados do servidor
+    // Método para apagar uma única instância de Lote do banco de dados do servidor
+    ativaLote(id: number): Observable<LoteRecebe> {
+
+        const headers = this.sessionTokenService.getSessionHeader();
+        const url = `${this.baseUrl}/patch/ativalote/${id}`; // Concatena o ID à URL base
+
+        if (headers) {
+            // Faz a requisição HTTP com o token de autenticação no cabeçalho
+            return this.httpClient.get<LoteRecebe>(url, { headers })
+                .pipe(
+                    catchError(this.handleError)
+                );
+        } else {
+            // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
+            return this.httpClient.get<LoteRecebe>(url)
+                .pipe(
+                    catchError(this.handleError)
+                );
+        }
+    }
+
+
+    // Método para apagar uma única instância de Lote do banco de dados do servidor
     delete(id: number): Observable<any> {
 
         const headers = this.sessionTokenService.getSessionHeader();
@@ -220,13 +163,13 @@ export class ProdutoService {
 
         if (headers) {
             // Faz a requisição HTTP com o token de autenticação no cabeçalho
-            return this.httpClient.delete<any>(url, { headers })
+            return this.httpClient.delete(url, { headers })
                 .pipe(
                     catchError(this.handleError)
                 );
         } else {
             // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-            return this.httpClient.delete<any>(url)
+            return this.httpClient.delete(url)
                 .pipe(
                     catchError(this.handleError)
                 );
@@ -235,10 +178,12 @@ export class ProdutoService {
 
     private handleError(error: HttpErrorResponse) {
         let errorMessage = 'Erro desconhecido';
+        let errorMessage2 = 'Erro desconhecido';
 
         // Verifica se há uma resposta de erro do servidor
         if (error.error && error.error.message) {
             errorMessage = `Erro: ${error.error.message}`;
+            errorMessage2 = `Erro: ${error.message}`;
             if (error.error.code) {
                 errorMessage += `, Code: ${error.error.code}`;
             }
@@ -259,12 +204,13 @@ export class ProdutoService {
             }
         }
 
-        console.error(errorMessage);
+        console.error('Erro1', errorMessage);
+        console.log('Erro2:', errorMessage2);
         return throwError(() => new Error(errorMessage)); // Retorna a mensagem de erro diretamente
     }
 
-    getClassificacao(): Observable<any[]> {
-        const url = 'http://localhost:8080/produtos/classificacao';
+    getStatus(): Observable<any[]> {
+        const url = 'http://localhost:8080/enum/statusDoLote';
         return this.httpClient.get<any[]>(url)
           .pipe(
             catchError(this.handleError)
@@ -272,11 +218,4 @@ export class ProdutoService {
       }
     
 
-    isPlacaMae(): boolean {
-        return this.produto instanceof PlacaMae;
     }
-
-    isProcessador(): boolean {
-        return this.produto instanceof Processador;
-    }
-}

@@ -44,7 +44,7 @@
     <input type="number" formControlName="peso" id="peso">
   </div>
 
-  <div class="form-group">
+  <!-- <div class="form-group">
     <label for="valorVenda">Valor de Venda:</label>
     <input type="number" formControlName="valorVenda" id="valorVenda">
   </div>
@@ -62,30 +62,7 @@
   <div class="form-group">
     <label for="unidadeDeMedida">Unidade de Medida:</label>
     <input type="text" formControlName="unidadeDeMedida" id="unidadeDeMedida">
-  </div>
-
-  <!-- <div class="form-group">
-    <label for="nomeImagem">Procurar Imagem:</label>
-    <div formArrayName="nomeImagem">
-      <div *ngFor="let figura of nomeImagem.controls; let i = index" [formGroupName]="i">
-    <input type="text" formControlName="nomeImagem" id="nomeImagem{{i}}">
-    <button type="button" (click)="removerNomeImagens(i)">Remover</button>
-    </div>
-    <button type="button" (click)="adicionarNomeImagens()">Adicionar Imagens</button>
-  </div>
-</div> -->
-
-  <!-- <div formArrayName="arquivos">
-    <div *ngFor="let arquivo of arquivos.controls; let i = index">
-      <div [formGroupName]="i">
-        <label>{{ arquivo.value.name }}</label>
-        <button type="button" (click)="removerArquivo(i)">Remover</button>
-      </div>
-    </div>
-  </div>
-   <input type="file" multiple (change)="onFileSelected($event)">
-  <button type="button" (click)="uploadFiles()">Upload</button> -->
-
+  </div> -->
 
   <div formArrayName="arquivos">
     <div *ngFor="let arquivo of arquivos.controls; let i = index">
@@ -102,44 +79,6 @@
   <ul>
     <li *ngFor="let arquivo of arquivosSelecionados">{{ arquivo.name }} <button type="button" (click)="removerArquivoSelecionado(arquivo)">Remover</button></li>
   </ul>
-  
-  
-  
-  
-
-  <!-- <div id="drop-zone" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
-    Arraste e solte os arquivos aqui
-  </div> -->
-
-  <!-- <form (submit)="uploadFile($event)">
-    <input type="file" #fileInput>
-    <button type="submit">Enviar</button>
-  </form> -->
-
-  <!-- <input type="file" (change)="onFileSelected($event)"> -->
-
-  <!-- <div formArrayName="arquivos">
-    <div *ngFor="let arquivo of arquivosSelecionados; let i = index">
-      <div>
-        <label>{{ arquivo }}</label>
-        <button type="button" (click)="removerArquivo(i)">Remover</button>
-      </div>
-    </div>
-  </div>
-  <input type="file" multiple (change)="onFileSelected($event)">
-  <button type="button" (click)="adicionarArquivo()">Adicionar Arquivo</button> -->
-
-
-  <!-- <div class="form-group">
-    <label for="arquivos">Procurar Imagem:</label>
-    <div formArrayName="arquivos">
-      <div *ngFor="let figura of arquivos.controls; let i = index" [formGroupName]="i">
-    <input type="text" formControlName="arquivos" id="nomeImagem{{i}}">
-    <button type="button" (click)="removerNomeImagens(i)">Remover</button>
-    </div>
-    <button type="button" (click)="adicionarNomeImagens()">Adicionar Imagens</button>
-  </div>
-</div> -->
 
   <!-- Exibir campos específicos de PlacaMae se o produto for uma PlacaMae -->
   <ng-container *ngIf="tipoProduto === 'placas mãe'">

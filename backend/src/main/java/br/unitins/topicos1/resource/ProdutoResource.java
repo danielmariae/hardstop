@@ -4,6 +4,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.application.ErrorTP1;
+import br.unitins.topicos1.dto.FornecedorResponseDTO;
 import br.unitins.topicos1.dto.PlacaMaeDTO;
 import br.unitins.topicos1.dto.PlacaMaeResponseDTO;
 import br.unitins.topicos1.dto.ProcessadorDTO;
@@ -170,11 +171,16 @@ public class ProdutoResource {
     }
 
 
-    @POST
+    @GET
     @Path("/search/fornecedor")
     @RolesAllowed({"Func", "Admin"})
-    public Response fornecedor(ProdutoFornecedorPatch dto) {
-        return Response.ok(service.encontraFornecedor(dto)).build();
+    public Response fornecedor(
+        @QueryParam("idProduto") Long idProduto,
+        @QueryParam("dataHoraVenda") String dataHoraVenda
+    ) {
+        ProdutoFornecedorPatch dto = new ProdutoFornecedorPatch(idProduto, dataHoraVenda);
+         FornecedorResponseDTO retorno = service.encontraFornecedor(dto);
+        return Response.status(201).entity(retorno).build();
     }
 
     @POST
