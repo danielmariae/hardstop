@@ -75,4 +75,10 @@ public interface ClienteService {
   //Autenticação de usuário
   public ClienteResponseDTO findByLogin(String login);
 
+    // LISTAR DE FORMA PAGINADA
+    public List<ClienteResponseDTO> findByAll(int page, int pageSize);
+
+    // CONTADOR:
+    public long count();
+  
 }

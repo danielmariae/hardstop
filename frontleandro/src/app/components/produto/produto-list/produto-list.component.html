@@ -1,115 +1,86 @@
-<mat-toolbar color="primary">
-    <div class="flex-container">
-        <span class="toolbar-title">Lista de Produtos</span>
-        <button mat-fab color="accent">
-            <mat-icon>add</mat-icon>
-        </button>
+<div class="container box">
+    <div class="columns">
+        <div class="column">
+            <form class="example-form">
+                <mat-form-field class="example-full-width">
+                        <mat-label>Selecione um produto</mat-label>
+                        <input type="text"
+                            placeholder="Pick one"
+                            aria-label="Number"
+                            matInput
+                            [formControl]="myControl"
+                            [matAutocomplete]="autoprod">
+                            <mat-autocomplete #autoprod="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selecionarProduto($event.option.value)">
+                            <mat-option *ngFor="let produto of filteredOptions | async" [value]="produto">
+                                {{ produto.nome }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </form>
+        </div>
+        <div class="column">
+            <form class="exclass">
+                <mat-form-field class="exfullclass">
+                    <mat-label>Inserir Novos Produtos</mat-label>
+                    <input type="text"
+                        placeholder="Pick one"
+                        aria-label="Number"
+                        matInput
+                        [formControl]="myControlClass"
+                        [matAutocomplete]="autoclass">
+                        <mat-autocomplete #autoclass="matAutocomplete" [displayWith]="displayClass" (optionSelected)="selecionarClassificacao($event.option.value)">
+                        <mat-option *ngFor="let classificacao of filteredOptionsClass | async" [value]="classificacao">
+                            {{ classificacao.nome }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </form>    
+        </div>
     </div>
-    <div class="autocomplete-container">
-        <form class="example-form">
-            <mat-form-field class="example-full-width">
-                <mat-label>Selecione um produto</mat-label>
-                <input type="text"
-                    placeholder="Pick one"
-                    aria-label="Number"
-                    matInput
-                    [formControl]="myControl"
-                    [matAutocomplete]="autoprod">
-                    <mat-autocomplete #autoprod="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selecionarProduto($event.option.value)">
-                    <mat-option *ngFor="let produto of filteredOptions | async" [value]="produto">
-                        {{ produto.nome }}
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
-        </form>
-    </div>
-    <div class="autoclass">
-        <form class="exclass">
-            <mat-form-field class="exfullclass">
-                <mat-label>Inserir Novos Produtos</mat-label>
-                <input type="text"
-                    placeholder="Pick one"
-                    aria-label="Number"
-                    matInput
-                    [formControl]="myControlClass"
-                    [matAutocomplete]="autoclass">
-                    <mat-autocomplete #autoclass="matAutocomplete" [displayWith]="displayClass" (optionSelected)="selecionarClassificacao($event.option.value)">
-                    <mat-option *ngFor="let classificacao of filteredOptionsClass | async" [value]="classificacao">
-                        {{ classificacao.nome }}
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
-        </form>
-    </div>
-</mat-toolbar>
+</div>
+<div class="field">
 
-<table mat-table [dataSource]="produtos" class="mat-elevation-z8">
-
-    <!-- Position Column -->
-    <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> No. </th>
-      <!--  <td mat-cell *matCellDef="let element; let i=index"> {{i + 1}} </td> -->
-      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-    </ng-container>
-
-    <!-- Nome Column -->
-    <ng-container matColumnDef="descricao">
-        <th mat-header-cell *matHeaderCellDef> Descricao </th>
-        <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
-    </ng-container>
-
-    <!-- Cnpj Column -->
-    <ng-container matColumnDef="classificacao">
-        <th mat-header-cell *matHeaderCellDef> classificacao </th>
-        <td mat-cell *matCellDef="let element"> {{element.classificacao.nome}} </td>
-    </ng-container>
-
-    <!-- EndSite Column -->
-    <ng-container matColumnDef="modelo">
-        <th mat-header-cell *matHeaderCellDef> Modelo </th>
-        <td mat-cell *matCellDef="let element"> {{element.modelo}} </td>
-    </ng-container>
-
-    <!-- Endereco Column -->
-    <ng-container matColumnDef="marca">
-        <th mat-header-cell *matHeaderCellDef> Marca </th>
-        <td mat-cell *matCellDef="let element"> {{element.marca}} </td>
-    </ng-container>
-
-    <!-- Telefone Column -->
-    <ng-container matColumnDef="quantidade">
-        <th mat-header-cell *matHeaderCellDef> Quantidade </th>
-        <td mat-cell *matCellDef="let element"> {{element.quantidadeUnidades}} </td>
-    </ng-container>
-
-    <!-- Telefone Column -->
-    <ng-container matColumnDef="valorVenda">
-        <th mat-header-cell *matHeaderCellDef> Valor </th>
-        <td mat-cell *matCellDef="let element"> {{element.valorVenda}} </td>
-    </ng-container>
-
-    <!-- Acao Column -->
-    <ng-container matColumnDef="acao">
-        <th mat-header-cell *matHeaderCellDef> Ação </th>
-        <td mat-cell *matCellDef="let element">
-            <button mat-icon-button color="primary" (click)="editarProduto(element.id)">
-                <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="apagarProduto(element.id)">
-                <mat-icon>delete</mat-icon>
-            </button>
+<div class="container">
+<h1 id="lista-produtos-h1" class="title is-1">Lista de produtos</h1>
+<table class="table is-fullwidth">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Modelo</th>
+        <th>Marca</th>
+        <th>Descrição</th>
+        <th>Quantidade</th>
+        <th>Valor</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let produto of produtos">
+        <td>{{ produto.id }}</td>
+        <td>{{ produto.nome }}</td>
+        <td>{{ produto.modelo }}</td>
+        <td>{{ produto.marca }}</td>
+        <td>{{ produto.descricao }}</td>
+        <td>{{ produto.quantidadeUnidades }}</td>
+        <td>R$ {{ produto.valorVenda }}</td>
+        <td>
+          <button (click)="selecionarProduto(produto)"><span class="icon is-small"><i class="mdi mdi-information"></i></span></button>
+          <button (click)="editarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-pencil"></i></span></button>
+          <button (click)="apagarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-delete"></i></span></button>
         </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-
-</table>
-
-<mat-paginator
-    [pageSizeOptions] = "[2,4,8,16]"
-    [pageSize] = "pageSize"
-    [length] = "totalRecords"
-    (page) = "paginar($event)">
-</mat-paginator>
+      </tr>
+    </tbody>
+  </table>
+  <div class="box">
+    <div class="is-right">
+        <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalRecords })">Anterior</a>
+        <a *ngIf="this.page !== totalPages - 1" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalRecords})">Próxima</a>
+        Página atual:
+        <a>{{this.page+1}}</a>
+        Total de páginas:
+        <a>{{this.totalPages}}</a>    
+    </div>
+</div>  
+</div>
+<br>

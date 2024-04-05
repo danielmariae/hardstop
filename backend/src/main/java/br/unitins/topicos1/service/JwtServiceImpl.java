@@ -7,6 +7,7 @@ import java.util.Set;
 
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
+import br.unitins.topicos1.model.Perfil;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -36,7 +37,7 @@ public class JwtServiceImpl implements JwtService {
         Instant expiryDate = now.plus(EXPIRATION_TIME);
 
         Set<String> roles = new HashSet<String>();
-        roles.add(dto.perfil().getLabel());
+        roles.add(Perfil.valueOf(dto.perfil()).getLabel());
 
         return Jwt.issuer("hardstop-jwt")
         .subject(dto.login())

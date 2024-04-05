@@ -42,6 +42,7 @@ export class ProdutoListComponent implements OnInit {
     totalRecords = 0;
     page = 0;
     pageSize = 0;
+    totalPages = 0;
     produtos: Produto[] = [];
 
     // Variável relacionada com as colunas da página html
@@ -119,14 +120,14 @@ export class ProdutoListComponent implements OnInit {
 
         // Atualizando os dados da página de acordo com a paginação ao carregar a página.
         this.atualizarDadosDaPagina();
-  
+
         // Inscrevendo para receber notificações de novos produtos
         this.produtoService.produtoInserido$.subscribe(() => {
             // Recarrega os produtos ao receber uma notificação
           this.carregarProdutos(this.page, this.pageSize);
           this.buscarTodosProdutos(); 
           this.router.navigate(['produtos']);
-        });
+        });        
       }
   
 // Buscando todos os produtos para carregar na lista de buscador de produtos
@@ -153,6 +154,7 @@ paginar(event: PageEvent) : void {
     this.carregarProdutos(this.page, this.pageSize);
     this.produtoService.count().subscribe(data => {
       this.totalRecords = data;
+      this.totalPages = this.totalRecords/this.pageSize;
     });
   }
 
@@ -167,7 +169,9 @@ paginar(event: PageEvent) : void {
             console.error('Erro:', error);
             window.alert(error);
         } 
-    });
+    })
+    this.totalPages = this.totalRecords/this.pageSize;
+    ;
 }
 
  // Método para apagar um produto escolhido

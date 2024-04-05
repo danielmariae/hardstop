@@ -2,15 +2,18 @@ package br.unitins.topicos1.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.jrimum.domkee.pessoa.CEP;
 
 import br.unitins.topicos1.Formatadores.EnderecoFormatador;
-import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.Formatadores.FuncionarioFormatador;
+import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
+import br.unitins.topicos1.dto.FuncionarioDTO;
+import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.PatchCpfDTO;
 import br.unitins.topicos1.dto.PatchEmailDTO;
 import br.unitins.topicos1.dto.PatchLoginDTO;
@@ -18,13 +21,11 @@ import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
-import br.unitins.topicos1.dto.FuncionarioDTO;
-import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.model.Endereco;
+import br.unitins.topicos1.model.Funcionario;
 import br.unitins.topicos1.model.Perfil;
 import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
-import br.unitins.topicos1.model.Funcionario;
 import br.unitins.topicos1.repository.EnderecoRepository;
 import br.unitins.topicos1.repository.FuncionarioRepository;
 import br.unitins.topicos1.validation.ValidationException;
@@ -126,19 +127,19 @@ public class FuncionarioServiceImpl implements FuncionarioService {
       }
     }
 
-    if (func.endereco() != null) {
+    if (func.listaEndereco() != null) {
       try {
-        Endereco endereco = new Endereco();
-        endereco.setNome(func.nome());
-        endereco.setLogradouro(func.endereco().logradouro());
-        endereco.setNumeroLote(func.endereco().numeroLote());
-        endereco.setBairro(func.endereco().bairro());
-        endereco.setComplemento(func.endereco().complemento());
-        endereco.setCep(new CEP(EnderecoFormatador.formataCep(func.endereco().cep().getCep())));
-        endereco.setLocalidade(func.endereco().localidade());
-        endereco.setUF(func.endereco().uf());
-        endereco.setPais(func.endereco().pais());
-        funcionario.setEndereco(endereco);
+        Endereco listaEndereco = new Endereco();
+        listaEndereco.setNome(func.nome());
+        listaEndereco.setLogradouro(func.listaEndereco().logradouro());
+        listaEndereco.setNumeroLote(func.listaEndereco().numeroLote());
+        listaEndereco.setBairro(func.listaEndereco().bairro());
+        listaEndereco.setComplemento(func.listaEndereco().complemento());
+        listaEndereco.setCep(new CEP(EnderecoFormatador.formataCep(func.listaEndereco().cep().getCep())));
+        listaEndereco.setLocalidade(func.listaEndereco().localidade());
+        listaEndereco.setUF(func.listaEndereco().uf());
+        listaEndereco.setPais(func.listaEndereco().pais());
+        funcionario.setEndereco(listaEndereco);
       } catch (Exception e) {
         throw new GeneralErrorException("500", "Internal Server Error", "FuncionarioServiceImpl(insert)", "Não consegui alocar memória para a lista de endereços do novo Funcionario. Tente novamente mais tarde! " +  e.getCause());
       }
@@ -271,18 +272,18 @@ public class FuncionarioServiceImpl implements FuncionarioService {
   @Transactional
   public FuncionarioResponseDTO insertEnderecoFuncionario(EnderecoFuncDTO end,Long id) {
     Funcionario funcionario = repository.findById(id);
-    Endereco endereco = new Endereco();
+    Endereco listaEndereco = new Endereco();
 
-    endereco.setLogradouro(end.logradouro());
-    endereco.setNumeroLote(end.numeroLote());
-    endereco.setBairro(end.bairro());
-    endereco.setComplemento(end.complemento());
-    endereco.setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
-    endereco.setLocalidade(end.localidade());
-    endereco.setUF(end.uf());
-    endereco.setPais(end.pais());
-    repositoryEndereco.persist(endereco);
-    funcionario.setEndereco(endereco);
+    listaEndereco.setLogradouro(end.logradouro());
+    listaEndereco.setNumeroLote(end.numeroLote());
+    listaEndereco.setBairro(end.bairro());
+    listaEndereco.setComplemento(end.complemento());
+    listaEndereco.setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
+    listaEndereco.setLocalidade(end.localidade());
+    listaEndereco.setUF(end.uf());
+    listaEndereco.setPais(end.pais());
+    repositoryEndereco.persist(listaEndereco);
+    funcionario.setEndereco(listaEndereco);
     repository.persist(funcionario);
     return FuncionarioResponseDTO.valueOf(funcionario);
   }
@@ -314,18 +315,18 @@ public class FuncionarioServiceImpl implements FuncionarioService {
       }
     }
 
-    Endereco endereco = new Endereco();
-    endereco.setLogradouro(dto.endereco().logradouro());
-    endereco.setNumeroLote(dto.endereco().numeroLote());
-    endereco.setBairro(dto.endereco().bairro());
-    endereco.setComplemento(dto.endereco().complemento());
-    endereco.setCep(new CEP(EnderecoFormatador.formataCep(dto.endereco().cep().getCep())));
-    endereco.setLocalidade(dto.endereco().localidade());
-    endereco.setUF(dto.endereco().uf());
-    endereco.setPais(dto.endereco().pais());
-    repositoryEndereco.persist(endereco);
+    Endereco listaEndereco = new Endereco();
+    listaEndereco.setLogradouro(dto.listaEndereco().logradouro());
+    listaEndereco.setNumeroLote(dto.listaEndereco().numeroLote());
+    listaEndereco.setBairro(dto.listaEndereco().bairro());
+    listaEndereco.setComplemento(dto.listaEndereco().complemento());
+    listaEndereco.setCep(new CEP(EnderecoFormatador.formataCep(dto.listaEndereco().cep().getCep())));
+    listaEndereco.setLocalidade(dto.listaEndereco().localidade());
+    listaEndereco.setUF(dto.listaEndereco().uf());
+    listaEndereco.setPais(dto.listaEndereco().pais());
+    repositoryEndereco.persist(listaEndereco);
 
-    funcionario.setEndereco(endereco);
+    funcionario.setEndereco(listaEndereco);
     repository.persist(funcionario);
     return FuncionarioDTO.valueOf(funcionario);
   }
@@ -362,4 +363,22 @@ public class FuncionarioServiceImpl implements FuncionarioService {
       throw new ValidationException("cpf", "Este cpf já existe no sistema. Usuário já está cadastrado no sistema.");
     }
   }
+
+  public List<FuncionarioResponseDTO> findByAll(int page, int pageSize) {
+
+    List<Funcionario> list = repository
+        .findAll()
+        .page(page, pageSize)
+        .list();
+    return list
+        .stream()
+        .map(c -> FuncionarioResponseDTO.valueOf(c))
+        .collect(Collectors.toList());
+}
+
+@Override
+public long count() {
+    return repository.count();
+}
+
 }

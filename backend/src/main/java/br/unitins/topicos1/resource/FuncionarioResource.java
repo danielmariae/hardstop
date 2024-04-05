@@ -4,7 +4,6 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.application.ErrorTP1;
-import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
@@ -16,7 +15,6 @@ import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.form.ArchiveForm;
-import br.unitins.topicos1.service.ClienteService;
 import br.unitins.topicos1.service.FileService;
 import br.unitins.topicos1.service.FuncionarioService;
 import jakarta.annotation.security.RolesAllowed;
@@ -25,6 +23,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
@@ -32,6 +31,7 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -46,9 +46,6 @@ JsonWebToken jwt;
 
 @Inject
 private FuncionarioService serviceFuncionario;
-
-@Inject
-private ClienteService serviceCliente;
 
 @Inject
 FileService fileService;
@@ -129,46 +126,9 @@ public Response getFuncionario() {
     return Response.status(200).entity(serviceFuncionario.updateSenhaFuncionario(senha, id)).build();
   }
 
-  @GET
-  @Path("/search/cliente/all")
-  @RolesAllowed({"Func", "Admin"})
-  public Response findbyAllCliente() {
-    return Response.ok(serviceCliente.findByAllCliente()).build();
-  }
-
-  @GET
-  @Path("/search/cliente/id/{id}")
-  @RolesAllowed({"Func", "Admin"})
-  public Response findByIdCliente(@PathParam("id") Long id) {
-    return Response.ok(serviceCliente.findByIdCliente(id)).build();
-  }
-
-  @GET
-  @Path("/search/cliente/nome/{nome}")
-  @RolesAllowed({"Func", "Admin"})
-  public Response findByNameCliente(@PathParam("nome") String nome) {
-    return Response.ok(serviceCliente.findByNameCliente(nome)).build();
-  }
-
-  @GET
-  @Path("/search/cliente/cpf/{cpf}")
-  @RolesAllowed({"Func", "Admin"})
-  public Response findByCpfCliente(@PathParam("cpf") String cpf) {
-    return Response.ok(serviceCliente.findByCpfCliente(cpf)).build();
-  }
-
-  @PUT
-  @Transactional
-  @Path("put/cliente/{id}")
-  @RolesAllowed({"Func", "Admin"})
-  public Response updateCliente(@Valid ClienteDTO dto, @PathParam("id") Long id) {
-    serviceCliente.updateCliente(dto, id);
-    return Response.status(Status.NO_CONTENT).build();
-  }
-
   @POST
   @Transactional
-  @Path("/insert/funcionario")
+  @Path("/")
   @RolesAllowed("Admin")
   public Response insertFuncionario(@Valid FuncionarioDTO dto) {
     FuncionarioDTO retorno =  serviceFuncionario.insertFuncionario(dto);
@@ -178,7 +138,7 @@ public Response getFuncionario() {
   @PUT
   @Transactional
   @RolesAllowed("Admin")
-  @Path("put/funcionario/{id}")
+  @Path("/{id}")
   public Response updateFuncionario(@Valid FuncionarioDTO dto, @PathParam("id") Long id) {
     serviceFuncionario.updateFuncionario(dto, id);
     return Response.status(Status.NO_CONTENT).build();
@@ -230,45 +190,37 @@ public Response getFuncionario() {
 
   @DELETE
   @Transactional
-  @Path("/delete/funcionario/{id}")
+  @Path("/{id}")
   @RolesAllowed("Admin")
   public Response deleteFuncionario(@PathParam("id") Long id) {
     serviceFuncionario.deleteFuncionario(id);
     return Response.status(Status.NO_CONTENT).build();
   }
 
-  @DELETE
-  @Transactional
-  @Path("/delete/cliente/{id}")
-  @RolesAllowed({"Func", "Admin"})
-  public Response deleteCliente(@PathParam("id") Long id) {
-    serviceCliente.deleteCliente(id);
-    return Response.status(Status.NO_CONTENT).build();
-  }
 
   @GET
-  @Path("/search/funcionario/all")
+  @Path("/all")
   @RolesAllowed({"Func", "Admin"})
   public Response findByAllFuncionario() {
     return Response.ok(serviceFuncionario.findByAllFuncionario()).build();
   }
 
   @GET
-  @Path("/search/funcionario/id/{id}")
+  @Path("/{id}")
   @RolesAllowed({"Func", "Admin"})
   public Response findByIdFuncionario(@PathParam("id") Long id) {
     return Response.ok(serviceFuncionario.findByIdFuncionario(id)).build();
   }
 
   @GET
-  @Path("/search/funcionario/nome/{nome}")
+  @Path("/nome/{nome}")
   @RolesAllowed({"Func", "Admin"})
   public Response findByNameFuncionario(@PathParam("nome") String nome) {
     return Response.ok(serviceFuncionario.findByNameFuncionario(nome)).build();
   }
 
   @GET
-  @Path("/search/funcionario/cpf/{cpf}")
+  @Path("/cpf/{cpf}")
   @RolesAllowed({"Func", "Admin"})
   public Response findByCpfFuncionario(@PathParam("cpf") String cpf) {
     return Response.ok(serviceFuncionario.findByCpfFuncionario(cpf)).build();
@@ -305,4 +257,20 @@ public Response getFuncionario() {
       .build();
 
     } 
+
+    @GET
+    @RolesAllowed({"Func", "Admin"})
+    public Response findAll(
+        @QueryParam("page") @DefaultValue("0") int page,
+        @QueryParam("pageSize") @DefaultValue("100") int pageSize) {
+  
+        return Response.ok(serviceFuncionario.findByAll(page, pageSize)).build();
+    }
+  
+  @GET
+  @Path("/count")
+  public Long count() {
+      return serviceFuncionario.count();
+  }
+
 }
