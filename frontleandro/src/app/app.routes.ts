@@ -18,6 +18,11 @@ import { SessionTokenComponent } from './components/session-token/session-token.
 import { FuncionarioEditComponent } from './components/funcionario/funcionario-edit/funcionario-edit.component';
 import { FuncionarioFormComponent } from './components/funcionario/funcionario-form/funcionario-form.component';
 import { FuncionarioViewComponent } from './components/funcionario/funcionario-view/funcionario-view.component';
+import { LoteFormComponent } from './components/lote/lote-form/lote-form.component';
+import { LoteListComponent } from './components/lote/lote-list-idProduto/lote-list-idProduto.component';
+import { ProdutoEscolhidoComponent } from './components/produto/produto-escolhido/produto-escolhido.component';
+import { ProdutoGarantiaComponent } from './components/produto/produto-garantia/produto-garantia.component';
+
 
 export const routes: Routes = [
     { path:'clientes/new', component: ClienteFormComponent, title:'Cadastrar novo cliente' },
@@ -38,6 +43,10 @@ export const routes: Routes = [
     {path: 'produtos', component: ProdutoListComponent, title: 'Lista de Produtos'},
     { path: 'produtos/new/:tipoProduto', component: ProdutoFormComponent, title: 'Formulario de Cadastro de Produtos'},
     {path: 'produtos/edit/:id', component: ProdutoEditComponent, title: 'Edicao de Produtos'},
+    {path: 'lotes/new', component: LoteFormComponent, title: 'Insercao de Lotes' },
+    {path: 'lotes/:id', component: LoteListComponent, title: 'Lista de Lotes por Produto'},
+    {path: 'produtos/:id', component: ProdutoEscolhidoComponent, title: 'Produto Escolhido'},
+    {path: 'produtos/garantia/:id', component: ProdutoGarantiaComponent, title: 'Fornecedor de Produto Defeituoso'},
 ];
 
 @NgModule({

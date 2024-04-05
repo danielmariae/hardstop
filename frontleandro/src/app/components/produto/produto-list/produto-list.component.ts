@@ -82,7 +82,8 @@ export class ProdutoListComponent implements OnInit {
       // Implementando o buscador para produto
       // Enviando o produto selecionado para uma página onde somente ele aparece
       selecionarProduto(produto: Produto) {
-        this.router.navigate(['/produtos', produto.id]);
+        const produtoEscolhido: string = 'produtos/' + produto.id;
+        this.navigationService.navigateTo(produtoEscolhido);
       }
 
       // Implementando o buscador para classificacao

@@ -69,9 +69,9 @@ fornecedores: Fornecedor[] = [];
     // Implementando o buscador para fornecedor
     // Enviando o fornecedor selecionado para uma página onde somente ele aparece
     selecionarFornecedor(fornecedor: Fornecedor) {
-      console.log(fornecedor);
-      this.router.navigate(['/fornecedores', fornecedor.id]);
-    }
+	const fornecedorEscolhido: string = '/fornecedores' + fornecedor.id;
+        this.navigationService.navigateTo(fornecedorEscolhido);
+          }
 
     ngOnInit() {
       // Carregando o Enum Tipos de Telfone para realizar mapeamento entre número de id do objeto Telefone e sua descrição no Enum para apresentar a descrição na página html

@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import br.unitins.topicos1.application.GeneralErrorException;
+import br.unitins.topicos1.dto.FornecedorDTO;
+import br.unitins.topicos1.dto.FornecedorResponseDTO;
 import br.unitins.topicos1.dto.PlacaMaeDTO;
 import br.unitins.topicos1.dto.PlacaMaeResponseDTO;
 import br.unitins.topicos1.dto.ProcessadorDTO;
@@ -210,8 +212,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 
         if(dto.quantidadeUnidades() != null) {
           // Este if verifica se a quantidade desse produto em estoque é zero. Isso é necessário para que não ocorra mistura de Lotes diferentes (adicionar as novas unidades de um produto que vieram do Fornecedor B, às unidades preexistentes desse mesmo produto que vieram do Fornecedor A). Para o caso onde as novas unidades de um produto vem do mesmo fornecedor, obtidas pelo mesmo preço e mantidas no mesmo valor, existe o método updateQuantidade de LoteService.
-        if(produto.getQuantidadeUnidades() == 0) {
-
+        if(produto.getQuantidadeUnidades() == null || produto.getQuantidadeUnidades() == 0) {
           try {
           produto.setValorVenda(dto.valorVenda());
           produto.setLoteAtual(repositoryLote.findById(dto.idLoteProduto()));
@@ -227,15 +228,13 @@ public class ProdutoServiceImpl implements ProdutoService {
 
         } else {
           throw new GeneralErrorException(
-            "400",
-            "Bad Resquest",
-            "ProdutoServiceImpl(update)",
-            "Não posso realizar update se a quantidade de produto em estoque for diferente de zero.");
+          "500",
+          "Server Error",
+          "ProdutoServiceImpl(update)",
+          "Não consegui realizar o update do produto porque quantidadeUnidades do produto atual não é zero!");
         }
       } else {
-
-        if(produto.getQuantidadeNaoConvencional() == 0) {
-
+        if(produto.getQuantidadeNaoConvencional() == null || produto.getQuantidadeNaoConvencional() == 0) {
           try {
           produto.setValorVenda(dto.valorVenda());
           produto.setLoteAtual(repositoryLote.findById(dto.idLoteProduto()));
@@ -251,10 +250,10 @@ public class ProdutoServiceImpl implements ProdutoService {
 
         } else {
           throw new GeneralErrorException(
-            "400",
-            "Bad Resquest",
-            "ProdutoServiceImpl(update)",
-            "Não posso realizar update se a quantidade de produto em estoque for diferente de zero.");
+          "500",
+          "Server Error",
+          "ProdutoServiceImpl(update)",
+          "Não consegui realizar o update do produto porque quantidadeNaoConvencional do produto atual não é zero!");
         }
 
 
@@ -316,7 +315,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     public Produto findById(Long id) {
-        return repository.findById(id);
+      return repository.findById(id);
     }
 
     @Override
@@ -372,7 +371,7 @@ public class ProdutoServiceImpl implements ProdutoService {
         return repository.count();
     }
 
-    public Fornecedor encontraFornecedor(ProdutoFornecedorPatch dto) {
+    public FornecedorResponseDTO encontraFornecedor(ProdutoFornecedorPatch dto) {
       
       LocalDateTime agora = LocalDateTime.now();
       DateTimeFormatter formatador = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -386,10 +385,12 @@ public class ProdutoServiceImpl implements ProdutoService {
 
         if(lt.getDataHoraUltimoVendido() == null) {
           if(lt.getDataHoraChegadaLote().isBefore(novoDateTime) && tempDateTime.isAfter(novoDateTime))
-            return lt.getFornecedor();
+          System.out.println(lt.getFornecedor());
+            return FornecedorResponseDTO.valueOf(lt.getFornecedor());
         } else {
           if(lt.getDataHoraChegadaLote().isBefore(novoDateTime) && tempDateTime.isAfter(novoDateTime))
-            return lt.getFornecedor();
+          System.out.println(lt.getFornecedor());
+            return FornecedorResponseDTO.valueOf(lt.getFornecedor());
         }
       }
       throw new GeneralErrorException(

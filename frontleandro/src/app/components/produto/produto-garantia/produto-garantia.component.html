@@ -1,0 +1,25 @@
+<form [formGroup]="produtoForm" (ngSubmit)="enviarDados()">
+    <!-- <div class="autocomplete-container">
+      <form class="example-form">
+        <mat-form-field class="example-full-width">
+          <mat-label>Selecione um produto</mat-label>
+          <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl"
+            [matAutocomplete]="autoprod">
+          <mat-autocomplete #autoprod="matAutocomplete" [displayWith]="displayFn"
+            (optionSelected)="selecionarProduto($event.option.value)">
+            <mat-option *ngFor="let produto of filteredOptions | async" [value]="produto">
+              {{ produto.nome }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+    </div> -->
+    <div class="form-group">
+        <label for="dataHoraVenda">Data e Hora da venda do Produto:</label>
+        <input type="datetime-local" formControlName="dataHoraVenda" id="dataHoraVenda">
+      </div>
+      <button type="submit">Procurar</button>
+      <button (click)="cancelarInsercao()">Cancelar</button>
+    
+    
+</form>

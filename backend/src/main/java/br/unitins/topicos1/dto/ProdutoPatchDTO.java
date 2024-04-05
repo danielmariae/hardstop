@@ -14,6 +14,7 @@ public record ProdutoPatchDTO(
     // @Digits(integer = 10, fraction = 0, message = "Por favor, digite um número válido")
     Integer quantidadeUnidades,
     Double quantidadeNaoConvencional,
+    String unidadeDeMedida,
     @NotNull(message = "O campo Lote não pode ser nulo")
     Long idLoteProduto
     ) {}

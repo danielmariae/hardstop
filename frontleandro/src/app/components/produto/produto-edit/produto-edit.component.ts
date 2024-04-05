@@ -24,23 +24,13 @@ export class ProdutoEditComponent implements OnInit {
     produtoForm!: FormGroup;
     classificacao: Classificacao[] = [];
     arquivosSelecionados: File[] = [];
+    selectedFile!: File;
     id: number = 0;
     tipoProduto!: string;
     placaMaeForm!: FormGroup; // Adicione FormGroup para o formulário de PlacaMae
     processadorForm!: FormGroup; // Adicione FormGroup para o formulário de Processador
     placaMae!: PlacaMae;
     processador!: Processador;
-
-
-    // Relacionado com Property 'placaMae' does not exist on type 'ProdutoFormComponent' no arquivo html.
-    // get placaMae(): PlacaMae {
-    //     return this.produto as PlacaMae;
-    // }
-
-    // Relacionado com Property 'processador' does not exist on type 'ProdutoFormComponent' no arquivo html.
-    // get processador(): Processador {
-    //     return this.produto as Processador;
-    // }
 
     constructor(private formBuilder: FormBuilder,
         private produtoService: ProdutoService,
@@ -50,7 +40,7 @@ export class ProdutoEditComponent implements OnInit {
         private sessionTokenService: SessionTokenService,
     ) {
         this.produto = new Produto();
-        //this.placamae = new PlacaMae();
+        this.placaMae = new PlacaMae();
         this.processador = new Processador();
         this.produtoForm = this.formBuilder.group({
             nome: [''],
@@ -71,6 +61,65 @@ export class ProdutoEditComponent implements OnInit {
             arquivos: this.formBuilder.array([]), 
         });
     }
+
+    onFileSelected(event: any) {
+      const files: FileList = event.target.files;
+      for (let i = 0; i < files.length; i++) {
+        this.arquivosSelecionados.push(files[i]);
+      }
+    }
+    
+    selecionarArquivos(input: HTMLInputElement) {
+      input.click(); // Simula o clique no input file
+    }
+  
+    uploadFiles(idProduto: number) {
+      const formData = new FormData();
+      let url: string; // Declaração e inicialização da variável url
+      if(this.arquivosSelecionados.length != 0){
+      for (let i = 0; i < this.arquivosSelecionados.length; i++) {
+        formData.append('nomeImagem', this.arquivosSelecionados[i].name);
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(this.arquivosSelecionados[i]);
+        reader.onload = () => { // Aguarda a conclusão da leitura do arquivo
+        const arrayBuffer = reader.result as ArrayBuffer;
+       const bytes = new Uint8Array(arrayBuffer);
+       const blob = new Blob([bytes]);
+       formData.append('imagem', blob);
+      url = 'http://localhost:8080/produtos/upload/imagem/id/' + idProduto;
+      
+      // Envia os arquivos usando o HttpClient
+      this.http.post(url , formData).subscribe({
+        next: (response) => {
+          // Sucesso!
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
+    };
+  } 
+  }
+      // Limpa os arquivos selecionados após o envio
+      this.arquivosSelecionados = [];
+    }
+    
+    removerArquivo(index: number) {
+      this.arquivosSelecionados.splice(index, 1);
+    }
+  
+    removerArquivoSelecionado(arquivo: File) {
+      const index = this.arquivosSelecionados.indexOf(arquivo);
+      if (index !== -1) {
+        this.arquivosSelecionados.splice(index, 1);
+      }
+    }
+    
+
+
+
+
+
 
     ngOnInit(): void {
         this.id = Number(this.route.snapshot.params['id']);
@@ -172,8 +221,9 @@ export class ProdutoEditComponent implements OnInit {
         console.log(detalhesProduto);
         this.produtoService.update(detalhesProduto, this.tipoProduto, this.produto.id).subscribe ({
             next: (response) => {
-            // Faz o upload de arquivos para o produto recém cadastrado
-            // Usa o id do resultado positivo do cadastro do produto
+            // Faz o upload de arquivos para o produto recém modificado
+            // Usa o id do produto para carregar mais imagens
+            this.uploadFiles(this.produto.id);
             this.produtoService.notificarProdutoInserido(); // Notificar outros componentes
             },
             error: (error) => {

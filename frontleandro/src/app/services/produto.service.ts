@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Observable, Subject, throwError, catchError } from 'rxjs';
 import { PlacaMae, Processador, Produto } from '../models/produto.model';
 import { SessionTokenService } from './session-token.service';
+import { Fornecedor } from '../models/fornecedor.model';
 
 @Injectable({
     providedIn: 'root'
@@ -102,19 +103,48 @@ export class ProdutoService {
 
 
     // Método para trazer uma única instância de Produto do banco de dados do servidor de acordo com seu id
-    findById(id: number): Observable<Produto> {
+    findById(id: number): Observable<any> {
         const headers = this.sessionTokenService.getSessionHeader();
         const url = `${this.baseUrl}/search/id/${id}`; // Concatena o ID à URL base
 
         if (headers) {
             // Faz a requisição HTTP com o token de autenticação no cabeçalho
-            return this.httpClient.get<Produto>(url, { headers })
+            return this.httpClient.get<any>(url, { headers })
                 .pipe(
                     catchError(this.handleError)
                 );
         } else {
             // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-            return this.httpClient.get<Produto>(url)
+            return this.httpClient.get<any>(url)
+                .pipe(
+                    catchError(this.handleError)
+                );
+        }
+    }
+   
+    findProdutoEstragado(idProduto: number,  dataHoraVenda: string): Observable<Fornecedor> {
+        const headers = this.sessionTokenService.getSessionHeader();
+        const url = `${this.baseUrl}/search/fornecedor`; 
+
+        const params = {
+            idProduto: +idProduto,
+            dataHoraVenda
+        }
+
+    //     let params = new HttpParams()
+    // .set('idProduto', idProduto.toString())
+    // .set('dataHoraVenda', dataHoraVenda);
+
+    console.log(params);
+        if (headers) {
+            // Faz a requisição HTTP com o token de autenticação no cabeçalho
+            return this.httpClient.get<Fornecedor>(url, { headers: headers, params: params })
+                .pipe(
+                    catchError(this.handleError)
+                );
+        } else {
+            // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
+            return this.httpClient.get<Fornecedor>(url, {params})
                 .pipe(
                     catchError(this.handleError)
                 );

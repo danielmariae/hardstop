@@ -18,62 +18,77 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 @Consumes(MediaType.APPLICATION_JSON)
 public class LoteResource {
 
-    @Inject
-    LoteService service;
+  @Inject
+  LoteService service;
 
-    @Inject
-    JsonWebToken jwt;
+  @Inject
+  JsonWebToken jwt;
 
-    @POST
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/insert/lote/")
-    public Response insert (@Valid LoteDTO dto){
-        LoteResponseDTO retorno = service.insert(dto);
-        return Response.status(201).entity(retorno).build();
-    }
+  @POST
+  @RolesAllowed({ "Func", "Admin" })
+  @Path("/insert/lote")
+  public Response insert(@Valid LoteDTO dto) {
+    LoteResponseDTO retorno = service.insert(dto);
+    return Response.status(201).entity(retorno).build();
+  }
 
-    @PATCH
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/patch/ativalote/{idProduto}")
-    public Response ativaLote(@PathParam("idProduto") Long idProduto)
-    {
-        return Response.status(201).entity(service.ativaLote(idProduto)).build();
-    }
+  @GET
+  @RolesAllowed({ "Func", "Admin" })
+  @Path("/patch/ativalote/{idLote}")
+  public Response ativaLote(@PathParam("idLote") Long idLote) {
+    return Response.status(201).entity(service.ativaLote(idLote)).build();
+  }
 
-    @PATCH
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/patch/quantidade")
-    public Response updateQuantidade(@Valid LotePatchQDTO dto)
-    {
-        return Response.status(201).entity(service.updateQuantidade(dto)).build();
-    }
+  @PATCH
+  @RolesAllowed({ "Func", "Admin" })
+  @Path("/patch/quantidade")
+  public Response updateQuantidade(@Valid LotePatchQDTO dto) {
+    return Response.status(201).entity(service.updateQuantidade(dto)).build();
+  }
 
-        @PATCH
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/patch/valorVenda")
-    public Response updateValorVenda(@Valid LotePatchVDTO dto) {
-        return Response.ok().entity(service.updateValorVenda(dto)).build();
-    }
+  @PATCH
+  @RolesAllowed({ "Func", "Admin" })
+  @Path("/patch/valorVenda")
+  public Response updateValorVenda(@Valid LotePatchVDTO dto) {
+    return Response.ok().entity(service.updateValorVenda(dto)).build();
+  }
 
-    @DELETE
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/delete/{id}")
-    public Response delete(@PathParam("id") Long id){
-        service.delete(id);
-        return Response.status(Response.Status.NO_CONTENT).build();
-    }
+  @DELETE
+  @RolesAllowed({ "Func", "Admin" })
+  @Path("/delete/{id}")
+  public Response delete(@PathParam("id") Long id) {
+    service.delete(id);
+    return Response.status(Response.Status.NO_CONTENT).build();
+  }
 
-    @GET
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/search/all/")
-    public Response findAll() {
-        return Response.ok(service.findByAll()).build();
-    }
+  @GET
+  @RolesAllowed({ "Func", "Admin" })
+  @Path("/search/all/")
+  public Response findAll() {
+    return Response.ok(service.findByAll()).build();
+  }
 
-    @GET
-    @RolesAllowed({"Func", "Admin"})
-    @Path("/search/id/{id}")
-    public Response findById(@PathParam("id") Long id) {
-        return Response.ok(service.findById(id)).build();
-    }
+  @GET
+  @RolesAllowed({ "Func", "Admin" })
+  @Path("/search/id/{id}")
+  public Response findById(@PathParam("id") Long id) {
+    return Response.ok(service.findById(id)).build();
+  }
+
+  @GET
+  @RolesAllowed({ "Func", "Admin" })
+  @Path("/search/idProduto/{id}")
+  public Response findByIdProduto(
+    @PathParam("id") Long id,
+    @QueryParam("page") @DefaultValue("0") int page,
+    @QueryParam("pageSize") @DefaultValue("100") int pageSize
+  ) {
+    return Response.ok(service.findByIdProduto(id, page, pageSize)).build();
+  }
+
+  @GET
+  @Path("/count")
+  public Long count() {
+    return service.count();
+  }
 }

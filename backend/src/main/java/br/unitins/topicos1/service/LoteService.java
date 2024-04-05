@@ -9,6 +9,13 @@ import br.unitins.topicos1.dto.LoteResponseDTO;
 import java.util.List;
 
 public interface LoteService {
+
+    // Traz a lista de Lotes relacionada a um produto com determinado id
+    List<LoteResponseDTO> findByIdProduto(Long idProduto, int page, int pageSize);
+
+    // CONTADOR:
+    public long count();
+
     LoteResponseDTO insert(LoteDTO dto);
 
     // ATUALIZAR LOTE:
@@ -29,5 +36,5 @@ public interface LoteService {
     List<LoteResponseDTO> findByAll();
 
     // ATIVA UM LOTE PRÉ CADASTRADO
-    LoteResponseDTO ativaLote(Long idProduto);
+    LoteResponseDTO ativaLote(Long idLote);
 }

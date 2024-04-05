@@ -9,12 +9,17 @@ import jakarta.persistence.ManyToOne;
    public class Lote extends DefaultEntity {
         private String lote;
         private LocalDateTime dataHoraChegadaLote;
+        private LocalDateTime dataHoraAtivacaoLote;
         private LocalDateTime dataHoraUltimoVendido;
         private Integer quantidadeUnidades;
         private Double quantidadeNaoConvencional;
         private String unidadeDeMedida;
         private Double custoCompra;
         private Double valorVenda;
+        private Integer garantiaMeses;
+
+        private StatusDoLote statusDoLote;
+
 
         @ManyToOne
         private Produto produto;
@@ -22,12 +27,6 @@ import jakarta.persistence.ManyToOne;
         @ManyToOne
         private Fornecedor fornecedor;
 
-        public LocalDateTime getDataHoraChegadaLote() {
-            return dataHoraChegadaLote;
-        }
-        public void setDataHoraChegadaLote(LocalDateTime dataHoraChegadaLote) {
-            this.dataHoraChegadaLote = dataHoraChegadaLote;
-        }
         public LocalDateTime getDataHoraUltimoVendido() {
             return dataHoraUltimoVendido;
         }
@@ -113,6 +112,66 @@ import jakarta.persistence.ManyToOne;
      */
     public void setUnidadeDeMedida(String unidadeDeMedida) {
         this.unidadeDeMedida = unidadeDeMedida;
+    }
+
+
+    /**
+     * @return Integer return the garantiaMeses
+     */
+    public Integer getGarantiaMeses() {
+        return garantiaMeses;
+    }
+
+    /**
+     * @param garantiaMeses the garantiaMeses to set
+     */
+    public void setGarantiaMeses(Integer garantiaMeses) {
+        this.garantiaMeses = garantiaMeses;
+    }
+
+
+    /**
+     * @return StatusDoLote return the statusDoLote
+     */
+    public StatusDoLote getStatusDoLote() {
+        return statusDoLote;
+    }
+
+    /**
+     * @param statusDoLote the statusDoLote to set
+     */
+    public void setStatusDoLote(StatusDoLote statusDoLote) {
+        this.statusDoLote = statusDoLote;
+    }
+
+
+    /**
+     * @return LocalDateTime return the dataHoraAtivacaoLote
+     */
+    public LocalDateTime getDataHoraAtivacaoLote() {
+        return dataHoraAtivacaoLote;
+    }
+
+    /**
+     * @param dataHoraAtivacaoLote the dataHoraAtivacaoLote to set
+     */
+    public void setDataHoraAtivacaoLote(LocalDateTime dataHoraAtivacaoLote) {
+        this.dataHoraAtivacaoLote = dataHoraAtivacaoLote;
+    }
+
+
+    /**
+     * @return LocalDateTime return the dataHoraChegadaLote
+     */
+    public LocalDateTime getDataHoraChegadaLote() {
+        return dataHoraChegadaLote;
+    }
+
+    /**
+     * @param dataHoraChegadaLote the dataHoraChegadaLote to set
+     */
+    public void setDataHoraChegadaLote(LocalDateTime dataHoraChegadaLote) {
+        this.dataHoraChegadaLote = dataHoraChegadaLote;
     }
 
 }

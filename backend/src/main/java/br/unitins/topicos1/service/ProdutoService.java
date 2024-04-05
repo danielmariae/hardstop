@@ -2,6 +2,7 @@ package br.unitins.topicos1.service;
 
 import java.util.List;
 
+import br.unitins.topicos1.dto.FornecedorResponseDTO;
 import br.unitins.topicos1.dto.PlacaMaeDTO;
 import br.unitins.topicos1.dto.PlacaMaeResponseDTO;
 import br.unitins.topicos1.dto.ProcessadorDTO;
@@ -63,7 +64,7 @@ public interface ProdutoService {
     List<ProdutoResponseDTO> findByAll(int page, int pageSize);
 
     // ENCONTRAR O FORNECEDOR DE UM PRODUTO ESTRAGADO
-    Fornecedor encontraFornecedor(ProdutoFornecedorPatch dto);
+    FornecedorResponseDTO encontraFornecedor(ProdutoFornecedorPatch dto);
 
     // CONTADOR:
     public long count();
