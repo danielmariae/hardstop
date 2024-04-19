@@ -1,4 +1,4 @@
-import { Produto } from "./Produto.model";
+import { Produto } from "./produto.model";
 import { Fornecedor } from "./fornecedor.model";
 import { Status } from "./loteStatus.model";
 

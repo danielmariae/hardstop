@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jrimum.domkee.pessoa.CEP;
-
-import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.EnderecoDTO;
@@ -50,7 +47,7 @@ public class LogisticaServiceImpl implements LogisticaService {
                 endereco.setNumeroLote(end.numeroLote());
                 endereco.setBairro(end.bairro());
                 endereco.setComplemento(end.complemento());
-                endereco.setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
+                endereco.setCep(end.cep());
                 endereco.setLocalidade(end.localidade());
                 endereco.setUF(end.uf());
                 endereco.setPais(end.pais());
@@ -120,7 +117,7 @@ public class LogisticaServiceImpl implements LogisticaService {
                         endereco.setNumeroLote(end1.numeroLote());
                         endereco.setBairro(end1.bairro());
                         endereco.setComplemento(end1.complemento());
-                        endereco.setCep(new CEP(EnderecoFormatador.formataCep(end1.cep().getCep())));
+                        endereco.setCep(end1.cep());
                         endereco.setLocalidade(end1.localidade());
                         endereco.setUF(end1.uf());
                         endereco.setPais(end1.pais());

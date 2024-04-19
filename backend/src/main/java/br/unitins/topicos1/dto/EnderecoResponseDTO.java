@@ -1,6 +1,5 @@
 package br.unitins.topicos1.dto;
 
-import org.jrimum.domkee.pessoa.CEP;
 
 import br.unitins.topicos1.model.Endereco;
 
@@ -11,7 +10,7 @@ public record EnderecoResponseDTO(
   String numeroLote,
   String bairro,
   String complemento,
-  CEP cep,
+  String cep,
   String localidade,
   String uf,
   String pais

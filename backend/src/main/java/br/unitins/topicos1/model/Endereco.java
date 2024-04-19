@@ -1,6 +1,5 @@
 package br.unitins.topicos1.model;
 
-import org.jrimum.domkee.pessoa.CEP;
 import org.jrimum.domkee.pessoa.UnidadeFederativa;
 
 import jakarta.persistence.Column;
@@ -18,7 +17,7 @@ public class Endereco extends DefaultEntity {
   private String bairro;
   private String complemento;
   @Column(name = "cep")
-  private CEP cep;
+  private String cep;
   private String localidade;
   @Enumerated(EnumType.STRING)
   private UnidadeFederativa uf;
@@ -65,11 +64,11 @@ public class Endereco extends DefaultEntity {
     this.complemento = complemento;
   }
 
-  public CEP getCep() {
+  public String getCep() {
     return cep;
   }
 
-  public void setCep(CEP cep) {
+  public void setCep(String cep) {
     this.cep = cep;
   }
 

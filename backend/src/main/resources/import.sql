@@ -21,21 +21,21 @@ $$; */
 
 insert into empresa (nomeReal, nomeFantasia, nomeResponsavel, cnpj, cpf, chavePixAleatoria, email, nomeBanco, codigoBanco, numeroConta, numeroAgencia, isEmpresa) values('Leandro Armações Ilimitadas Ltda', 'LAILPALMAS', 'Leandro Guimarães Garcia', '81.478.733/0001-38', '73522652363', 'a87a052f-64f7-4496-9399-8f898c416f28', 'leocid25@gmail.com', 'Banco do Brasil', '001', '124911-8', '1867-8', 'true');
 
-insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Katia de Ruim', 'Barão de Cotegipe', '15', 'Sul', 'Perto da igreja Assembléia', '64532098', 'Rialma', 'GO', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Katia de Ruim', 'Barão de Cotegipe', '15', 'Sul', 'Perto da igreja Assembléia', '64532-098', 'Rialma', 'GO', 'Brasil');
 
-insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Flávio de Boa', 'Palmares da Cruz', '88', 'Norte', 'Perto do supermercado Real', '38432422', 'Ponte Alta', 'TO', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Flávio de Boa', 'Palmares da Cruz', '88', 'Norte', 'Perto do supermercado Real', '38432-422', 'Ponte Alta', 'TO', 'Brasil');
 
-insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('.Net.Com', 'Aida Aguiar',  '18', 'Santa Efigênia', 'Proximo Açai', '77532043', 'Sao Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('.Net.Com', 'Aida Aguiar',  '18', 'Santa Efigênia', 'Proximo Açai', '77532-043', 'Sao Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Arruda de Alencar', 'Martins Pontes', '55', 'Butantã', 'Sul', '73828382', 'Sao Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Arruda de Alencar', 'Martins Pontes', '55', 'Butantã', 'Sul', '73828-382', 'Sao Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Marta de Cesare', 'dos Potiguares', '567', 'Anhangabaú', 'Centro', '70987213', 'Sao Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Marta de Cesare', 'dos Potiguares', '567', 'Anhangabaú', 'Centro', '70987-213', 'Sao Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Mãe da Katia de Ruim', 'Sermão de mãe', '58', 'Oeste', 'Ao lado da igreja do Véu', '73245787', 'Araraquara', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Mãe da Katia de Ruim', 'Sermão de mãe', '58', 'Oeste', 'Ao lado da igreja do Véu', '73245-787', 'Araraquara', 'SP', 'Brasil');
 
-insert into endereco (nome, logradouro, numerolote, bairro, cep, localidade, uf, pais) values('Leandro Armações Ilimitadas Ltda', 'rua dos Guaytacazes', '1000', 'Santa Efigênia', '77226654', 'Sao Paulo', 'SP', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, cep, localidade, uf, pais) values('Leandro Armações Ilimitadas Ltda', 'rua dos Guaytacazes', '1000', 'Santa Efigênia', '77226-654', 'Sao Paulo', 'SP', 'Brasil');
 
-insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('.Hardware.Com', 'Gal Costa',  '374', 'das Acacias', 's/c', '76093120', 'Brasilia', 'DF', 'Brasil');
+insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('.Hardware.Com', 'Gal Costa',  '374', 'das Acacias', 's/c', '76093-120', 'Brasilia', 'DF', 'Brasil');
 
 -- ## Clientes ##
 -- senha 123VaA_

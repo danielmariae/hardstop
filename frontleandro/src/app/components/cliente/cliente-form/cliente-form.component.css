@@ -1,4 +1,19 @@
-.centralizador
-{
+
+.centralizador{
     text-align: center;
+}
+
+/* Estilizando o campo de entrada de data */
+input[type="date"] {
+    /* Define a largura do campo */
+    width: 100%;
+    /* Adicione outros estilos conforme necessário */
+  }
+ 
+#seletor-especial{
+    width: max-content;
+    max-width: max-content;
+    display: inline-flex;
+    justify-content: flex-start;
+
 }

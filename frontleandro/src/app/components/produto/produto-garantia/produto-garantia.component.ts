@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators, For
 import { LoteService } from '../../../services/lote.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavigationService } from '../../../services/navigation.service';
-import { Produto } from '../../../models/Produto.model';
+import { Produto } from '../../../models/produto.model';
 import { ProdutoService } from '../../../services/produto.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SessionTokenService } from '../../../services/session-token.service';

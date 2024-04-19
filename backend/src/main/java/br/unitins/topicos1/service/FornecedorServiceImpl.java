@@ -1,6 +1,5 @@
 package br.unitins.topicos1.service;
 
-import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.Formatadores.FornLogFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
@@ -14,7 +13,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import org.jrimum.domkee.pessoa.CEP;
 import org.postgresql.util.PSQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +48,7 @@ public class FornecedorServiceImpl implements FornecedorService {
                 endereco.setNumeroLote(end.numeroLote());
                 endereco.setBairro(end.bairro());
                 endereco.setComplemento(end.complemento());
-                endereco.setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
+                endereco.setCep(end.cep());
                 endereco.setLocalidade(end.localidade());
                 endereco.setUF(end.uf());
                 endereco.setPais(end.pais());
@@ -114,7 +112,7 @@ public class FornecedorServiceImpl implements FornecedorService {
                         endereco.setNumeroLote(end1.numeroLote());
                         endereco.setBairro(end1.bairro());
                         endereco.setComplemento(end1.complemento());
-                        endereco.setCep(new CEP(EnderecoFormatador.formataCep(end1.cep().getCep())));
+                        endereco.setCep(end1.cep());
                         endereco.setLocalidade(end1.localidade());
                         endereco.setUF(end1.uf());
                         endereco.setPais(end1.pais());

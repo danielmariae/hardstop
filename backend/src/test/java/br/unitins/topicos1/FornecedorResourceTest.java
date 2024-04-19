@@ -17,7 +17,6 @@ import static org.hamcrest.Matchers.equalTo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jrimum.domkee.pessoa.CEP;
 import org.jrimum.domkee.pessoa.UnidadeFederativa;
 
 @QuarkusTest
@@ -28,7 +27,7 @@ public class FornecedorResourceTest{
        public void testFornecedorDTO() {
 
        List<EnderecoDTO> enderecos = new ArrayList<>();
-       enderecos.add(new EnderecoDTO("Endereço 1", "605 Sul Alameda 24 QI 14", "Lote 16", "Plano Diretor Sul", "Casa de Esquina na Rua Principal", new CEP("77016-446"), "Palmas", UnidadeFederativa.TO, "Brasil"));
+       enderecos.add(new EnderecoDTO("Endereço 1", "605 Sul Alameda 24 QI 14", "Lote 16", "Plano Diretor Sul", "Casa de Esquina na Rua Principal", "77016-446", "Palmas", UnidadeFederativa.TO, "Brasil"));
        List<TelefoneDTO> telefones = new ArrayList<>();
        telefones.add(new TelefoneDTO(1, "63", "99963-2459"));
 

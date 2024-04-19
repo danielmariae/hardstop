@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ClienteService } from '../../../services/cliente.service';
-import { Cliente } from '../../../models/cliente.model';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Cliente } from '../../../models/cliente.model';
+import { ClienteService } from '../../../services/cliente.service';
 import { NavigationService } from '../../../services/navigation.service';
+import { validarSenhaUpdate } from '../../../validators/update-senha-validator';
 
 
 @Component({
@@ -41,14 +41,13 @@ export class ClienteEditComponent implements OnInit {
       cpf: [''],
       sexo: [''],
       login: [''],
-      senha: [''],
+      senha: this.formBuilder.control('',validarSenhaUpdate()),
       email: [''],
       telefones: this.formBuilder.array([]),
       enderecos: this.formBuilder.array([]),
   });
 }
-
-  ngOnInit(): void {
+ngOnInit(): void {
 
     this.id = Number(this.route.snapshot.paramMap.get('id'));
     //this.enderecoAnterior = this.navigationService
@@ -70,7 +69,7 @@ export class ClienteEditComponent implements OnInit {
           // Inserindo valores nos campos de nome, cnpj e endSite
           this.clienteForm.patchValue({
             nome: cliente.nome,
-            dataNascimento: cliente.dataNascimento,
+            dataNascimento: this.formatarData(cliente.dataNascimento),
             cpf: cliente.cpf,
             sexo: cliente.sexo,
             login: cliente.login,
@@ -112,6 +111,12 @@ adicionarTelefone(telefone?: any): void {
 removerTelefone(index: number): void {
   this.telefones.removeAt(index);
 }
+
+formatarData(data: string): string {
+  const partesData = data.split('-');
+  return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+}
+
 
 get enderecos(): FormArray {
   return this.clienteForm.get('enderecos') as FormArray;

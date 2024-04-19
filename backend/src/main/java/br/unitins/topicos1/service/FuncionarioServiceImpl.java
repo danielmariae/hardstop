@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jrimum.domkee.pessoa.CEP;
-
-import br.unitins.topicos1.Formatadores.EnderecoFormatador;
 import br.unitins.topicos1.Formatadores.FuncionarioFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
@@ -135,7 +132,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         listaEndereco.setNumeroLote(func.listaEndereco().numeroLote());
         listaEndereco.setBairro(func.listaEndereco().bairro());
         listaEndereco.setComplemento(func.listaEndereco().complemento());
-        listaEndereco.setCep(new CEP(EnderecoFormatador.formataCep(func.listaEndereco().cep().getCep())));
+        listaEndereco.setCep(func.listaEndereco().cep());
         listaEndereco.setLocalidade(func.listaEndereco().localidade());
         listaEndereco.setUF(func.listaEndereco().uf());
         listaEndereco.setPais(func.listaEndereco().pais());
@@ -252,7 +249,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         funcionario.getEndereco().setLogradouro(end.logradouro());
         funcionario.getEndereco().setNumeroLote(end.numeroLote());
         funcionario.getEndereco().setBairro(end.bairro());
-        funcionario.getEndereco().setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
+        funcionario.getEndereco().setCep(end.cep());
         funcionario.getEndereco().setComplemento(end.complemento());
         funcionario.getEndereco().setLocalidade(end.localidade());
         funcionario.getEndereco().setUF(end.uf());
@@ -278,7 +275,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     listaEndereco.setNumeroLote(end.numeroLote());
     listaEndereco.setBairro(end.bairro());
     listaEndereco.setComplemento(end.complemento());
-    listaEndereco.setCep(new CEP(EnderecoFormatador.formataCep(end.cep().getCep())));
+    listaEndereco.setCep(end.cep());
     listaEndereco.setLocalidade(end.localidade());
     listaEndereco.setUF(end.uf());
     listaEndereco.setPais(end.pais());
@@ -320,7 +317,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     listaEndereco.setNumeroLote(dto.listaEndereco().numeroLote());
     listaEndereco.setBairro(dto.listaEndereco().bairro());
     listaEndereco.setComplemento(dto.listaEndereco().complemento());
-    listaEndereco.setCep(new CEP(EnderecoFormatador.formataCep(dto.listaEndereco().cep().getCep())));
+    listaEndereco.setCep(dto.listaEndereco().cep());
     listaEndereco.setLocalidade(dto.listaEndereco().localidade());
     listaEndereco.setUF(dto.listaEndereco().uf());
     listaEndereco.setPais(dto.listaEndereco().pais());

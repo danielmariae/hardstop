@@ -12,7 +12,6 @@ import br.unitins.topicos1.dto.ProdutoFornecedorPatch;
 import br.unitins.topicos1.dto.ProdutoPatchDTO;
 import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.model.Classificacao;
-import br.unitins.topicos1.model.Fornecedor;
 import br.unitins.topicos1.model.Produto;
 
 

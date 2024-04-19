@@ -1,10 +1,10 @@
 package br.unitins.topicos1.dto;
 
-import org.jrimum.domkee.pessoa.CEP;
 import org.jrimum.domkee.pessoa.UnidadeFederativa;
 
 import br.unitins.topicos1.model.Endereco;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 public record EnderecoFuncPatchDTO(
   Long id,
@@ -16,7 +16,9 @@ public record EnderecoFuncPatchDTO(
   String bairro,
   @NotBlank(message = "O campo complemento não pode ser nulo.")
   String complemento,
-  CEP cep,
+  @NotBlank(message = "O campo não pode ser nulo.")
+  @Pattern(regexp = "(\\d{5}-\\d{3})")
+  String cep,
   @NotBlank(message = "O campo municipio não pode ser nulo.")
   String localidade,
   UnidadeFederativa uf,

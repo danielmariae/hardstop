@@ -24,6 +24,7 @@
     "@angular/router": "^17.1.0",
     "angular-ng-autocomplete": "^2.0.12",
     "bulma": "^1.0.0",
+    "ngx-mask": "^17.0.7",
     "rxjs": "~7.8.0",
     "sass": "^1.72.0",
     "tslib": "^2.3.0",
