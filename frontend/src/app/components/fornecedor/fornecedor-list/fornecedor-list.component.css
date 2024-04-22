@@ -1,3 +1,19 @@
+.autocomplete-container {
+  position: absolute;
+  top: 5px; /* Ajuste conforme necessário */
+  left: 10px; /* Ajuste conforme necessário */
+}
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
 .toolbar-title {
     flex: 1;
     text-align: center;
@@ -6,6 +22,7 @@
   .flex-container {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* Isso garante que o título e o botão permaneçam no canto esquerdo */
     width: 100%;
   }
   
@@ -16,7 +33,7 @@
     text-align: center;
   }
   .mat-column-nomeFantasia {
-    width: 100%;
+    width: 20%;
   }
   .mat-column-cnpj {
     text-align: center;
@@ -28,7 +45,7 @@
   }
   .mat-column-endereco {
     text-align: center;
-    min-width: 5em;
+    width: 20%;
   }
   .mat-column-telefone {
     text-align: center;
