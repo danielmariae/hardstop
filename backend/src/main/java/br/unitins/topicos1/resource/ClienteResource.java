@@ -5,6 +5,7 @@ import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import br.unitins.topicos1.application.ErrorTP1;
 import br.unitins.topicos1.dto.ClienteDTO;
+import br.unitins.topicos1.dto.ClienteNSDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.PatchCpfDTO;
@@ -332,6 +333,15 @@ FileService fileService;
   @RolesAllowed({"Func", "Admin"})
   public Response updateCliente(@Valid ClienteDTO dto, @PathParam("id") Long id) {
     service.updateCliente(dto, id);
+    return Response.status(Status.NO_CONTENT).build();
+  }
+
+  @PUT
+  @Transactional
+  @Path("ns/{id}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response updateClienteNS(@Valid ClienteNSDTO dto, @PathParam("id") Long id) {
+    service.updateClienteNS(dto, id);
     return Response.status(Status.NO_CONTENT).build();
   }
 }

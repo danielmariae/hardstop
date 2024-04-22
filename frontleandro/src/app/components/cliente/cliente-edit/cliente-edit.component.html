@@ -1,4 +1,4 @@
-<h1 class="title is-1 centralizador">Alterar cadastro de cliente</h1>
+<h1 class="title is-1 centralizador">Editar dados do cliente #{{cliente.id}}</h1>
   <form [formGroup]="clienteForm" (ngSubmit)="salvarAlteracoes()">
     <div class="container box">
     <h2 class="title is-3"> Dados pessoais </h2>
@@ -64,7 +64,7 @@
       </div>
       <div class="column">
         <label class="field label" for="senha">Senha:</label>
-        <input class="control input" type="password" id="senha" formControlName="senha">
+        <input class="control input" type="password" id="senha" formControlName="senha" placeholder="Deixe em branco para manter">
         <div *ngIf="clienteForm.get('senha')?.invalid && clienteForm.get('senha')?.touched">
           <p style="font-weight: bold" class="help is-danger">Essa senha está fraca ou nula. Por favor, verificar padrão correto:</p>
           <p class="help is-danger">Pelo menos 1 letra maiúscula, 1 letra minúscula, 1 dígito, 1 caractere especial. Entre 6 a 10 caracteres.</p>
@@ -95,14 +95,11 @@
                   </select>
               </div>
               </div>
-              <div class="column">
-                <label class="field label">Ação</label>
-                <div class="button is-default is-danger">
-                <button type="button" (click)="removerTelefone(i)">Remover</button>
-                </div>
-              </div>
         </div>
-        <br>
+        <div class="button is-default is-danger">
+          <button type="button" (click)="removerTelefone(i)">Remover</button>
+        </div>  
+        <br><br>
       </div>
       <div class="button is-primary is-default">
       <button type="button" (click)="adicionarTelefone()">Adicionar telefone</button>
@@ -118,74 +115,75 @@
       <div *ngFor="let endereco of enderecos.controls; let i = index" [formGroupName]="i">
         <div class="columns">
           <div class="column">
-            <label class="field label">Nome:</label>
-            <input class="control input" formControlName="nome" placeholder="Nome">
-          </div>
-          <div class="column">
-            <label class="field label">Logradouro:</label>
-            <input class="control input" formControlName="logradouro" placeholder="Logradouro">
+            <label class="field label">Nome do endereço:</label>
+            <input class="control input" formControlName="nome" placeholder="Nome para este endereço:">
           </div>
           <div class="column is-one-quarter">
-            <label class="field label">Número/Lote: </label>
-            <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
-          </div>
-          </div>
+            <label class="field label">CEP:</label>
+            <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
+            <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
+              <p class="help is-danger">CEP inválido.</p>    
+            </div>    
+          </div>  
+        </div>
           <div class="columns">
             <div class="column">
-              <label class="field label">Bairro: </label>
-              <input class="control input" formControlName="bairro" placeholder="Bairro">
+              <label class="field label">Logradouro:</label>
+              <input class="control input" formControlName="logradouro" placeholder="Logradouro (será preenchido automaticamente)"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column is-one-fifth">
+              <label class="field label">Número/Lote: </label>
+              <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
             </div>
             <div class="column">
               <label class="field label">Complemento: </label>
               <input class="control input" formControlName="complemento" placeholder="Complemento">
             </div>
-            </div>
-            <div class="columns" [formGroupName]="'cep'">
-                <div class="column">
-                  <label class="field label">CEP Prefixo:</label>
-                  <input class="control input" formControlName="prefixo" placeholder="CEP Prefixo">
-                </div>
-                <div class="column">
-                  <label class="field label">CEP Sufixo:</label>
-                  <input class="control input" formControlName="sufixo" placeholder="CEP Sufixo">
-                </div>
-                <div class="column">
-                  <label class="field label">CEP:</label>
-                  <input class="control input" formControlName="cep" placeholder="CEP">
-                </div>  
           </div>
           <div class="columns">
             <div class="column">
-              <label class="field label">Localidade</label>
-              <input class="control input" formControlName="localidade" placeholder="Localidade">
+              <label class="field label">Bairro: </label>
+              <input class="control input" formControlName="bairro" placeholder="Bairro" [disabled]="!endereco.get('cepInvalido')?.value" readonly>
             </div>
             <div class="column">
+              <label class="field label">Localidade:</label>
+              <input class="control input" formControlName="localidade" placeholder="Localidade" [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+            <div class="column is-one-fifth">
               <label class="field label">UF:</label>
-              <div class="select">
-                <select formControlName="uf">
-                  <option disabled selected value="">Selecione um Estado</option>
-                  <option *ngFor="let ufs of uf" [value]="ufs.sigla">{{ ufs.nome }}</option>
-                </select>  
-              </div>
+              <input class="control input" formControlName="uf" placeholder="UF"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
             </div>
             <div class="column">
-              <label class="field label">País</label>
-              <input class="control input" formControlName="pais" placeholder="País">
-            </div>
-            <div class="column">                
-              <label class="field label">Ação</label>
-              <div class="button is-default is-danger">
-                <button type="button" (click)="removerEndereco(i)">Remover</button>      
-              </div>
+              <label class="field label">País:</label>
+              <input class="control input" formControlName="pais" placeholder="País"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
             </div>
           </div>
+          <div class="columns">
+            <div class="column">
+              <div class="notification is-info">
+                Os dados de Logradouro, Bairro, Localidade, UF e País são preenchidos com base no seu CEP. Caso tenha alguma dificuldade, busque seu CEP através do site: <a target="_blank" href='https://buscacepinter.correios.com.br/app/endereco/index.php' >Busca CEP (dos correios)</a>
+              </div>              
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">                
+              <div class="button is-default is-danger">
+                <button type="button" (click)="removerEndereco(i)">Remover endereço</button>      
+              </div>
+              <br><br>
+            </div>
+          </div>
+          </div>
       </div>
+      <div class="button is-primary is-default">
+        <button type="button" (click)="adicionarEndereco()">Adicionar endereço</button>
+       </div>
     </div>
-    <br>
-    <div class="button is-primary is-default">
-     <button type="button" (click)="adicionarEndereco()">Adicionar Endereço</button>
-    </div>
-  </div>
 
   <!--
     <button type="submit" [disabled]="fornecedorForm.invalid">Salvar</button>

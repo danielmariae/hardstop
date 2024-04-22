@@ -42,9 +42,9 @@
       <tr *ngFor="let cliente of clientes">
         <td>{{ cliente.id }}</td>
         <td>{{ cliente.nome }}</td>
-        <td>{{ cliente.cpf }}</td>
-        <td>{{ cliente.dataNascimento }}</td>
-        <td>{{ cliente.sexo }}</td>
+        <td>{{ formatarCPF(cliente.cpf) }}</td>
+        <td>{{ formatarData(cliente.dataNascimento) }}</td>
+        <td>{{ formatarSexo(cliente.sexo) }}</td>
         <td>{{ cliente.email }}</td>
         <td>
           <button (click)="selecionarCliente(cliente)"><span class="icon is-small"><i class="mdi mdi-information"></i></span></button>

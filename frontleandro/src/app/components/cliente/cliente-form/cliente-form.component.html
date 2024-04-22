@@ -22,7 +22,7 @@
       </div>
       <div class="column">
         <label class="field label">Data de Nascimento:</label>
-        <input class="control input" type="text" inputmode="numerifc" id="dataNascimento" mask="00/00/0000" placeholder="Ex.: 01/01/2001" formControlName="dataNascimento">
+        <input class="control input" type="text" inputmode="numeric" id="dataNascimento" mask="00/00/0000" placeholder="Ex.: 01/01/2001" formControlName="dataNascimento">
         <div *ngIf="clienteForm.get('dataNascimento')?.hasError('idadeInvalida') && clienteForm.get('dataNascimento')?.touched">
           <p class="help is-danger">Cliente deve ter mais de 18 anos.</p>
         </div>
@@ -31,14 +31,17 @@
         </div>
       </div>
       <div class="column">
-        <label class="field label" formControlName="sexo">Sexo:</label>
+        <label class="field label">Sexo:</label>
         <div class="select" id="seletor-especial">
-          <select >
+          <select formControlName="sexo">
             <option disabled selected value=" ">Selecione um sexo:ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</option>
             <option value="M">Masculino</option>
             <option value="F">Feminino</option>
             <option value="O">Outros</option>
           </select>
+        </div>
+        <div *ngIf="clienteForm.get('sexo')?.hasError('required') && clienteForm.get('sexo')?.touched">
+          <p class="help is-danger">Por favor, escolha um sexo.</p>
         </div>
       </div>
     </div>
@@ -91,10 +94,11 @@
               </div>
               <div class="column">
                 <label class="field label">Selecione tipo de telefone:</label>
-                <div class="select" id="seletor-especial">
-                  <select formControlName="tipoTelefone">
+                <div class="select" > 
+                  <!-- id="seletor-especial" -->
+                  <select formControlName="tipo">
                     <option disabled selected value="">Selecione um tipo de telefone</option>
-                    <option *ngFor="let tipos of tiposTelefone" [value]="tipos.id">{{ tipos.descricao }}</option>
+                    <option *ngFor="let tipo of tiposTelefone" [value]="tipo.id">{{ tipo.descricao }}</option>
                   </select>
               </div>
               </div>
@@ -113,89 +117,89 @@
     </div>
     </div>
 
-    <br>
-    
     <div class="container box">
       <h2 class="title is-3">Endereços</h2>  
       <div formArrayName="enderecos">
       <div *ngFor="let endereco of enderecos.controls; let i = index" [formGroupName]="i">
         <div class="columns">
           <div class="column">
-            <label class="field label">Nome:</label>
-            <input class="control input" formControlName="nome" placeholder="Nome">
-          </div>
-          <div class="column">
-            <label class="field label">Logradouro:</label>
-            <input class="control input" formControlName="logradouro" placeholder="Logradouro">
+            <label class="field label">Nome do endereço:</label>
+            <input class="control input" formControlName="nome" placeholder="Nome para este endereço:">
           </div>
           <div class="column is-one-quarter">
-            <label class="field label">Número/Lote: </label>
-            <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
-          </div>
-          </div>
+            <label class="field label">CEP:</label>
+            <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
+            <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
+              <p class="help is-danger">CEP inválido.</p>    
+            </div>    
+          </div>  
+        </div>
           <div class="columns">
             <div class="column">
-              <label class="field label">Bairro: </label>
-              <input class="control input" formControlName="bairro" placeholder="Bairro">
+              <label class="field label">Logradouro:</label>
+              <input class="control input" formControlName="logradouro" placeholder="Logradouro (será preenchido automaticamente)"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column is-one-fifth">
+              <label class="field label">Número/Lote: </label>
+              <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
             </div>
             <div class="column">
               <label class="field label">Complemento: </label>
               <input class="control input" formControlName="complemento" placeholder="Complemento">
             </div>
-            </div>
-            <div class="columns" [formGroupName]="'cep'">
-                <div class="column">
-                  <label class="field label">CEP Prefixo:</label>
-                  <input class="control input" formControlName="prefixo" placeholder="CEP Prefixo">
-                </div>
-                <div class="column">
-                  <label class="field label">CEP Sufixo:</label>
-                  <input class="control input" formControlName="sufixo" placeholder="CEP Sufixo">
-                </div>
-                <div class="column">
-                  <label class="field label">CEP:</label>
-                  <input class="control input" formControlName="cep" placeholder="CEP">
-                </div>  
           </div>
           <div class="columns">
             <div class="column">
-              <label class="field label">Localidade</label>
-              <input class="control input" formControlName="localidade" placeholder="Localidade">
+              <label class="field label">Bairro: </label>
+              <input class="control input" formControlName="bairro" placeholder="Bairro" [disabled]="!endereco.get('cepInvalido')?.value" readonly>
             </div>
             <div class="column">
+              <label class="field label">Localidade:</label>
+              <input class="control input" formControlName="localidade" placeholder="Localidade" [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+            <div class="column is-one-fifth">
               <label class="field label">UF:</label>
-              <div class="select">
-                <select formControlName="uf">
-                  <option disabled selected value="">Selecione um Estado</option>
-                  <option *ngFor="let ufs of uf" [value]="ufs.sigla">{{ ufs.nome }}</option>
-                </select>  
-              </div>
+              <input class="control input" formControlName="uf" placeholder="UF"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
             </div>
             <div class="column">
-              <label class="field label">País</label>
-              <input class="control input" formControlName="pais" placeholder="País">
-            </div>
-            <div class="column">                
-              <label class="field label">Ação</label>
-              <div class="button is-default is-danger">
-                <button type="button" (click)="removerEndereco(i)">Remover</button>      
-              </div>
+              <label class="field label">País:</label>
+              <input class="control input" formControlName="pais" placeholder="País"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
             </div>
           </div>
+          <div class="columns">
+            <div class="column">
+              <div class="notification is-info">
+                Os dados de Logradouro, Bairro, Localidade, UF e País são preenchidos com base no seu CEP. Caso tenha alguma dificuldade, busque seu CEP através do site: <a target="_blank" href='https://buscacepinter.correios.com.br/app/endereco/index.php' >Busca CEP (dos correios)</a>
+              </div>              
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">                
+              <div class="button is-default is-danger">
+                <button type="button" (click)="removerEndereco(i)">Remover endereço</button>      
+              </div>
+              <br><br>
+            </div>
+          </div>
+          </div>
       </div>
+      <div class="button is-primary is-default">
+        <button type="button" (click)="adicionarEndereco()">Adicionar endereço</button>
+       </div>
     </div>
-    <div class="button is-primary is-default">
-     <button type="button" (click)="adicionarEndereco()">Adicionar Endereço</button>
-    </div>
-  </div>
+
 
   <!--
     <button type="submit" [disabled]="fornecedorForm.invalid">Salvar</button>
     -->
     <div class="container box">
       <div class="buttons">
-      <button class="button is-primary" type="submit">Salvar</button>
-  
+        <button class="button is-primary" type="submit">Salvar</button>
       <button class="button is-text" (click)="cancelarInsercao()">Cancelar</button>
     </div>
   </div> 

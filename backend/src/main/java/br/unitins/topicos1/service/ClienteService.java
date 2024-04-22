@@ -1,8 +1,10 @@
 package br.unitins.topicos1.service;
 
 
+import java.util.List;
+
 import br.unitins.topicos1.dto.ClienteDTO;
-import br.unitins.topicos1.dto.PatchSenhaDTO;
+import br.unitins.topicos1.dto.ClienteNSDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.DesejoResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
@@ -11,11 +13,9 @@ import br.unitins.topicos1.dto.PatchCpfDTO;
 import br.unitins.topicos1.dto.PatchEmailDTO;
 import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
+import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
-
-
-import java.util.List;
 
 public interface ClienteService {
   // Cadastra um novo cliente
@@ -23,6 +23,9 @@ public interface ClienteService {
 
   // Substitui todas as informações relacionadas a um cliente com determinado id
   public ClienteResponseDTO updateCliente(ClienteDTO dto, Long id);
+
+  // Substitui todas as informações relacionadas a um cliente com determinado id (exceto Senha)
+  public ClienteResponseDTO updateClienteNS(ClienteNSDTO dto, Long id);
 
   // Substitui algum dado de um telefone
   public ClienteResponseDTO updateTelefoneCliente(TelefonePatchDTO tel, Long id);
@@ -80,5 +83,6 @@ public interface ClienteService {
 
     // CONTADOR:
     public long count();
+
   
 }

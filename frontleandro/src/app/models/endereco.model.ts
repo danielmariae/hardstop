@@ -1,7 +1,6 @@
-import { CEP } from "./cep.model";
-
-
 type UnidadeFederativa = {}
+
+
 export class ListaEndereco{
     id!: number;
     nome!: string;
@@ -9,7 +8,7 @@ export class ListaEndereco{
     numeroLote!: string;
     bairro!: string;
     complemento!: string;
-    cep!: CEP;
+    cep!: string;
     localidade!: string;
     uf!: UnidadeFederativa;
     pais!: string;

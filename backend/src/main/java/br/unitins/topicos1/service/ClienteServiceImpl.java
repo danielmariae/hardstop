@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 import br.unitins.topicos1.Formatadores.ClienteFormatador;
 import br.unitins.topicos1.Formatadores.TelefoneFormatador;
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.ClienteDTO;
+import br.unitins.topicos1.dto.ClienteNSDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.DesejoResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
@@ -135,7 +135,72 @@ cliente.getListaProduto().clear();
     cliente.setCpf(ClienteFormatador.formataCpf(clt.cpf()));
     cliente.setSexo(clt.sexo());
     cliente.setLogin(clt.login());
-    cliente.setSenha(hashservice.getHashSenha(clt.senha()));
+
+    if(!clt.senha().isEmpty()){
+      cliente.setSenha(hashservice.getHashSenha(clt.senha()));
+    }else{
+        Cliente clienteNoBanco = repository.findById(id);
+        String senhaAtual = clienteNoBanco.getSenha();
+        cliente.setSenha(senhaAtual);
+    }
+    cliente.setEmail(clt.email());
+
+    int i = 0;
+    int j = 0;
+
+    for (Telefone tele1 : cliente.getListaTelefone()) {
+      i++;
+      j = 0;
+      for (TelefoneDTO tele : clt.listaTelefone()) {
+        j++;
+        if (i == j) {
+          tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
+          tele1.setDdd(tele.ddd());
+          tele1.setNumeroTelefone(
+            TelefoneFormatador.formataNumeroTelefone(tele.numeroTelefone())
+          );
+        }
+      }
+    }
+
+    int ie = 0;
+    int je = 0;
+
+    for (Endereco endereco : cliente.getListaEndereco()) {
+      ie++;
+      je = 0;
+      for (EnderecoDTO end1 : clt.listaEndereco()) {
+        je++;
+        if (ie == je) {
+          endereco.setNome(end1.nome());
+          endereco.setLogradouro(end1.logradouro());
+          endereco.setNumeroLote(end1.numeroLote());
+          endereco.setBairro(end1.bairro());
+          endereco.setComplemento(end1.complemento());
+          endereco.setCep(end1.cep());
+          endereco.setLocalidade(end1.localidade());
+          endereco.setUF(end1.uf());
+          endereco.setPais(end1.pais());
+        }
+      }
+    }
+
+    //repository.persist(cliente);
+    return ClienteResponseDTO.valueOf(cliente);
+  }
+
+  @Override
+  @Transactional
+  public ClienteResponseDTO updateClienteNS(ClienteNSDTO clt, Long id) {
+    Cliente cliente = repository.findById(id);
+
+    cliente.setNome(clt.nome());
+    cliente.setDataNascimento(
+      ClienteFormatador.formataDataNascimento(clt.dataNascimento())
+    );
+    cliente.setCpf(ClienteFormatador.formataCpf(clt.cpf()));
+    cliente.setSexo(clt.sexo());
+    cliente.setLogin(clt.login());
     cliente.setEmail(clt.email());
 
     int i = 0;
@@ -424,6 +489,7 @@ cliente.getListaProduto().clear();
       .map(p -> DesejoResponseDTO.valueOf(p))
       .toList();
   }
+
 
 
   @Override

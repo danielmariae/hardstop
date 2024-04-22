@@ -96,11 +96,30 @@ export class ClienteService {
   insert(cliente: Cliente): Observable<Cliente> {
 
     const headers = this.sessionTokenService.getSessionHeader();
+  // Remover o ID do cliente, já que ele será gerado automaticamente pelo servidor
+  const { id, ...clienteSemId } = cliente;
 
+  // Remover o ID de cada endereço
+  const enderecosSemId = clienteSemId.listaEndereco.map(endereco => {
+    const { id: enderecoId, ...enderecoSemId } = endereco;
+    return enderecoSemId;
+  });
 
-      console.log(cliente);
+  // Remover o ID de cada telefone
+  const telefonesSemId = clienteSemId.listaTelefone.map(telefone => {
+    const { id: telefoneId, ...telefoneSemId } = telefone;
+    return telefoneSemId;
+  });
+
+  // Montar o objeto cliente sem IDs nos endereços e telefones
+  const clienteSemIds = {
+    ...clienteSemId,
+    listaEndereco: enderecosSemId,
+    listaTelefone: telefonesSemId
+  };
+      console.log(clienteSemIds);
       // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-      return this.httpClient.post<Cliente>(this.baseUrl, cliente)
+      return this.httpClient.post<Cliente>(this.baseUrl, clienteSemId)
         .pipe(
           catchError(this.handleError)
         );
@@ -119,6 +138,26 @@ export class ClienteService {
         );
     } else {
       return this.httpClient.put<Cliente>(url, cliente)
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+  }
+
+  updateNS(cliente: Cliente, id: number): Observable<Cliente> {
+
+    const headers = this.sessionTokenService.getSessionHeader();
+    const url = `${this.baseUrl}/ns/${id}`; // Concatena o ID à URL base
+
+    const { senha, ...clienteSemSenha } = cliente;
+
+    if (headers) {
+      return this.httpClient.put<Cliente>(url, clienteSemSenha, { headers })
+        .pipe(
+          catchError(this.handleError)
+        );
+    } else {
+      return this.httpClient.put<Cliente>(url, clienteSemSenha)
         .pipe(
           catchError(this.handleError)
         );
