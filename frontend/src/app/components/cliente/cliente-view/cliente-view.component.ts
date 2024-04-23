@@ -136,6 +136,23 @@ formatarCPF(cpf: string): string {
   }
 }
 
+formatarTelefone(telefone: string): string {
+  // Remove todos os caracteres não numéricos
+  const telefoneDigits = telefone.replace(/\D/g, '');
+
+  // Verifica se o telefone possui 10 ou 11 dígitos
+  if (telefoneDigits.length === 10) {
+    // Formata o telefone no formato para telefones fixos (0000-0000)
+    return telefoneDigits.replace(/(\d{4})(\d{4})/, '$1-$2');
+  } else if (telefoneDigits.length === 11) {
+    // Formata o telefone no formato para celulares (00000-0000)
+    return telefoneDigits.replace(/(\d{5})(\d{4})/, '$1-$2');
+  } else {
+    // Retorna o telefone original se não possuir 10 ou 11 dígitos
+    return telefone;
+  }
+}
+
 
 get enderecos(): FormArray {
   return this.clienteForm.get('enderecos') as FormArray;

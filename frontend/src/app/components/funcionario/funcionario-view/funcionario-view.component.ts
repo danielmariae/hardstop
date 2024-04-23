@@ -8,6 +8,7 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NavigationService } from '../../../services/navigation.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
+import { formatarDataNascimento } from '../../../converters/date-converter';
 
 
 @Component({
@@ -90,8 +91,8 @@ funcionarios: any;
           // Inserindo valores nos campos de nome, cnpj e endSite
           this.funcionarioForm.patchValue({
             nome: funcionario.nome,
-            dataNascimento: funcionario.dataNascimento,
-            cpf: funcionario.cpf,
+            dataNascimento: this.formatarData(funcionario.dataNascimento),
+            cpf: this.formatarCPF(funcionario.cpf),
             sexo: funcionario.sexo,
             idperfil: funcionario.idperfil,
             login: funcionario.login,
@@ -102,8 +103,10 @@ funcionarios: any;
 
           // Populando o FormArray com os dados existentes de funcionario.listaTelefone
           funcionario.listaTelefone.forEach(telefone => {
+            telefone.numeroTelefone = this.formatarTelefone(telefone.numeroTelefone);
             this.adicionarTelefone(telefone);
-          });
+          }
+        );
           
           console.log(this.funcionario);
         });
@@ -130,12 +133,14 @@ get telefones(): FormArray {
 }
 
 adicionarTelefone(telefone?: any): void {
+  const numeroTelefoneFormatado = telefone ? this.formatarTelefone(telefone.numeroTelefone) : '';
+
   const telefoneFormGroup = this.formBuilder.group({
     ddd: [telefone ? telefone.ddd : ''],
-    numeroTelefone: [telefone ? telefone.numeroTelefone : ''],
+    numeroTelefone: [numeroTelefoneFormatado],
     tipo: [telefone ? telefone.tipo : '']
   });
-
+  
   this.telefones.push(telefoneFormGroup);
 }
 
@@ -212,6 +217,44 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
       return cep; // Retorna o CEP original se não possuir 8 dígitos
     }
   }
+
+  formatarData(data: string): string {
+    const partesData = data.split('-');
+    return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+  }
+  
+  formatarCPF(cpf: string): string {
+    // Remove todos os caracteres não numéricos
+    const cpfDigits = cpf.replace(/\D/g, '');
+  
+    // Verifica se o CPF possui 11 dígitos
+    if (cpfDigits.length === 11) {
+      // Formata o CPF no formato desejado
+      return cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    } else {
+      // Retorna o CPF original se não possuir 11 dígitos
+      return cpf;
+    }
+  }
+
+  formatarTelefone(telefone: string): string {
+    // Remove todos os caracteres não numéricos
+    const telefoneDigits = telefone.replace(/\D/g, '');
+  
+    // Verifica se o telefone possui 10 ou 11 dígitos
+    if (telefoneDigits.length === 10) {
+      // Formata o telefone no formato para telefones fixos (0000-0000)
+      return telefoneDigits.replace(/(\d{4})(\d{4})/, '$1-$2');
+    } else if (telefoneDigits.length === 11) {
+      // Formata o telefone no formato para celulares (00000-0000)
+      return telefoneDigits.replace(/(\d{5})(\d{4})/, '$1-$2');
+    } else {
+      // Retorna o telefone original se não possuir 10 ou 11 dígitos
+      return telefone;
+    }
+  }
+  
+  
 
   editarFuncionario(id: number): void {
     const enderecoEdicao: string = "funcionarios/edit/" + id.toString();

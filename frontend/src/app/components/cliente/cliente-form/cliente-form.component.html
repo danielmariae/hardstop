@@ -5,17 +5,17 @@
     <div class="columns">
       <div class="column">
       <label class="field label" for="nome">Nome:</label>
-      <input class="control input" type="text" id="nome" formControlName="nome">  
+      <input class="control input" type="text" id="nome" formControlName="nome"
+      placeholder="Insira aqui seu nome">  
       <div *ngIf="clienteForm.get('nome')?.hasError('required') && clienteForm.get('nome')?.touched">
         <p class="help is-danger">Campo obrigatório.</p>
       </div>
-
       </div>
     </div>
     <div class="columns">
       <div class="column">
           <label class="field label" for="cpf">CPF:</label>
-          <input class="control input" type="text" id="cpf" formControlName="cpf" inputmode="numeric" mask="000.000.000-00">
+          <input class="control input" type="numeric" id="cpf" formControlName="cpf" inputmode="numeric" mask="000.000.000-00">
           <div *ngIf="clienteForm.get('cpf')?.hasError('cpfInvalido') && clienteForm.get('cpf')?.touched">
             <p class="help is-danger">CPF inválido. Verifique se CPF está correto.</p>
           </div>
@@ -34,7 +34,7 @@
         <label class="field label">Sexo:</label>
         <div class="select" id="seletor-especial">
           <select formControlName="sexo">
-            <option disabled selected value=" ">Selecione um sexo:ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</option>
+            <option disabled selected value="">Selecione um sexo:ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</option>
             <option value="M">Masculino</option>
             <option value="F">Feminino</option>
             <option value="O">Outros</option>
@@ -86,7 +86,7 @@
             <div class="columns">
               <div class="column">
                 <label class="field label">DDD:</label>
-                <input class="control input" formControlName="ddd" placeholder="Insira o DDD sem parênteses">
+                <input class="control input" type="text" formControlName="ddd" placeholder="Insira o DDD sem parênteses" inputmode="numeric" mask="(00)" id="ddd">
               </div> 
               <div class="column">
                 <label class="field label">Número:</label>

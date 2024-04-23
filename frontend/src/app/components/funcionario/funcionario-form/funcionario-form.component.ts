@@ -1,24 +1,31 @@
-import { Funcionario } from '../../../models/funcionario.model';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators, FormControl } from '@angular/forms';
-import { FuncionarioService } from '../../../services/funcionario.service'; 
-import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { NavigationService } from '../../../services/navigation.service';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { Component } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { Funcionario } from '../../../models/funcionario.model';
+import { FuncionarioService } from '../../../services/funcionario.service';
+import { NavigationService } from '../../../services/navigation.service';
+import { cpfValidator } from '../../../validators/cpf-validator';
+import { dataValidator } from '../../../validators/data-validator';
+import { idadeValidator } from '../../../validators/idade-validator';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { formatarDataNascimento } from '../../../converters/date-converter';
 
 @Component({
   selector: 'app-funcionario',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, NgxMaskDirective],
   templateUrl: './funcionario-form.component.html',
-  styleUrl: './funcionario-form.component.css'
+  styleUrl: './funcionario-form.component.css',
+  providers: [provideNgxMask()]
 })
 export class FuncionarioFormComponent {
   errorMessage: string = '';
   funcionarioForm: FormGroup;
   tiposTelefone: any[];
+  tiposPerfil: any[];
   uf: any[];
 
   constructor(private formBuilder: FormBuilder, 
@@ -29,24 +36,60 @@ export class FuncionarioFormComponent {
     private viaCep: NgxViacepService) {
     this.tiposTelefone = [];
     this.uf = [];
+    this.tiposPerfil = [];
     // Inicializar funcionarioForm no construtor
     this.funcionarioForm = formBuilder.group({
-        nome: [''],
-        dataNascimento: [''],
-        cpf: [''],
-        sexo: [''],
-        login: [''],
-        senha: [''],
-        email: [''],
-        idperfil: [''],
+      nome: ['', Validators.required],
+      dataNascimento: this.formBuilder.control('',
+        {
+          validators: [
+            Validators.required,
+            Validators.pattern(/^(0[1-9]|[1-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/[0-9]{4}$/),
+            idadeValidator(),
+            dataValidator()
+          ]
+        }
+      ),
+      cpf: this.formBuilder.control('', {
+        validators: [
+          Validators.required, cpfValidator()
+        ],
+        nonNullable: true,
+      }),
+      sexo: this.formBuilder.control('', {
+        validators: [
+          Validators.required
+        ],
+        nonNullable: true,
+      }),
+        login: ['', Validators.required],
+        senha: this.formBuilder.control('', {
+          validators: [
+            Validators.required,
+            Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-[!“#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+).{6,10}$/)
+          ],
+          nonNullable: true,
+        }),
+        email: this.formBuilder.control('', {
+          validators: [
+            Validators.required,
+            Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')
+          ],
+          nonNullable: true,
+        }),
+        idperfil: this.formBuilder.control('', {
+          validators: [
+            Validators.required
+          ],
+          nonNullable: true,
+        }),
         telefones: this.formBuilder.array([]),
         endereco: this.formBuilder.group({
-          nome: ['', Validators.required],
           cep: ['', Validators.required],
           logradouro: [''],
-          numeroLote: [''],
+          numeroLote: ['', Validators.required],
+          complemento: ['', Validators.required],
           bairro: [''],
-          complemento: [''],
           localidade: [''],
           uf: [''],
           pais: [''],
@@ -70,6 +113,10 @@ export class FuncionarioFormComponent {
       this.tiposTelefone = data;
     });
 
+    this.funcionarioService.getTipoPerfil().subscribe(data => {
+      this.tiposPerfil = data;
+    })
+
     this.funcionarioService.getUF().subscribe(data => {
       this.uf = data;
     });
@@ -89,9 +136,9 @@ export class FuncionarioFormComponent {
 
   criarTelefoneFormGroup(): FormGroup {
     return this.formBuilder.group({
-      ddd: [''],
-      numeroTelefone: [''],
-      tipo: [null],
+      ddd: ['', Validators.required],
+      numeroTelefone: ['', Validators.pattern],
+      tipo: ['', Validators.required],
     });
   }
 
@@ -166,20 +213,41 @@ export class FuncionarioFormComponent {
     }
   }
 
+  formatarData(data: string): string {
+    const partesData = data.split('-');
+    return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+  }
+  
+  formatarCPF(cpf: string): string {
+    // Remove todos os caracteres não numéricos
+    const cpfDigits = cpf.replace(/\D/g, '');
+  
+    // Verifica se o CPF possui 11 dígitos
+    if (cpfDigits.length === 11) {
+      // Formata o CPF no formato desejado
+      return cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    } else {
+      // Retorna o CPF original se não possuir 11 dígitos
+      return cpf;
+    }
+  }
+  
   cancelarInsercao(): void {
     // Redireciona o usuário para a rota anterior
     this.navigationService.navigateTo('funcionarios');
 }
 
   salvarFuncionario(): void {
-    if (this.funcionarioForm.invalid) {
+    console.log(this.funcionarioForm.value.id)
+    if (this.funcionarioForm.errors) {
+      console.error('Formulário inválido. Por favor, corrigir campos incorretos.')
       return;
     }
 
     const novoFuncionario: Funcionario = {
       id: 0,
       nome: this.funcionarioForm.value.nome,
-      dataNascimento: this.funcionarioForm.value.dataNascimento,
+      dataNascimento: formatarDataNascimento(this.funcionarioForm.value.dataNascimento),
       cpf: this.funcionarioForm.value.cpf,
       sexo: this.funcionarioForm.value.sexo,
       idperfil: this.funcionarioForm.value.idperfil,

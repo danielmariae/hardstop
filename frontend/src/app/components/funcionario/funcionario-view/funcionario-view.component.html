@@ -21,7 +21,7 @@
           <label class="field label" formControlName="sexo">Sexo:</label>
           <div class="select" id="seletor-especial">
             <select formControlName="sexo">
-              <option disabled selected value=" ">Selecione um sexo:ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</option>
+              <option disabled selected value="">Selecione um sexo:ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</option>
               <option disabled value="M">Masculino</option>
               <option disabled value="F">Feminino</option>
               <option disabled value="O">Outros</option>
@@ -78,22 +78,16 @@
       </div>
       
       <div class="container box">
-        <h2 class="title is-3">Endereços</h2>  
+        <h2 class="title is-3">Endereço</h2>  
         <div formArrayName="endereco">
-            <div class="columns">
-              <div class="column">
-                <label class="field label">Nome do endereço:</label>
-                <input class="control input" readonly formControlName="nome" placeholder="Nome para este endereço:">
-              </div>
-              <div class="column is-one-quarter">
-                <label class="field label">CEP:</label>
-                <input class="control input" readonly formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
-                <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
-                  <p class="help is-danger">CEP inválido.</p>    
-                </div>    
-              </div>  
-            </div>
               <div class="columns">
+                <div class="column is-one-quarter">
+                  <label class="field label">CEP:</label>
+                  <input class="control input" readonly formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
+                  <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
+                    <p class="help is-danger">CEP inválido.</p>    
+                  </div>    
+                </div>  
                 <div class="column">
                   <label class="field label">Logradouro:</label>
                   <input class="control input" readonly formControlName="logradouro" placeholder="Logradouro (será preenchido automaticamente)"
