@@ -1,10 +1,12 @@
 import { Funcionario } from '../../../models/funcionario.model';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators, FormControl } from '@angular/forms';
 import { FuncionarioService } from '../../../services/funcionario.service'; 
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavigationService } from '../../../services/navigation.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { NgxViacepService } from '@brunoc/ngx-viacep';
 
 @Component({
   selector: 'app-funcionario',
@@ -19,14 +21,16 @@ export class FuncionarioFormComponent {
   tiposTelefone: any[];
   uf: any[];
 
-  constructor(private formBuilder: FormBuilder, private funcionarioService: FuncionarioService,
-    private router: Router, private activatedRoute: ActivatedRoute,
-    private navigationService: NavigationService) {
+  constructor(private formBuilder: FormBuilder, 
+    private funcionarioService: FuncionarioService,
+    private router: Router, 
+    private activatedRoute: ActivatedRoute,
+    private navigationService: NavigationService,
+    private viaCep: NgxViacepService) {
     this.tiposTelefone = [];
     this.uf = [];
     // Inicializar funcionarioForm no construtor
     this.funcionarioForm = formBuilder.group({
-        id: [null],
         nome: [''],
         dataNascimento: [''],
         cpf: [''],
@@ -34,10 +38,31 @@ export class FuncionarioFormComponent {
         login: [''],
         senha: [''],
         email: [''],
+        idperfil: [''],
         telefones: this.formBuilder.array([]),
-        endereco: this.formBuilder,
-        perfil: [''],
+        endereco: this.formBuilder.group({
+          nome: ['', Validators.required],
+          cep: ['', Validators.required],
+          logradouro: [''],
+          numeroLote: [''],
+          bairro: [''],
+          complemento: [''],
+          localidade: [''],
+          uf: [''],
+          pais: [''],
+          cepInvalido: [false],
+        }),
     });
+    
+    // Adicionar um observador para o campo de CEP
+    this.endereco.get('cep')?.valueChanges.pipe(
+        debounceTime(300), // Aguarda 300ms após a última mudança no campo
+        distinctUntilChanged() // Garante que a busca só será feita se o valor do campo for alterado
+          ).subscribe((cep: string | null) => {
+            if (cep !== null) {
+              this.atualizarEndereco(cep, this.endereco);
+              }
+    })
   }
   
   ngOnInit(): void {
@@ -64,38 +89,81 @@ export class FuncionarioFormComponent {
 
   criarTelefoneFormGroup(): FormGroup {
     return this.formBuilder.group({
-      id: [null],
       ddd: [''],
       numeroTelefone: [''],
       tipo: [null],
     });
   }
 
-  get enderecos(): FormArray {
-    return this.funcionarioForm.get('enderecos') as FormArray;
+  get endereco(): FormGroup {
+    return this.funcionarioForm.get('endereco') as FormGroup;
   }
 
-  adicionarEndereco(): void {
-    this.enderecos.push(this.criarEnderecoFormGroup());
+  // Método atualizarEndereco atualizado para receber apenas o CEP e o FormGroup:
+  atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
+    const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+
+    if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
+      this.viaCep.buscarPorCep(cepValue).subscribe({
+        next: (endereco) => {
+          if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
+            // Atualizando os valores do formulário com os dados do endereço
+            enderecoFormGroup.patchValue({
+              cep: this.formatarCep(endereco.cep),
+              logradouro: endereco.logradouro,
+              bairro: endereco.bairro,
+              localidade: endereco.localidade,
+              uf: endereco.uf,
+              pais: 'Brasil',
+              cepInvalido: false // Adiciona uma propriedade para indicar que o CEP é válido
+            });
+          } else {
+            // Limpar campos de endereço se o CEP não for válido
+            enderecoFormGroup.patchValue({
+              logradouro: null,
+              bairro: null,
+              localidade: null,
+              uf: null,
+              cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Erro ao buscar endereço por CEP:', error);
+          // Limpar campos de endereço em caso de erro na busca
+          enderecoFormGroup.patchValue({
+            logradouro: null,
+            bairro: null,
+            localidade: null,
+            uf: null,
+            cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+          });
+        }
+      });
+    } else {
+      // Limpar campos de endereço se o CEP não possuir 8 dígitos
+      enderecoFormGroup.patchValue({
+        logradouro: null,
+        bairro: null,
+        localidade: null,
+        uf: null,
+        cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+      });
+    }
   }
 
-  criarEnderecoFormGroup(): FormGroup {
-    return this.formBuilder.group({
-      id: [null],
-      nome: [''],
-      logradouro: [''],
-      numeroLote: [''],
-      bairro: [''],
-      complemento: [''],
-      cep: this.formBuilder.group({
-        prefixo: [''],
-        sufixo: [null],
-        cep: ['']
-      }),
-      localidade: [''],
-      uf: [null],
-      pais: ['']
-    });
+  // Método para converter o CEP para o formato desejado
+  formatarCep(cep: string): string {
+    // Remove caracteres não numéricos do CEP
+    const cepDigits = cep.replace(/\D/g, '');
+
+    // Verifica se o CEP possui 8 dígitos
+    if (cepDigits.length === 8) {
+      // Formata o CEP no formato desejado
+      return cepDigits.replace(/(\d{5})(\d{3})/, '$1-$2');
+    } else {
+      return cep; // Retorna o CEP original se não possuir 8 dígitos
+    }
   }
 
   cancelarInsercao(): void {
@@ -109,17 +177,17 @@ export class FuncionarioFormComponent {
     }
 
     const novoFuncionario: Funcionario = {
-      id: this.funcionarioForm.value.id,
+      id: 0,
       nome: this.funcionarioForm.value.nome,
       dataNascimento: this.funcionarioForm.value.dataNascimento,
       cpf: this.funcionarioForm.value.cpf,
       sexo: this.funcionarioForm.value.sexo,
+      idperfil: this.funcionarioForm.value.idperfil,
       login: this.funcionarioForm.value.login,
       senha: this.funcionarioForm.value.senha,
       email: this.funcionarioForm.value.email,
       listaTelefone: this.funcionarioForm.value.telefones,
-      listaEndereco: this.funcionarioForm.value.enderecos,
-      perfil: this.funcionarioForm.value.perfil
+      listaEndereco: this.funcionarioForm.value.endereco,
     };
 
     // Chamando o serviço para inserir o funcionario

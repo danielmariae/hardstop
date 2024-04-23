@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NavigationService } from '../../../services/navigation.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { NgxViacepService } from '@brunoc/ngx-viacep';
 
 
 @Component({
@@ -29,13 +31,14 @@ export class FuncionarioEditComponent implements OnInit {
     private router: Router,
     private funcionarioService: FuncionarioService,
     private formBuilder: FormBuilder,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private viaCep: NgxViacepService
   ) {
     this.tiposTelefone = [];
     this.uf = [];
     this.funcionario = new Funcionario(); // Inicialização no construtor
+
     this.funcionarioForm = formBuilder.group({
-      id: [null],
       nome: [''],
       dataNascimento: [''],
       cpf: [''],
@@ -43,11 +46,22 @@ export class FuncionarioEditComponent implements OnInit {
       login: [''],
       senha: [''],
       email: [''],
+      idperfil: [''],
       telefones: this.formBuilder.array([]),
-      listaEndereco: this.formBuilder,
-      perfil: ['']
+      endereco: this.formBuilder.group({
+        nome: ['', Validators.required],
+        cep: ['', Validators.required],
+        logradouro: [''],
+        numeroLote: [''],
+        bairro: [''],
+        complemento: [''],
+        localidade: [''],
+        uf: [''],
+        pais: [''],
+        cepInvalido: [false],
+      }),
   });
-}
+  }
 
   ngOnInit(): void {
 
@@ -67,32 +81,43 @@ export class FuncionarioEditComponent implements OnInit {
     if (this.id !== null) {
         this.funcionarioService.findById(this.id).subscribe(funcionario => {
           this.funcionario = funcionario;
-
           // Inserindo valores nos campos de nome, cnpj e endSite
           this.funcionarioForm.patchValue({
             nome: funcionario.nome,
             dataNascimento: funcionario.dataNascimento,
             cpf: funcionario.cpf,
             sexo: funcionario.sexo,
+            idperfil: funcionario.idperfil,
             login: funcionario.login,
             senha: funcionario.senha,
             email: funcionario.email,
-            perfil: funcionario.perfil,
-            listaEndereco: funcionario.listaEndereco,
+            endereco: funcionario.listaEndereco,
             });
 
           // Populando o FormArray com os dados existentes de funcionario.listaTelefone
           funcionario.listaTelefone.forEach(telefone => {
             this.adicionarTelefone(telefone);
           });
-
           
           console.log(this.funcionario);
         });
       } else {
         console.error('O parâmetro "id" não foi fornecido ou é inválido.');
       }
+
+      const cepControl = this.endereco.get('cep');
+      if (cepControl?.value !== '') {
+        cepControl?.valueChanges.pipe(
+          debounceTime(300), // Aguarda 300ms após a última mudança no campo
+          distinctUntilChanged() // Garante que a busca só será feita se o valor do campo for alterado
+        ).subscribe((cep: string | null) => {
+          if (cep !== null) {
+            this.atualizarEndereco(cep, this.endereco);
+          }
+        });
+
   }
+}
 
 get telefones(): FormArray {
   return this.funcionarioForm.get('telefones') as FormArray;
@@ -112,29 +137,75 @@ removerTelefone(index: number): void {
   this.telefones.removeAt(index);
 }
 
-get listaEndereco(): FormArray {
-  return this.funcionarioForm.get('listaEndereco') as FormArray;
+get endereco(): FormGroup {
+  return this.funcionarioForm.get('endereco') as FormGroup;
 }
 
-adicionarEndereco(endereco?: any): void {
-  const enderecoFormGroup = this.formBuilder.group({
-    nome: [endereco && endereco.nome ? endereco.nome : ''],
-    logradouro: [endereco && endereco.logradouro ? endereco.logradouro : ''],
-    numeroLote: [endereco && endereco.numeroLote ? endereco.numeroLote : ''],
-    bairro: [endereco && endereco.bairro ? endereco.bairro : ''],
-    complemento: [endereco && endereco.complemento ? endereco.complemento : ''],
-    cep: this.formBuilder.group({
-      prefixo: [endereco && endereco.cep && endereco.cep.prefixo ? endereco.cep.prefixo : ''],
-      sufixo: [endereco && endereco.cep && endereco.cep.sufixo ? endereco.cep.sufixo : ''],
-      cep: [endereco && endereco.cep && endereco.cep.cep ? endereco.cep.cep : '']
-    }),
-    localidade: [endereco && endereco.localidade ? endereco.localidade : ''],
-    uf: [endereco && endereco.uf ? endereco.uf : ''],
-    pais: [endereco && endereco.pais ? endereco.pais : ''],
-  });
+atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
+  const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
 
-  this.listaEndereco.push(enderecoFormGroup);
+  if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
+    this.viaCep.buscarPorCep(cepValue).subscribe({
+      next: (endereco) => {
+        if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
+          // Atualizando os valores do formulário com os dados do endereço
+          enderecoFormGroup.patchValue({
+            cep: this.formatarCep(endereco.cep),
+            logradouro: endereco.logradouro,
+            bairro: endereco.bairro,
+            localidade: endereco.localidade,
+            uf: endereco.uf,
+            pais: 'Brasil',
+            cepInvalido: false // Adiciona uma propriedade para indicar que o CEP é válido
+          });
+        } else {
+          // Limpar campos de endereço se o CEP não for válido
+          enderecoFormGroup.patchValue({
+            logradouro: null,
+            bairro: null,
+            localidade: null,
+            uf: null,
+            cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Erro ao buscar endereço por CEP:', error);
+        // Limpar campos de endereço em caso de erro na busca
+        enderecoFormGroup.patchValue({
+          logradouro: null,
+          bairro: null,
+          localidade: null,
+          uf: null,
+          cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+        });
+      }
+    });
+  } else {
+    // Limpar campos de endereço se o CEP não possuir 8 dígitos
+    enderecoFormGroup.patchValue({
+      logradouro: null,
+      bairro: null,
+      localidade: null,
+      uf: null,
+      cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+    });
+  }
 }
+
+  // Método para converter o CEP para o formato desejado
+  formatarCep(cep: string): string {
+    // Remove caracteres não numéricos do CEP
+    const cepDigits = cep.replace(/\D/g, '');
+
+    // Verifica se o CEP possui 8 dígitos
+    if (cepDigits.length === 8) {
+      // Formata o CEP no formato desejado
+      return cepDigits.replace(/(\d{5})(\d{3})/, '$1-$2');
+    } else {
+      return cep; // Retorna o CEP original se não possuir 8 dígitos
+    }
+  }
   
   cancelarEdicao(): void {
     // Redireciona o usuário para outra rota anterior
@@ -152,14 +223,15 @@ adicionarEndereco(endereco?: any): void {
       dataNascimento: this.funcionarioForm.value.dataNascimento,
       cpf: this.funcionarioForm.value.cpf,
       sexo: this.funcionarioForm.value.sexo,
+      idperfil: this.funcionarioForm.value.idperfil,
       login: this.funcionarioForm.value.login,
       senha: this.funcionarioForm.value.senha,
       email: this.funcionarioForm.value.email,
       listaTelefone: this.funcionarioForm.value.telefones,
-      listaEndereco: this.funcionarioForm.value.listaEndereco,
-      perfil: this.funcionarioForm.value.perfil
+      listaEndereco: this.funcionarioForm.value.endereco,
     };
     
+    // IMPLEMENTAR LÓGICA DE ATUALIZAR SEM SENHA NOVA
     // Lógica para salvar as alterações do funcionario
     this.funcionarioService.update(novoFuncionario, this.funcionario.id).subscribe({
       next: (response) => {

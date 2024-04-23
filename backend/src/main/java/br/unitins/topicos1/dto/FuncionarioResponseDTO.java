@@ -14,7 +14,7 @@ public record FuncionarioResponseDTO(
   String email,
   String nomeImagem,
   EnderecoResponseDTO listaEndereco,
-  Integer perfil,
+  Integer idperfil,
   List<TelefoneResponseDTO> listaTelefone
 ) {
   public static FuncionarioResponseDTO valueOf(Funcionario funcionario) {

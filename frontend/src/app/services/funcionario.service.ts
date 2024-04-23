@@ -96,16 +96,24 @@ export class FuncionarioService {
   insert(funcionario: Funcionario): Observable<Funcionario> {
 
     const headers = this.sessionTokenService.getSessionHeader();
+    // Remover o ID do cliente, já que ele será gerado automaticamente pelo servidor
+    const { id, ...funcionarioSemId } = funcionario;
 
 
-      console.log(funcionario);
+      console.log(funcionarioSemId);
       // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-      return this.httpClient.post<Funcionario>(this.baseUrl, funcionario)
+      if(headers){
+        return this.httpClient.post<Funcionario>(this.baseUrl, funcionarioSemId, { headers })
         .pipe(
           catchError(this.handleError)
         );
+      }else{
+        return this.httpClient.put<Funcionario>(this.baseUrl, funcionarioSemId)
+        .pipe(
+          catchError(this.handleError)
+        );
+      }
     }
-
   // Método para alterar uma única instância de Funcionario no banco de dados do servidor
   update(funcionario: Funcionario, id: number): Observable<Funcionario> {
 

@@ -79,7 +79,7 @@ funcionarios: any;
             senha: funcionario.senha,
             email: funcionario.email,
             listaEndereco: funcionario.listaEndereco,
-            perfil: funcionario.perfil
+            idperfil: funcionario.idperfil
             });
 
           // Populando o FormArray com os dados existentes de funcionario.listaTelefone
@@ -163,7 +163,7 @@ adicionarEndereco(endereco?: any): void {
       email: this.funcionarioForm.value.email,
       listaTelefone: this.funcionarioForm.value.telefones,
       listaEndereco: this.funcionarioForm.value.listaEndereco,
-      perfil: this.funcionarioForm.value.perfil
+      idperfil: this.funcionarioForm.value.idperfil
     };
     
     // Lógica para salvar as alterações do funcionario

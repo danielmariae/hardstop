@@ -7,10 +7,10 @@ export class Funcionario {
     dataNascimento!: string;
     cpf!: string;
     sexo!: string;
+    idperfil!: number;
+    email!: string;
     login!: string;
     senha!: string;
-    email!: string;
     listaEndereco!: ListaEndereco;
     listaTelefone!: ListaTelefone[];
-    perfil!: number;
 }
