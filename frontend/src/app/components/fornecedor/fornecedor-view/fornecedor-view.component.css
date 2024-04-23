@@ -3,6 +3,11 @@
     top: 5px; /* Ajuste conforme necessário */
     left: 10px; /* Ajuste conforme necessário */
   }
+
+  .centralizador
+{
+    text-align: center;
+}
   
   .example-form {
     min-width: 150px;

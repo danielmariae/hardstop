@@ -36,6 +36,7 @@ todosFornecedores: Fornecedor[] = [];
     totalRecords = 0;
     page = 0;
     pageSize = 0;
+    totalPages = 0;
 fornecedores: Fornecedor[] = [];
 // Variável relacionada com as colunas da página html
     displayedColumns: string[] = ['id', 'nomeFantasia', 'cnpj', 'endSite', 'endereco', 'telefone', 'acao'];
@@ -65,13 +66,6 @@ fornecedores: Fornecedor[] = [];
     displayFn(fornecedor: Fornecedor): string {
       return fornecedor && fornecedor.nomeFantasia ? fornecedor.nomeFantasia : '';
     }
-
-    // Implementando o buscador para fornecedor
-    // Enviando o fornecedor selecionado para uma página onde somente ele aparece
-    selecionarFornecedor(fornecedor: Fornecedor) {
-	const fornecedorEscolhido: string = '/fornecedores' + fornecedor.id;
-        this.navigationService.navigateTo(fornecedorEscolhido);
-          }
 
     ngOnInit() {
       // Carregando o Enum Tipos de Telfone para realizar mapeamento entre número de id do objeto Telefone e sua descrição no Enum para apresentar a descrição na página html
@@ -125,7 +119,7 @@ fornecedores: Fornecedor[] = [];
       this.carregarFornecedores(this.page, this.pageSize);
       this.fornecedorService.count().subscribe(data => {
         this.totalRecords = data;
-        console.log(this.totalRecords);
+        this.totalPages = Math.round(this.totalRecords/this.pageSize);
       });
     }
 
@@ -143,7 +137,15 @@ fornecedores: Fornecedor[] = [];
             } 
 
         });
+        this.totalPages = Math.round(this.totalRecords/this.pageSize);
     }
+
+    // Implementando o buscador para fornecedor
+    // Enviando o fornecedor selecionado para uma página onde somente ele aparece
+    selecionarFornecedor(fornecedor: Fornecedor) {
+      const fornecedorEscolhido: string = '/fornecedores/' + fornecedor.id;
+      this.navigationService.navigateTo(fornecedorEscolhido);
+  }
 
     // Método para apagar um fornecedor escolhido
     apagarFornecedor(id: number): void {

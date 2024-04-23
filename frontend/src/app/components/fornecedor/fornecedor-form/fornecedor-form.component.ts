@@ -5,6 +5,8 @@ import { FornecedorService } from '../../../services/fornecedor.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavigationService } from '../../../services/navigation.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { NgxViacepService } from '@brunoc/ngx-viacep';
 
 @Component({
   selector: 'app-fornecedor',
@@ -21,7 +23,8 @@ export class FornecedorComponent {
 
   constructor(private formBuilder: FormBuilder, private fornecedorService: FornecedorService,
     private router: Router, private activatedRoute: ActivatedRoute,
-    private navigationService: NavigationService) {
+    private navigationService: NavigationService,
+    private viaCep: NgxViacepService) {
     this.tiposTelefone = [];
     this.uf = [];
     // Inicializar fornecedorForm no construtor
@@ -79,22 +82,95 @@ export class FornecedorComponent {
   }
 
   criarEnderecoFormGroup(): FormGroup {
-    return this.formBuilder.group({
+    const enderecoFormGroup = this.formBuilder.group({
       id: [null],
       nome: [''],
+      cep: [''],
       logradouro: [''],
       numeroLote: [''],
       bairro: [''],
       complemento: [''],
-      cep: this.formBuilder.group({
-        prefixo: [''],
-        sufixo: [null],
-        cep: ['']
-      }),
       localidade: [''],
-      uf: [null],
-      pais: ['']
+      uf: [''],
+      pais: [''],
+      cepInvalido: [false],
     });
+
+    enderecoFormGroup.get('cep')?.valueChanges.pipe(
+      debounceTime(300), // Aguarda 300ms após a última mudança no campo
+      distinctUntilChanged() // Garante que a busca só será feita se o valor do campo for alterado
+    ).subscribe((cep: string | null) => {
+      if (cep !== null) {
+        this.atualizarEndereco(cep, enderecoFormGroup);
+      }
+    });
+
+    return enderecoFormGroup;
+  }
+
+  atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
+    const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+
+    if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
+      this.viaCep.buscarPorCep(cepValue).subscribe({
+        next: (endereco) => {
+          if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
+            // Atualizando os valores do formulário com os dados do endereço
+            enderecoFormGroup.patchValue({
+              cep: this.formatarCep(endereco.cep),
+              logradouro: endereco.logradouro,
+              bairro: endereco.bairro,
+              localidade: endereco.localidade,
+              uf: endereco.uf,
+              pais: 'Brasil',
+              cepInvalido: false // Adiciona uma propriedade para indicar que o CEP é válido
+            });
+          } else {
+            // Limpar campos de endereço se o CEP não for válido
+            enderecoFormGroup.patchValue({
+              logradouro: null,
+              bairro: null,
+              localidade: null,
+              uf: null,
+              cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Erro ao buscar endereço por CEP:', error);
+          // Limpar campos de endereço em caso de erro na busca
+          enderecoFormGroup.patchValue({
+            logradouro: null,
+            bairro: null,
+            localidade: null,
+            uf: null,
+            cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+          });
+        }
+      });
+    } else {
+      // Limpar campos de endereço se o CEP não possuir 8 dígitos
+      enderecoFormGroup.patchValue({
+        logradouro: null,
+        bairro: null,
+        localidade: null,
+        uf: null,
+        cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+      });
+    }
+  }
+
+  formatarCep(cep: string): string {
+    // Remove caracteres não numéricos do CEP
+    const cepDigits = cep.replace(/\D/g, '');
+
+    // Verifica se o CEP possui 8 dígitos
+    if (cepDigits.length === 8) {
+      // Formata o CEP no formato desejado
+      return cepDigits.replace(/(\d{5})(\d{3})/, '$1-$2');
+    } else {
+      return cep; // Retorna o CEP original se não possuir 8 dígitos
+    }
   }
 
   cancelarInsercao(): void {

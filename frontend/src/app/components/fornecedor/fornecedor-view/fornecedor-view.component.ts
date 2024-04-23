@@ -11,14 +11,14 @@ import { NgxViacepService } from '@brunoc/ngx-viacep';
 
 
 @Component({
-  selector: 'app-fornecedor-edit',
+  selector: 'app-fornecedor-view',
   standalone: true,
   imports: [FormsModule, CommonModule, ReactiveFormsModule],
-  templateUrl: './fornecedor-edit.component.html',
-  styleUrls: ['./fornecedor-edit.component.css']
+  templateUrl: './fornecedor-view.component.html',
+  styleUrls: ['./fornecedor-view.component.css']
 })
 
-export class FornecedorEditComponent implements OnInit {
+export class FornecedorViewComponent implements OnInit {
   fornecedor: Fornecedor;
   fornecedorForm: FormGroup;
   tiposTelefone: any[];
@@ -248,5 +248,36 @@ removerEndereco(index: number): void {
        window.alert(error);
       }
     });
+  }
+
+      // Implementando o buscador para fornecedor
+    // Enviando o fornecedor selecionado para uma página onde somente ele aparece
+    selecionarFornecedor(fornecedor: Fornecedor) {
+      const fornecedorEscolhido: string = '/fornecedores' + fornecedor.id;
+      this.navigationService.navigateTo(fornecedorEscolhido);
+  }
+
+    // Método para apagar um fornecedor escolhido
+    apagarFornecedor(id: number): void {
+        this.fornecedorService.delete(id).subscribe({
+          next:  (response) => {
+                this.fornecedorService.notificarFornecedorInserido();
+            },
+            error: (error) => {
+            console.error(error);
+            window.alert(error); // Exibe a mensagem de erro usando window.alert()
+            }
+        });
+    }
+
+    // Método para chamar o endpoint para edição de um Fornecedor escolhido
+    editarFornecedor(id: number): void {
+      const enderecoEdicao: string = "fornecedores/edit/" + id.toString();
+      this.navigationService.navigateTo(enderecoEdicao);
+  }
+
+  verFornecedores(): void{
+    const enderecoList: string = "fornecedores";
+    this.navigationService.navigateTo(enderecoList);
   }
 }

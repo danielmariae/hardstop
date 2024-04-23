@@ -5,7 +5,7 @@ import { ClienteFormComponent } from './components/cliente/cliente-form/cliente-
 import { ClienteListComponent } from './components/cliente/cliente-list/cliente-list.component';
 import { ClienteViewComponent } from './components/cliente/cliente-view/cliente-view.component';
 import { FornecedorEditComponent } from './components/fornecedor/fornecedor-edit/fornecedor-edit.component';
-import { FornecedorEscolhidoComponent } from './components/fornecedor/fornecedor-escolhido/fornecedor-escolhido.component';
+import { FornecedorViewComponent } from './components/fornecedor/fornecedor-view/fornecedor-view.component';
 import { FornecedorComponent } from './components/fornecedor/fornecedor-form/fornecedor-form.component';
 import { FornecedorListComponent } from './components/fornecedor/fornecedor-list/fornecedor-list.component';
 import { FuncionarioListComponent } from './components/funcionario/funcionario-list/funcionario-list.component';
@@ -39,7 +39,7 @@ export const routes: Routes = [
     { path: 'fornecedores', component: FornecedorListComponent, title: 'Lista de Fornecedores'},
     { path: 'fornecedores/new', component: FornecedorComponent, title: 'Formulario de Fornecedores'},
     { path: 'fornecedores/edit/:id', component: FornecedorEditComponent, title: 'Edição de Dados de Fornecedores' },
-    {path: 'fornecedores/:id', component: FornecedorEscolhidoComponent, title: 'Fornecedor Escolhido'},
+    {path: 'fornecedores/:id', component: FornecedorViewComponent, title: 'Ver fornecedor'},
     {path: 'produtos', component: ProdutoListComponent, title: 'Lista de Produtos'},
     { path: 'produtos/new/:tipoProduto', component: ProdutoFormComponent, title: 'Formulario de Cadastro de Produtos'},
     {path: 'produtos/edit/:id', component: ProdutoEditComponent, title: 'Edicao de Produtos'},
