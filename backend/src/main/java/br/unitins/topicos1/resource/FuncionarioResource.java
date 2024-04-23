@@ -7,6 +7,7 @@ import br.unitins.topicos1.application.ErrorTP1;
 import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
+import br.unitins.topicos1.dto.FuncionarioNSDTO;
 import br.unitins.topicos1.dto.PatchCpfDTO;
 import br.unitins.topicos1.dto.PatchEmailDTO;
 import br.unitins.topicos1.dto.PatchLoginDTO;
@@ -176,6 +177,16 @@ public Response getFuncionario() {
     Long idCliente = serviceFuncionario.findByLogin(login).id();
     return Response.status(200).entity(serviceFuncionario.updateEnderecoFuncionario(end, idCliente)).build();
   }
+
+  @PUT
+  @Transactional
+  @Path("ns/{id}")
+  @RolesAllowed({"Func", "Admin"})
+  public Response updateFuncionarioNS(@Valid FuncionarioNSDTO dto, @PathParam("id") Long id) {
+    serviceFuncionario.updateFuncionarioNS(dto, id);
+    return Response.status(Status.NO_CONTENT).build();
+  }
+
 
   @POST
   @Path("insert/endereco/")

@@ -133,6 +133,27 @@ export class FuncionarioService {
     }
   }
 
+  updateNS(funcionario: Funcionario, id: number): Observable<Funcionario> {
+
+    const headers = this.sessionTokenService.getSessionHeader();
+    const url = `${this.baseUrl}/ns/${id}`; // Concatena o ID à URL base
+
+    const { senha, ...funcionarioSemSenha } = funcionario;
+
+    if (headers) {
+      return this.httpClient.put<Funcionario>(url, funcionarioSemSenha, { headers })
+        .pipe(
+          catchError(this.handleError)
+        );
+    } else {
+      return this.httpClient.put<Funcionario>(url, funcionarioSemSenha)
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+  }
+
+
   // Método para apagar uma única instância de Funcionario do banco de dados do servidor
   delete(id: number): Observable<any> {
 
@@ -175,6 +196,14 @@ export class FuncionarioService {
 
   getTipoTelefone(): Observable<any[]> {
     const url = 'http://localhost:8080/enum/tipoTelefone';
+    return this.httpClient.get<any[]>(url)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getTipoPerfil(): Observable<any[]> {
+    const url = 'http://localhost:8080/enum/perfil';
     return this.httpClient.get<any[]>(url)
       .pipe(
         catchError(this.handleError)

@@ -1,8 +1,11 @@
 package br.unitins.topicos1.service;
 
+import java.util.List;
+
 import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
+import br.unitins.topicos1.dto.FuncionarioNSDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.PatchCpfDTO;
 import br.unitins.topicos1.dto.PatchEmailDTO;
@@ -13,9 +16,6 @@ import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 
 
-import java.util.List;
-
-
 public interface FuncionarioService {
 
   // Cadastra um funcionário
@@ -23,6 +23,8 @@ public interface FuncionarioService {
 
   // Altera todas as informações de funcionário em um dado id
   public FuncionarioResponseDTO updateFuncionario(FuncionarioDTO dto, Long id);
+
+  public FuncionarioResponseDTO updateFuncionarioNS(FuncionarioNSDTO dto, Long id);
 
   // Substitui algum dado de um telefone
   public FuncionarioResponseDTO updateTelefoneFuncionario(TelefonePatchDTO tel, Long id);

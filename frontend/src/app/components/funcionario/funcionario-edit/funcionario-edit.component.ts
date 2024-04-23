@@ -22,8 +22,8 @@ export class FuncionarioEditComponent implements OnInit {
   funcionario: Funcionario;
   funcionarioForm: FormGroup;
   tiposTelefone: any[];
+  tiposPerfil: any[];
   uf: any[];
-  enderecoAnterior: string = '';
   id: number = 1;
 
   constructor(
@@ -35,6 +35,7 @@ export class FuncionarioEditComponent implements OnInit {
     private viaCep: NgxViacepService
   ) {
     this.tiposTelefone = [];
+    this.tiposPerfil = [];
     this.uf = [];
     this.funcionario = new Funcionario(); // Inicialização no construtor
 
@@ -75,6 +76,10 @@ export class FuncionarioEditComponent implements OnInit {
     this.funcionarioService.getUF().subscribe(data => {
       this.uf = data;
     });
+
+    this.funcionarioService.getTipoPerfil().subscribe(data => {
+      this.tiposPerfil = data;
+    })
 
     //const idParam = this.route.snapshot.paramMap.get('id');
     console.log(this.id);
@@ -232,11 +237,31 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
     };
     
     // IMPLEMENTAR LÓGICA DE ATUALIZAR SEM SENHA NOVA
-    // Lógica para salvar as alterações do funcionario
+    if(this.funcionarioForm.value.senha === undefined || this.funcionarioForm.value.senha === null){
+      this.funcionarioService.updateNS(novoFuncionario, this.funcionario.id).subscribe({
+        next: (response) => {
+          console.log(novoFuncionario);
+          if(this.navigationService.getPreviousEndPoint() === 'clientes') {
+            this.funcionarioService.notificarFuncionarioInserido(); // Notificar outros componentes
+          } else {
+            this.navigationService.navigateTo('clientes');
+          }
+        },
+        error: (error) => {
+         // Este callback é executado quando ocorre um erro durante a emissão do valor
+         console.error('Erro:', error);
+         // Aqui você pode lidar com o erro de acordo com sua lógica de negócio
+         // Por exemplo, exibir uma mensagem de erro para o usuário
+         window.alert(error);
+        }
+      });
+  
+    }else{
+          // Lógica para salvar as alterações do funcionario
     this.funcionarioService.update(novoFuncionario, this.funcionario.id).subscribe({
       next: (response) => {
         console.log(novoFuncionario);
-        if(this.navigationService.getPreviousEndPoint() === 'funcionarioes') {
+        if(this.navigationService.getPreviousEndPoint() === 'funcionarios') {
           this.funcionarioService.notificarFuncionarioInserido(); // Notificar outros componentes
         } else {
           this.navigationService.navigateTo('funcionarios');
@@ -250,5 +275,6 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
        window.alert(error);
       }
     });
+    }
   }
 }

@@ -10,6 +10,7 @@ import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.EnderecoFuncDTO;
 import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
 import br.unitins.topicos1.dto.FuncionarioDTO;
+import br.unitins.topicos1.dto.FuncionarioNSDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
 import br.unitins.topicos1.dto.PatchCpfDTO;
 import br.unitins.topicos1.dto.PatchEmailDTO;
@@ -144,6 +145,60 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     repository.persist(funcionario);
     return FuncionarioResponseDTO.valueOf(funcionario);
   }
+
+  @Override
+  @Transactional
+  public FuncionarioResponseDTO updateFuncionarioNS(FuncionarioNSDTO func, Long id) {
+    Funcionario funcionario = repository.findById(id);
+
+    funcionario.setNome(func.nome());
+    funcionario.setDataNascimento(
+      FuncionarioFormatador.formataDataNascimento(func.dataNascimento())
+    );
+    funcionario.setCpf(FuncionarioFormatador.formataCpf(func.cpf()));
+    funcionario.setSexo(func.sexo());
+    funcionario.setLogin(func.login());
+    funcionario.setEmail(func.email());
+
+    int i = 0;
+    int j = 0;
+
+    for (Telefone tele1 : funcionario.getListaTelefone()) {
+      i++;
+      j = 0;
+      for (TelefoneDTO tele : func.listaTelefone()) {
+        j++;
+        if (i == j) {
+          tele1.setTipoTelefone(TipoTelefone.valueOf(tele.tipo()));
+          tele1.setDdd(tele.ddd());
+          tele1.setNumeroTelefone(
+            TelefoneFormatador.formataNumeroTelefone(tele.numeroTelefone())
+          );
+        }
+      }
+    }
+
+    if (func.listaEndereco() != null) {
+      try {
+        Endereco listaEndereco = new Endereco();
+        listaEndereco.setNome(func.nome());
+        listaEndereco.setLogradouro(func.listaEndereco().logradouro());
+        listaEndereco.setNumeroLote(func.listaEndereco().numeroLote());
+        listaEndereco.setBairro(func.listaEndereco().bairro());
+        listaEndereco.setComplemento(func.listaEndereco().complemento());
+        listaEndereco.setCep(func.listaEndereco().cep());
+        listaEndereco.setLocalidade(func.listaEndereco().localidade());
+        listaEndereco.setUF(func.listaEndereco().uf());
+        listaEndereco.setPais(func.listaEndereco().pais());
+        funcionario.setEndereco(listaEndereco);
+      } catch (Exception e) {
+        throw new GeneralErrorException("500", "Internal Server Error", "FuncionarioServiceImpl(insert)", "Não consegui alocar memória para a lista de endereços do novo Funcionario. Tente novamente mais tarde! " +  e.getCause());
+      }
+    }
+    repository.persist(funcionario);
+    return FuncionarioResponseDTO.valueOf(funcionario);
+  }
+
 
   @Override
   @Transactional
