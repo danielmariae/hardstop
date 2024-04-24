@@ -57,12 +57,13 @@
               <div class="columns">
                 <div class="column">
                   <label class="field label">DDD:</label>
-                  <input class="control input" formControlName="ddd" placeholder="Insira o DDD sem parênteses">
+                  <input class="control input" type="text" formControlName="ddd" placeholder="Insira o DDD sem parênteses" inputmode="numeric" mask="(00)" id="ddd" readonly>
                 </div> 
                 <div class="column">
                   <label class="field label">Número:</label>
-                  <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone">
+                  <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone" mask="00000-0000" id="numeroTelefone" readonly>
                 </div>
+
                 <div class="column">
                   <label class="field label">Selecione tipo de telefone:</label>
                   <div class="select">

@@ -21,7 +21,7 @@
           <label class="field label" formControlName="sexo">Sexo:</label>
           <div class="select" id="seletor-especial">
             <select formControlName="sexo">
-              <option disabled selected value=" ">Selecione um sexo:ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</option>
+              <option disabled selected value="">Selecione um sexo:ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</option>
               <option value="M">Masculino</option>
               <option value="F">Feminino</option>
               <option value="O">Outros</option>
@@ -53,19 +53,18 @@
         </div>
       </div>
       </div>
-      
-          <div class="container box">
-            <h2 class="title is-3"> Telefones </h2>  
+      <div class="container box">
+          <h2 class="title is-3"> Telefones </h2>  
             <div formArrayName="telefones">
             <div *ngFor="let telefone of telefones.controls; let i = index" [formGroupName]="i">  
               <div class="columns">
                 <div class="column">
                   <label class="field label">DDD:</label>
-                  <input class="control input" formControlName="ddd" placeholder="Insira o DDD sem parênteses">
+                  <input class="control input" type="text" formControlName="ddd" placeholder="Insira o DDD sem parênteses" inputmode="numeric" mask="(00)" id="ddd">
                 </div> 
                 <div class="column">
                   <label class="field label">Número:</label>
-                  <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone">
+                  <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone" mask="00000-0000" id="numeroTelefone">
                 </div>
                 <div class="column">
                   <label class="field label">Selecione tipo de telefone:</label>
@@ -83,31 +82,95 @@
                   </div>
                 </div>
           </div>
-          <br>
+          <div class="columns">
+            <div class="column">
+              <div class="button is-primary is-default">
+                <button type="button" (click)="adicionarTelefone()">Adicionar telefone</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="button is-primary is-default">
-        <button type="button" (click)="adicionarTelefone()">Adicionar telefone</button>
-      </div>
       </div>
       </div>
       
       <div class="container box">
         <h2 class="title is-3">Endereço</h2>  
-        <div formArrayName="endereco">
-            <div class="columns">
-              <div class="column">
-                <label class="field label">Nome do endereço:</label>
-                <input class="control input" formControlName="nome" placeholder="Nome para este endereço:">
+        <div formGroupName="endereco">
+          <div class="columns">
+            <div class="column is-one-fifth">
+              <label class="field label">CEP:</label>
+              <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
+              <div *ngIf="endereco.get('cep')?.touched && endereco.get('cep')?.hasError('required')">
+                <p class="help is-danger">Campo obrigatório.</p>    
+              </div>    
+              <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
+                <p class="help is-danger">CEP inválido.</p>    
               </div>
-              <div class="column is-one-quarter">
-                <label class="field label">CEP:</label>
-                <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
-                <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
-                  <p class="help is-danger">CEP inválido.</p>    
-                </div>    
-              </div>  
+            </div>  
+            <div class="column">
+              <label class="field label">Logradouro:</label>
+              <input class="control input" formControlName="logradouro" placeholder="Logradouro (será preenchido automaticamente)"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
             </div>
+            <div class="column is-one-fifth">
+              <label class="field label">Número/Lote: </label>
+              <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
+              <div *ngIf="endereco.get('numeroLote')?.touched && endereco.get('numeroLote')?.hasError('required')">
+                <p class="help is-danger">Campo obrigatório.</p>
+                <p class="help is-danger">Caso não tenha, use "S/N" ou "Sem número".</p>    
+              </div>      
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Complemento: </label>
+              <input class="control input" formControlName="complemento" placeholder="Complemento">
+              <div *ngIf="endereco.get('complemento')?.touched && endereco.get('complemento')?.hasError('required')">
+                <p class="help is-danger">Campo obrigatório.</p>
+                <p class="help is-danger">Caso não tenha, digite "S/C" ou "Sem complemento".</p>    
+              </div>     
+            </div>
+            <div class="column">
+              <label class="field label">Bairro: </label>
+              <input class="control input" formControlName="bairro" placeholder="Bairro" [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+            <div class="column">
+              <label class="field label">Localidade:</label>
+              <input class="control input" formControlName="localidade" placeholder="Localidade" [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+            <div class="column is-one-fifth">
+              <label class="field label">UF:</label>
+              <input class="control input" formControlName="uf" placeholder="UF"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+            <div class="column">
+              <label class="field label">País:</label>
+              <input class="control input" formControlName="pais" placeholder="País"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+          </div>
+          <div class="columns">
+          </div>
+          <div class="columns">
+            <div class="column">
+              <div class="notification is-info">
+                Os dados de Logradouro, Bairro, Localidade, UF e País são preenchidos com base no seu CEP. Caso tenha alguma dificuldade, busque seu CEP através do site: <a target="_blank" href='https://buscacepinter.correios.com.br/app/endereco/index.php' >Busca CEP (dos correios)</a>
+              </div>              
+            </div>
+          </div>
+      </div>
+        <!-- <div formArrayName="endereco">
               <div class="columns">
+                <div class="column is-one-quarter">
+                  <label class="field label">CEP:</label>
+                  <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
+                  <div *ngIf="endereco.get('cep')?.touched && endereco.get('cep')?.hasError('required')">
+                    <p class="help is-danger">Campo obrigatório.</p>    
+                  </div>    
+                  <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
+                    <p class="help is-danger">CEP inválido.</p>    
+                  </div>    
+                </div>  
                 <div class="column">
                   <label class="field label">Logradouro:</label>
                   <input class="control input" formControlName="logradouro" placeholder="Logradouro (será preenchido automaticamente)"
@@ -118,10 +181,19 @@
                 <div class="column is-one-fifth">
                   <label class="field label">Número/Lote: </label>
                   <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
+                  <div *ngIf="endereco.get('numeroLote')?.touched && endereco.get('numeroLote')?.hasError('required')">
+                    <p class="help is-danger">Campo obrigatório.</p>
+                    <p class="help is-danger">Caso não tenha, use "S/N" ou "Sem número".</p>    
+                  </div>      
                 </div>
                 <div class="column">
                   <label class="field label">Complemento: </label>
                   <input class="control input" formControlName="complemento" placeholder="Complemento">
+                  <div *ngIf="endereco.get('complemento')?.touched && endereco.get('complemento')?.hasError('required')">
+                    <p class="help is-danger">Campo obrigatório.</p>
+                    <p class="help is-danger">Caso não tenha, digite "S/C" ou "Sem complemento".</p>    
+
+                  </div>     
                 </div>
               </div>
               <div class="columns">
@@ -151,7 +223,7 @@
                   </div>              
                 </div>
               </div>
-          </div>
+          </div> -->
     <!--
       <button type="submit" [disabled]="fornecedorForm.invalid">Salvar</button>
       -->

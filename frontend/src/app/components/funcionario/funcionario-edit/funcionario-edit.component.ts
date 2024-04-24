@@ -8,14 +8,16 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NavigationService } from '../../../services/navigation.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 
 @Component({
   selector: 'app-funcionario-edit',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxMaskDirective],
   templateUrl: './funcionario-edit.component.html',
-  styleUrls: ['./funcionario-edit.component.css']
+  styleUrls: ['./funcionario-edit.component.css'],
+  providers: [provideNgxMask()]
 })
 
 export class FuncionarioEditComponent implements OnInit {
@@ -40,22 +42,22 @@ export class FuncionarioEditComponent implements OnInit {
     this.funcionario = new Funcionario(); // Inicialização no construtor
 
     this.funcionarioForm = formBuilder.group({
-      nome: [''],
-      dataNascimento: [''],
-      cpf: [''],
-      sexo: [''],
-      login: [''],
-      senha: [''],
-      email: [''],
-      idperfil: [''],
+      nome: ['', Validators.required],
+      dataNascimento: ['', Validators.required],
+      cpf: ['', Validators.required],
+      sexo: ['', Validators.required],
+      login: ['', Validators.required],
+      senha: ['', Validators.required],
+      email: ['', Validators.required],
+      idperfil: ['',  Validators.required],
       telefones: this.formBuilder.array([]),
       endereco: this.formBuilder.group({
         nome: ['', Validators.required],
         cep: ['', Validators.required],
         logradouro: [''],
         numeroLote: [''],
+        complemento: ['', Validators.required],
         bairro: [''],
-        complemento: [''],
         localidade: [''],
         uf: [''],
         pais: [''],
@@ -89,8 +91,8 @@ export class FuncionarioEditComponent implements OnInit {
           // Inserindo valores nos campos de nome, cnpj e endSite
           this.funcionarioForm.patchValue({
             nome: funcionario.nome,
-            dataNascimento: funcionario.dataNascimento,
-            cpf: funcionario.cpf,
+            dataNascimento: this.formatarData(funcionario.dataNascimento),
+            cpf: this.formatarCPF(funcionario.cpf),
             sexo: funcionario.sexo,
             idperfil: funcionario.idperfil,
             login: funcionario.login,
@@ -104,6 +106,11 @@ export class FuncionarioEditComponent implements OnInit {
             this.adicionarTelefone(telefone);
           });
           
+          // Formatando o número de telefone antes de adicionar ao FormArray
+          funcionario.listaTelefone.forEach(telefone => {
+            telefone.numeroTelefone = this.formatarTelefone(telefone.numeroTelefone);
+          });
+
           console.log(this.funcionario);
         });
       } else {
@@ -195,6 +202,42 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
       uf: null,
       cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
     });
+  }
+}
+
+formatarData(data: string): string {
+  const partesData = data.split('-');
+  return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+}
+
+formatarCPF(cpf: string): string {
+  // Remove todos os caracteres não numéricos
+  const cpfDigits = cpf.replace(/\D/g, '');
+
+  // Verifica se o CPF possui 11 dígitos
+  if (cpfDigits.length === 11) {
+    // Formata o CPF no formato desejado
+    return cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  } else {
+    // Retorna o CPF original se não possuir 11 dígitos
+    return cpf;
+  }
+}
+
+formatarTelefone(telefone: string): string {
+  // Remove todos os caracteres não numéricos
+  const telefoneDigits = telefone.replace(/\D/g, '');
+
+  // Verifica se o telefone possui 10 ou 11 dígitos
+  if (telefoneDigits.length === 10) {
+      // Formata o telefone no formato para telefones fixos (0000-0000)
+      return telefoneDigits.replace(/(\d{4})(\d{4})/, '$1-$2');
+  } else if (telefoneDigits.length === 11) {
+      // Formata o telefone no formato para celulares (00000-0000)
+      return telefoneDigits.replace(/(\d{5})(\d{4})/, '$1-$2');
+  } else {
+      // Retorna o telefone original se não possuir 10 ou 11 dígitos
+      return telefone;
   }
 }
 

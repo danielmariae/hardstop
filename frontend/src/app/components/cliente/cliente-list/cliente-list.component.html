@@ -24,8 +24,9 @@
 </div>
 <div class="field">
 
-<div class="container">
-<h1 id="lista-clientes-h1" class="title is-1">Lista de clientes</h1>
+<div class="container box">
+  <h1 id="lista-clientes-h1" class="title is-1">Lista de clientes</h1>
+<div class="table-container">
 <table class="table is-fullwidth">
     <thead>
       <tr>
@@ -54,22 +55,21 @@
       </tr>
     </tbody>
   </table>
-  <div class="box">
-    <div class="button is-primary is-default">
-      <button type="button" (click)="inserirCliente()">Inserir novo cliente</button>
-   </div>
-   <br>
-   <br>
-    <div>
-        <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalRecords })">Anterior</a>
-        <a *ngIf="this.page+1 !== totalPages" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalRecords})">Próxima</a>
-        Página atual:
-        <a>{{this.page+1}}</a>
-        Total de páginas:
-        <a>{{this.totalPages}}</a>    
-    </div>
-
-  </div>  
-  
+  </div>
 </div>
+<div class="container box">
+  <div class="button is-primary is-default">
+    <button type="button" (click)="inserirCliente()">Inserir novo cliente</button>
+ </div>
+ <br>
+ <br>
+  <div>
+      <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalRecords })">Anterior</a>
+      <a *ngIf="this.page+1 !== totalPages" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalRecords})">Próxima</a>
+      Página atual:
+      <a>{{this.page+1}}</a>
+      Total de páginas:
+      <a>{{this.totalPages}}</a>    
+  </div>
+</div>  
 <br>

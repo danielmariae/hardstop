@@ -168,4 +168,37 @@ inserirFuncionario(): void {
     this.navigationService.navigateTo(enderecoEdicao);
 }
 
+formatarData(data: string): string {
+  const partesData = data.split('-');
+  return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+}
+
+formatarSexo(sexo: string): string {
+  var sexoFormatado: string = ' ';
+  if(sexo === 'M'){
+    var sexoFormatado = 'Masculino'
+    return sexoFormatado;
+  }else if (sexo === 'F'){
+    var sexoFormatado = 'Feminino'
+    return sexoFormatado;
+  }else if (sexo === 'O'){
+    var sexoFormatado = 'Outros'
+    return sexoFormatado;
+  }
+  return sexoFormatado;
+}
+formatarCPF(cpf: string): string {
+  // Remove todos os caracteres não numéricos
+  const cpfDigits = cpf.replace(/\D/g, '');
+
+  // Verifica se o CPF possui 11 dígitos
+  if (cpfDigits.length === 11) {
+    // Formata o CPF no formato desejado
+    return cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  } else {
+    // Retorna o CPF original se não possuir 11 dígitos
+    return cpf;
+  }
+}
+
 }

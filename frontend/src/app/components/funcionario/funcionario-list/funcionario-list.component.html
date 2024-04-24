@@ -22,54 +22,52 @@
         </div>
     </div>
 </div>
-<div class="field">
-
-<div class="container">
-<h1 id="lista-funcionarios-h1" class="title is-1">Lista de funcionarios</h1>
-<table class="table is-fullwidth">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>CPF</th>
-        <th>Data de Nascimento</th>
-        <th>Sexo</th>
-        <th>Email</th>
-        <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let funcionario of funcionarios">
-        <td>{{ funcionario.id }}</td>
-        <td>{{ funcionario.nome }}</td>
-        <td>{{ funcionario.cpf }}</td>
-        <td>{{ funcionario.dataNascimento }}</td>
-        <td>{{ funcionario.sexo }}</td>
-        <td>{{ funcionario.email }}</td>
-        <td>
-          <button (click)="selecionarFuncionario(funcionario)"><span class="icon is-small"><i class="mdi mdi-information"></i></span></button>
-          <button (click)="editarFuncionario(funcionario.id)"><span class="icon is-small"><i class="mdi mdi-pencil"></i></span></button>
-          <button (click)="apagarFuncionario(funcionario.id)"><span class="icon is-small"><i class="mdi mdi-delete"></i></span></button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="box">
-    <div class="button is-primary is-default">
-      <button type="button" (click)="inserirFuncionario()">Inserir novo funcionario</button>
-   </div>
-   <br>
-   <br>
-    <div>
-        <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalRecords })">Anterior</a>
-        <a *ngIf="this.page+1 !== totalPages" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalRecords})">Próxima</a>
-        Página atual:
-        <a>{{this.page+1}}</a>
-        Total de páginas:
-        <a>{{this.totalPages}}</a>    
+<div class="container box">
+  <h1 id="lista-funcionarios-h1" class="title is-1">Lista de funcionários</h1>
+    <div class="table-container">
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th >CPF</th>
+            <th>Data de Nascimento</th>
+            <th>Sexo</th>
+            <th>Email</th>
+            <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let funcionario of funcionarios">
+            <td>{{ funcionario.id }}</td>
+            <td>{{ funcionario.nome }}</td>
+            <td>{{ formatarCPF(funcionario.cpf) }}</td>
+            <td>{{ formatarData(funcionario.dataNascimento) }}</td>
+            <td>{{ formatarSexo(funcionario.sexo) }}</td>
+            <td>{{ funcionario.email }}</td>
+            <td>
+              <button (click)="selecionarFuncionario(funcionario)"><span class="icon is-small"><i class="mdi mdi-information"></i></span></button>
+              <button (click)="editarFuncionario(funcionario.id)"><span class="icon is-small"><i class="mdi mdi-pencil"></i></span></button>
+              <button (click)="apagarFuncionario(funcionario.id)"><span class="icon is-small"><i class="mdi mdi-delete"></i></span></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
   </div>  
-  
-</div>
+<div class="container box">
+  <div class="button is-primary is-default">
+    <button type="button" (click)="inserirFuncionario()">Inserir novo funcionario</button>
+ </div>
+ <br>
+ <br>
+  <div>
+      <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalRecords })">Anterior</a>
+      <a *ngIf="this.page+1 !== totalPages" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalRecords})">Próxima</a>
+      Página atual:
+      <a>{{this.page+1}}</a>
+      Total de páginas:
+      <a>{{this.totalPages}}</a>    
+  </div>
+</div> 
 <br>

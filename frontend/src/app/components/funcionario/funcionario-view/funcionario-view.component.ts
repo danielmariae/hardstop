@@ -9,14 +9,16 @@ import { NavigationService } from '../../../services/navigation.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { formatarDataNascimento } from '../../../converters/date-converter';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 
 @Component({
   selector: 'app-funcionario-edit',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxMaskDirective],
   templateUrl: './funcionario-view.component.html',
-  styleUrls: ['./funcionario-view.component.css']
+  styleUrls: ['./funcionario-view.component.css'], 
+  providers: [provideNgxMask()]
 })
 
 export class FuncionarioViewComponent implements OnInit {

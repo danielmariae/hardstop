@@ -129,6 +129,70 @@
       <div class="container box">
         <h2 class="title is-3">Endereço</h2>  
         <div formArrayName="endereco">
+          <div class="columns">
+            <div class="column is-one-fifth">
+              <label class="field label">CEP:</label>
+              <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
+              <div *ngIf="endereco.get('cep')?.touched && endereco.get('cep')?.hasError('required')">
+                <p class="help is-danger">Campo obrigatório.</p>    
+              </div>    
+              <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
+                <p class="help is-danger">CEP inválido.</p>    
+              </div>
+            </div>  
+            <div class="column">
+              <label class="field label">Logradouro:</label>
+              <input class="control input" formControlName="logradouro" placeholder="Logradouro (será preenchido automaticamente)"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+            <div class="column is-one-fifth">
+              <label class="field label">Número/Lote: </label>
+              <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
+              <div *ngIf="endereco.get('numeroLote')?.touched && endereco.get('numeroLote')?.hasError('required')">
+                <p class="help is-danger">Campo obrigatório.</p>
+                <p class="help is-danger">Caso não tenha, use "S/N" ou "Sem número".</p>    
+              </div>      
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Complemento: </label>
+              <input class="control input" formControlName="complemento" placeholder="Complemento">
+              <div *ngIf="endereco.get('complemento')?.touched && endereco.get('complemento')?.hasError('required')">
+                <p class="help is-danger">Campo obrigatório.</p>
+                <p class="help is-danger">Caso não tenha, digite "S/C" ou "Sem complemento".</p>    
+              </div>     
+            </div>
+            <div class="column">
+              <label class="field label">Bairro: </label>
+              <input class="control input" formControlName="bairro" placeholder="Bairro" [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+            <div class="column">
+              <label class="field label">Localidade:</label>
+              <input class="control input" formControlName="localidade" placeholder="Localidade" [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+            <div class="column is-one-fifth">
+              <label class="field label">UF:</label>
+              <input class="control input" formControlName="uf" placeholder="UF"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+            <div class="column">
+              <label class="field label">País:</label>
+              <input class="control input" formControlName="pais" placeholder="País"
+              [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+            </div>
+          </div>
+          <div class="columns">
+          </div>
+          <div class="columns">
+            <div class="column">
+              <div class="notification is-info">
+                Os dados de Logradouro, Bairro, Localidade, UF e País são preenchidos com base no seu CEP. Caso tenha alguma dificuldade, busque seu CEP através do site: <a target="_blank" href='https://buscacepinter.correios.com.br/app/endereco/index.php' >Busca CEP (dos correios)</a>
+              </div>              
+            </div>
+          </div>
+      </div>
+        <!-- <div formArrayName="endereco">
               <div class="columns">
                 <div class="column is-one-quarter">
                   <label class="field label">CEP:</label>
@@ -192,7 +256,7 @@
                   </div>              
                 </div>
               </div>
-          </div>
+          </div> -->
     <!--
       <button type="submit" [disabled]="fornecedorForm.invalid">Salvar</button>
       -->
