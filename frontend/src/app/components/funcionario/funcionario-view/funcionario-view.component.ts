@@ -257,6 +257,10 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
   }
   
   
+  verFuncionarios(): void{
+    const enderecoList: string = "funcionarios";
+    this.navigationService.navigateTo(enderecoList);
+  }
 
   editarFuncionario(id: number): void {
     const enderecoEdicao: string = "funcionarios/edit/" + id.toString();

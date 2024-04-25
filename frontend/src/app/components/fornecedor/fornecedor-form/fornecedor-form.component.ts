@@ -7,13 +7,15 @@ import { CommonModule } from '@angular/common';
 import { NavigationService } from '../../../services/navigation.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-fornecedor',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, NgxMaskDirective],
   templateUrl: './fornecedor-form.component.html',
-  styleUrl: './fornecedor-form.component.css'
+  styleUrl: './fornecedor-form.component.css',
+  providers: [provideNgxMask()]
 })
 export class FornecedorComponent {
   errorMessage: string = '';
@@ -21,8 +23,10 @@ export class FornecedorComponent {
   tiposTelefone: any[];
   uf: any[];
 
-  constructor(private formBuilder: FormBuilder, private fornecedorService: FornecedorService,
-    private router: Router, private activatedRoute: ActivatedRoute,
+  constructor(private formBuilder: FormBuilder, 
+    private fornecedorService: FornecedorService,
+    private router: Router, 
+    private activatedRoute: ActivatedRoute,
     private navigationService: NavigationService,
     private viaCep: NgxViacepService) {
     this.tiposTelefone = [];
@@ -30,9 +34,9 @@ export class FornecedorComponent {
     // Inicializar fornecedorForm no construtor
     this.fornecedorForm = formBuilder.group({
         id: [null],
-        nomeFantasia: [''],
+        nomeFantasia: ['', Validators.required],
         cnpj: [''],
-        endSite: [''],
+        endSite: ['http://'],
         telefones: this.formBuilder.array([]),
         enderecos: this.formBuilder.array([]),
     });

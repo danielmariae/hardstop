@@ -1,36 +1,7 @@
-/* Estilo para o formulário */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Espaçamento entre os elementos do formulário */
-    margin-bottom: 20px; /* Margem inferior para separar do próximo elemento */
-  }
-  
-  /* Estilo para os grupos de formulário (rótulo + input/textarea) */
-  .form-group {
-    display: flex;
-    align-items: center;
-  }
-  
-  /* Estilo para os rótulos */
-  label {
-    font-weight: bold; /* Deixa o texto em negrito */
-    margin-right: 10px; /* Espaçamento à direita para separar do input/textarea */
-  }
-  
-  /* Estilo para os inputs de texto e número */
-  input[type="text"],
-  input[type="number"],
-  textarea {
-    flex: 1; /* Ocupa o restante do espaço disponível */
-    padding: 8px; /* Espaçamento interno */
-    border: 1px solid #ccc; /* Borda cinza */
-    border-radius: 8px; /* Cantos ligeiramente mais arredondados */
-    box-sizing: border-box; /* Considera o padding e a borda como parte do tamanho */
-  }
-  
   /* Estilo para os elementos dentro do ng-container, se necessário */
   /* ng-container {
     
   } */
-  
+  .centralizador{
+    text-align: center;
+}

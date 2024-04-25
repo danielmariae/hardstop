@@ -75,10 +75,33 @@ export class ProdutoFormComponent implements OnInit {
   onFileSelected(event: any) {
     const files: FileList = event.target.files;
     for (let i = 0; i < files.length; i++) {
-      this.arquivosSelecionados.push(files[i]);
+      const file = files[i];
+      this.arquivosSelecionados.push(file);
+     /* this.previewImage(file).then((result) => {
+        if (result) {
+          const blob = new Blob([result], { type: file.type });
+          const imageUrl = URL.createObjectURL(blob);
+          console.log('URL da imagem:', imageUrl);
+          this.fileUrls.push(imageUrl);
+        }
+      });
+      */
     }
   }
   
+  previewImage(file: File): Promise<ArrayBuffer | null> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        resolve(event.target.result);
+      };
+      reader.onerror = (event: any) => {
+        reject(null);
+      };
+      reader.readAsArrayBuffer(file);
+    });
+  }
+      
   selecionarArquivos(input: HTMLInputElement) {
     input.click(); // Simula o clique no input file
   }

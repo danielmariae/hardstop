@@ -1,81 +1,77 @@
-<form [formGroup]="processadorForm" class="processador-form">
-  <div class="form-group">
-    <label for="soquete">Soquete:</label>
-    <input type="text" formControlName="soquete" id="soquete">
-  </div>
-
-  <div class="form-group">
-    <label for="pistas">Pistas:</label>
-    <input type="text" formControlName="pistas" id="pistas">
-  </div>
-
-  <div class="form-group">
-    <label for="bloqueado">Bloqueado:</label>
-    <input type="text" formControlName="bloqueado" id="bloqueado">
-  </div>
-
-  <div class="form-group">
-    <label for="compatibilidadeChipset">Compatibilidade Chipset:</label>
-    <input type="text" formControlName="compatibilidadeChipset" id="compatibilidadeChipset">
-  </div>
-
-  <div class="form-group">
-    <label for="canaisMemoria">Canais de Memória:</label>
-    <input type="text" formControlName="canaisMemoria" id="canaisMemoria">
-  </div>
-
-  <div class="form-group">
-    <label for="capacidadeMaxMemoria">Capacidade Máxima de Memória:</label>
-    <input type="text" formControlName="capacidadeMaxMemoria" id="capacidadeMaxMemoria">
-  </div>
-
-  <div class="form-group">
-    <label for="pontenciaBase">Potência Base:</label>
-    <input type="text" formControlName="pontenciaBase" id="pontenciaBase">
-  </div>
-
-  <div class="form-group">
-    <label for="potenciaMaxima">Potência Máxima:</label>
-    <input type="text" formControlName="potenciaMaxima" id="potenciaMaxima">
-  </div>
-
-  <div class="form-group">
-    <label for="frequenciaBase">Frequência Base:</label>
-    <input type="text" formControlName="frequenciaBase" id="frequenciaBase">
-  </div>
-
-  <div class="form-group">
-    <label for="frequenciaMaxima">Frequência Máxima:</label>
-    <input type="text" formControlName="frequenciaMaxima" id="frequenciaMaxima">
-  </div>
-
-  <div class="form-group">
-    <label for="tamanhoCacheL3">Tamanho Cache L3:</label>
-    <input type="text" formControlName="tamanhoCacheL3" id="tamanhoCacheL3">
-  </div>
-
-  <div class="form-group">
-    <label for="tamanhoCacheL2">Tamanho Cache L2:</label>
-    <input type="text" formControlName="tamanhoCacheL2" id="tamanhoCacheL2">
-  </div>
-
-  <div class="form-group">
-    <label for="numNucleosFisicos">Número de Núcleos Físicos:</label>
-    <input type="text" formControlName="numNucleosFisicos" id="numNucleosFisicos">
-  </div>
-
-  <div class="form-group">
-    <label for="numThreads">Número de Threads:</label>
-    <input type="text" formControlName="numThreads" id="numThreads">
-  </div>
-
-  <div class="form-group">
-    <label for="velMaxMemoria">Velocidade Máxima de Memória:</label>
-    <input type="text" formControlName="velMaxMemoria" id="velMaxMemoria">
-  </div>
-
-  <div class="form-group">
-    <label for="conteudoEmbalagem">Conteúdo da Embalagem:</label>
-    <input type="text" formControlName="conteudoEmbalagem" id="conteudoEmbalagem">
+<form [formGroup]="processadorForm">
+  <div class="container box">
+    <h1 class="title is-2 centralizador">Dados de processador:</h1>
+    <div class="columns">
+      <div class="column">
+        <label class="field label" for="soquete">Soquete:</label>
+        <input class="control input" type="text" formControlName="soquete" id="soquete">
+      </div>
+      <div class="column">
+        <label class="field label" for="pistas">Pistas:</label>
+        <input class="control input" type="text" formControlName="pistas" id="pistas">
+      </div>
+      <div class="column">
+        <label class="field label" for="bloqueado">Bloqueado:</label>
+        <input class="control input" type="text" formControlName="bloqueado" id="bloqueado">
+      </div>
+      <div class="column">
+        <label class="field label" for="compatibilidadeChipset">Compatibilidade Chipset:</label>
+        <input class="control input" type="text" formControlName="compatibilidadeChipset" id="compatibilidadeChipset">
+      </div>
+      <div class="column">
+        <label class="field label" for="canaisMemoria">Canais de Memória:</label>
+        <input class="control input" type="text" formControlName="canaisMemoria" id="canaisMemoria">
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <label class="field label" for="capacidadeMaxMemoria">Capacidade Máxima de Memória:</label>
+        <input class="control input" type="text" formControlName="capacidadeMaxMemoria" id="capacidadeMaxMemoria">
+      </div>
+      <div class="column">
+        <label class="field label" for="pontenciaBase">Potência Base:</label>
+        <input class="control input" type="text" formControlName="pontenciaBase" id="pontenciaBase">
+      </div>
+      <div class="column">
+        <label class="field label" for="potenciaMaxima">Potência Máxima:</label>
+        <input class="control input" type="text" formControlName="potenciaMaxima" id="potenciaMaxima">
+      </div>    
+      <div class="column">
+        <label class="field label" for="frequenciaBase">Frequência Base:</label>
+        <input class="control input" type="text" formControlName="frequenciaBase" id="frequenciaBase">
+      </div>    
+    </div>  
+    <div class="columns">
+      <div class="column">
+        <label class="field label" for="frequenciaMaxima">Frequência Máxima:</label>
+        <input class="control input" type="text" formControlName="frequenciaMaxima" id="frequenciaMaxima">
+      </div>  
+      <div class="column">
+        <label class="field label" for="tamanhoCacheL3">Tamanho Cache L3:</label>
+        <input class="control input" type="text" formControlName="tamanhoCacheL3" id="tamanhoCacheL3">
+      </div>    
+      <div class="column">
+        <label class="field label" for="tamanhoCacheL2">Tamanho Cache L2:</label>
+        <input class="control input" type="text" formControlName="tamanhoCacheL2" id="tamanhoCacheL2">
+      </div>    
+      <div class="column">
+        <label class="field label" for="numNucleosFisicos">Número de Núcleos Físicos:</label>
+        <input class="control input" type="text" formControlName="numNucleosFisicos" id="numNucleosFisicos">
+      </div>
+      <div class="column">
+        <label class="field label" for="numThreads">Número de Threads:</label>
+        <input class="control input" type="text" formControlName="numThreads" id="numThreads">
+      </div>  
+    </div>
+    <div class="columns">
+      <div class="column">
+        <label class="field label" for="velMaxMemoria">Velocidade Máxima de Memória:</label>
+        <input class="control input" type="text" formControlName="velMaxMemoria" id="velMaxMemoria">
+      </div>
+      <div class="column">
+        <label class="field label" for="conteudoEmbalagem">Conteúdo da Embalagem:</label>
+        <input class="control input" type="text" formControlName="conteudoEmbalagem" id="conteudoEmbalagem">
+      </div>
+    </div>
   </div>
 </form>

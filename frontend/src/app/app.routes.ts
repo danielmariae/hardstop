@@ -5,23 +5,23 @@ import { ClienteFormComponent } from './components/cliente/cliente-form/cliente-
 import { ClienteListComponent } from './components/cliente/cliente-list/cliente-list.component';
 import { ClienteViewComponent } from './components/cliente/cliente-view/cliente-view.component';
 import { FornecedorEditComponent } from './components/fornecedor/fornecedor-edit/fornecedor-edit.component';
-import { FornecedorViewComponent } from './components/fornecedor/fornecedor-view/fornecedor-view.component';
 import { FornecedorComponent } from './components/fornecedor/fornecedor-form/fornecedor-form.component';
 import { FornecedorListComponent } from './components/fornecedor/fornecedor-list/fornecedor-list.component';
+import { FornecedorViewComponent } from './components/fornecedor/fornecedor-view/fornecedor-view.component';
+import { FuncionarioEditComponent } from './components/funcionario/funcionario-edit/funcionario-edit.component';
+import { FuncionarioFormComponent } from './components/funcionario/funcionario-form/funcionario-form.component';
 import { FuncionarioListComponent } from './components/funcionario/funcionario-list/funcionario-list.component';
+import { FuncionarioViewComponent } from './components/funcionario/funcionario-view/funcionario-view.component';
 import { HomeComponent } from './components/home/home.component';
+import { LoteFormComponent } from './components/lote/lote-form/lote-form.component';
+import { LoteListComponent } from './components/lote/lote-list-idProduto/lote-list-idProduto.component';
 import { ProdutoEditComponent } from './components/produto/produto-edit/produto-edit.component';
 import { ProdutoFormComponent } from './components/produto/produto-form/produto-form/produto-form.component';
+import { ProdutoGarantiaComponent } from './components/produto/produto-garantia/produto-garantia.component';
 import { ProdutoListComponent } from './components/produto/produto-list/produto-list.component';
 import { AuthResolver } from './components/session-token/resolver/session-token.resolver';
 import { SessionTokenComponent } from './components/session-token/session-token.component';
-import { FuncionarioEditComponent } from './components/funcionario/funcionario-edit/funcionario-edit.component';
-import { FuncionarioFormComponent } from './components/funcionario/funcionario-form/funcionario-form.component';
-import { FuncionarioViewComponent } from './components/funcionario/funcionario-view/funcionario-view.component';
-import { LoteFormComponent } from './components/lote/lote-form/lote-form.component';
-import { LoteListComponent } from './components/lote/lote-list-idProduto/lote-list-idProduto.component';
-import { ProdutoEscolhidoComponent } from './components/produto/produto-escolhido/produto-escolhido.component';
-import { ProdutoGarantiaComponent } from './components/produto/produto-garantia/produto-garantia.component';
+import { ProdutoViewComponent } from './components/produto/produto-view/produto-view.component';
 
 
 export const routes: Routes = [
@@ -45,7 +45,7 @@ export const routes: Routes = [
     {path: 'produtos/edit/:id', component: ProdutoEditComponent, title: 'Edicao de Produtos'},
     {path: 'lotes/new', component: LoteFormComponent, title: 'Insercao de Lotes' },
     {path: 'lotes/:id', component: LoteListComponent, title: 'Lista de Lotes por Produto'},
-    {path: 'produtos/:id', component: ProdutoEscolhidoComponent, title: 'Produto Escolhido'},
+    {path: 'produtos/:id', component: ProdutoViewComponent, title: 'Produto Escolhido'},
     {path: 'produtos/garantia/:id', component: ProdutoGarantiaComponent, title: 'Fornecedor de Produto Defeituoso'},
 ];
 

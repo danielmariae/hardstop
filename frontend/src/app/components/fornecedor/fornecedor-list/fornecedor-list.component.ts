@@ -168,7 +168,7 @@ fornecedores: Fornecedor[] = [];
 
   // Método para chamar o endpoint para inserção de novo Fornecedor
   inserirFornecedor(): void {
-    const enderecoEdicao: string = "fornecedores/new";
+    const enderecoEdicao: string = "fornecedores/new/";
     this.navigationService.navigateTo(enderecoEdicao);
 }
 

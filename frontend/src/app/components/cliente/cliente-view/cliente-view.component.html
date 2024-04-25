@@ -72,13 +72,13 @@
             <div class="columns">
               <div class="column">
                 <label class="field label">DDD:</label>
-                <input class="control input" formControlName="ddd" placeholder="Insira o DDD sem parênteses" readonly>
+                <input class="control input" type="text" formControlName="ddd" placeholder="Insira o DDD sem parênteses" inputmode="numeric" mask="(00)" id="ddd" readonly>
               </div> 
               <div class="column">
                 <label class="field label">Número:</label>
-                <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone" readonly>
+                <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone" mask="00000-0000" id="numeroTelefone" readonly>
               </div>
-              <div class="column">
+            <div class="column">
                 <label class="field label">Selecione tipo de telefone:</label>
                 <div class="select" id="seletor-especial" readonly>
                   <select formControlName="tipo">
@@ -107,9 +107,6 @@
           <div class="column is-one-quarter">
             <label class="field label">CEP:</label>
             <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000" readonly>
-            <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
-              <p class="help is-danger">CEP inválido.</p>    
-            </div>    
           </div>  
         </div>
           <div class="columns">
@@ -158,9 +155,9 @@
     -->
     <div class="container box">
       <div class="buttons">
-      <button class="button is-primary" type="submit">Salvar</button>
-  
-      <button class="button is-text" (click)="cancelarEdicao()">Cancelar</button>
+        <button class="button is-text" (click)="verClientes()">Voltar a lista</button>
+        <button class="button is-primary" (click)="editarCliente(cliente.id)">Editar</button>
+        <button class="button is-danger" (click)="apagarCliente(cliente.id)">Apagar</button>
     </div>
   </div> 
 </form>

@@ -63,7 +63,6 @@
                   <label class="field label">Número:</label>
                   <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone" mask="00000-0000" id="numeroTelefone" readonly>
                 </div>
-
                 <div class="column">
                   <label class="field label">Selecione tipo de telefone:</label>
                   <div class="select">
@@ -132,6 +131,7 @@
     </div>
     <div class="container box">
       <div class="buttons">
+        <button class="button is-text" (click)="verFuncionarios()">Voltar a lista</button>
         <button class="button is-primary" (click)="editarFuncionario(funcionario.id)">Editar</button>
         <button class="button is-danger" (click)="apagarFuncionario(funcionario.id)">Apagar</button>
     </div>

@@ -9,14 +9,16 @@ import { validarSenhaUpdate } from '../../../validators/update-senha-validator';
 import { formatarDataNascimento } from '../../../converters/date-converter';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 
 @Component({
   selector: 'app-cliente-view',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxMaskDirective],
   templateUrl: './cliente-view.component.html',
-  styleUrls: ['./cliente-view.component.css']
+  styleUrls: ['./cliente-view.component.css'],
+  providers: [provideNgxMask()]
 })
 
 export class ClienteViewComponent implements OnInit {
@@ -94,7 +96,6 @@ ngOnInit(): void {
       }
   }
 
-  
   desativarSeletores(): boolean{
     return true;
   }
@@ -182,8 +183,6 @@ adicionarEndereco(endereco?: any): void {
       }
     });
   
-  
-
   this.enderecos.push(enderecoFormGroup);
 }
 
@@ -196,7 +195,7 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
         if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
           // Atualizando os valores do formulário com os dados do endereço
           enderecoFormGroup.patchValue({
-            cep: this.formatarCep(endereco.cep),
+            cep: endereco.cep,
             logradouro: endereco.logradouro,
             bairro: endereco.bairro,
             localidade: endereco.localidade,
@@ -308,15 +307,27 @@ removerEndereco(index: number): void {
     });
   }
 
-  apagarCliente(id: number): void {
-    this.clienteService.delete(id).subscribe({
-      next:  (response) => {
-            this.clienteService.notificarClienteInserido();
-        },
-        error: (error) => {
-        console.error(error);
-        window.alert(error); // Exibe a mensagem de erro usando window.alert()
-        }
-    });
+    // Método para apagar um fornecedor escolhido
+    apagarCliente(id: number): void {
+      this.clienteService.delete(id).subscribe({
+        next:  (response) => {
+              this.clienteService.notificarClienteInserido();
+          },
+          error: (error) => {
+          console.error(error);
+          window.alert(error); // Exibe a mensagem de erro usando window.alert()
+          }
+      });
+  }
+
+  // Método para chamar o endpoint para edição de um Cliente escolhido
+  editarCliente(id: number): void {
+    const enderecoEdicao: string = "clientes/edit/" + id.toString();
+    this.navigationService.navigateTo(enderecoEdicao);
+}
+
+verClientes(): void{
+  const enderecoList: string = "clientes";
+  this.navigationService.navigateTo(enderecoList);
 }
 }

@@ -40,7 +40,7 @@
 </div>
 <div class="field">
 
-<div class="container">
+<div class="container box">
 <h1 id="lista-produtos-h1" class="title is-1">Lista de produtos</h1>
 <table class="table is-fullwidth">
     <thead>
@@ -71,8 +71,9 @@
         </td>
       </tr>
     </tbody>
-  </table>
-  <div class="box">
+  </table>  
+</div>
+<div class="container box">
     <div class="is-right">
         <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalRecords })">Anterior</a>
         <a *ngIf="this.page !== totalPages - 1" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalRecords})">Próxima</a>
@@ -81,6 +82,5 @@
         Total de páginas:
         <a>{{this.totalPages}}</a>    
     </div>
-</div>  
 </div>
 <br>
