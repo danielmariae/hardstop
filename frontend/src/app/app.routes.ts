@@ -22,6 +22,7 @@ import { ProdutoListComponent } from './components/produto/produto-list/produto-
 import { AuthResolver } from './components/session-token/resolver/session-token.resolver';
 import { SessionTokenComponent } from './components/session-token/session-token.component';
 import { ProdutoViewComponent } from './components/produto/produto-view/produto-view.component';
+import { ProdutoEscolhidoComponent } from './components/produto/produto-escolhido/produto-escolhido.component';
 
 
 export const routes: Routes = [
@@ -46,6 +47,7 @@ export const routes: Routes = [
     {path: 'lotes/new', component: LoteFormComponent, title: 'Insercao de Lotes' },
     {path: 'lotes/:id', component: LoteListComponent, title: 'Lista de Lotes por Produto'},
     {path: 'produtos/:id', component: ProdutoViewComponent, title: 'Produto Escolhido'},
+    {path: 'produtos/escolhido/:id', component: ProdutoEscolhidoComponent, title: 'Produto Escolhido'},
     {path: 'produtos/garantia/:id', component: ProdutoGarantiaComponent, title: 'Fornecedor de Produto Defeituoso'},
 ];
 
