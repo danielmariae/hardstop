@@ -24,6 +24,8 @@ import { FornecedorService } from '../../../services/fornecedor.service';
 import { LoteService } from '../../../services/lote.service';
 import { LoteRecebe } from '../../../models/loteRecebe.model';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { LoteRecebeClass } from '../../../models/loteRecebeClass.model';
+import { LoteTesteService } from '../../../services/loteTeste.service';
 
 @Component({
     selector: 'app-lote-list-idProduto',
@@ -45,7 +47,9 @@ export class LoteListComponent implements OnInit {
     totalRecords = 0;
     page = 0;
     pageSize = 0;
+    totalPages = 0;
     lotes: LoteRecebe[] = [];
+    lotesTeste: LoteRecebeClass[] = [];
 
     // Variável relacionada com as colunas da página html
     displayedColumns: string[] = ['id', 'lote', 'descricaoStatusDoLote', 'cnpjFornecedor', 'modeloProduto', 'quantidadeUnidades', 'custoCompra', 'valorVenda', 'garantiaMeses', 'dataHoraChegadaLote', 'dataHoraAtivacaoLote', 'dataHoraUltimoVendido', 'acao'];
@@ -57,6 +61,7 @@ export class LoteListComponent implements OnInit {
         private http: HttpClient,
         private sessionTokenService: SessionTokenService,
         private loteService: LoteService,
+        private loteTesteService: LoteTesteService,
     ) {
         this.statusDoLote = [];
     }
@@ -74,6 +79,7 @@ export class LoteListComponent implements OnInit {
 
         // Atualizando os dados da página de acordo com a paginação ao carregar a página.
         this.atualizarDadosDaPagina();
+        this.atualizarDadosDaPaginaTeste();
     }
 
    
@@ -114,7 +120,7 @@ export class LoteListComponent implements OnInit {
     paginar(event: PageEvent): void {
         this.page = event.pageIndex;
         this.pageSize = event.pageSize;
-        this.atualizarDadosDaPagina();
+        this.atualizarDadosDaPaginaTeste();
     }
 
     // Método para paginar os resultados
@@ -122,9 +128,19 @@ export class LoteListComponent implements OnInit {
         this.carregarLotes(this.page, this.pageSize);
         this.loteService.count().subscribe(data => {
             this.totalRecords = data;
+            this.totalPages = Math.round(this.totalRecords/this.pageSize);
         });
+        console.log(this.lotes);
     }
 
+    atualizarDadosDaPaginaTeste():void{
+        this.carregarLotesEnvia(this.page, this.pageSize);
+        this.loteService.count().subscribe(data => {
+            this.totalRecords = data;
+        })
+        console.log(this.carregarLotesEnvia);
+        this.totalPages = Math.round(this.totalRecords/this.pageSize);
+    }
     // Método para paginar os resultados
     carregarLotes(page: number, pageSize: number): void {
         this.loteService.findByIdProduto(this.id, page, pageSize).subscribe({
@@ -138,6 +154,23 @@ export class LoteListComponent implements OnInit {
                 window.alert(error);
             }
         });
+        this.totalPages = Math.round(this.totalRecords/this.pageSize);
+    }
+
+    carregarLotesEnvia(page: number, pageSize: number): void {
+        this.loteService.findByIdProdutoEnviado(this.id, page, pageSize).subscribe({
+            next: (response) => {
+                this.lotesTeste = response;
+                console.log(this.lotesTeste);
+            },
+            error: (error) => {
+                // Este callback é executado quando ocorre um erro durante a emissão do valor
+                console.error('Erro:', error.message);
+                window.alert(error);
+            }
+        });
+        console.log(this.lotesTeste);
+        this.totalPages = Math.round(this.totalRecords/this.pageSize);
     }
 
 ativarLote(id: number): void {
@@ -153,8 +186,4 @@ ativarLote(id: number): void {
     });
 
 }
-
-
-
-
 }

@@ -14,12 +14,22 @@
         </mat-form-field>
       </form>
     </div> -->
-    <div class="form-group">
-        <label for="dataHoraVenda">Data e Hora da venda do Produto:</label>
-        <input type="datetime-local" formControlName="dataHoraVenda" id="dataHoraVenda">
+    <h1 class="title is-1 centralizador">Procurar fornecedor do produto #{{produtoId}}</h1>
+    <div class="container box">
+      <div class="columns">
+        <div class="column">
+          <label class="field label" for="dataHoraVenda">Data e Hora da venda do Produto:</label>
+          <input class="control input" type="datetime-local" formControlName="dataHoraVenda" id="dataHoraVenda">        
+        </div>
       </div>
-      <button type="submit">Procurar</button>
-      <button (click)="cancelarInsercao()">Cancelar</button>
-    
+    </div>
+    <div class="form-group">
+    </div>
+    <div class="container box">
+      <div class="buttons">
+        <button class="button is-primary" type="submit">Procurar</button>
+      <button class="button is-text" (click)="cancelarInsercao()">Cancelar</button>
+    </div>
+  </div>     
     
 </form>

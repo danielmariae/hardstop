@@ -109,6 +109,85 @@ public class LoteServiceImpl implements LoteService {
 
   @Override
   @Transactional
+  // Chegaram mais unidades de um mesmo produto, de um fornecedor diferente e/ou por um custo de compra diferente e/ou por um valor de venda diferente. Neste caso preciso criar um novo Lote. Este novo Lote ficará inativo até que o estoque do produto acabe. Caso o estoque já tenha acabado, este Lote será automaticamente ativado.
+  public LoteResponseCDTO insertTeste(LoteDTO dto) {
+    Lote lote = new Lote();
+    lote.setLote(dto.lote());
+    // Formato esperado da data e hora na String
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+          "yyyy-MM-dd HH:mm:ss"
+        );
+    lote.setDataHoraChegadaLote(LocalDateTime.parse(dto.dataHoraChegadaLote(), formatter));
+    lote.setQuantidadeUnidades(dto.quantidadeUnidades());
+    lote.setQuantidadeNaoConvencional(dto.quantidadeNaoConvencional());
+    lote.setUnidadeDeMedida(dto.unidadeDeMedida());
+    lote.setValorVenda(dto.valorVenda());
+    lote.setCustoCompra(dto.custoCompra());
+    lote.setGarantiaMeses(dto.garantiaMeses());
+    lote.setFornecedor(repositoryFornecedor.findById(dto.fornecedor().getId()));
+    lote.setProduto(repositoryProduto.findById(dto.produto().getId()));
+    lote.setStatusDoLote(StatusDoLote.valueOf(2)); // Todo Lote recém cadastrado recebe status de EM ESPERA
+  
+    try {
+       
+      repository.persist(lote);
+    } catch (Exception e) {
+      throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "LoteServiceImpl(insert)",
+        "Não consegui persistir o lote no banco de dados."
+      );
+    }
+    // O estoque do produto já acabou. O Lote recém inserido será automaticamente ativado.
+    if (
+      (repositoryProduto.findById(dto.produto().getId()).getQuantidadeUnidades() ==
+      null || repositoryProduto.findById(dto.produto().getId()).getQuantidadeUnidades() == 0) ||
+      (repositoryProduto
+        .findById(dto.produto().getId())
+        .getQuantidadeNaoConvencional() ==
+      null || repositoryProduto
+      .findById(dto.produto().getId())
+      .getQuantidadeNaoConvencional() ==
+    0)
+    ) {
+      LocalDateTime agora = LocalDateTime.now();
+      String dataFormatada = agora.format(formatter);
+      LocalDateTime novoDateTime = LocalDateTime.parse(
+        dataFormatada,
+        formatter
+      );
+      // Ativa o Lote
+      lote.setDataHoraAtivacaoLote(novoDateTime);
+      lote.setStatusDoLote(StatusDoLote.valueOf(1));
+      ProdutoPatchDTO prodpatch = new ProdutoPatchDTO(
+        dto.produto().getId(),
+        dto.valorVenda(),
+        dto.quantidadeUnidades(),
+        dto.quantidadeNaoConvencional(),
+        dto.unidadeDeMedida(),
+        lote.getId()
+      );
+      // O método abaixo altera os valores de venda, quantidade e id do Lote atual no produto em questão. O Lote torna-se ativado e o produto agora aponta para ele.
+      serviceProduto.update(prodpatch);
+    }
+    /* try {
+            repositoryProduto.findById(dto.idProduto()).setLoteAtual(lote);
+            repositoryProduto.findById(dto.idProduto()).setQuantidade(repositoryProduto.findById(dto.idProduto()).getQuantidade()+dto.quantidade());
+         } catch (OptimisticLockException e) {
+            throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "LoteServiceImpl(insert)",
+        "Não consegui realizar o insert de Lote por conta de concorrência no banco de dados. Tente novamente." + e);
+        } */
+
+    return LoteResponseCDTO.valueOf(lote);
+  }
+
+
+  @Override
+  @Transactional
   // Chegaram mais unidades do mesmo produto, do mesmo fornecedor, pelo mesmo custo de compra e irei manter o mesmo valor de venda. Neste caso só altero a quantidade e mais nada.
   public LoteResponseDTO updateQuantidade(LotePatchQDTO dto) {
     Lote lote = repository.findById(dto.id());
@@ -259,6 +338,36 @@ public class LoteServiceImpl implements LoteService {
     return loteResponse;
   }
 
+  public List<LoteResponseCDTO> findByIdProdutoTeste(
+    Long idProduto,
+    int page,
+    int pageSize
+  ) {
+    List<Lote> temp = repository.listAll();
+    List<Lote> temp2 = new ArrayList<Lote>();
+    List<LoteResponseCDTO> loteResponse = new ArrayList<LoteResponseCDTO>();
+    Integer count = 0;
+    for (Lote lote : temp) {
+      if (lote.getProduto().getId().equals(idProduto)) {
+        temp2.add(lote);
+        count++;
+      }
+    }
+    // Calcula o índice inicial e final para a página atual
+    int startIndex = page * pageSize;
+    int endIndex = Math.min(startIndex + pageSize, temp2.size());
+    // Obtém a lista paginada usando subList
+    List<Lote> listaPaginada = temp2.subList(startIndex, endIndex);
+  
+    // Transforma a lista paginada em lista de DTOs
+    for (Lote lote : listaPaginada) {
+      LoteResponseCDTO dto = LoteResponseCDTO.valueOf(lote);
+      loteResponse.add(dto);
+    }
+    return loteResponse;
+  }
+
+
   @Override
   public long count() {
     return repository.count();
@@ -267,6 +376,11 @@ public class LoteServiceImpl implements LoteService {
   @Override
   public LoteResponseDTO findById(Long id) {
     return LoteResponseDTO.valueOf(repository.findById(id));
+  }
+
+  @Override
+  public LoteResponseCDTO findByIdTeste(Long id) {
+    return LoteResponseCDTO.valueOf(repository.findById(id));
   }
 
   @Override

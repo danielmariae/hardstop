@@ -132,9 +132,6 @@ export class LoteFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    
-
     // Implementando o buscador para produtos
     this.buscarTodosProdutos();
 
@@ -283,15 +280,8 @@ export class LoteFormComponent implements OnInit {
       });
   }
 
-
-
-
-
-
   cancelarInsercao(): void {
     // Redireciona o usuário para a rota anterior
     this.navigationService.navigateBack();
   }
-
-
 }
