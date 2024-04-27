@@ -233,6 +233,38 @@ export class ProdutoViewComponent implements OnInit {
             }
         });
 }
+apagarProduto(id: number): void {
+  this.produtoService.delete(id).subscribe({
+      next: (response) => {
+          this.produtoService.notificarProdutoInserido();
+      },
+      error: (error) => {
+          console.error(error);
+          window.alert(error); // Exibe a mensagem de erro usando window.alert()
+      }
+  });
+}
+
+// Método para chamar o endpoint para edição de um Produto escolhido
+editarProduto(id: number): void {
+  const enderecoEdicao: string = "produtos/edit/" + id.toString();
+  this.navigationService.navigateTo(enderecoEdicao);
+}
+
+listarLote(id: number): void {
+  const listaLote: string = "lotes/" + id.toString();
+  this.navigationService.navigateTo(listaLote);
+}
+
+criarLote(): void {
+  const criaLote: string = "lotes/new";
+  this.navigationService.navigateTo(criaLote);
+}
+
+produtoDefeito(id: number): void {
+  const produtoDefeito: string = "produtos/garantia/" + id;
+  this.navigationService.navigateTo(produtoDefeito);
+}
 
       
 }
