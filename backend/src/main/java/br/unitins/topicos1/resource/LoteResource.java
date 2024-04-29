@@ -128,8 +128,15 @@ public class LoteResource {
 
 
   @GET
+  @Path("/count/{id}")
+  public Long count2(@PathParam("id") Long id) {
+    return service.count2(id);
+  }
+  
+  @GET
   @Path("/count")
   public Long count() {
     return service.count();
   }
+
 }

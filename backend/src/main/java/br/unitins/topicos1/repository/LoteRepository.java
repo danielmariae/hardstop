@@ -15,4 +15,8 @@ public class LoteRepository implements PanacheRepository<Lote> {
     public List<Lote> findAll(Long idProduto) {
         return find("produto.id = ?1", idProduto).list();
     }
+
+    public Long countProdutos(Long idProduto){
+        return find("produto.id = ?1", idProduto).count();
+    }
 }

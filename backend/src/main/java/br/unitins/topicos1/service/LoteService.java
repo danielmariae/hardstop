@@ -17,7 +17,8 @@ public interface LoteService {
 
 
     // CONTADOR:
-    public long count();
+    public Long count2(Long id);
+    public Long count();
 
     LoteResponseDTO insert(LoteDTO dto);
     LoteResponseCDTO insertTeste(LoteDTO dto);

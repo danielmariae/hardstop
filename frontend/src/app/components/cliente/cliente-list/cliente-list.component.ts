@@ -100,6 +100,14 @@ export class ClienteListComponent implements OnInit {
           this.router.navigate(['clientes']);
         });        
       }
+
+      
+    onChange(event:any): void{
+      const value = event.target.value;
+      console.log(value);
+      this.paginar({ pageIndex: 0, pageSize: parseInt(value), length: this.totalPages }); 
+  }
+ 
   
 // Buscando todos os clientes para carregar na lista de buscador de clientes
 buscarTodosClientes(): void {

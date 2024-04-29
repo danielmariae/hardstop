@@ -21,8 +21,10 @@ export class LoteService {
 
 
     // Método para realizar contagens. Envolvido com a paginação
-    count(): Observable<number> {
-        return this.httpClient.get<number>(`${this.baseUrl}/count`);
+    count(id: number): Observable<number> {
+        const headers = this.sessionTokenService.getSessionHeader();
+
+        return this.httpClient.get<number>(`${this.baseUrl}/count/${id}`);
     }
 
     // Método para trazer todas as instâncias de Lote de um dado produto de acordo com a paginação

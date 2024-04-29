@@ -107,7 +107,7 @@ export class ProdutoListComponent implements OnInit {
         // Este foi o menor número que definimos no arquivo html
         this.pageSize = 2; 
         // Implementando o buscador para produtos
-       this.buscarTodosProdutos();
+       //this.buscarTodosProdutos();
 
         // Implementando o buscador para classificacao
         this.produtoService.getClassificacao().subscribe({
@@ -121,6 +121,7 @@ export class ProdutoListComponent implements OnInit {
 
         // Atualizando os dados da página de acordo com a paginação ao carregar a página.
         this.atualizarDadosDaPagina();
+        console.log(this.pageSize);
 
         // Inscrevendo para receber notificações de novos produtos
         this.produtoService.produtoInserido$.subscribe(() => {
@@ -130,7 +131,7 @@ export class ProdutoListComponent implements OnInit {
           this.router.navigate(['produtos']);
         });        
       }
-  
+    
 // Buscando todos os produtos para carregar na lista de buscador de produtos
 buscarTodosProdutos(): void {
   this.produtoService.findTodos().subscribe({
@@ -141,6 +142,14 @@ buscarTodosProdutos(): void {
       console.error('Erro ao carregar produtos:', error);
     }
   });
+}
+// Adicione o método onChange
+onChange(event: any): void {
+  const value = event.target.value;
+  console.log(value);
+  this.pageSize = parseInt(value); // Atualiza o valor de pageSize
+  this.page = 0; // Reseta a página para a primeira ao mudar o tamanho da página
+  this.atualizarDadosDaPagina(); // Atualiza os dados da página
 }
 
 // Método para paginar os resultados

@@ -369,7 +369,12 @@ public class LoteServiceImpl implements LoteService {
 
 
   @Override
-  public long count() {
+  public Long count2(Long id) {
+    return repository.countProdutos(id);
+  }
+
+  @Override
+  public Long count() {
     return repository.count();
   }
 

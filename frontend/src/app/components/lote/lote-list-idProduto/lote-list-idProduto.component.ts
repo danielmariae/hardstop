@@ -78,10 +78,15 @@ export class LoteListComponent implements OnInit {
         // this.carregarStatus();
 
         // Atualizando os dados da página de acordo com a paginação ao carregar a página.
-        this.atualizarDadosDaPagina();
+        //this.atualizarDadosDaPagina();
         this.atualizarDadosDaPaginaTeste();
     }
 
+    onChange(event:any): void{
+        const value = event.target.value;
+        console.log(value);
+        this.paginar({ pageIndex: 0, pageSize: parseInt(value), length: this.totalPages }); 
+    }
    
 
     //   carregarProduto() {
@@ -126,7 +131,7 @@ export class LoteListComponent implements OnInit {
     // Método para paginar os resultados
     atualizarDadosDaPagina(): void {
         this.carregarLotes(this.page, this.pageSize);
-        this.loteService.count().subscribe(data => {
+        this.loteService.count(this.id).subscribe(data => {
             this.totalRecords = data;
             this.totalPages = Math.round(this.totalRecords/this.pageSize);
         });
@@ -135,11 +140,12 @@ export class LoteListComponent implements OnInit {
 
     atualizarDadosDaPaginaTeste():void{
         this.carregarLotesEnvia(this.page, this.pageSize);
-        this.loteService.count().subscribe(data => {
+        this.loteService.count(this.id).subscribe(data => {
             this.totalRecords = data;
+            this.totalPages = Math.round(this.totalRecords/this.pageSize);
+            console.log(this.totalPages);
         })
         console.log(this.carregarLotesEnvia);
-        this.totalPages = Math.round(this.totalRecords/this.pageSize);
     }
     // Método para paginar os resultados
     carregarLotes(page: number, pageSize: number): void {

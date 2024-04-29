@@ -64,12 +64,32 @@
  <br>
  <br>
   <div>
-      <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalRecords })">Anterior</a>
-      <a *ngIf="this.page+1 !== totalPages" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalRecords})">Próxima</a>
-      Página atual:
-      <a>{{this.page+1}}</a>
-      Total de páginas:
-      <a>{{this.totalPages}}</a>    
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalPages })">Anterior</a>
+          <a *ngIf="this.page+1 !== totalPages" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalPages})">Próxima</a>    
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">Página atual:</div>
+        <div class="level-item"><a>{{this.page+1}}</a></div>
+        <div class="level-item">Total de páginas:</div>
+        <div class="level-item"><a>{{this.totalPages}}</a></div>
+        <div class="level-item">ㅤ</div>
+        <div class="level-item">Itens por página:</div>
+        <div class="level-item">
+          <div class="select">
+            <select (change)="onChange($event)">
+              <option selected value="2">2</option>
+              <option value="4">4</option>
+              <option value="8">8</option>
+              <option value="16">16</option>
+            </select>
+          </div>  
+        </div>
+      </div>
+    </nav>  
   </div>
 </div>  
 <br>
