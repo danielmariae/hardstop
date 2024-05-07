@@ -253,7 +253,7 @@ removerEndereco(index: number): void {
       // Implementando o buscador para fornecedor
     // Enviando o fornecedor selecionado para uma página onde somente ele aparece
     selecionarFornecedor(fornecedor: Fornecedor) {
-      const fornecedorEscolhido: string = '/fornecedores' + fornecedor.id;
+      const fornecedorEscolhido: string = '/adm/fornecedores' + fornecedor.id;
       this.navigationService.navigateTo(fornecedorEscolhido);
   }
 
@@ -272,12 +272,12 @@ removerEndereco(index: number): void {
 
     // Método para chamar o endpoint para edição de um Fornecedor escolhido
     editarFornecedor(id: number): void {
-      const enderecoEdicao: string = "fornecedores/edit/" + id.toString();
+      const enderecoEdicao: string = "adm/fornecedores/edit/" + id.toString();
       this.navigationService.navigateTo(enderecoEdicao);
   }
 
   verFornecedores(): void{
-    const enderecoList: string = "fornecedores";
+    const enderecoList: string = "adm/fornecedores";
     this.navigationService.navigateTo(enderecoList);
   }
 }

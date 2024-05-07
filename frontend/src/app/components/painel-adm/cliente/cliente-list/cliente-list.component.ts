@@ -94,7 +94,7 @@ export class ClienteListComponent implements OnInit {
       // Implementando o buscador para cliente
       // Enviando o cliente selecionado para uma página onde somente ele aparece
       selecionarCliente(cliente: Cliente) {
-        this.router.navigate(['/clientes', cliente.id]);
+        this.router.navigate(['/adm/clientes', cliente.id]);
       }
       ngOnInit() {
 
@@ -171,8 +171,7 @@ paginar(event: PageEvent) : void {
     ;
 }
 inserirCliente(): void {
-  const enderecoEdicao: string = "clientes/new";
-  this.navigationService.navigateTo(enderecoEdicao);
+  this.navigationService.navigateTo("/adm/clientes/new");
 }
 
  // Método para apagar um cliente escolhido
@@ -221,10 +220,21 @@ formatarCPF(cpf: string): string {
   }
 }
 
- // Método para chamar o endpoint para edição de um Cliente escolhido
- editarCliente(id: number): void {
-    const enderecoEdicao: string = "clientes/edit/" + id.toString();
+  // Método para chamar o endpoint para edição de um Cliente escolhido
+  editarCliente(id: number): void {
+    const enderecoEdicao: string = "/adm/clientes/edit/" + id.toString();
     this.navigationService.navigateTo(enderecoEdicao);
-}
+  }
 
+  navegarParaFornecedor(): void{
+    this.navigationService.navigateTo("adm/fornecedores/");
+  }
+  
+  navegarParaFuncionario(): void{
+    this.navigationService.navigateTo("adm/funcionarios/");
+  } 
+
+  navegarParaProdutos(): void{
+    this.navigationService.navigateTo("adm/produtos");
+  }
 }

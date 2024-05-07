@@ -88,7 +88,7 @@ export class ProdutoListComponent implements OnInit {
       // Implementando o buscador para produto
       // Enviando o produto selecionado para uma página onde somente ele aparece
       selecionarProduto(produto: Produto) {
-        const produtoEscolhido: string = 'produtos/' + produto.id;
+        const produtoEscolhido: string = 'adm/produtos/' + produto.id;
         this.navigationService.navigateTo(produtoEscolhido);
       }
 
@@ -104,7 +104,7 @@ export class ProdutoListComponent implements OnInit {
 
       // Método para chamar o endpoint para inserção de novo Fornecedor
       selecionarClassificacao(classificacao: Classificacao) {
-        const enderecoEdicao: string = 'produtos/new/' + classificacao.nome.toLowerCase();
+        const enderecoEdicao: string = 'adm/produtos/new/' + classificacao.nome.toLowerCase();
         this.navigationService.navigateTo(enderecoEdicao);
       }
   
@@ -134,7 +134,7 @@ export class ProdutoListComponent implements OnInit {
             // Recarrega os produtos ao receber uma notificação
           this.carregarProdutos(this.page, this.pageSize);
           this.buscarTodosProdutos(); 
-          this.router.navigate(['produtos']);
+          this.router.navigate(['adm/produtos']);
         });        
       }
     
@@ -230,8 +230,18 @@ paginar(event: PageEvent) : void {
 
  // Método para chamar o endpoint para edição de um Produto escolhido
  editarProduto(id: number): void {
-    const enderecoEdicao: string = "produtos/edit/" + id.toString();
+    const enderecoEdicao: string = "adm/produtos/edit/" + id.toString();
     this.navigationService.navigateTo(enderecoEdicao);
-}
+  }
+  navegarParaFornecedor(): void{
+    this.navigationService.navigateTo("adm/fornecedores/");
+  }
 
+  navegarParaFuncionario(): void{
+    this.navigationService.navigateTo("adm/funcionarios/");
+  } 
+
+  navegarParaClientes(): void{
+    this.navigationService.navigateTo("adm/clientes");
+  }
 }

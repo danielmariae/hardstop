@@ -166,7 +166,7 @@ fornecedores: Fornecedor[] = [];
     // Implementando o buscador para fornecedor
     // Enviando o fornecedor selecionado para uma página onde somente ele aparece
     selecionarFornecedor(fornecedor: Fornecedor) {
-      const fornecedorEscolhido: string = '/fornecedores/' + fornecedor.id;
+      const fornecedorEscolhido: string = '/adm/fornecedores/' + fornecedor.id;
       this.navigationService.navigateTo(fornecedorEscolhido);
   }
 
@@ -185,14 +185,25 @@ fornecedores: Fornecedor[] = [];
 
     // Método para chamar o endpoint para edição de um Fornecedor escolhido
     editarFornecedor(id: number): void {
-      const enderecoEdicao: string = "fornecedores/edit/" + id.toString();
+      const enderecoEdicao: string = "/adm/fornecedores/edit/" + id.toString();
       this.navigationService.navigateTo(enderecoEdicao);
   }
 
   // Método para chamar o endpoint para inserção de novo Fornecedor
   inserirFornecedor(): void {
-    const enderecoEdicao: string = "fornecedores/new/";
+    const enderecoEdicao: string = "/adm/fornecedores/new/";
     this.navigationService.navigateTo(enderecoEdicao);
-}
+  }
 
+  navegarParaProdutos(): void{
+    this.navigationService.navigateTo("/adm/produtos/");
+  }
+
+  navegarParaFuncionario(): void{
+    this.navigationService.navigateTo("/adm/funcionarios/");
+  } 
+
+  navegarParaClientes(): void{
+    this.navigationService.navigateTo("/adm/clientes");
+  }
 }

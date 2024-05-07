@@ -23,7 +23,8 @@ import { formatarDataNascimento } from '../../../../converters/date-converter';
   providers: [provideNgxMask()]
 })
 export class ClienteFormComponent {
-  errorMessage: string = '';
+  errorMessage: string | null = null;
+  errorDetails: any | null = null; // Objeto JSON para armazenar os detalhes do erro
   clienteForm: FormGroup;
   tiposTelefone: any[];
   uf: any[];
@@ -224,7 +225,7 @@ export class ClienteFormComponent {
 
   cancelarInsercao(): void {
     // Redireciona o usuário para a rota anterior
-    this.navigationService.navigateTo('clientes');
+    this.navigationService.navigateTo("adm/clientes");
   }
 
   salvarCliente(): void {
@@ -258,7 +259,9 @@ export class ClienteFormComponent {
       error: (error) => {
         // Este callback é executado quando ocorre um erro durante a emissão do valor
         console.error('Erro ao inserir cliente:', error);
-        window.alert(error);
+        //window.alert(error)
+        this.errorMessage = error.error.errorMessage;
+        this.errorDetails = error;
       }
     });
 

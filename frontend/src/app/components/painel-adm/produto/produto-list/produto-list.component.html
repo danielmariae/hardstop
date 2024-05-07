@@ -1,88 +1,111 @@
-<div class="container box">
-    <div class="columns">
-        <div class="column">
-          <input class="control input" type="text" [(ngModel)]="searchProdutoText" (input)="buscarProdutos()" placeholder="Selecione um produto">
-          <aside class="menu">
-            <ul class="menu-list" *ngIf="filteredProdutos.length">
-              <li *ngFor="let produto of filteredProdutos" (click)="selecionarProduto(produto)">
-                  <a>{{ produto.nome }}</a>
-              </li>
-          </ul>
-          </aside>
-        </div>
-        <div class="column">
-          <input class="control input" type="text" [(ngModel)]="searchClassificacaoText" (input)="buscarClassificacao()" placeholder="Inserir novo produto">
-          <aside class="menu">
-            <ul class="menu-list" *ngIf="filteredClassificacoes.length">
-              <li *ngFor="let classificacao of filteredClassificacoes" (click)="selecionarClassificacao(classificacao)">
-                  <a>{{ classificacao.nome }}</a>
-              </li>
-          </ul>
-          </aside>      
+<div class="container">
+  <div class="columns">
+    <div class="column is-one-fifth">
+      <div class="box">
+        <p class="title is-4">Painel Administrativo</p>
+        <aside class="menu">
+          <p class="menu-label">Gestão de pessoas</p>
+            <ul class="menu-list">
+              <li><a  (click)="navegarParaClientes()">Clientes</a></li>
+              <li><a (click)="navegarParaFuncionario()">Funcionários</a></li>
+            </ul>
+          <p class="menu-label">Gestão de produtos</p>
+            <ul class="menu-list">
+              <li><a class="is-active">Produtos</a></li>
+              <li><a (click)="navegarParaFornecedor()">Fornecedores</a></li>
+            </ul>
+        </aside>
+      </div>
     </div>
+    <div class="column">
+      <div class="box">
+        <div class="columns">
+            <div class="column">
+              <input class="control input" type="text" [(ngModel)]="searchProdutoText" (input)="buscarProdutos()" placeholder="Selecione um produto">
+              <aside class="menu">
+                <ul class="menu-list" *ngIf="filteredProdutos.length">
+                  <li *ngFor="let produto of filteredProdutos" (click)="selecionarProduto(produto)">
+                      <a>{{ produto.nome }}</a>
+                  </li>
+              </ul>
+              </aside>
+            </div>
+            <div class="column">
+              <input class="control input" type="text" [(ngModel)]="searchClassificacaoText" (input)="buscarClassificacao()" placeholder="Inserir novo produto">
+              <aside class="menu">
+                <ul class="menu-list" *ngIf="filteredClassificacoes.length">
+                  <li *ngFor="let classificacao of filteredClassificacoes" (click)="selecionarClassificacao(classificacao)">
+                      <a>{{ classificacao.nome }}</a>
+                  </li>
+              </ul>
+              </aside>      
+        </div>
+        </div>
     </div>
+    <div class="field">
+    
+    <div class="box">
+    <h1 id="lista-produtos-h1" class="title is-1">Lista de produtos</h1>
+    <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Modelo</th>
+            <th>Marca</th>
+            <th>Descrição</th>
+            <th>Quantidade</th>
+            <th>Valor</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let produto of produtos">
+            <td>{{ produto.id }}</td>
+            <td>{{ produto.nome }}</td>
+            <td>{{ produto.modelo }}</td>
+            <td>{{ produto.marca }}</td>
+            <td>{{ produto.descricao }}</td>
+            <td>{{ produto.quantidadeUnidades }}</td>
+            <td>R$ {{ produto.valorVenda }}</td>
+            <td>
+              <button (click)="selecionarProduto(produto)"><span class="icon is-small"><i class="mdi mdi-information"></i></span></button>
+              <button (click)="editarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-pencil"></i></span></button>
+              <button (click)="apagarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-delete"></i></span></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>  
+    </div>
+    <div class="box">
+        <nav class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalPages })">Anterior</a>
+                <a *ngIf="this.page+1 !== totalPages" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalPages})">Próxima</a>    
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">Página atual:</div>
+              <div class="level-item"><a>{{this.page+1}}</a></div>
+              <div class="level-item">Total de páginas:</div>
+              <div class="level-item"><a>{{this.totalPages}}</a></div>
+              <div class="level-item">ㅤ</div>
+              <div class="level-item">Itens por página:</div>
+              <div class="level-item">
+                <div class="select">
+                  <select (change)="onChange($event)">
+                    <option selected value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="8">8</option>
+                    <option value="16">16</option>
+                  </select>
+                </div>  
+              </div>
+            </div>
+          </nav>  
+    </div>
+    <br>
+    </div>
+  </div>
 </div>
-<div class="field">
-
-<div class="container box">
-<h1 id="lista-produtos-h1" class="title is-1">Lista de produtos</h1>
-<table class="table is-fullwidth">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Modelo</th>
-        <th>Marca</th>
-        <th>Descrição</th>
-        <th>Quantidade</th>
-        <th>Valor</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let produto of produtos">
-        <td>{{ produto.id }}</td>
-        <td>{{ produto.nome }}</td>
-        <td>{{ produto.modelo }}</td>
-        <td>{{ produto.marca }}</td>
-        <td>{{ produto.descricao }}</td>
-        <td>{{ produto.quantidadeUnidades }}</td>
-        <td>R$ {{ produto.valorVenda }}</td>
-        <td>
-          <button (click)="selecionarProduto(produto)"><span class="icon is-small"><i class="mdi mdi-information"></i></span></button>
-          <button (click)="editarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-pencil"></i></span></button>
-          <button (click)="apagarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-delete"></i></span></button>
-        </td>
-      </tr>
-    </tbody>
-  </table>  
-</div>
-<div class="container box">
-    <nav class="level">
-        <div class="level-left">
-          <div class="level-item">
-            <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalPages })">Anterior</a>
-            <a *ngIf="this.page+1 !== totalPages" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalPages})">Próxima</a>    
-          </div>
-        </div>
-        <div class="level-right">
-          <div class="level-item">Página atual:</div>
-          <div class="level-item"><a>{{this.page+1}}</a></div>
-          <div class="level-item">Total de páginas:</div>
-          <div class="level-item"><a>{{this.totalPages}}</a></div>
-          <div class="level-item">ㅤ</div>
-          <div class="level-item">Itens por página:</div>
-          <div class="level-item">
-            <div class="select">
-              <select (change)="onChange($event)">
-                <option selected value="2">2</option>
-                <option value="4">4</option>
-                <option value="8">8</option>
-                <option value="16">16</option>
-              </select>
-            </div>  
-          </div>
-        </div>
-      </nav>  
-</div>
-<br>

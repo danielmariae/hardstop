@@ -82,7 +82,7 @@ export class FuncionarioListComponent implements OnInit {
       // Implementando o buscador para funcionario
       // Enviando o funcionario selecionado para uma página onde somente ele aparece
       selecionarFuncionario(funcionario: Funcionario) {
-        this.router.navigate(['/funcionarios', funcionario.id]);
+        this.router.navigate(['/adm/funcionarios', funcionario.id]);
       }
       ngOnInit() {
 
@@ -99,7 +99,7 @@ export class FuncionarioListComponent implements OnInit {
             // Recarrega os funcionarios ao receber uma notificação
           this.carregarFuncionarios(this.page, this.pageSize);
           this.buscarTodosFuncionarios(); 
-          this.router.navigate(['funcionarios']);
+          this.router.navigate(['adm/funcionarios']);
         });        
       }
 
@@ -163,14 +163,12 @@ paginar(event: PageEvent) : void {
             console.error('Erro:', error);
             window.alert(error);
         } 
-    })
+    });
     this.totalPages = Math.round(this.totalRecords/this.pageSize);
-    ;
-}
-inserirFuncionario(): void {
-  const enderecoEdicao: string = "funcionarios/new";
-  this.navigationService.navigateTo(enderecoEdicao);
-}
+  }
+  inserirFuncionario(): void {
+    this.navigationService.navigateTo("/adm/funcionarios/new");
+  }
 
  // Método para apagar um funcionario escolhido
  apagarFuncionario(id: number): void {
@@ -183,45 +181,56 @@ inserirFuncionario(): void {
         window.alert(error); // Exibe a mensagem de erro usando window.alert()
         }
     });
-}
+  }
 
- // Método para chamar o endpoint para edição de um Funcionario escolhido
- editarFuncionario(id: number): void {
-    const enderecoEdicao: string = "funcionarios/edit/" + id.toString();
-    this.navigationService.navigateTo(enderecoEdicao);
-}
+  // Método para chamar o endpoint para edição de um Funcionario escolhido
+  editarFuncionario(id: number): void {
+      const enderecoEdicao: string = "/adm/funcionarios/edit/" + id.toString();
+      this.navigationService.navigateTo(enderecoEdicao);
+  }
 
-formatarData(data: string): string {
-  const partesData = data.split('-');
-  return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
-}
+  formatarData(data: string): string {
+    const partesData = data.split('-');
+    return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+  }
 
-formatarSexo(sexo: string): string {
-  var sexoFormatado: string = ' ';
-  if(sexo === 'M'){
-    var sexoFormatado = 'Masculino'
-    return sexoFormatado;
-  }else if (sexo === 'F'){
-    var sexoFormatado = 'Feminino'
-    return sexoFormatado;
-  }else if (sexo === 'O'){
-    var sexoFormatado = 'Outros'
+  formatarSexo(sexo: string): string {
+    var sexoFormatado: string = ' ';
+    if(sexo === 'M'){
+      var sexoFormatado = 'Masculino'
+      return sexoFormatado;
+    }else if (sexo === 'F'){
+      var sexoFormatado = 'Feminino'
+      return sexoFormatado;
+    }else if (sexo === 'O'){
+      var sexoFormatado = 'Outros'
+      return sexoFormatado;
+    }
     return sexoFormatado;
   }
-  return sexoFormatado;
-}
-formatarCPF(cpf: string): string {
-  // Remove todos os caracteres não numéricos
-  const cpfDigits = cpf.replace(/\D/g, '');
+  formatarCPF(cpf: string): string {
+    // Remove todos os caracteres não numéricos
+    const cpfDigits = cpf.replace(/\D/g, '');
 
-  // Verifica se o CPF possui 11 dígitos
-  if (cpfDigits.length === 11) {
-    // Formata o CPF no formato desejado
-    return cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-  } else {
-    // Retorna o CPF original se não possuir 11 dígitos
-    return cpf;
+    // Verifica se o CPF possui 11 dígitos
+    if (cpfDigits.length === 11) {
+      // Formata o CPF no formato desejado
+      return cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    } else {
+      // Retorna o CPF original se não possuir 11 dígitos
+      return cpf;
+    }
   }
-}
+  navegarParaFornecedor(): void{
+    this.navigationService.navigateTo("/adm/fornecedores/");
+  }
+
+  navegarParaClientes(): void{
+    this.navigationService.navigateTo("/adm/clientes/");
+  } 
+
+  navegarParaProdutos(): void{
+    this.navigationService.navigateTo("/adm/produtos");
+  }
 
 }

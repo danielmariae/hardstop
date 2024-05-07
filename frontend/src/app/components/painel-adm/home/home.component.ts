@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-admin-home',
+  standalone: true,
+  imports: [],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrl: './home.component.css'
 })
-export class HomeComponent {
-  // Aqui você pode adicionar propriedades e métodos relacionados ao HomeComponent
+export class HomeAdminComponent {
+
 }

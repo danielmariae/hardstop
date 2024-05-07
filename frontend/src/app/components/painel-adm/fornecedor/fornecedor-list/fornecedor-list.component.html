@@ -1,4 +1,23 @@
 <div class="container">
+  <div class="columns">
+    <div class="column is-one-fifth">
+      <div class="box">
+        <p class="title is-4">Painel Administrativo</p>
+        <aside class="menu">
+          <p class="menu-label">Gestão de pessoas</p>
+            <ul class="menu-list">
+              <li><a  (click)="navegarParaClientes()">Clientes</a></li>
+              <li><a (click)="navegarParaFuncionario()">Funcionários</a></li>
+            </ul>
+          <p class="menu-label">Gestão de produtos</p>
+            <ul class="menu-list">
+              <li><a (click)="navegarParaProdutos()">Produtos</a></li>
+              <li><a class="is-active">Fornecedores</a></li>
+            </ul>
+        </aside>
+      </div>
+    </div>
+    <div class="column"> 
       <div class="box">
         <div class="columns">
           <div class="column">
@@ -18,7 +37,7 @@
           </div>
         </div>
       </div>
-      <div class="box">
+      <div class="box table-container">
         <h1 id="lista-clientes-h1" class="title is-1 centralizador">Lista de fornecedores</h1>
         <table class="table is-fullwidth">
             <thead>
@@ -72,9 +91,8 @@
           </div>
         </div>
       </nav>  
-  
-    
       </div>  
-      
     </div>
+  </div>
+</div>
     <br>

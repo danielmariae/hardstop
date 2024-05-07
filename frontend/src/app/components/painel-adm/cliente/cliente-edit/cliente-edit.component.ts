@@ -236,7 +236,7 @@ removerEndereco(index: number): void {
 
   cancelarEdicao(): void {
     // Redireciona o usuário para outra rota anterior
-    this.navigationService.navigateTo('clientes');
+    this.navigationService.navigateTo('adm/clientes');
   }
 
 
@@ -269,7 +269,7 @@ removerEndereco(index: number): void {
           if(this.navigationService.getPreviousEndPoint() === 'clientes') {
             this.clienteService.notificarClienteInserido(); // Notificar outros componentes
           } else {
-            this.navigationService.navigateTo('clientes');
+            this.navigationService.navigateTo('/adm/clientes');
           }
         },
         error: (error) => {
@@ -289,7 +289,7 @@ removerEndereco(index: number): void {
         if(this.navigationService.getPreviousEndPoint() === 'clientes') {
           this.clienteService.notificarClienteInserido(); // Notificar outros componentes
         } else {
-          this.navigationService.navigateTo('clientes');
+          this.navigationService.navigateTo('/adm/clientes');
         }
       },
       error: (error) => {

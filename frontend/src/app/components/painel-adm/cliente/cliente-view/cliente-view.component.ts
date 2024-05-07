@@ -322,12 +322,12 @@ removerEndereco(index: number): void {
 
   // Método para chamar o endpoint para edição de um Cliente escolhido
   editarCliente(id: number): void {
-    const enderecoEdicao: string = "clientes/edit/" + id.toString();
+    const enderecoEdicao: string = "/adm/clientes/edit/" + id.toString();
     this.navigationService.navigateTo(enderecoEdicao);
 }
 
 verClientes(): void{
-  const enderecoList: string = "clientes";
+  const enderecoList: string = "/adm/clientes";
   this.navigationService.navigateTo(enderecoList);
 }
 }
