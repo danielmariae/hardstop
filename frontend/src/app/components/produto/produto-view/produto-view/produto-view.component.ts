@@ -2,18 +2,18 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { NavigationService } from '../../../services/navigation.service';
-import { Produto, PlacaMae, Processador, Classificacao } from '../../../models/produto.model';
-import { ProdutoService } from '../../../services/produto.service';
-import { PlacaMaeFormComponent } from '../produto-form/placaMae-form/placaMae-form.component';
-import { ProcessadorFormComponent } from '../produto-form/processador-form/processador-form.component';
+import { NavigationService } from '../../../../services/navigation.service';
+import { Produto, PlacaMae, Processador, Classificacao } from '../../../../models/produto.model';
+import { ProdutoService } from '../../../../services/produto.service';
+import { ProcessadorViewComponent } from '../processador-view/processador-view.component'
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { SessionTokenService } from '../../../services/session-token.service';
+import { SessionTokenService } from '../../../../services/session-token.service';
+import { PlacaMaeViewComponent } from '../placaMae-view/placa-mae-view.component';
 
 @Component({
     selector: 'app-produto-edit',
     standalone: true,
-    imports: [ReactiveFormsModule, CommonModule, PlacaMaeFormComponent, ProcessadorFormComponent],
+    imports: [ReactiveFormsModule, CommonModule, PlacaMaeViewComponent, ProcessadorViewComponent],
     templateUrl: './produto-view.component.html',
     styleUrl: './produto-view.component.css'
 })

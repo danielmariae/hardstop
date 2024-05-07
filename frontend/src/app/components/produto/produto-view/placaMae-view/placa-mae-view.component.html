@@ -1,0 +1,42 @@
+<form [formGroup]="placaMaeForm">
+    <div class="container box">
+      <h1 class="title is-2 centralizador">Dados de Placa Mãe</h1>
+      <div class="columns">
+        <div class="column">
+          <label class="field label" for="cpu">CPU:</label>
+          <input class="control input" type="text" formControlName="cpu" id="cpu" readonly>
+        </div>  
+        <div class="column">
+          <label class="field label" for="chipset">Chipset:</label>
+          <input class="control input" type="text" formControlName="chipset" id="chipset" readonly>
+        </div>
+        <div class="column">
+          <label class="field label" for="memoria">Memória:</label>
+          <input class="control input" type="text" formControlName="memoria" id="memoria" readonly>
+        </div>  
+        <div class="column">
+          <label class="field label" for="bios">BIOS:</label>
+          <input class="control input" type="text" formControlName="bios" id="bios" readonly>
+        </div>  
+      </div>
+      <div class="columns">
+        <div class="column">
+          <label class="field label" for="grafico">Gráfico:</label>
+          <input class="control input" type="text" formControlName="grafico" id="grafico" readonly>
+        </div>  
+        <div class="column">
+          <label class="field label" for="lan">LAN:</label>
+          <input class="control input" type="text" formControlName="lan" id="lan" readonly>
+        </div>  
+        <div class="column">
+          <label class="field label" for="slots">Slots:</label>
+          <input class="control input" type="text" formControlName="slots" id="slots" readonly>
+        </div>
+        <div class="column">
+          <label class="field label" for="armazenamento">Armazenamento:</label>
+          <input class="control input" type="text" formControlName="armazenamento" id="armazenamento" readonly>
+        </div>  
+      </div>
+    </div>
+  </form>
+  

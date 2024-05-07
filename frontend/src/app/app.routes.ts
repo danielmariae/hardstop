@@ -21,7 +21,7 @@ import { ProdutoGarantiaComponent } from './components/produto/produto-garantia/
 import { ProdutoListComponent } from './components/produto/produto-list/produto-list.component';
 import { AuthResolver } from './components/session-token/resolver/session-token.resolver';
 import { SessionTokenComponent } from './components/session-token/session-token.component';
-import { ProdutoViewComponent } from './components/produto/produto-view/produto-view.component';
+import { ProdutoViewComponent } from './components/produto/produto-view/produto-view/produto-view.component';
 import { ProdutoEscolhidoComponent } from './components/produto/produto-escolhido/produto-escolhido.component';
 
 

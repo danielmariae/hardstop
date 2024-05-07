@@ -1,0 +1,138 @@
+<form [formGroup]="produtoForm">
+  <div class="container box">
+    <h1 class="title is-1 centralizador">Visualizar produto #{{produto.id}}</h1>
+    <div class="columns">
+      <div class="column">
+        <label class="field label" for="nome">Nome:</label>
+        <input class="control input" type="text" formControlName="nome" id="nome" readonly>
+    </div>
+    </div>
+    <div class="columns">
+      <div class="column">  
+          <label class="field label" for="modelo">Modelo:</label>
+          <input class="control input" type="text" formControlName="modelo" id="modelo" readonly>
+      </div>
+      <div class="column">
+          <label class="field label" for="marca">Marca:</label>
+          <input class="control input" type="text" formControlName="marca" id="marca" readonly>
+      </div>
+      <div class="column">
+        <label class="field label" for="codigoBarras">Código de Barras:</label>
+        <input class="control input" type="text" formControlName="codigoBarras" id="codigoBarras" readonly>
+    </div>
+    </div>
+    <div class="columns">
+      <div class="column"> 
+        <label class="field label" for="altura">Altura:</label>
+        <input class="control input" type="number" formControlName="altura" id="altura" readonly>
+    </div>
+      <div class="column">
+          <label class="field label" for="largura">Largura:</label>
+          <input class="control input" type="number" formControlName="largura" id="largura" readonly>
+      </div>
+      <div class="column">
+          <label class="field label" for="comprimento">Comprimento:</label>
+          <input class="control input" type="number" formControlName="comprimento" id="comprimento" readonly>
+      </div>
+
+      <div class="column">
+        <label class="field label" for="peso">Peso:</label>
+        <input class="control input" type="number" formControlName="peso" id="peso" readonly>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+          <label class="field label" for="descricao">Descrição:</label>
+          <textarea class="textarea has-fixed-size" formControlName="descricao" id="descricao" readonly></textarea>
+      </div>
+    </div>
+
+      
+      <!-- <div class="form-group">
+        <label for="valorVenda">Valor de Venda:</label>
+        <input type="number" formControlName="valorVenda" id="valorVenda">
+      </div>
+    
+      <div class="form-group">
+        <label for="quantidade">Quantidade:</label>
+        <input type="number" formControlName="quantidadeUnidades" id="quantidadeUnidades">
+      </div>
+    
+      <div class="form-group">
+        <label for="quantidade">Quantidade Não Convencional:</label>
+        <input type="number" formControlName="quantidadeNaoConvencional" id="quantidadeNaoConvencional">
+      </div>
+    
+      <div class="form-group">
+        <label for="unidadeDeMedida">Unidade de Medida:</label>
+        <input type="text" formControlName="unidadeDeMedida" id="unidadeDeMedida">
+      </div> -->
+    
+      <div class="columns">
+        <div class="column">
+          <h1 class="title is-3 centralizador">Upload de imagens</h1>
+
+          <!-- <div formArrayName="arquivos">
+            <div *ngFor="let arquivo of arquivos.controls; let i = index">
+              <div [formGroupName]="i">
+                 <div class="buttons">
+                  <button class="button is-link">{{arquivo.value.name}}</button>
+                  <button class="button is-danger" type="button" (click)="removerArquivo(i)"><span class="icon is-small"><i class="mdi mdi-delete"></i></span></button>
+                </div>
+               <label>{{ arquivo.value.name }}</label>
+                <button type="button" (click)="removerArquivo(i)">Remover</button>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="file">
+            <label class="file-label">
+              <input (click)="fileInput.click()" class="file-input" type="file" name="resume" multiple (change)="onFileSelected($event)" #fileInput style="display: none" readonly>
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="mdi mdi-upload"></i>
+                </span>
+                <span class="file-label"> Escolha um arquivo... </span>
+              </span>
+            </label>
+          </div>
+        <!-- Lista de nomes dos arquivos selecionados -->
+        <div class="table-container">
+          <table class="table is-fullwidth">
+            <tr>
+              <th>Nome do arquivo:</th>
+              <th>Ação:</th>
+            </tr>
+            <tr *ngFor="let arquivo of arquivosSelecionados">
+              <td><p class="is-size-6">{{arquivo.name}}</p></td>
+              <td><button class="button is-size-6" type="button" (click)="removerArquivoSelecionado(arquivo)"><span class="icon is-small"><i class="mdi mdi-delete"></i></span></button>
+              </td>
+            </tr>
+          </table>
+        </div>  
+        </div>
+      </div>
+  </div>
+
+  <!-- Exibir campos específicos de PlacaMae se o produto for uma PlacaMae -->
+  <ng-container *ngIf="tipoProduto === 'placas mãe'">
+    <app-placaMae-view [placaMae]="placaMae"></app-placaMae-view>
+  </ng-container>
+
+  <!-- Exibir campos específicos de Processador se o produto for um Processador -->
+  <ng-container *ngIf="tipoProduto === 'processadores'">
+    <app-processador-view [processador]="processador"></app-processador-view>
+  </ng-container>
+  <br>
+  <div class="container box">
+    <div class="buttons">
+      <button class="button is-primary" type="submit">Salvar</button>
+      <button class="button is-danger" (click)="apagarProduto(produto.id)">Apagar</button>
+      <button class="button is-primary" (click)="listarLote(produto.id)">Listar lote</button>
+      <button class="button is-primary" (click)="criarLote()">Criar novo lote</button>
+      <button class="button is-primary" (click)="produtoDefeito(produto.id)">Produto com defeito?</button>
+    <!-- <button class="button is-text" (click)="cancelarInsercao()">Voltar</button> -->
+
+  </div>
+</div> 
+</form>
