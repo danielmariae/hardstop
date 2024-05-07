@@ -134,7 +134,11 @@ paginar(event: PageEvent) : void {
     this.clienteService.count().subscribe(data => {
       this.totalRecords = data;
       this.totalPages = Math.round(this.totalRecords/this.pageSize);
+      if(this.totalPages < 1){
+        this.totalPages = 1;
+      }
     });
+    console.log(this.totalPages);
   }
 
   // Método para paginar os resultados

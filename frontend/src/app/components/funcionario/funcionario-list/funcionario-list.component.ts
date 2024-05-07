@@ -120,13 +120,23 @@ paginar(event: PageEvent) : void {
     this.atualizarDadosDaPagina();
   }
 
+  onChange(event:any): void{
+    const value = event.target.value;
+    console.log(value);
+    this.paginar({ pageIndex: 0, pageSize: parseInt(value), length: this.totalPages }); 
+}
+
   // Método para paginar os resultados
   atualizarDadosDaPagina(): void {
     this.carregarFuncionarios(this.page, this.pageSize);
     this.funcionarioService.count().subscribe(data => {
       this.totalRecords = data;
       this.totalPages = Math.round(this.totalRecords/this.pageSize);
+      if(this.totalPages < 1){
+        this.totalPages = 1;
+      }
     });
+    console.log(this.totalPages);
   }
 
   // Método para paginar os resultados

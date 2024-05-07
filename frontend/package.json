@@ -23,6 +23,8 @@
     "@angular/platform-browser-dynamic": "^17.1.0",
     "@angular/router": "^17.1.0",
     "@brunoc/ngx-viacep": "^3.4.1",
+    "@creativebulma/bulma-tagsinput": "^1.0.3",
+    "@ng-select/ng-select": "^12.0.7",
     "angular-ng-autocomplete": "^2.0.12",
     "bulma": "^1.0.0",
     "ngx-mask": "^17.0.7",

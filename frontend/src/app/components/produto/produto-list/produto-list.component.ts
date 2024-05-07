@@ -2,7 +2,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild, viewChild } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { Classificacao, Produto } from '../../../models/produto.model';
 import { ProdutoService } from '../../../services/produto.service';
@@ -14,29 +14,34 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable, of } from 'rxjs';
-import { startWith, map, catchError, toArray } from 'rxjs/operators';
+import { Observable, fromEvent, of } from 'rxjs';
+import { startWith, map, catchError, toArray, debounceTime, tap, switchMap } from 'rxjs/operators';
 import { NavigationService } from '../../../services/navigation.service';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
     selector: 'app-fornecedor-list',
     standalone: true,
-    imports: [NgFor, MatTableModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterModule, CommonModule, MatPaginatorModule, MatAutocompleteModule, FormsModule,
-    MatFormFieldModule, MatInputModule, ReactiveFormsModule, AsyncPipe,],
+    imports: [NgFor, MatTableModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterModule, CommonModule, MatPaginatorModule, MatAutocompleteModule, FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, AsyncPipe, NgSelectModule],
     templateUrl: './produto-list.component.html',
     styleUrl: './produto-list.component.css'
 })
 
 export class ProdutoListComponent implements OnInit {
+    @Output() setProdutoNameEvent = new EventEmitter<{ nome: string }>();
 
     // Variáveis relacionadas com a caixa de busca
     myControl = new FormControl('');
     filteredOptions: Observable<Produto[]>;
     todosProdutos: Produto[] = [];
-
+    filteredProdutos: Produto[] = [];
+    searchProdutoText: string = '';
+    
     myControlClass = new FormControl('');
     filteredOptionsClass: Observable<Classificacao[]>;
     todasClassificacoes: Classificacao[] = [];
+    filteredClassificacoes: Classificacao[] = [];
+    searchClassificacaoText: string = '';
 
     // variaveis de controle de paginacao
     totalRecords = 0;
@@ -67,6 +72,7 @@ export class ProdutoListComponent implements OnInit {
           );
 
     }
+  
 
     // Implementando o buscador para produto
     private _filter(value: string): Produto[] {
@@ -107,7 +113,7 @@ export class ProdutoListComponent implements OnInit {
         // Este foi o menor número que definimos no arquivo html
         this.pageSize = 2; 
         // Implementando o buscador para produtos
-       //this.buscarTodosProdutos();
+        this.buscarTodosProdutos();
 
         // Implementando o buscador para classificacao
         this.produtoService.getClassificacao().subscribe({
@@ -132,6 +138,28 @@ export class ProdutoListComponent implements OnInit {
         });        
       }
     
+      buscarProdutos(): void {
+        const searchTextLowerCase = this.searchProdutoText.toLowerCase();
+        if (searchTextLowerCase.trim() === '') {
+          this.filteredProdutos = [];
+      } else {
+          this.filteredProdutos = this.todosProdutos.filter(produto =>
+              produto.nome.toLowerCase().includes(searchTextLowerCase)
+          );
+        }
+      }
+
+      buscarClassificacao(): void {
+        const searchTextLowerCase = this.searchClassificacaoText.toLowerCase();
+        if (searchTextLowerCase.trim() === '') {
+          this.filteredClassificacoes = [];
+      } else {
+          this.filteredClassificacoes = this.todasClassificacoes.filter(Classificacao =>
+              Classificacao.nome.toLowerCase().includes(searchTextLowerCase)
+          );
+        }
+      }
+
 // Buscando todos os produtos para carregar na lista de buscador de produtos
 buscarTodosProdutos(): void {
   this.produtoService.findTodos().subscribe({
@@ -165,6 +193,9 @@ paginar(event: PageEvent) : void {
     this.produtoService.count().subscribe(data => {
       this.totalRecords = data;
       this.totalPages = this.totalRecords/this.pageSize;
+      if(this.totalPages < 1){
+        this.totalPages = 1;
+      }
     });
   }
 

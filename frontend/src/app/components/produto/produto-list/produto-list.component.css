@@ -51,7 +51,26 @@
       text-align: center;
       min-width: 10em;
     }
-
+    .autocomplete-list {
+      position: absolute;
+      z-index: 1000; /* Ajuste conforme necessário */
+      background-color: #fff; /* Cor de fundo da lista */
+      border: 1px solid #ccc; /* Borda da lista */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra da lista */
+      list-style-type: none; /* Remover marcadores de lista */
+      padding: 0;
+      margin: 0;
+  }
+  
+  .autocomplete-list li {
+      padding: 8px 12px; /* Espaçamento interno dos itens */
+      cursor: pointer; /* Cursor do mouse ao passar por cima */
+  }
+  
+  .autocomplete-list li:hover {
+      background-color: #f0f0f0; /* Cor de fundo ao passar por cima */
+  }
+  
     #espacador-texto{
       margin-right: 2%;
     }

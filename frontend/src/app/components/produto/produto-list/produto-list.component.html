@@ -1,41 +1,25 @@
 <div class="container box">
     <div class="columns">
         <div class="column">
-            <form class="example-form">
-                <mat-form-field class="example-full-width">
-                        <mat-label>Selecione um produto</mat-label>
-                        <input type="text"
-                            placeholder="Pick one"
-                            aria-label="Number"
-                            matInput
-                            [formControl]="myControl"
-                            [matAutocomplete]="autoprod">
-                            <mat-autocomplete #autoprod="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selecionarProduto($event.option.value)">
-                            <mat-option *ngFor="let produto of filteredOptions | async" [value]="produto">
-                                {{ produto.nome }}
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </form>
+          <input class="control input" type="text" [(ngModel)]="searchProdutoText" (input)="buscarProdutos()" placeholder="Selecione um produto">
+          <aside class="menu">
+            <ul class="menu-list" *ngIf="filteredProdutos.length">
+              <li *ngFor="let produto of filteredProdutos" (click)="selecionarProduto(produto)">
+                  <a>{{ produto.nome }}</a>
+              </li>
+          </ul>
+          </aside>
         </div>
         <div class="column">
-            <form class="exclass">
-                <mat-form-field class="exfullclass">
-                    <mat-label>Inserir Novos Produtos</mat-label>
-                    <input type="text"
-                        placeholder="Pick one"
-                        aria-label="Number"
-                        matInput
-                        [formControl]="myControlClass"
-                        [matAutocomplete]="autoclass">
-                        <mat-autocomplete #autoclass="matAutocomplete" [displayWith]="displayClass" (optionSelected)="selecionarClassificacao($event.option.value)">
-                        <mat-option *ngFor="let classificacao of filteredOptionsClass | async" [value]="classificacao">
-                            {{ classificacao.nome }}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-            </form>    
-        </div>
+          <input class="control input" type="text" [(ngModel)]="searchClassificacaoText" (input)="buscarClassificacao()" placeholder="Inserir novo produto">
+          <aside class="menu">
+            <ul class="menu-list" *ngIf="filteredClassificacoes.length">
+              <li *ngFor="let classificacao of filteredClassificacoes" (click)="selecionarClassificacao(classificacao)">
+                  <a>{{ classificacao.nome }}</a>
+              </li>
+          </ul>
+          </aside>      
+    </div>
     </div>
 </div>
 <div class="field">
@@ -56,7 +40,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let produto of produtos">
+        <tr *ngFor="let produto of produtos">
         <td>{{ produto.id }}</td>
         <td>{{ produto.nome }}</td>
         <td>{{ produto.modelo }}</td>

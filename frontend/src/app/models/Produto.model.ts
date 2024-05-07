@@ -1,4 +1,5 @@
 export class Produto {
+    [x: string]: any;
     id!: number;
     nome!: string;
     modelo!: string;
