@@ -1,7 +1,7 @@
 <div class="container box">
     <div class="columns">
         <div class="column">
-            <form class="example-form">
+            <!-- <form class="example-form">
                 <mat-form-field class="example-full-width">
                         <mat-label>Selecione um funcionario</mat-label>
                         <input type="text"
@@ -16,9 +16,20 @@
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
-                </form>
+                </form> -->
+                <input class="control input" type="text" [(ngModel)]="searchText" (input)="buscarFuncionario()" placeholder="Procure um funcionário">
+                <aside class="menu">
+                  <ul class="menu-list" *ngIf="filteredFuncionarios.length">
+                    <li *ngFor="let func of filteredFuncionarios" (click)="selecionarFuncionario(func)">
+                        <a>{{ func.nome }}</a>
+                    </li>
+                </ul>
+                </aside>  
         </div>
         <div class="column">
+          <div class="button is-primary is-default is-fullwidth">
+            <button type="button" (click)="inserirFuncionario()">Inserir novo funcionario</button>
+         </div>
         </div>
     </div>
 </div>
@@ -56,11 +67,6 @@
     </div>
   </div>  
 <div class="container box">
-  <div class="button is-primary is-default">
-    <button type="button" (click)="inserirFuncionario()">Inserir novo funcionario</button>
- </div>
- <br>
- <br>
   <div>
     <nav class="level">
       <div class="level-left">

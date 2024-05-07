@@ -33,6 +33,8 @@ export class ClienteListComponent implements OnInit {
     myControl = new FormControl('');
     filteredOptions: Observable<Cliente[]>;
     todosClientes: Cliente[] = [];
+    filteredClientes: Cliente[] = [];
+    
 
     myControlClass = new FormControl('');
 
@@ -42,6 +44,7 @@ export class ClienteListComponent implements OnInit {
     pageSize = 0;
     totalPages = 0;
     clientes: Cliente[] = [];
+    searchText: string = '';
 
     // Variável relacionada com as colunas da página html
     // displayedColumns: string[] = ['id', 'descricao', 'classificacao', 'modelo', 'marca', 'quantidade', 'valorVenda', 'acao'];
@@ -75,6 +78,17 @@ export class ClienteListComponent implements OnInit {
       // Implementando o buscador para cliente
       displayFn(cliente: Cliente): string {
         return cliente && cliente.nome ? cliente.nome : '';
+      }
+
+      buscarCliente(): void {
+        const searchTextLowerCase = this.searchText.toLowerCase();
+        if (searchTextLowerCase.trim() === '') {
+          this.filteredClientes = [];
+      } else {
+          this.filteredClientes = this.todosClientes.filter(cliente =>
+              cliente.nome.toLowerCase().includes(searchTextLowerCase)
+          );
+        }
       }
   
       // Implementando o buscador para cliente

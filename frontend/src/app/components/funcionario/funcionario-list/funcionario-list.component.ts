@@ -33,6 +33,7 @@ export class FuncionarioListComponent implements OnInit {
     myControl = new FormControl('');
     filteredOptions: Observable<Funcionario[]>;
     todosFuncionarios: Funcionario[] = [];
+    filteredFuncionarios: Funcionario[] = [];
 
     myControlClass = new FormControl('');
 
@@ -42,6 +43,7 @@ export class FuncionarioListComponent implements OnInit {
     pageSize = 0;
     totalPages = 0;
     funcionarios: Funcionario[] = [];
+    searchText: string = '';
 
     // Variável relacionada com as colunas da página html
     // displayedColumns: string[] = ['id', 'descricao', 'classificacao', 'modelo', 'marca', 'quantidade', 'valorVenda', 'acao'];
@@ -99,6 +101,17 @@ export class FuncionarioListComponent implements OnInit {
           this.buscarTodosFuncionarios(); 
           this.router.navigate(['funcionarios']);
         });        
+      }
+
+      buscarFuncionario(): void {
+        const searchTextLowerCase = this.searchText.toLowerCase();
+        if (searchTextLowerCase.trim() === '') {
+          this.filteredFuncionarios = [];
+      } else {
+          this.filteredFuncionarios = this.todosFuncionarios.filter(funcionario =>
+              funcionario.nome.toLowerCase().includes(searchTextLowerCase)
+          );
+        }
       }
   
 // Buscando todos os funcionarios para carregar na lista de buscador de funcionarios

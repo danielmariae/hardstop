@@ -1,7 +1,7 @@
 <div class="container box">
     <div class="columns">
         <div class="column">
-            <form class="example-form">
+            <!-- <form class="example-form">
                 <mat-form-field class="example-full-width">
                         <mat-label>Selecione um cliente</mat-label>
                         <input type="text"
@@ -16,9 +16,20 @@
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
-                </form>
+                </form> -->
+                <input class="control input" type="text" [(ngModel)]="searchText" (input)="buscarCliente()" placeholder="Procure um cliente">
+                <aside class="menu">
+                  <ul class="menu-list" *ngIf="filteredClientes.length">
+                    <li *ngFor="let cliente of filteredClientes" (click)="selecionarCliente(cliente)">
+                        <a>{{ cliente.nome }}</a>
+                    </li>
+                </ul>
+                </aside>      
         </div>
         <div class="column">
+          <div class="button is-primary is-default is-fullwidth">
+            <button type="button" (click)="inserirCliente()">Inserir novo cliente</button>
+         </div>        
         </div>
     </div>
 </div>
@@ -58,11 +69,6 @@
   </div>
 </div>
 <div class="container box">
-  <div class="button is-primary is-default">
-    <button type="button" (click)="inserirCliente()">Inserir novo cliente</button>
- </div>
- <br>
- <br>
   <div>
     <nav class="level">
       <div class="level-left">
