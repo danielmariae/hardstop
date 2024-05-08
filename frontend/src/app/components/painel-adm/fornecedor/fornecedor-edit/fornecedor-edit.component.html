@@ -136,6 +136,12 @@
         <button class="button is-primary" type="submit">Salvar</button>
       <button class="button is-text" (click)="cancelarEdicao()">Cancelar</button>
     </div>
+    <div *ngIf="errorDetails" class="notification is-danger">
+      <div *ngFor="let error of errorDetails.errors">
+        <p><b>{{error.fieldName}}:</b> {{error.message}}</p>
+      </div>
+    </div> 
+  
   </div> 
   </form>
   

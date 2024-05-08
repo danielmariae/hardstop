@@ -37,6 +37,8 @@ import { LoteTesteService } from '../../../../services/loteTeste.service';
 })
 
 export class LoteListComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
     id: number = 0;
     produto: Produto = new Produto();
     fornecedores: Fornecedor[] = [];

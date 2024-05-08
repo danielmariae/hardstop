@@ -63,13 +63,24 @@ FileService fileService;
 
   @GET
   @RolesAllowed({"User"})
+  @Path("this")
   public Response getCliente() {
-
       // obtendo o login pelo token jwt
       String login = jwt.getSubject();
       
       return Response.ok(service.findByLogin(login)).build();
   }
+
+  @GET
+  @RolesAllowed({"User"})
+  @Path("this/perfil")
+  public Response getClientePerfil() {
+      // obtendo o login pelo token jwt
+      String login = jwt.getSubject();
+      
+      return Response.ok(service.findPerfilByLogin(login)).build();
+  }
+
 
   @PATCH
   @RolesAllowed({"User"})

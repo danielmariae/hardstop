@@ -35,6 +35,8 @@ import { LoteEnvia } from '../../../../models/loteEnvia.model';
 })
 
 export class LoteFormComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
 
   @Input() lote: LoteEnvia = new LoteEnvia();
   loteForm: FormGroup;

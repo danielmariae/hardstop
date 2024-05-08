@@ -160,7 +160,10 @@
             <button class="button is-text" (click)="verClientes()">Voltar a lista</button>
             <button class="button is-primary" (click)="editarCliente(cliente.id)">Editar</button>
             <button class="button is-danger" (click)="apagarCliente(cliente.id)">Apagar</button>
-        </div>
+          </div>
+          <div *ngIf="errorDetails" class="notification is-danger">
+            <p><b>{{errorDetails.status}}:</b> {{errorDetails.statusText}}</p>
+          </div>
       </div> 
     </form>
     </div>

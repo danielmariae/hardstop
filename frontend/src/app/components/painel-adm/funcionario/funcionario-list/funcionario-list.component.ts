@@ -28,6 +28,8 @@ import { NavigationService } from '../../../../services/navigation.service';
 })
 
 export class FuncionarioListComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
 
     // Variáveis relacionadas com a caixa de busca
     myControl = new FormControl('');

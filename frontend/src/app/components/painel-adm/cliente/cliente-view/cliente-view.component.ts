@@ -22,6 +22,9 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 })
 
 export class ClienteViewComponent implements OnInit {
+  errorMessage: string | null = null;
+  errorDetails: any | null = null; // Objeto JSON para armazenar os detalhes do erro
+
   cliente: Cliente;
   clienteForm: FormGroup;
   tiposTelefone: any[];
@@ -300,10 +303,10 @@ removerEndereco(index: number): void {
       error: (error) => {
        // Este callback é executado quando ocorre um erro durante a emissão do valor
        console.error('Erro:', error);
-       // Aqui você pode lidar com o erro de acordo com sua lógica de negócio
-       // Por exemplo, exibir uma mensagem de erro para o usuário
-       window.alert(error);
-      }
+       //window.alert(error)
+       this.errorMessage = error.error.errorMessage;
+       this.errorDetails = error;
+     }
     });
   }
 
@@ -312,12 +315,16 @@ removerEndereco(index: number): void {
       this.clienteService.delete(id).subscribe({
         next:  (response) => {
               this.clienteService.notificarClienteInserido();
+              this.navigationService.navigateTo("adm/clientes");
           },
           error: (error) => {
-          console.error(error);
-          window.alert(error); // Exibe a mensagem de erro usando window.alert()
+            console.error('Erro:', error);
+            //window.alert(error)
+            this.errorMessage = error.error.errorMessage;
+            this.errorDetails = error;
           }
       });
+
   }
 
   // Método para chamar o endpoint para edição de um Cliente escolhido

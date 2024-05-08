@@ -3,6 +3,10 @@ import { RouterOutlet } from '@angular/router';
 import { SessionTokenService } from './services/session-token.service';
 import { CommonModule } from '@angular/common';
 import { NavigationService } from './services/navigation.service';
+import { ClienteService } from './services/cliente.service';
+import { FuncionarioService } from './services/funcionario.service';
+import { Observable, catchError, of } from 'rxjs';
+import { Perfil } from './models/perfil.model';
 
 
 @Component({
@@ -15,9 +19,13 @@ import { NavigationService } from './services/navigation.service';
 export class AppComponent implements OnInit{
   title = 'frontend';
   usuarioLogado = false;
+  admLogado = false;
+
   constructor(
     private sessionTokenService: SessionTokenService,
     private navigationService: NavigationService,
+    private clienteService: ClienteService,
+    private funcionarioService: FuncionarioService
   ){}
 
   ngOnInit(): void {
@@ -42,15 +50,51 @@ export class AppComponent implements OnInit{
       });
     });
 
-    const headers = this.sessionTokenService.getSessionHeader();
-    
-    if(headers)
-      this.usuarioLogado = true;
-    else
-      this.usuarioLogado = false;
-
-      console.log(this.usuarioLogado);
+    this.getPerfil();
   }
+
+  getPerfil(): void {
+    let profile: Observable<Perfil>;
+  
+    profile = this.clienteService.getPerfil();
+  
+    profile.subscribe(
+      response => {
+        if (response && response.id === 0) {
+          this.usuarioLogado = true;
+        }
+      },
+      error => {
+        // Verifica se o erro é do tipo HttpErrorResponse e se o status é 400
+        if (error.status !== 403) {
+          console.error('Ocorreu um erro ao obter o perfil:', error);
+        }
+      }
+    );
+  
+    // O mesmo para a função getPerfil() de funcionário
+    let funcionarioProfile: Observable<Perfil>;
+    funcionarioProfile = this.funcionarioService.getPerfil();
+  
+    funcionarioProfile.subscribe(
+      response => {
+        if (response && response.id === 1 || response.id === 2) {
+          this.admLogado = true;
+        }
+      },
+      error => {
+        // Verifica se o erro é do tipo HttpErrorResponse e se o status é 400
+        if (error.status !== 403) {
+          console.error('Ocorreu um erro ao obter o perfil do funcionário:', error);
+        }
+      }
+    );
+  
+    console.log('Usuário está logado? ', this.usuarioLogado);
+    console.log('Adm está logado? ', this.admLogado);
+  }
+  
+  
 
   deslogarUsuario(): void {
     this.sessionTokenService.clearSessionToken();

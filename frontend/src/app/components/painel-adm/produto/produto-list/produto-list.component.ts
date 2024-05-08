@@ -28,6 +28,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 })
 
 export class ProdutoListComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
     @Output() setProdutoNameEvent = new EventEmitter<{ nome: string }>();
 
     // Variáveis relacionadas com a caixa de busca

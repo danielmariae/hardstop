@@ -22,8 +22,9 @@ import { formatarDataNascimento } from '../../../../converters/date-converter';
   providers: [provideNgxMask()]
 })
 export class FuncionarioFormComponent {
-  errorMessage: string = '';
-  funcionarioForm: FormGroup;
+  errorMessage: string | null = null;
+  errorDetails: any | null = null;
+    funcionarioForm: FormGroup;
   tiposTelefone: any[];
   tiposPerfil: any[];
   uf: any[];

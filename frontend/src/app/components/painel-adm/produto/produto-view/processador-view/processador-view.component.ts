@@ -12,6 +12,8 @@ import { ProdutoService } from '../../../../../services/produto.service';
   styleUrls: ['./processador-view.component.css']
 })
 export class ProcessadorViewComponent implements OnInit {
+  errorMessage: string | null = null;
+  errorDetails: any | null = null;
   @Input() processador: Processador = new Processador();
   processadorForm!: FormGroup;
 

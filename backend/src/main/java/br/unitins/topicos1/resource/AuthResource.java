@@ -5,6 +5,7 @@ package br.unitins.topicos1.resource;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import br.unitins.topicos1.dto.ClienteResponseDTO;
 import br.unitins.topicos1.dto.FuncionarioResponseDTO;
@@ -40,6 +41,9 @@ public class AuthResource {
 
     @Inject
     JwtService jwtService;
+
+    @Inject
+    JsonWebToken jwt;
 
     @PermitAll
     @POST
@@ -79,5 +83,4 @@ public class AuthResource {
         //return Response.ok().header("Authorization", token).build();
         
     }
-
 }

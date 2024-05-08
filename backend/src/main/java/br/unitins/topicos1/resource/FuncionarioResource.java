@@ -53,12 +53,23 @@ FileService fileService;
 
 @GET
 @RolesAllowed({"Func", "Admin"})
+@Path("this")
 public Response getFuncionario() {
 
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();
     
     return Response.ok(serviceFuncionario.findByLogin(login)).build();
+}
+
+@GET
+@RolesAllowed({"Func", "Admin"})
+@Path("this/perfil")
+public Response getFuncionarioPerfil() {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+    
+    return Response.ok(serviceFuncionario.findPerfilByLogin(login)).build();
 }
 
   @PATCH

@@ -19,6 +19,8 @@ import { NgxViacepService } from '@brunoc/ngx-viacep';
 })
 
 export class FornecedorViewComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
   fornecedor: Fornecedor;
   fornecedorForm: FormGroup;
   tiposTelefone: any[];

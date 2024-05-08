@@ -12,6 +12,8 @@ import { ProdutoService } from '../../../../../services/produto.service';
   styleUrls: ['./placaMae-form.component.css']
 })
 export class PlacaMaeFormComponent {
+  errorMessage: string | null = null;
+  errorDetails: any | null = null;
   @Input() placaMae: PlacaMae = new PlacaMae();
   placaMaeForm!: FormGroup;
 

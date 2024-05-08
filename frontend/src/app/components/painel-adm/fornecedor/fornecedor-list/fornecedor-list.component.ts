@@ -28,6 +28,8 @@ import { NavigationService } from '../../../../services/navigation.service';
 })
 
 export class FornecedorListComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
 // Variáveis relacionadas com a caixa de busca
   myControl = new FormControl('');
   filteredOptions: Observable<Fornecedor[]>;
@@ -154,9 +156,11 @@ fornecedores: Fornecedor[] = [];
                 this.fornecedores = response;
             },
             error: (error) => {
-                // Este callback é executado quando ocorre um erro durante a emissão do valor
-                console.error('Erro:', error);
-                window.alert(error);
+            // Este callback é executado quando ocorre um erro durante a emissão do valor
+            console.error('Erro: ', error);
+            //window.alert(error)
+            this.errorMessage = error.error.errorMessage;
+            this.errorDetails = error;
             } 
 
         });

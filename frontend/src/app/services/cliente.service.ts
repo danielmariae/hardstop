@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Observable, Subject, throwError, catchError } from 'rxjs';
 import { Cliente } from '../models/cliente.model';
 import { SessionTokenService } from './session-token.service';
+import { Perfil } from '../models/perfil.model';
 
 
 
@@ -202,6 +203,31 @@ export class ClienteService {
           catchError(this.handleError)
         );
     }
+  }
+
+
+  getPerfil(): Observable<Perfil> {
+    const headers = this.sessionTokenService.getSessionHeader();
+    const url = `${this.baseUrl}/this/perfil`;
+
+    let profile: Observable<Perfil>; // Remova a atribuição inicial aqui
+
+    if (headers) {
+      profile = this.httpClient.get<Perfil>(url, { headers });
+    } else {
+      // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
+      profile = this.httpClient.get<Perfil>(url);
+    }
+
+    // profile.subscribe(
+    //   response => {
+    //     console.log(response); // Verifique a resposta recebida
+    //   },
+    //   error => {
+    //     console.error(error); // Em caso de erro, imprima o erro
+    //   }
+    // );
+    return profile;
   }
 
   getTipoTelefone(): Observable<any[]> {

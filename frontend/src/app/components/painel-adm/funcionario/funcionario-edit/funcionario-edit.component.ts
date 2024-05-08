@@ -21,6 +21,8 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 })
 
 export class FuncionarioEditComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
   funcionario: Funcionario;
   funcionarioForm: FormGroup;
   tiposTelefone: any[];

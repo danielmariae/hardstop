@@ -19,6 +19,8 @@ import { PlacaMaeViewComponent } from '../placaMae-view/placa-mae-view.component
 })
 
 export class ProdutoViewComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
     produto: Produto;
     @ViewChild('fileInput') fileInput: any;
     produtoForm!: FormGroup;

@@ -20,6 +20,8 @@ import { SessionTokenService } from '../../../../../services/session-token.servi
   })
 
 export class ProdutoFormComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
   @ViewChild('fileInput') fileInput: any;
   tipoProduto!: string;
   arquivosSelecionados: File[] = [];

@@ -19,6 +19,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 })
 export class FornecedorComponent {
   errorMessage: string = '';
+  errorDetails: any | null = null;
   fornecedorForm: FormGroup;
   tiposTelefone: any[];
   uf: any[];
@@ -204,8 +205,10 @@ export class FornecedorComponent {
       },
       error: (error) => {
         // Este callback é executado quando ocorre um erro durante a emissão do valor
-        console.error('Erro:', error);
-        window.alert(error);
+        console.error('Erro ao inserir cliente:', error);
+        //window.alert(error)
+        this.errorMessage = error.error.errorMessage;
+        this.errorDetails = error;
       }
   });
   }

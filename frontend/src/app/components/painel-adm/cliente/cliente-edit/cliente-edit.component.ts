@@ -20,6 +20,9 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 
 export class ClienteEditComponent implements OnInit {
+  errorMessage: string | null = null;
+  errorDetails: any | null = null; // Objeto JSON para armazenar os detalhes do erro
+  
   cliente: Cliente;
   clienteForm: FormGroup;
   tiposTelefone: any[];
@@ -274,10 +277,10 @@ removerEndereco(index: number): void {
         },
         error: (error) => {
          // Este callback é executado quando ocorre um erro durante a emissão do valor
-         console.error('Erro:', error);
-         // Aqui você pode lidar com o erro de acordo com sua lógica de negócio
-         // Por exemplo, exibir uma mensagem de erro para o usuário
-         window.alert(error);
+         console.error('Erro ao editar cliente:', error);
+         //window.alert(error)
+         this.errorMessage = error.error.errorMessage;
+         this.errorDetails = error;
         }
       });
   
@@ -295,10 +298,10 @@ removerEndereco(index: number): void {
       error: (error) => {
        // Este callback é executado quando ocorre um erro durante a emissão do valor
        console.error('Erro:', error);
-       // Aqui você pode lidar com o erro de acordo com sua lógica de negócio
-       // Por exemplo, exibir uma mensagem de erro para o usuário
-       window.alert(error);
-      }
+       //window.alert(error)
+       this.errorMessage = error.error.errorMessage;
+       this.errorDetails = error;
+     }
     });
     }
 

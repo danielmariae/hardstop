@@ -19,6 +19,8 @@ import { SessionTokenService } from '../../../../services/session-token.service'
 })
 
 export class ProdutoEditComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
     produto: Produto;
     @ViewChild('fileInput') fileInput: any;
     produtoForm!: FormGroup;

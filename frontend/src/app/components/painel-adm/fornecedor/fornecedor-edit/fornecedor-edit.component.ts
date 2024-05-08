@@ -19,6 +19,8 @@ import { NgxViacepService } from '@brunoc/ngx-viacep';
 })
 
 export class FornecedorEditComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
   fornecedor: Fornecedor;
   fornecedorForm: FormGroup;
   tiposTelefone: any[];
@@ -241,11 +243,11 @@ removerEndereco(index: number): void {
         }
       },
       error: (error) => {
-       // Este callback é executado quando ocorre um erro durante a emissão do valor
-       console.error('Erro:', error);
-       // Aqui você pode lidar com o erro de acordo com sua lógica de negócio
-       // Por exemplo, exibir uma mensagem de erro para o usuário
-       window.alert(error);
+          // Este callback é executado quando ocorre um erro durante a emissão do valor
+          console.error('Erro ao inserir cliente:', error);
+          //window.alert(error)
+          this.errorMessage = error.error.errorMessage;
+          this.errorDetails = error;
       }
     });
   }

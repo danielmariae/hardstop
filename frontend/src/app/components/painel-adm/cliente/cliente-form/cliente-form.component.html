@@ -205,7 +205,7 @@
     </div>
     <div *ngIf="errorDetails" class="notification is-danger">
       <div *ngFor="let error of errorDetails.errors">
-        <p>{{error.message}}</p>
+        <p><b>{{error.fieldName}}:</b> {{error.message}}</p>
       </div>
   </div> 
   </div>

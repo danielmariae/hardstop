@@ -91,6 +91,17 @@
           </div>
         </div>
       </nav>  
+      <div *ngIf="errorDetails">
+        <div class="box notification is-danger">
+          <div class="columns">
+            <div class="column">
+              <div>
+                <p><b>{{errorDetails.status}}:</b> {{errorDetails.statusText}}</p>
+              </div>    
+            </div>
+          </div>
+        </div>   
+      </div>
       </div>  
     </div>
   </div>

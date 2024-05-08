@@ -14,14 +14,14 @@
       <div class="navbar-end">
         <a class="navbar-item">Favoritos</a>
         <a class="navbar-item">Carrinho</a>
-        <div *ngIf="!usuarioLogado">
+        <div *ngIf="!admLogado && !usuarioLogado">
           <div class="navbar-item"> 
             <div class="buttons">
               <a href='/loginF' class="button is-light">Conta</a>
             </div>
           </div>
         </div>
-        <div *ngIf="usuarioLogado">
+        <div *ngIf="admLogado">
           <div class="navbar-item">
             <div class="buttons">
               <a href='/adm/clientes' class="button is-light">Painel</a>

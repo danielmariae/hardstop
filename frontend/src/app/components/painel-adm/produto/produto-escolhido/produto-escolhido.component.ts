@@ -29,6 +29,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 
 export class ProdutoEscolhidoComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
     dataSource: Produto[] | PlacaMae[] | Processador[] = [];
     todasClassificacoes: Classificacao[] = [];
     produtoId: number = 0;

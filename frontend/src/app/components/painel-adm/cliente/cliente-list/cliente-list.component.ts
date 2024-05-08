@@ -28,6 +28,8 @@ import { NavigationService } from '../../../../services/navigation.service';
 })
 
 export class ClienteListComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null; // Objeto JSON para armazenar os detalhes do erro
 
     // Variáveis relacionadas com a caixa de busca
     myControl = new FormControl('');
@@ -130,7 +132,10 @@ buscarTodosClientes(): void {
       this.todosClientes = todosClientes;
     },
     error: (error) => {
-      console.error('Erro ao carregar clientes:', error);
+      console.error('Erro ao buscar clientes:', error);
+      //window.alert(error)
+      this.errorMessage = error.error.errorMessage;
+      this.errorDetails = error;
     }
   });
 }
@@ -163,8 +168,10 @@ paginar(event: PageEvent) : void {
         },
         error: (error) => {
             // Este callback é executado quando ocorre um erro durante a emissão do valor
-            console.error('Erro:', error);
-            window.alert(error);
+            console.error('Erro ao inserir cliente:', error);
+            //window.alert(error)
+            this.errorMessage = error.error.errorMessage;
+            this.errorDetails = error;
         } 
     })
     this.totalPages = Math.round(this.totalRecords/this.pageSize);
@@ -181,8 +188,6 @@ inserirCliente(): void {
             this.clienteService.notificarClienteInserido();
         },
         error: (error) => {
-        console.error(error);
-        window.alert(error); // Exibe a mensagem de erro usando window.alert()
         }
     });
 }
@@ -237,4 +242,6 @@ formatarCPF(cpf: string): string {
   navegarParaProdutos(): void{
     this.navigationService.navigateTo("adm/produtos");
   }
+  
+
 }

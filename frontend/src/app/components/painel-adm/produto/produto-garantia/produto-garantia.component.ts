@@ -34,6 +34,8 @@ import { LoteEnvia } from '../../../../models/loteEnvia.model';
 })
 
 export class ProdutoGarantiaComponent implements OnInit {
+    errorMessage: string | null = null;
+    errorDetails: any | null = null;
     produtoForm: FormGroup;
     produto: Produto = new Produto();
     produtoId: number = 0;
