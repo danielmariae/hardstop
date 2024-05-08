@@ -46,36 +46,38 @@
     
     <div class="box">
     <h1 id="lista-produtos-h1" class="title is-1">Lista de produtos</h1>
-    <table class="table is-fullwidth">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Modelo</th>
-            <th>Marca</th>
-            <th>Descrição</th>
-            <th>Quantidade</th>
-            <th>Valor</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let produto of produtos">
-            <td>{{ produto.id }}</td>
-            <td>{{ produto.nome }}</td>
-            <td>{{ produto.modelo }}</td>
-            <td>{{ produto.marca }}</td>
-            <td>{{ produto.descricao }}</td>
-            <td>{{ produto.quantidadeUnidades }}</td>
-            <td>R$ {{ produto.valorVenda }}</td>
-            <td>
-              <button (click)="selecionarProduto(produto)"><span class="icon is-small"><i class="mdi mdi-information"></i></span></button>
-              <button (click)="editarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-pencil"></i></span></button>
-              <button (click)="apagarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-delete"></i></span></button>
-            </td>
-          </tr>
-        </tbody>
-      </table>  
+      <div class="table-container">
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Modelo</th>
+              <th>Marca</th>
+              <th>Descrição</th>
+              <th>Quantidade</th>
+              <th>Valor</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let produto of produtos">
+              <td>{{ produto.id }}</td>
+              <td>{{ produto.nome }}</td>
+              <td>{{ produto.modelo }}</td>
+              <td>{{ produto.marca }}</td>
+              <td>{{ produto.descricao }}</td>
+              <td>{{ produto.quantidadeUnidades }}</td>
+              <td>R$ {{ produto.valorVenda }}</td>
+              <td>
+                <button (click)="selecionarProduto(produto)"><span class="icon is-small"><i class="mdi mdi-information"></i></span></button>
+                <button (click)="editarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-pencil"></i></span></button>
+                <button (click)="apagarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-delete"></i></span></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>  
+      </div>
     </div>
     <div class="box">
         <nav class="level">

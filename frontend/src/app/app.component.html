@@ -14,10 +14,20 @@
       <div class="navbar-end">
         <a class="navbar-item">Favoritos</a>
         <a class="navbar-item">Carrinho</a>
-        <div class="navbar-item">
+        <div *ngIf="!usuarioLogado">
+          <div class="navbar-item"> 
             <div class="buttons">
               <a href='/loginF' class="button is-light">Conta</a>
             </div>
+          </div>
+        </div>
+        <div *ngIf="usuarioLogado">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a href='/adm/clientes' class="button is-light">Painel</a>
+              <a (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
