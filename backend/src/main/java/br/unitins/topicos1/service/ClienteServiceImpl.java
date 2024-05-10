@@ -18,6 +18,7 @@ import br.unitins.topicos1.dto.PatchEmailDTO;
 import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
+import br.unitins.topicos1.dto.PerfilDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Cliente;
@@ -508,6 +509,15 @@ cliente.getListaProduto().clear();
             throw new ValidationException("login", "Login inválido");
         
         return ClienteResponseDTO.valueOf(cliente);
+    }
+    
+    @Override
+    public PerfilDTO findPerfilByLogin(String login) {
+      Cliente cliente = repository.findByLogin(login);
+      if(cliente == null)
+        throw new ValidationException("login", "Login inválido");
+      
+      return PerfilDTO.valueOf(cliente.getPerfil());
     }
 
 

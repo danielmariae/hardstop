@@ -12,6 +12,7 @@ import br.unitins.topicos1.dto.PatchEmailDTO;
 import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
+import br.unitins.topicos1.dto.PerfilDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 
@@ -74,10 +75,14 @@ public interface FuncionarioService {
   //Autenticação de usuário
   public FuncionarioResponseDTO findByLogin(String login);
 
-    // LISTAR DE FORMA PAGINADA
-    public List<FuncionarioResponseDTO> findByAll(int page, int pageSize);
+  // LISTAR DE FORMA PAGINADA
+  public List<FuncionarioResponseDTO> findByAll(int page, int pageSize);
 
-    // CONTADOR:
-    public long count();
+  // CONTADOR:
+  public long count();
+
+  // ENCONTRAR PERFIL:
+  public PerfilDTO findPerfilByLogin(String login);
+
 
 }

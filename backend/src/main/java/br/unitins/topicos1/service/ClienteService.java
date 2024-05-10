@@ -14,6 +14,7 @@ import br.unitins.topicos1.dto.PatchEmailDTO;
 import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
+import br.unitins.topicos1.dto.PerfilDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 
@@ -84,5 +85,6 @@ public interface ClienteService {
     // CONTADOR:
     public long count();
 
+    public PerfilDTO findPerfilByLogin(String login);
   
 }

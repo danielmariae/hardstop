@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import { ClienteService } from './cliente.service';
+import { FuncionarioService } from './funcionario.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 export class SessionTokenService {
   private baseUrl = 'http://localhost:8080/auth'; // URL base da sua API
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(
+    private httpClient: HttpClient  ) { }
 
   // Método para salvar o token de sessão no armazenamento local
   saveSessionToken(token: string) {
@@ -55,6 +58,8 @@ export class SessionTokenService {
      const loginUrl = `${this.baseUrl}/loginF`;
      return this.httpClient.post(loginUrl, { login: username, senha: password });
     }
+
+
 
     // Exemplo de método para fazer uma solicitação HTTP para a API para autenticar o Cliente
     authenticateUserC(username: string, password: string): Observable<any> {

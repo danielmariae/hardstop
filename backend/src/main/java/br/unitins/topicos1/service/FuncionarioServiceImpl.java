@@ -17,6 +17,7 @@ import br.unitins.topicos1.dto.PatchEmailDTO;
 import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
+import br.unitins.topicos1.dto.PerfilDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Endereco;
@@ -433,4 +434,12 @@ public long count() {
     return repository.count();
 }
 
+    @Override
+    public PerfilDTO findPerfilByLogin(String login) {
+      Funcionario funcionario = repository.findByLogin(login);
+      if(funcionario == null)
+        throw new ValidationException("login", "Login inválido");
+      
+      return PerfilDTO.valueOf(funcionario.getPerfil());
+    }
 }

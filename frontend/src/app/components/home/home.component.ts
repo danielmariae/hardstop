@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SessionTokenService } from '../../services/session-token.service';
 
 @Component({
   selector: 'app-home',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  // Aqui você pode adicionar propriedades e métodos relacionados ao HomeComponent
+  constructor(
+    private sessionTokenService: SessionTokenService
+  ){}
+
+
 }
