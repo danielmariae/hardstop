@@ -193,6 +193,18 @@ FileService fileService;
     return Response.status(200).entity(service.updateEnderecoCliente(end, idCliente)).build();
   }
 
+  @PUT
+  @Path("this")
+  @RolesAllowed({"User"})
+  public Response updateThis(@Valid ClienteNSDTO cliente) {
+    // obtendo o login pelo token jwt
+    String login = jwt.getSubject();
+
+    Long idCliente = service.findByLogin(login).id();
+    return Response.status(200).entity(service.updateClienteNS(cliente, idCliente)).build();
+  }
+
+
   @POST
   @Path("post/endereco/")
   @RolesAllowed({"User"})

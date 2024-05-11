@@ -4,6 +4,7 @@ import { Observable, Subject, throwError, catchError } from 'rxjs';
 import { Cliente } from '../models/cliente.model';
 import { SessionTokenService } from './session-token.service';
 import { Perfil } from '../models/perfil.model';
+import { SenhaUpdate } from '../models/senhaUpdate.model';
 
 
 
@@ -165,6 +166,48 @@ export class ClienteService {
     }
   }
 
+  updateThis(cliente: Cliente): Observable<Cliente> {
+
+    const headers = this.sessionTokenService.getSessionHeader();
+    const url = `${this.baseUrl}/this`; // Concatena o ID à URL base
+
+    const { senha, ...clienteSemSenha } = cliente;
+    const { id, ...clienteSemId } = clienteSemSenha;
+
+    if (headers) {
+      return this.httpClient.put<Cliente>(url, clienteSemId, { headers })
+        .pipe(
+          catchError(this.handleError)
+        );
+    } else {
+      return this.httpClient.put<Cliente>(url, clienteSemId)
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+  }
+
+  
+  updateThisSenha(senha: SenhaUpdate): Observable<SenhaUpdate> {
+
+    const headers = this.sessionTokenService.getSessionHeader();
+    const url = `${this.baseUrl}/this`; // Concatena o ID à URL base
+
+    if (headers) {
+      return this.httpClient.put<SenhaUpdate>(url, senha, { headers })
+        .pipe(
+          catchError(this.handleError)
+        );
+    } else {
+      return this.httpClient.put<SenhaUpdate>(url, senha)
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+  }
+
+
+
   // Método para apagar uma única instância de Cliente do banco de dados do servidor
   delete(id: number): Observable<any> {
 
@@ -204,6 +247,26 @@ export class ClienteService {
         );
     }
   }
+
+  findThis(): Observable<Cliente> {
+    const headers = this.sessionTokenService.getSessionHeader();
+    const url = `${this.baseUrl}/this`; // Concatena o ID à URL base
+
+    if (headers) {
+      // Faz a requisição HTTP com o token de autenticação no cabeçalho
+      return this.httpClient.get<Cliente>(url, { headers })
+        .pipe(
+          catchError(this.handleError)
+        );
+    } else {
+      // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
+      return this.httpClient.get<Cliente>(url)
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+  }
+
 
 
   getPerfil(): Observable<Perfil> {
