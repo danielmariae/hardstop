@@ -432,8 +432,8 @@ public class LoteServiceImpl implements LoteService {
   public LoteResponseDTO ativaLote(Long idLote) {
         System.out.println(idLote);
         Lote lote = repository.findById(idLote);
-        System.out.println(idLote);
-        System.out.println(lote);
+        System.out.println("id do lote:"+idLote);
+        System.out.println("hash do lote:"+lote);
       // O if abaixo verifica se dataHoraAtivacaoLote == null
       if (lote.getDataHoraAtivacaoLote() == null) {
         LocalDateTime agora = LocalDateTime.now();
@@ -456,7 +456,7 @@ public class LoteServiceImpl implements LoteService {
           lote.getId()
         );
         // O método abaixo altera os valores de venda, quantidade e id do Lote atual no produto em questão. O Lote torna-se ativado e o produto agora aponta para ele.
-        System.out.println("111111111111111111111111111111111111111111111111111111111111");
+        System.out.println("vai executar o produto patch:");
         serviceProduto.update(prodpatch);
         System.out.println("2222222222222222222222222222222222222222222222222222222222222");
         lote.setStatusDoLote(StatusDoLote.valueOf(1));

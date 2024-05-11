@@ -54,7 +54,7 @@ public class LoteResource {
 
 
   @GET
-  @RolesAllowed({ "Func", "Admin" })
+  @RolesAllowed({"Func", "Admin"})
   @Path("/patch/ativalote/{idLote}")
   public Response ativaLote(@PathParam("idLote") Long idLote) {
     return Response.status(201).entity(service.ativaLote(idLote)).build();

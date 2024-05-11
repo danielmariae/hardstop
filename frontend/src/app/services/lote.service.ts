@@ -245,38 +245,30 @@ export class LoteService {
     }
 
     private handleError(error: HttpErrorResponse) {
-        let errorDetails: any = {}; // Objeto para armazenar os detalhes do erro
-      
-        // Verifica se há uma resposta de erro do servidor
-        if (error.error && error.error.message) {
-          errorDetails.error = error.error.message;
-          if (error.error.code) {
-            errorDetails.code = error.error.code;
-          }
-          if (error.error.errors) {
-            errorDetails.errors = error.error.errors;
-          }
-        }
-        else if (error.error instanceof ErrorEvent) {
-          // Trata erros do lado do cliente
-          errorDetails.error = error.error.message;
-        } else {
-          // Trata outros tipos de erros
-          errorDetails.status = error.status;
-          errorDetails.statusText = error.statusText;
-          if (error.url) {
-            errorDetails.url = error.url;
-          }
-          if (error.message) {
-            errorDetails.error = error.message;
-          }
-        }
-      
-        console.error(errorDetails); // Log dos detalhes do erro
-      
-        return throwError(() => errorDetails); // Retorna os detalhes do erro como uma Observable
+      let errorDetails: any = {}; // Objeto para armazenar os detalhes do erro
+    
+     if (error.error && error.error.code === "500" || error.error.code === "400") {
+        // Trata erro com código "500"
+        errorDetails.code = error.error.code;
+        errorDetails.message = error.error.message;
+        errorDetails.subjectError = {
+          subjectName: error.error.subjectError.subjectName,
+          message: error.error.subjectError.message
+        };
+      } else if (error.error instanceof ErrorEvent) {
+        // Trata erros do lado do cliente
+        errorDetails.error = error.error.message;
+      } else {
+        // Trata outros tipos de erros
+        errorDetails.code = error.status;
+        errorDetails.message = error.statusText;
       }
-
+    
+      console.error(errorDetails); // Log dos detalhes do erro
+    
+      return throwError(() => errorDetails); // Retorna os detalhes do erro como uma Observable
+    }
+          
     getStatus(): Observable<any[]> {
         const url = 'http://localhost:8080/enum/statusDoLote';
         return this.httpClient.get<any[]>(url)

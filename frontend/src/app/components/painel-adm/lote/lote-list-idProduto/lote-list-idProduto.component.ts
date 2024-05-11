@@ -53,9 +53,6 @@ export class LoteListComponent implements OnInit {
     lotes: LoteRecebe[] = [];
     lotesTeste: LoteRecebeClass[] = [];
 
-    // Variável relacionada com as colunas da página html
-    displayedColumns: string[] = ['id', 'lote', 'descricaoStatusDoLote', 'cnpjFornecedor', 'modeloProduto', 'quantidadeUnidades', 'custoCompra', 'valorVenda', 'garantiaMeses', 'dataHoraChegadaLote', 'dataHoraAtivacaoLote', 'dataHoraUltimoVendido', 'acao'];
-
     constructor(private fornecedorService: FornecedorService,
         private produtoService: ProdutoService,
         private route: ActivatedRoute,
@@ -190,10 +187,11 @@ ativarLote(id: number): void {
         },
         error: (error) => {
             // Este callback é executado quando ocorre um erro durante a emissão do valor
-            console.error('Erro:', error.message);
-            window.alert(error); 
+            this.errorDetails = error;
+            this.errorMessage = error.subjectError.message;
+            console.error('Erro:', this.errorDetails);
         }
     });
-
 }
+
 }
