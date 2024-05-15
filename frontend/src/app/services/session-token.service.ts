@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ClienteService } from './cliente.service';
 import { FuncionarioService } from './funcionario.service';
@@ -10,6 +10,12 @@ import { FuncionarioService } from './funcionario.service';
 })
 export class SessionTokenService {
   private baseUrl = 'http://localhost:8080/auth'; // URL base da sua API
+  private loginAdmSubject = new Subject<void>();
+  private loginClienteSubject = new Subject<void>();
+
+  loginAdmSuccess$ = this.loginAdmSubject.asObservable();
+  loginClienteSuccess$ = this.loginClienteSubject.asObservable();
+
 
   constructor(
     private httpClient: HttpClient  ) { }
@@ -56,7 +62,11 @@ export class SessionTokenService {
   // Exemplo de método para fazer uma solicitação HTTP para a API para autenticar o Funcionario
     authenticateUserF(username: string, password: string): Observable<any> {
      const loginUrl = `${this.baseUrl}/loginF`;
-     return this.httpClient.post(loginUrl, { login: username, senha: password });
+     return this.httpClient.post(loginUrl, { login: username, senha: password }).pipe(
+      tap(() => {
+        this.notifyLoginAdmSucess();
+      })
+     );
     }
 
 
@@ -64,6 +74,20 @@ export class SessionTokenService {
     // Exemplo de método para fazer uma solicitação HTTP para a API para autenticar o Cliente
     authenticateUserC(username: string, password: string): Observable<any> {
       const loginUrl = `${this.baseUrl}/loginU`;
-      return this.httpClient.post(loginUrl, { login: username, senha: password });
+      return this.httpClient.post(loginUrl, { login: username, senha: password }).pipe(
+        tap(() => {
+          this.notifyLoginClienteSucess();
+        })
+      );
      }
+
+     notifyLoginAdmSucess(){
+      this.loginAdmSubject.next();
+     }
+     
+     notifyLoginClienteSucess(){
+      this.loginClienteSubject.next();
+     }
+
+
 }

@@ -34,10 +34,7 @@ export class ClienteUpdateSenhaComponent
     this.senha = new SenhaUpdate();
     this.senhaForm = formBuilder.group({
       senhaAntiga: [''],
-      senhaAtual: ['',
-        Validators.required,
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-[!“#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+).{6,10}$/)
-      ]
+      senhaAtual: ['', ]
     });
     this.updateIsSucess = false;
   }
@@ -47,16 +44,17 @@ export class ClienteUpdateSenhaComponent
   }
 
   salvarAlteracoes(): void{
-
-    if(this.senhaForm.errors){
+    if(this.senhaForm.invalid){
       console.error('Formulário invalido. Por favor, corrigir.')
-      return;
+      // return;
     }
 
     const novaSenha: SenhaUpdate = {
       senhaAntiga: this.senhaForm.value.senhaAntiga,
       senhaAtual: this.senhaForm.value.senhaAtual
     };
+
+    console.log(novaSenha);
 
     this.clienteService.updateThisSenha(novaSenha).subscribe({
       next: (response) => {

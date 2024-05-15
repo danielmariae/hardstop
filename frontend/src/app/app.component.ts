@@ -18,8 +18,8 @@ import { Perfil } from './models/perfil.model';
 })
 export class AppComponent implements OnInit{
   title = 'frontend';
-  usuarioLogado = false;
-  admLogado = false;
+  usuarioLogado: boolean = false;
+  admLogado: boolean = false;
 
   constructor(
     private sessionTokenService: SessionTokenService,
@@ -28,7 +28,8 @@ export class AppComponent implements OnInit{
     private funcionarioService: FuncionarioService
   ){}
 
-  ngOnInit(): void {
+  ngOnInit(
+  ): void {
     // Get all "navbar-burger" elements
     const navbarBurgers = Array.from(document.querySelectorAll('.navbar-burger'));
 
@@ -50,56 +51,38 @@ export class AppComponent implements OnInit{
       });
     });
 
-    this.getPerfil();
-  }
+    // Verifica se há um estado de login armazenado no sessionStorage ao inicializar o componente
+    const usuarioLogadoState = sessionStorage.getItem('usuarioLogado');
+    if (usuarioLogadoState !== null) {
+      this.usuarioLogado = JSON.parse(usuarioLogadoState);
+    }
 
-  getPerfil(): void {
-    let profile: Observable<Perfil>;
-  
-    profile = this.clienteService.getPerfil();
-  
-    profile.subscribe(
-      response => {
-        if (response && response.id === 0) {
-          this.usuarioLogado = true;
-        }
-      },
-      error => {
-        // Verifica se o erro é do tipo HttpErrorResponse e se o status é 400
-        if (error.status !== 403) {
-          console.error('Ocorreu um erro ao obter o perfil:', error);
-        }
-      }
-    );
-  
-    // O mesmo para a função getPerfil() de funcionário
-    let funcionarioProfile: Observable<Perfil>;
-    funcionarioProfile = this.funcionarioService.getPerfil();
-  
-    funcionarioProfile.subscribe(
-      response => {
-        if (response && response.id === 1 || response.id === 2) {
-          this.admLogado = true;
-        }
-      },
-      error => {
-        // Verifica se o erro é do tipo HttpErrorResponse e se o status é 400
-        if (error.status !== 403) {
-          console.error('Ocorreu um erro ao obter o perfil do funcionário:', error);
-        }
-      }
-    );
-  
-    console.log('Usuário está logado? ', this.usuarioLogado);
-    console.log('Adm está logado? ', this.admLogado);
+    const admLogadoState = sessionStorage.getItem('admLogado');
+    if (admLogadoState !== null) {
+      this.admLogado = JSON.parse(admLogadoState);
+    }
+
+    // Subscreve-se aos eventos de login bem-sucedido para atualizar o estado de login
+    this.sessionTokenService.loginAdmSuccess$.subscribe(() => {
+      this.admLogado = true;
+      sessionStorage.setItem('admLogado', JSON.stringify(true));
+    });
+
+    this.sessionTokenService.loginClienteSuccess$.subscribe(() => {
+      this.usuarioLogado = true;
+      sessionStorage.setItem('usuarioLogado', JSON.stringify(true));
+    });
   }
-  
-  
 
   deslogarUsuario(): void {
+    // Limpa o estado de login e remove os dados do sessionStorage
+    this.usuarioLogado = false;
+    sessionStorage.removeItem('usuarioLogado');
+    this.admLogado = false;
+    sessionStorage.removeItem('admLogado');
+
+    // Limpa a sessão do token
     this.sessionTokenService.clearSessionToken();
-    this.navigationService.navigateTo('/home');
-    
   }
 }
 

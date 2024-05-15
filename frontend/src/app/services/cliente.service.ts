@@ -191,15 +191,17 @@ export class ClienteService {
   updateThisSenha(senha: SenhaUpdate): Observable<SenhaUpdate> {
 
     const headers = this.sessionTokenService.getSessionHeader();
-    const url = `${this.baseUrl}/this`; // Concatena o ID à URL base
+    const url = `${this.baseUrl}/patch/senha`; // Concatena o ID à URL base
 
     if (headers) {
-      return this.httpClient.put<SenhaUpdate>(url, senha, { headers })
-        .pipe(
-          catchError(this.handleError)
-        );
+      console.log("CAIU AQUI NO HEADERS.")
+      return this.httpClient.patch<SenhaUpdate>(url, senha, { headers })
+      .pipe(
+        catchError(this.handleError)
+      );
     } else {
-      return this.httpClient.put<SenhaUpdate>(url, senha)
+      console.log("CAIU NO ELSE.")
+      return this.httpClient.patch<SenhaUpdate>(url, senha)
         .pipe(
           catchError(this.handleError)
         );

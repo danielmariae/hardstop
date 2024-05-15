@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClient } from '@angular/common/http';
+import { NavigationService } from '../../services/navigation.service';
 
 
 @Component({
@@ -22,6 +23,10 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./session-token.component.css']
 })
 export class SessionTokenComponent implements OnInit {
+    loginClienteForm: FormGroup = this.formBuilder.group({
+        username: ['', Validators.required],
+        password: ['', Validators.required]
+    });
     loginForm: FormGroup = this.formBuilder.group({
         username: ['', Validators.required],
         password: ['', Validators.required]
@@ -31,8 +36,9 @@ export class SessionTokenComponent implements OnInit {
   constructor(
             private formBuilder: FormBuilder,
             private sessionTokenService: SessionTokenService,
-            private httpClient: HttpClient
-            ) {}
+            private httpClient: HttpClient,
+            private navigationService: NavigationService,  
+          ) {}
 
   ngOnInit(): void {
   }
@@ -62,6 +68,7 @@ export class SessionTokenComponent implements OnInit {
       this.sessionTokenService.saveSessionToken(token);
       this.loginForm.reset();
       this.errorMessage = '';
+      this.navigationService.navigateTo('/adm/clientes');
     },
     error: (error) => {
       console.log('Erro:', error);
@@ -73,16 +80,16 @@ export class SessionTokenComponent implements OnInit {
 
   loginC() {
 
-    if (!this.loginForm) {
+    if (!this.loginClienteForm) {
         return;
     }
 
-    if (this.loginForm.invalid) {
+    if (this.loginClienteForm.invalid) {
       return;
     }
 
-    const username = this.loginForm.get('username')?.value; // Use o operador de navegação segura (?) para acessar os valores com segurança
-    const password = this.loginForm.get('password')?.value; // Use o operador de navegação segura (?) para acessar os valores com segurança
+    const username = this.loginClienteForm.get('username')?.value; // Use o operador de navegação segura (?) para acessar os valores com segurança
+    const password = this.loginClienteForm.get('password')?.value; // Use o operador de navegação segura (?) para acessar os valores com segurança
 
   if (!username || !password) {
     return;
@@ -97,6 +104,8 @@ export class SessionTokenComponent implements OnInit {
       this.loginForm.reset();
       this.errorMessage = '';
       // Redirecionar o usuário para a página de perfil, por exemplo
+      this.navigationService.navigateTo('/cliente/edit');
+      
     },
     error: (error) => {
       console.log('Erro:', error);
@@ -106,12 +115,6 @@ export class SessionTokenComponent implements OnInit {
   });
 
   }
-
-
-
-
-
-
 }
 
 

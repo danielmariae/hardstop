@@ -284,13 +284,13 @@ cliente.getListaProduto().clear();
 
   @Override
   @Transactional
-  public String updateSenhaCliente(PatchSenhaDTO senha, Long id) {
+  public PatchSenhaDTO updateSenhaCliente(PatchSenhaDTO senha, Long id) {
     Cliente cliente = repository.findById(id);
 
     if(hashservice.getHashSenha(senha.senhaAntiga()).equals(cliente.getSenha())) {
     cliente.setSenha(hashservice.getHashSenha(senha.senhaAtual()));
     //repository.persist(cliente);
-    return "Senha alterada com sucesso.";
+      return senha;
     } else {
      throw new ValidationException("updateSenha", "Favor inserir a senha antiga correta."); 
     }
