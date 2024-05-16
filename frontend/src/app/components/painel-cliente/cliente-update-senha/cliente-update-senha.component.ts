@@ -44,6 +44,12 @@ export class ClienteUpdateSenhaComponent
   }
 
   salvarAlteracoes(): void{
+    if(this.errorDetails !== null)
+      this.errorDetails = null;
+
+    if(this.updateIsSucess === true)
+      this.updateIsSucess = false;
+
     if(this.senhaForm.invalid){
       console.error('Formulário invalido. Por favor, corrigir.')
       // return;
@@ -57,6 +63,8 @@ export class ClienteUpdateSenhaComponent
     console.log(novaSenha);
 
     this.clienteService.updateThisSenha(novaSenha).subscribe({
+
+
       next: (response) => {
         console.log("Senha atualizada com sucesso!");
         this.updateIsSucess = true;

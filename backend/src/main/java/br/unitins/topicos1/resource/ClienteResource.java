@@ -3,6 +3,9 @@ package br.unitins.topicos1.resource;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import br.unitins.topicos1.application.ErrorTP1;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClienteNSDTO;
@@ -92,7 +95,9 @@ FileService fileService;
 
     Long id = service.findByLogin(login).id();
 
-    return Response.status(200).entity(service.updateNome(nome, id)).build();
+    UpdateResponse entity = new UpdateResponse(service.updateNome(nome, id));
+
+    return Response.status(200).entity(entity).build();
   }
 
   @PATCH
@@ -105,7 +110,9 @@ FileService fileService;
 
     Long id = service.findByLogin(login).id();
 
-    return Response.status(200).entity(service.updateCpf(cpf, id)).build();
+    UpdateResponse entity = new UpdateResponse(service.updateCpf(cpf, id));
+
+    return Response.status(200).entity(entity).build();
   }
 
   @PATCH
@@ -118,7 +125,9 @@ FileService fileService;
 
     Long id = service.findByLogin(login).id();
 
-    return Response.status(200).entity(service.updateLogin(novoLogin, id)).build();
+    UpdateResponse entity = new UpdateResponse(service.updateLogin(novoLogin, id));
+
+    return Response.status(200).entity(entity).build();
   }
 
   @PATCH
@@ -131,7 +140,9 @@ FileService fileService;
 
     Long id = service.findByLogin(login).id();
 
-    return Response.status(200).entity(service.updateEmail(email, id)).build();
+    UpdateResponse entity = new UpdateResponse(service.updateEmail(email, id));
+
+    return Response.status(200).entity(entity).build();
   }
 
   @PATCH
@@ -144,7 +155,11 @@ FileService fileService;
 
     Long id = service.findByLogin(login).id();
 
-    return Response.status(200).entity(service.updateSenhaCliente(senha, id)).build();
+    UpdateResponse entity = new UpdateResponse(service.updateSenhaCliente(senha, id));
+
+    return Response.status(200).entity(entity).build();
+  
+    
   }
 
   @POST
@@ -366,5 +381,18 @@ FileService fileService;
   public Response updateClienteNS(@Valid ClienteNSDTO dto, @PathParam("id") Long id) {
     service.updateClienteNS(dto, id);
     return Response.status(Status.NO_CONTENT).build();
+  }
+}
+
+class UpdateResponse {
+  private String message;
+
+  @JsonCreator
+  public UpdateResponse(@JsonProperty("message") String message) {
+    this.message = message;
+  }  
+
+  public String getMessage() {
+      return message;
   }
 }

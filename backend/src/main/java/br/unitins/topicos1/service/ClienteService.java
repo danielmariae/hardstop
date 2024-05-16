@@ -53,7 +53,7 @@ public interface ClienteService {
   public String updateEmail(PatchEmailDTO email, Long id);
 
   // Altera a senha do cliente
-  public PatchSenhaDTO updateSenhaCliente(PatchSenhaDTO senha, Long id);
+  public String updateSenhaCliente(PatchSenhaDTO senha, Long id);
 
   // Apaga um cliente inteiro
   public void deleteCliente(Long id);
