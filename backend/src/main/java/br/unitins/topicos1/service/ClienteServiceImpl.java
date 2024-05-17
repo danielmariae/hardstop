@@ -10,7 +10,6 @@ import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.ClienteDTO;
 import br.unitins.topicos1.dto.ClienteNSDTO;
 import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.DesejoResponseDTO;
 import br.unitins.topicos1.dto.EnderecoDTO;
 import br.unitins.topicos1.dto.EnderecoPatchDTO;
 import br.unitins.topicos1.dto.PatchCpfDTO;
@@ -19,6 +18,7 @@ import br.unitins.topicos1.dto.PatchLoginDTO;
 import br.unitins.topicos1.dto.PatchNomeDTO;
 import br.unitins.topicos1.dto.PatchSenhaDTO;
 import br.unitins.topicos1.dto.PerfilDTO;
+import br.unitins.topicos1.dto.ProdutoResponseDTO;
 import br.unitins.topicos1.dto.TelefoneDTO;
 import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Cliente;
@@ -482,13 +482,13 @@ cliente.getListaProduto().clear();
     return ClienteResponseDTO.valueOf(cliente);
   }
 
-  public List<DesejoResponseDTO> findListaDesejosCliente(Long id) {
+  public List<ProdutoResponseDTO> findListaDesejosCliente(Long id) {
 
      return repository
       .findById(id)
       .getListaProduto()
       .stream()
-      .map(p -> DesejoResponseDTO.valueOf(p))
+      .map(p -> ProdutoResponseDTO.valueOf(p))
       .toList();
   }
 
