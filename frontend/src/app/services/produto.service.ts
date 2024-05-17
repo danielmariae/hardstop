@@ -96,6 +96,27 @@ export class ProdutoService {
         }
     }
 
+    findByNome(nome: string, page?: number, pageSize?: number): Observable<Produto[]>{
+        const headers = this.sessionTokenService.getSessionHeader();
+        const url = `${this.baseUrl}/search/nome/${nome}`;
+
+        if (page !== undefined && pageSize !== undefined) {
+            const params = new HttpParams()
+                .set('page', page.toString())
+                .set('pageSize', pageSize.toString());
+            
+            return this.httpClient.get<Produto[]>(url, { params })
+                .pipe(
+                    catchError(this.handleError)
+                );
+        }else{
+            return this.httpClient.get<Produto[]>(url)
+            .pipe(
+                catchError(this.handleError)
+            );
+        }
+    }
+
     // Método para realizar contagens. Envolvido com a paginação
     count(): Observable<number> {
         return this.httpClient.get<number>(`${this.baseUrl}/count`);
@@ -121,6 +142,8 @@ export class ProdutoService {
                 );
         }
     }
+
+
    
     findProdutoEstragado(idProduto: number,  dataHoraVenda: string): Observable<Fornecedor> {
         const headers = this.sessionTokenService.getSessionHeader();

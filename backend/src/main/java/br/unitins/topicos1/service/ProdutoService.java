@@ -48,7 +48,7 @@ public interface ProdutoService {
     ProdutoResponseDTO findByCodigoBarras(String cpf);
 
     // PROCURAR POR NOME:
-    List<ProdutoResponseDTO> findByName(String nome);
+    List<ProdutoResponseDTO> findByName(String nome, int page, int pageSize);
 
     // PROCURAR POR CLASSIFICAÇÃO
     List<ProdutoResponseDTO> findByClassificacao(Long idClassificacao);

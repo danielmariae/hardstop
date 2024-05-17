@@ -25,6 +25,7 @@ import { ProdutoViewComponent } from './components/painel-adm/produto/produto-vi
 import { ProdutoEscolhidoComponent } from './components/painel-adm/produto/produto-escolhido/produto-escolhido.component';
 import { ClienteThisEditComponent } from './components/painel-cliente/cliente-this-edit/cliente-this-edit.component';
 import { ClienteUpdateSenhaComponent } from './components/painel-cliente/cliente-update-senha/cliente-update-senha.component';
+import { ProdutoHomeListComponent } from './components/home/produto-home-list/produto-home-list.component';
 
 
 export const routes: Routes = [
@@ -37,7 +38,7 @@ export const routes: Routes = [
     { path:'adm/funcionarios', component: FuncionarioListComponent, title:'Listar funcionario'},
     { path:'adm/funcionarios/:id', component: FuncionarioViewComponent, title:'Ver funcionario'},
     { path: 'loginF', component: SessionTokenComponent },
-    { path: 'home', component: HomeComponent, resolve: { isAuthenticated: AuthResolver } },
+    { path: 'home', component: HomeComponent, title: 'Bem-vindo!' },
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'adm/fornecedores', component: FornecedorListComponent, title: 'Lista de Fornecedores'},
     { path: 'adm/fornecedores/new', component: FornecedorComponent, title: 'Formulario de Fornecedores'},
@@ -53,7 +54,7 @@ export const routes: Routes = [
     {path: 'adm/produtos/garantia/:id', component: ProdutoGarantiaComponent, title: 'Fornecedor de Produto Defeituoso'},
     {path: 'cliente/edit', component: ClienteThisEditComponent, title: 'Editar cliente'},
     {path: 'cliente/senha', component: ClienteUpdateSenhaComponent, title: 'Atualizar senha'},
-
+    {path: 'home/buscador/:nome', component: ProdutoHomeListComponent, title: 'Você buscou por :nome'}
 ];
 
 @NgModule({

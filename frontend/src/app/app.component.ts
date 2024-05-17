@@ -3,16 +3,14 @@ import { RouterOutlet } from '@angular/router';
 import { SessionTokenService } from './services/session-token.service';
 import { CommonModule } from '@angular/common';
 import { NavigationService } from './services/navigation.service';
-import { ClienteService } from './services/cliente.service';
-import { FuncionarioService } from './services/funcionario.service';
 import { Observable, catchError, of } from 'rxjs';
-import { Perfil } from './models/perfil.model';
+import { Form, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule],
+  imports: [ReactiveFormsModule, RouterOutlet, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -24,9 +22,9 @@ export class AppComponent implements OnInit{
   constructor(
     private sessionTokenService: SessionTokenService,
     private navigationService: NavigationService,
-    private clienteService: ClienteService,
-    private funcionarioService: FuncionarioService
-  ){}
+    private formBuilder: FormBuilder,
+  ){
+  }
 
   ngOnInit(
   ): void {

@@ -34,7 +34,13 @@ export class ClienteUpdateSenhaComponent
     this.senha = new SenhaUpdate();
     this.senhaForm = formBuilder.group({
       senhaAntiga: [''],
-      senhaAtual: ['', ]
+      senhaAtual: this.formBuilder.control('', {
+        validators: [
+          Validators.required,
+          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-[!“#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+).{6,10}$/)
+        ],
+        nonNullable: true,
+      }),
     });
     this.updateIsSucess = false;
   }

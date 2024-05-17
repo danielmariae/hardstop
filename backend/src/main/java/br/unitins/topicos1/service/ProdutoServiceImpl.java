@@ -322,9 +322,10 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public List<ProdutoResponseDTO> findByName(String nome) {
-        return repository
-        .findByName(nome)
+    public List<ProdutoResponseDTO> findByName(String nome, int page, int pageSize) {
+     
+      return repository
+        .findByName(nome, page, pageSize)
         .stream()
         .map(p -> ProdutoResponseDTO.valueOf(p))
         .toList();
