@@ -16,7 +16,8 @@ public record ClienteResponseDTO(
   String nomeImagem,
   Perfil perfil,
   List<EnderecoResponseDTO> listaEndereco,
-  List<TelefoneResponseDTO> listaTelefone
+  List<TelefoneResponseDTO> listaTelefone,
+  List<ProdutoResponseDTO> listaDesejos
 ) {
   public static ClienteResponseDTO valueOf(Cliente cliente) {
     return new ClienteResponseDTO(
@@ -38,7 +39,11 @@ public record ClienteResponseDTO(
         .getListaTelefone()
         .stream()
         .map(t -> TelefoneResponseDTO.valueOf(t))
-        .toList()
-    );
+        .toList(), 
+      cliente
+        .getListaProduto()
+        .stream()
+        .map(p -> ProdutoResponseDTO.valueOf(p))
+        .toList());
   }
 }

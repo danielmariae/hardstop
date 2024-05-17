@@ -70,9 +70,9 @@
               <td>{{ produto.quantidadeUnidades }}</td>
               <td>R$ {{ produto.valorVenda }}</td>
               <td>
-                <button (click)="selecionarProduto(produto)"><span class="icon is-small"><i class="mdi mdi-information"></i></span></button>
-                <button (click)="editarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-pencil"></i></span></button>
-                <button (click)="apagarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-delete"></i></span></button>
+                <button (click)="selecionarProduto(produto)"><span class="icon is-small"><i class="mdi mdi-information" title="Ver produto"></i></span></button>
+                <button (click)="editarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-pencil" title="Editar produto"></i></span></button>
+                <button (click)="apagarProduto(produto.id)"><span class="icon is-small"><i class="mdi mdi-delete" title="Deletar produto"></i></span></button>
               </td>
             </tr>
           </tbody>

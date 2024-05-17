@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="columns">
+        <div class="column is-one-fifth">
+            <div class="box">
+                <p class="title is-4">Painel do cliente</p>
+                <aside class="menu">
+                    <ul class="menu-list">
+                        <li><a (click)="editarDados()">Editar dados pessoais</a></li>
+                        <li><a class="is-active">Atualizar senha</a></li>
+                    </ul>
+                </aside>
+            </div>
+        </div>
+        <div class="column">
+            <div class="box">
+                <form [formGroup]="senhaForm" (ngSubmit)="salvarAlteracoes()">
+                    <div class="columns">
+                        <div class="column">
+                            <label class="field label" for="senha">Senha antiga:</label>
+                            <input class="control input" type="password" id="senhaAntiga" formControlName="senhaAntiga">
+                        </div>
+                        <div class="column">
+                            <label class="field label" for="senha">Nova senha:</label>
+                            <input class="control input" type="password" id="senhaAtual" formControlName="senhaAtual">
+                            <div *ngIf="senhaForm.get('senhaAtual')?.invalid && senhaForm.get('senhaAtual')?.touched">
+                              <p style="font-weight: bold" class="help is-danger">Essa senha está fraca ou nula. Por favor, verificar padrão correto:</p>
+                              <p class="help is-danger">Pelo menos 1 letra maiúscula, 1 letra minúscula, 1 dígito, 1 caractere especial. Entre 6 a 10 caracteres.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                    <button class="button is-primary" type="submit">Salvar atualizações</button>
+                </div>
+                <div *ngIf="updateIsSucess" class="notification is-sucess">
+                    <p>Dados atualizados com sucesso!</p>
+                </div> 
+                <div *ngIf="errorDetails" class="notification is-danger">
+                   <div *ngFor="let error of errorDetails.errors">
+                    <!-- <p>{{error.}}</p> -->
+                    <p>{{error.message}}</p>
+                   </div>
+                </div> 
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

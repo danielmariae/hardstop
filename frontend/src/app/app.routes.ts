@@ -23,6 +23,8 @@ import { AuthResolver } from './components/session-token/resolver/session-token.
 import { SessionTokenComponent } from './components/session-token/session-token.component';
 import { ProdutoViewComponent } from './components/painel-adm/produto/produto-view/produto-view/produto-view.component';
 import { ProdutoEscolhidoComponent } from './components/painel-adm/produto/produto-escolhido/produto-escolhido.component';
+import { ClienteThisEditComponent } from './components/painel-cliente/cliente-this-edit/cliente-this-edit.component';
+import { ClienteUpdateSenhaComponent } from './components/painel-cliente/cliente-update-senha/cliente-update-senha.component';
 
 
 export const routes: Routes = [
@@ -49,6 +51,9 @@ export const routes: Routes = [
     {path: 'adm/produtos/:id', component: ProdutoViewComponent, title: 'Produto Escolhido'},
     {path: 'adm/produtos/escolhido/:id', component: ProdutoEscolhidoComponent, title: 'Produto Escolhido'},
     {path: 'adm/produtos/garantia/:id', component: ProdutoGarantiaComponent, title: 'Fornecedor de Produto Defeituoso'},
+    {path: 'cliente/edit', component: ClienteThisEditComponent, title: 'Editar cliente'},
+    {path: 'cliente/senha', component: ClienteUpdateSenhaComponent, title: 'Atualizar senha'},
+
 ];
 
 @NgModule({

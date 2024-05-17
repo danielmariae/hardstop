@@ -39,9 +39,9 @@ insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, lo
 
 -- ## Clientes ##
 -- senha 123VaA_
-insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email) values('Katia de Ruim', '2010-08-08', '23576472720', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com');
+insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('Katia de Ruim', '2010-08-08', 0, '23576472720', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com');
 -- senha 1a2B3!
-insert into cliente (nome, datanascimento, cpf, sexo, login, senha, email) values('Flavio de Boa', '2007-10-02', '20275068536', 'M', 'flavio1234', 'pTOqkVzjpPAXcO0Iau1rmMLSxHsi/CSmyX7a+k1h9oDcYjh2k2s+GQfTRhK9JECbQFkezUT2unji0ww04h7KDQ==', 'flavio1234@gmail.com');
+insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('Flavio de Boa', '2007-10-02', 0, '20275068536', 'M', 'flavio1234', 'pTOqkVzjpPAXcO0Iau1rmMLSxHsi/CSmyX7a+k1h9oDcYjh2k2s+GQfTRhK9JECbQFkezUT2unji0ww04h7KDQ==', 'flavio1234@gmail.com');
 
 -- ## Funcionarios ##
 -- senha bVgH_-2

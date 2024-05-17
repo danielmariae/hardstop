@@ -179,7 +179,7 @@ export class ProdutoViewComponent implements OnInit {
 
     cancelarEdicao(): void {
         // Redireciona o usuário para outra rota anterior
-        this.navigationService.navigateBack();
+        this.navigationService.navigateTo("adm/produtos");
       }
       encontrarClassificacao(nomeProcurado: string): Classificacao | undefined {
         for (const classifi of this.classificacao) {
@@ -249,22 +249,22 @@ apagarProduto(id: number): void {
 
 // Método para chamar o endpoint para edição de um Produto escolhido
 editarProduto(id: number): void {
-  const enderecoEdicao: string = "produtos/edit/" + id.toString();
+  const enderecoEdicao: string = "adm/produtos/edit/" + id.toString();
   this.navigationService.navigateTo(enderecoEdicao);
 }
 
 listarLote(id: number): void {
-  const listaLote: string = "lotes/" + id.toString();
+  const listaLote: string = "adm/lotes/" + id.toString();
   this.navigationService.navigateTo(listaLote);
 }
 
 criarLote(): void {
-  const criaLote: string = "lotes/new";
+  const criaLote: string = "adm/lotes/new";
   this.navigationService.navigateTo(criaLote);
 }
 
 produtoDefeito(id: number): void {
-  const produtoDefeito: string = "produtos/garantia/" + id;
+  const produtoDefeito: string = "adm/produtos/garantia/" + id;
   this.navigationService.navigateTo(produtoDefeito);
 }
 

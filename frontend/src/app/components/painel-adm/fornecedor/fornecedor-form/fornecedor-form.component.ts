@@ -202,6 +202,7 @@ export class FornecedorComponent {
       next: (response) => {
       console.log('Resultado:', response);
       this.fornecedorService.notificarFornecedorInserido(); // Notificar outros componentes
+      this.navigationService.navigateTo("adm/fornecedores");
       },
       error: (error) => {
         // Este callback é executado quando ocorre um erro durante a emissão do valor

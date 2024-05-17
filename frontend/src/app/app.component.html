@@ -17,7 +17,7 @@
         <div *ngIf="!admLogado && !usuarioLogado">
           <div class="navbar-item"> 
             <div class="buttons">
-              <a href='/loginF' class="button is-light">Conta</a>
+              <a href='/loginF' class="button is-light">Login</a>
             </div>
           </div>
         </div>
@@ -25,7 +25,15 @@
           <div class="navbar-item">
             <div class="buttons">
               <a href='/adm/clientes' class="button is-light">Painel</a>
-              <a (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
+              <a href='/loginF' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="usuarioLogado">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a href='/cliente/edit' class="button is-light">Painel</a>
+              <a href='/loginF' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
             </div>
           </div>
         </div>

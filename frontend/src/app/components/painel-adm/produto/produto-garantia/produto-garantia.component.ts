@@ -114,7 +114,7 @@ export class ProdutoGarantiaComponent implements OnInit {
                 next: (response: Fornecedor) => {
                     // Exibir mensagem de sucesso (opcional)
                        // Redirecionar para a página anterior
-                       const fornecedorCulpado: string = "fornecedores/" + response.id;
+                       const fornecedorCulpado: string = "adm/fornecedores/" + response.id;
                        this.navigationService.navigateTo(fornecedorCulpado);
                 },
                 error: (error) => {

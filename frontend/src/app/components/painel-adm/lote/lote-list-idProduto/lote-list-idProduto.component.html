@@ -17,7 +17,7 @@
           <th>Chegada</th>
           <th>Ativação</th>
           <th>Desativação</th>
-          <!-- <th>Ação</th> -->
+          <th>Ação</th>
         </tr>
         <tr *ngFor="let loteTeste of lotesTeste">
           <td>{{loteTeste.id}}</td>
@@ -32,6 +32,9 @@
           <td>{{loteTeste.dataHoraChegadaLote}}</td>
           <td>{{loteTeste.dataHoraAtivacaoLote}}</td>
           <td>{{loteTeste.dataHoraUltimoVendido}}</td>
+          <td>
+            <button (click)="ativarLote(loteTeste.id)"><span class="icon is-small"><i class="mdi mdi-check-circle-outline"></i></span></button>
+          </td>
         </tr>
       </table>
     </div>
@@ -63,4 +66,15 @@
         </div>
       </div>
     </nav>  
+    <div *ngIf="errorDetails">
+      <div class="box notification is-danger">
+        <div class="columns">
+          <div class="column">
+            <div>
+              <p><b>{{errorDetails.code}}:</b> {{errorDetails.subjectError.message}}</p>
+            </div>    
+          </div>
+        </div>
+      </div>   
+    </div>
   </div>
