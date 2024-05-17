@@ -26,6 +26,7 @@ import { ProdutoEscolhidoComponent } from './components/painel-adm/produto/produ
 import { ClienteThisEditComponent } from './components/painel-cliente/cliente-this-edit/cliente-this-edit.component';
 import { ClienteUpdateSenhaComponent } from './components/painel-cliente/cliente-update-senha/cliente-update-senha.component';
 import { ProdutoHomeListComponent } from './components/home/produto-home-list/produto-home-list.component';
+import { UserTemplateComponent } from './components/template/user-template/user-template.component';
 
 
 export const routes: Routes = [
@@ -54,7 +55,16 @@ export const routes: Routes = [
     {path: 'adm/produtos/garantia/:id', component: ProdutoGarantiaComponent, title: 'Fornecedor de Produto Defeituoso'},
     {path: 'cliente/edit', component: ClienteThisEditComponent, title: 'Editar cliente'},
     {path: 'cliente/senha', component: ClienteUpdateSenhaComponent, title: 'Atualizar senha'},
-    {path: 'home/buscador/:nome', component: ProdutoHomeListComponent, title: 'Você buscou por :nome'}
+    {path: 'home/buscador/:nome', component: ProdutoHomeListComponent},
+    {
+        path: 'user',
+        component: UserTemplateComponent,
+        title: 'Painel do cliente',
+        children: [
+            {path: '', pathMatch: 'full', redirectTo: 'edit'},
+            {path: 'edit', component: ClienteThisEditComponent, title: 'Edite seu perfil'}
+        ],
+    },
 ];
 
 @NgModule({

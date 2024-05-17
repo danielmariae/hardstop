@@ -1,11 +1,27 @@
+<br>
 <div class="container">
+    <h1 class="title is-3 is-center">Resultados para: "{{this.nomeBusca}}"</h1>
     <div class="columns">
-        <div class="column">
-            <div *ngFor="let produto of produtos">
-                <div class="box">
-                    {{produto.nome}}
-                </div>
+        <div class="column is-one-fifth">
+            <div class="box">
+                <h1 class="">
+
+                </h1>
             </div>
+        </div>
+        <div class="column">
+            <div *ngFor="let produto of produtos" class="field">
+                <div class="box">
+                    <div class="columns">
+                        <div class="column is-one-fifth">
+                            
+                        </div>
+                        <div class="column">
+                            <p class="is-size-5">{{produto.nome}}</p>
+                        </div>
+                    </div>
+                </div>
+             </div>
         </div>
     </div>
 </div>

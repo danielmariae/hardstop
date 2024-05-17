@@ -207,7 +207,6 @@ public class ProdutoResource {
 
     @GET
     @Path("/download/imagem/{nomeImagem}")
-    @RolesAllowed({"Func", "Admin"})
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response download(@PathParam("nomeImagem") String nomeImagem){
 

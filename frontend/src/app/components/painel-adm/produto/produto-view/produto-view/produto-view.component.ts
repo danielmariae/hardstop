@@ -27,6 +27,8 @@ export class ProdutoViewComponent implements OnInit {
     classificacao: Classificacao[] = [];
     arquivosSelecionados: File[] = [];
     selectedFile!: File;
+    imagensBase64: string[] = [];
+
     id: number = 0;
     tipoProduto!: string;
     placaMaeForm!: FormGroup; // Adicione FormGroup para o formulário de PlacaMae
@@ -58,7 +60,7 @@ export class ProdutoViewComponent implements OnInit {
             quantidadeUnidades: [''],
             quantidadeNaoConvencional: [''],
             unidadeDeMedida: [''],
-            nomeImagem: [''],
+            nomeImagem: this.formBuilder.array([]),
             classificacao: [''],
             arquivos: this.formBuilder.array([]), 
         });
@@ -97,11 +99,11 @@ export class ProdutoViewComponent implements OnInit {
         },
         error: (error) => {
           console.log(error);
-        }
-      });
-    };
-  } 
-  }
+            }
+          });
+        };
+      } 
+      }
       // Limpa os arquivos selecionados após o envio
       this.arquivosSelecionados = [];
     }
@@ -117,18 +119,13 @@ export class ProdutoViewComponent implements OnInit {
       }
     }
     
-
-
-
-
-
-
     ngOnInit(): void {
         this.id = Number(this.route.snapshot.params['id']);
         //this.tipoProduto = this.route.snapshot.params['tipoProduto'];
         this.carregarClassificacao();
         this.carregarProduto();
       }
+
       get arquivos(): FormArray {
         return this.produtoForm.get('arquivos') as FormArray;
       }
@@ -151,10 +148,26 @@ export class ProdutoViewComponent implements OnInit {
             } else {
             this.inicializarProdutoForm();
             }
+            this.carregarImagens();
           });
           
       }
-    
+
+      carregarImagens(): void{
+        if(!this.produto.nomeImagem){
+          console.log('Entrou no if de sem imagem...');
+          return;
+        }
+
+        this.produtoService.getImagesAsBase64(this.produto.nomeImagem)
+          .then(imagensBase64 => {
+            this.imagensBase64 = imagensBase64;
+          })
+          .catch(error => {
+            console.error("Erro ao carregar imagens.")
+          })
+      }
+
       carregarClassificacao() {
         this.produtoService.getClassificacao()
           .subscribe(classificacao => {

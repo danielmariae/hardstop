@@ -70,7 +70,7 @@
     
       <div class="columns">
         <div class="column">
-          <h1 class="title is-3 centralizador">Upload de imagens</h1>
+          <h1 class="title is-3 centralizador">Imagens do produto:</h1>
 
           <!-- <div formArrayName="arquivos">
             <div *ngFor="let arquivo of arquivos.controls; let i = index">
@@ -85,7 +85,7 @@
             </div>
           </div> -->
 
-          <div class="file">
+          <!-- <div class="file">
             <label class="file-label">
               <input (click)="fileInput.click()" class="file-input" type="file" name="resume" multiple (change)="onFileSelected($event)" #fileInput style="display: none" readonly>
               <span class="file-cta">
@@ -95,20 +95,23 @@
                 <span class="file-label"> Escolha um arquivo... </span>
               </span>
             </label>
-          </div>
+          </div> -->
         <!-- Lista de nomes dos arquivos selecionados -->
-        <div class="table-container">
-          <table class="table is-fullwidth">
-            <tr>
-              <th>Nome do arquivo:</th>
-              <th>Ação:</th>
-            </tr>
-            <tr *ngFor="let arquivo of arquivosSelecionados">
-              <td><p class="is-size-6">{{arquivo.name}}</p></td>
-              <td><button class="button is-size-6" type="button" (click)="removerArquivoSelecionado(arquivo)"><span class="icon is-small"><i class="mdi mdi-delete"></i></span></button>
-              </td>
-            </tr>
-          </table>
+        <div class="columns">
+          <div *ngFor="let imagemBase64 of imagensBase64; let i = index" class="column">
+            <div class="box">
+              <div class="columns">
+                <div class="column">
+                  <figure class="image is-128x128">
+                    <img [src]="imagemBase64" alt="Imagem do produto">
+                  </figure>    
+                </div>
+                <div class="column is-two-thirds">
+                  <p *ngIf="produto && produto.nomeImagem"> {{ produto.nomeImagem[i] }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>  
         </div>
       </div>

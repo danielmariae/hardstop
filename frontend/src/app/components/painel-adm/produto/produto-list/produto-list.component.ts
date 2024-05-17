@@ -137,7 +137,7 @@ export class ProdutoListComponent implements OnInit {
           this.carregarProdutos(this.page, this.pageSize);
           this.buscarTodosProdutos(); 
           this.router.navigate(['adm/produtos']);
-        });        
+        });     
       }
     
       buscarProdutos(): void {
@@ -194,7 +194,7 @@ paginar(event: PageEvent) : void {
     this.carregarProdutos(this.page, this.pageSize);
     this.produtoService.count().subscribe(data => {
       this.totalRecords = data;
-      this.totalPages = this.totalRecords/this.pageSize;
+      this.totalPages = Math.round(this.totalRecords/this.pageSize);
       if(this.totalPages < 1){
         this.totalPages = 1;
       }
@@ -205,6 +205,7 @@ paginar(event: PageEvent) : void {
   carregarProdutos(page: number, pageSize: number): void {
     this.produtoService.findAll(this.page, this.pageSize).subscribe({
         next: (response) => {
+            console.log(response);   
             this.produtos = response;
         },
         error: (error) => {

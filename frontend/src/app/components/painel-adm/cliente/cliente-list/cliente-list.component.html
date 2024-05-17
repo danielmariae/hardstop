@@ -21,22 +21,6 @@
       <div class="box">
         <div class="columns">
             <div class="column">
-                <!-- <form class="example-form">
-                    <mat-form-field class="example-full-width">
-                            <mat-label>Selecione um cliente</mat-label>
-                            <input type="text"
-                                placeholder="Pick one"
-                                aria-label="Number"
-                                matInput
-                                [formControl]="myControl"
-                                [matAutocomplete]="autoprod">
-                                <mat-autocomplete #autoprod="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selecionarCliente($event.option.value)">
-                                <mat-option *ngFor="let cliente of filteredOptions | async" [value]="cliente">
-                                    {{ cliente.nome }}
-                                </mat-option>
-                            </mat-autocomplete>
-                        </mat-form-field>
-                    </form> -->
                     <input class="control input" type="text" [(ngModel)]="searchText" (input)="buscarCliente()" placeholder="Procure um cliente">
                     <aside class="menu">
                       <ul class="menu-list" *ngIf="filteredClientes.length">
@@ -54,7 +38,6 @@
         </div>
     </div>
     <div class="field">
-    
     <div class="box">
       <h1 id="lista-clientes-h1" class="title is-1">Lista de clientes</h1>
     <div class="table-container">

@@ -3,6 +3,7 @@ import { Produto } from '../../../models/produto.model';
 import { ActivatedRoute } from '@angular/router';
 import { ProdutoService } from '../../../services/produto.service';
 import { CommonModule } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-produto-home-list',
@@ -22,16 +23,20 @@ export class ProdutoHomeListComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private produtoService: ProdutoService
+    private produtoService: ProdutoService,
+    private titleService: Title
   ){}
 
   ngOnInit(): void {
-    this.nomeBusca = String(this.route.snapshot.paramMap.get('nome'));
     this.pageSize = 2; 
-
-    this.carregarProdutos(this.page, this.pageSize);
-
-    
+  
+    this.route.paramMap.subscribe(params => {
+      this.nomeBusca = params.get('nome') || '';
+      this.page=0;
+      this.carregarProdutos(this.page, this.pageSize);
+      this.titleService.setTitle(`Você buscou por "${this.nomeBusca}"`)
+    })
+    console.log(this.produtos);
   }
 
   carregarProdutos(page: number, pageSize: number): void {
