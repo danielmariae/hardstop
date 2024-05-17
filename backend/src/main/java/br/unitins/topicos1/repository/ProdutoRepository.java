@@ -9,8 +9,8 @@ import jakarta.persistence.NoResultException;
 
 @ApplicationScoped
 public class ProdutoRepository implements PanacheRepository<Produto> {
-    public List<Produto> findByName(String nome) {
-        return find("UPPER(nome) LIKE UPPER(?1) ", "%"+nome+"%").list();
+    public List<Produto> findByName(String nome, int page, int pageSize) {
+        return find("UPPER(nome) LIKE UPPER(?1) ", "%"+nome+"%").page(page, pageSize).list();
     }
 
     public List<Produto> findByClassificacao(Long idClassificacao) {

@@ -1,61 +1,66 @@
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="/">
-        <h1 id="hardstoplogo">HARDSTOP</h1>
-      </a>
-      <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
+<div class="container">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="/">
+            <h1 id="hardstoplogo">HARDSTOP</h1>
+          </a>
+          <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+    
+        <div class="navbar-menu" id="navMenu">
+          <div class="navbar-end">
+            <div *ngIf="!admLogado">
 
-    <div class="navbar-menu" id="navMenu">
-      <div class="navbar-end">
-        <a class="navbar-item">Favoritos</a>
-        <a class="navbar-item">Carrinho</a>
-        <div *ngIf="!admLogado && !usuarioLogado">
-          <div class="navbar-item"> 
-            <div class="buttons">
-              <a href='/loginF' class="button is-light">Login</a>
+            </div>
+            <a class="navbar-item">Favoritos</a>
+            <a class="navbar-item">Carrinho</a>
+            <div *ngIf="!admLogado && !usuarioLogado">
+              <div class="navbar-item"> 
+                <div class="buttons">
+                  <a href='/loginF' class="button is-light">Login</a>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="admLogado">
+              <div class="navbar-item">
+                <div class="buttons">
+                  <a href='/adm/clientes' class="button is-light">Painel</a>
+                  <a href='/loginF' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="usuarioLogado">
+              <div class="navbar-item">
+                <div class="buttons">
+                  <a href='/cliente/edit' class="button is-light">Painel</a>
+                  <a href='/loginF' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div *ngIf="admLogado">
-          <div class="navbar-item">
-            <div class="buttons">
-              <a href='/adm/clientes' class="button is-light">Painel</a>
-              <a href='/loginF' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="usuarioLogado">
-          <div class="navbar-item">
-            <div class="buttons">
-              <a href='/cliente/edit' class="button is-light">Painel</a>
-              <a href='/loginF' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
-  <router-outlet/>
-  <br>
-  <footer>
-    <div class="container content">
-        <div class="columns">
-            <div class="column is-one-quarter">
-            </div>
-            <div class="column">
-                <h1 id="footer-h1">&copy; 2024 Hardstop</h1>
-                <p id="footer-p">Desenvolvido por Lucas Daniel e Leandro Garcia na disciplina de <a href="https://www.unitins.br/nPortal/sistemas-de-informacao-palmas">Tópicos 2</a> – 2024</p>
+      </nav>
+      <router-outlet/>
+      <br>
+      <footer>
+        <div class="container content">
+            <div class="columns">
+                <div class="column is-one-quarter">
+                </div>
+                <div class="column">
+                    <h1 id="footer-h1">&copy; 2024 Hardstop</h1>
+                    <p id="footer-p">Desenvolvido por Lucas Daniel e Leandro Garcia na disciplina de <a href="https://www.unitins.br/nPortal/sistemas-de-informacao-palmas">Tópicos 2</a> – 2024</p>
+                </div>
             </div>
         </div>
-    </div>
-    <nav class="navbar" id="footer-nav">
-        <div class="navbar-end">
-            <a class="navbar-item footer-a" href="./index.html">Início</a>
-        </div>
-    </nav>
-</footer>
+        <nav class="navbar" id="footer-nav">
+            <div class="navbar-end">
+                <a class="navbar-item footer-a" href="./index.html">Início</a>
+            </div>
+        </nav>
+      </footer>
+ </div>

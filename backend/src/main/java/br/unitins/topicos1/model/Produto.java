@@ -29,6 +29,7 @@ public class Produto extends DefaultEntity {
     private Double quantidadeNaoConvencional;
     private String unidadeDeMedida;
     private List<String> nomeImagem;
+    private String imagemPrincipal;
 
     @OneToOne
     private Lote loteAtual;
@@ -55,6 +56,7 @@ public class Produto extends DefaultEntity {
         this.codigoBarras = codigoBarras;
     }
 
+    
     public String getMarca() {
         return marca;
     }
@@ -204,6 +206,14 @@ public class Produto extends DefaultEntity {
      */
     public void setUnidadeDeMedida(String unidadeDeMedida) {
         this.unidadeDeMedida = unidadeDeMedida;
+    }
+
+    public String getImagemPrincipal() {
+        return imagemPrincipal;
+    }
+
+    public void setImagemPrincipal(String imagemPrincipal) {
+        this.imagemPrincipal = imagemPrincipal;
     }
 
 }

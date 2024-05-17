@@ -1,6 +1,8 @@
 package br.unitins.topicos1.dto;
 
 
+import java.util.List;
+
 import br.unitins.topicos1.model.Classificacao;
 import br.unitins.topicos1.model.Produto;
 
@@ -19,7 +21,8 @@ public record ProdutoResponseDTO(
     Integer quantidadeUnidades,
     Double quantidadeNaoConvencional,
     String unidadeDeMedida,
-    Classificacao classificacao
+    Classificacao classificacao,
+    List<String> listaImagem
     ) {
         public static ProdutoResponseDTO valueOf(Produto produto){
             return new ProdutoResponseDTO(
@@ -37,7 +40,8 @@ public record ProdutoResponseDTO(
                 produto.getQuantidadeUnidades(),
                 produto.getQuantidadeNaoConvencional(),
                 produto.getUnidadeDeMedida(),
-                produto.getClassificacao()     
+                produto.getClassificacao(),
+                produto.getNomeImagem()
             );
         }
     }

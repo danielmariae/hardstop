@@ -154,8 +154,12 @@ public class ProdutoResource {
 
     @GET
     @Path("/search/nome/{nome}")
-    public Response findByName(@PathParam("nome") String nome) {
-        return Response.ok(service.findByName(nome)).build();
+    public Response findByName(
+        @PathParam("nome") String nome,
+        @QueryParam("page") @DefaultValue("0") int page,
+        @QueryParam("pageSize") @DefaultValue("100") int pageSize
+        ) {
+        return Response.ok(service.findByName(nome, page, pageSize)).build();
     }
 
     @GET
@@ -203,7 +207,6 @@ public class ProdutoResource {
 
     @GET
     @Path("/download/imagem/{nomeImagem}")
-    @RolesAllowed({"Func", "Admin"})
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response download(@PathParam("nomeImagem") String nomeImagem){
 
