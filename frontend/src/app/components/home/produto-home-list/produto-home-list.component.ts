@@ -4,13 +4,14 @@ import { ActivatedRoute } from '@angular/router';
 import { ProdutoService } from '../../../services/produto.service';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { HeaderHomeComponent } from "../../template/home-template/header-home/header-home.component";
 
 @Component({
-  selector: 'app-produto-home-list',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './produto-home-list.component.html',
-  styleUrl: './produto-home-list.component.css'
+    selector: 'app-produto-home-list',
+    standalone: true,
+    templateUrl: './produto-home-list.component.html',
+    styleUrl: './produto-home-list.component.css',
+    imports: [CommonModule, HeaderHomeComponent]
 })
 export class ProdutoHomeListComponent implements OnInit {
   nomeBusca: string = '';

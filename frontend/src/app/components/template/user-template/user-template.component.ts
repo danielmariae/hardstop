@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HeaderUserComponent } from "./header/header-user.component";
+import { HeaderUserComponent } from "./header-user/header-user.component";
 import { RouterOutlet } from '@angular/router';
 import { SessionTokenService } from '../../../services/session-token.service';
 

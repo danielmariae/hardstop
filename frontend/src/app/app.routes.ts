@@ -27,35 +27,12 @@ import { ClienteThisEditComponent } from './components/painel-cliente/cliente-th
 import { ClienteUpdateSenhaComponent } from './components/painel-cliente/cliente-update-senha/cliente-update-senha.component';
 import { ProdutoHomeListComponent } from './components/home/produto-home-list/produto-home-list.component';
 import { UserTemplateComponent } from './components/template/user-template/user-template.component';
+import { HomeTemplateComponent } from './components/template/home-template/template-home/home-template.component';
+import { AdminTemplateComponent } from './components/template/admin-template/template-admin/admin-template.component';
 
 
 export const routes: Routes = [
-    { path:'adm/clientes/new', component: ClienteFormComponent, title:'Cadastrar novo cliente' },
-    { path:'adm/clientes/edit/:id', component: ClienteEditComponent, title:'Editar cliente' },
-    { path:'adm/clientes', component: ClienteListComponent, title:'Listar clientes'},
-    { path:'adm/clientes/:id', component: ClienteViewComponent, title:'Ver cliente'},
-    { path:'adm/funcionarios/new', component: FuncionarioFormComponent, title:'Cadastrar novo funcionario' },
-    { path:'adm/funcionarios/edit/:id', component: FuncionarioEditComponent, title:'Editar funcionario' },
-    { path:'adm/funcionarios', component: FuncionarioListComponent, title:'Listar funcionario'},
-    { path:'adm/funcionarios/:id', component: FuncionarioViewComponent, title:'Ver funcionario'},
-    { path: 'loginF', component: SessionTokenComponent },
-    { path: 'home', component: HomeComponent, title: 'Bem-vindo!' },
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'adm/fornecedores', component: FornecedorListComponent, title: 'Lista de Fornecedores'},
-    { path: 'adm/fornecedores/new', component: FornecedorComponent, title: 'Formulario de Fornecedores'},
-    { path: 'adm/fornecedores/edit/:id', component: FornecedorEditComponent, title: 'Edição de Dados de Fornecedores' },
-    {path: 'adm/fornecedores/:id', component: FornecedorViewComponent, title: 'Ver fornecedor'},
-    {path: 'adm/produtos', component: ProdutoListComponent, title: 'Lista de Produtos'},
-    { path: 'adm/produtos/new/:tipoProduto', component: ProdutoFormComponent, title: 'Formulario de Cadastro de Produtos'},
-    {path: 'adm/produtos/edit/:id', component: ProdutoEditComponent, title: 'Edicao de Produtos'},
-    {path: 'adm/lotes/new', component: LoteFormComponent, title: 'Insercao de Lotes' },
-    {path: 'adm/lotes/:id', component: LoteListComponent, title: 'Lista de Lotes por Produto'},
-    {path: 'adm/produtos/:id', component: ProdutoViewComponent, title: 'Produto Escolhido'},
-    {path: 'adm/produtos/escolhido/:id', component: ProdutoEscolhidoComponent, title: 'Produto Escolhido'},
-    {path: 'adm/produtos/garantia/:id', component: ProdutoGarantiaComponent, title: 'Fornecedor de Produto Defeituoso'},
-    {path: 'cliente/edit', component: ClienteThisEditComponent, title: 'Editar cliente'},
-    {path: 'cliente/senha', component: ClienteUpdateSenhaComponent, title: 'Atualizar senha'},
-    {path: 'home/buscador/:nome', component: ProdutoHomeListComponent},
+    {path:'', pathMatch: 'full', redirectTo:'home'},
     {
         path: 'user',
         component: UserTemplateComponent,
@@ -65,6 +42,66 @@ export const routes: Routes = [
             {path: 'edit', component: ClienteThisEditComponent, title: 'Edite seu perfil'}
         ],
     },
+    { 
+        path: 'home',
+        component: HomeTemplateComponent,
+        children: [
+            {path: 'buscador/:nome', component: ProdutoHomeListComponent}
+        ]
+    },
+    {
+        path: 'adm',
+        component: AdminTemplateComponent,
+        title: 'Painel de Administrador',
+        children:[
+            { 
+                path:'clientes',
+                children:[
+                    { path: '', component: ClienteListComponent, title:'Listar clientes'},
+                    { path:'new', component: ClienteFormComponent, title:'Cadastrar novo cliente' },
+                    { path:'edit/:id', component: ClienteEditComponent, title:'Editar cliente' },
+                    { path:':id', component: ClienteViewComponent, title:'Ver cliente'},
+                ]
+            },
+            {
+                path:'funcionarios',
+                children:[
+                    { path:'new', component: FuncionarioFormComponent, title:'Cadastrar novo funcionario' },
+                    { path:'edit/:id', component: FuncionarioEditComponent, title:'Editar funcionario' },
+                    { path:'', component: FuncionarioListComponent, title:'Listar funcionario'},
+                    { path:':id', component: FuncionarioViewComponent, title:'Ver funcionario'},                        
+                ]
+            },
+            {
+                path:'fornecedores',
+                children:[
+                    { path: '', component: FornecedorListComponent, title: 'Lista de Fornecedores'},
+                    { path: 'new', component: FornecedorComponent, title: 'Formulario de Fornecedores'},
+                    { path: 'edit/:id', component: FornecedorEditComponent, title: 'Edição de Dados de Fornecedores' },
+                    { path: ':id', component: FornecedorViewComponent, title: 'Ver fornecedor'},
+                
+                ]
+            },
+            {
+                path:'produtos',
+                children:[
+                    {path: '', component: ProdutoListComponent, title: 'Lista de Produtos'},
+                    {path: 'new/:tipoProduto', component: ProdutoFormComponent, title: 'Formulario de Cadastro de Produtos'},
+                    {path: 'edit/:id', component: ProdutoEditComponent, title: 'Edicao de Produtos'},
+                    {path: ':id', component: ProdutoViewComponent, title: 'Produto Escolhido'},
+                    {path: 'escolhido/:id', component: ProdutoEscolhidoComponent, title: 'Produto Escolhido'},
+                    {path: 'garantia/:id', component: ProdutoGarantiaComponent, title: 'Fornecedor de Produto Defeituoso'},
+                
+                ]
+            }
+        ]
+    },
+    { path: 'loginF', component: SessionTokenComponent },
+    {path: 'adm/lotes/new', component: LoteFormComponent, title: 'Insercao de Lotes' },
+    {path: 'adm/lotes/:id', component: LoteListComponent, title: 'Lista de Lotes por Produto'},
+    {path: 'cliente/edit', component: ClienteThisEditComponent, title: 'Editar cliente'},
+    {path: 'cliente/senha', component: ClienteUpdateSenhaComponent, title: 'Atualizar senha'},
+
 ];
 
 @NgModule({
