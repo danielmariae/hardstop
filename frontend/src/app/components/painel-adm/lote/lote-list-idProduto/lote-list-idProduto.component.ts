@@ -128,14 +128,14 @@ export class LoteListComponent implements OnInit {
     }
 
     // Método para paginar os resultados
-    atualizarDadosDaPagina(): void {
-        this.carregarLotes(this.page, this.pageSize);
-        this.loteService.count(this.id).subscribe(data => {
-            this.totalRecords = data;
-            this.totalPages = Math.round(this.totalRecords/this.pageSize);
-        });
-        console.log(this.lotes);
-    }
+    // atualizarDadosDaPagina(): void {
+    //     this.carregarLotes(this.page, this.pageSize);
+    //     this.loteService.count(this.id).subscribe(data => {
+    //         this.totalRecords = data;
+    //         this.totalPages = Math.round(this.totalRecords/this.pageSize);
+    //     });
+    //     console.log(this.lotes);
+    // }
 
     atualizarDadosDaPaginaTeste():void{
         this.carregarLotesEnvia(this.page, this.pageSize);
@@ -149,20 +149,20 @@ export class LoteListComponent implements OnInit {
         console.log(this.carregarLotesEnvia);
     }
     // Método para paginar os resultados
-    carregarLotes(page: number, pageSize: number): void {
-        this.loteService.findByIdProduto(this.id, page, pageSize).subscribe({
-            next: (response) => {
-                this.lotes = response;
-                console.log(this.lotes);
-            },
-            error: (error) => {
-                // Este callback é executado quando ocorre um erro durante a emissão do valor
-                console.error('Erro:', error.message);
-                window.alert(error);
-            }
-        });
-        this.totalPages = Math.round(this.totalRecords/this.pageSize);
-    }
+    // carregarLotes(page: number, pageSize: number): void {
+    //     this.loteService.findByIdProduto(this.id, page, pageSize).subscribe({
+    //         next: (response) => {
+    //             this.lotes = response;
+    //             console.log(this.lotes);
+    //         },
+    //         error: (error) => {
+    //             // Este callback é executado quando ocorre um erro durante a emissão do valor
+    //             console.error('Erro:', error.message);
+    //             window.alert(error);
+    //         }
+    //     });
+    //     this.totalPages = Math.round(this.totalRecords/this.pageSize);
+    // }
 
     carregarLotesEnvia(page: number, pageSize: number): void {
         this.loteService.findByIdProdutoEnviado(this.id, page, pageSize).subscribe({

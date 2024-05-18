@@ -28,46 +28,46 @@ export class LoteService {
     }
 
     // Método para trazer todas as instâncias de Lote de um dado produto de acordo com a paginação
-    findByIdProduto(id: number, page?: number, pageSize?: number): Observable<LoteRecebe[]> {
+    // findByIdProduto(id: number, page?: number, pageSize?: number): Observable<LoteRecebe[]> {
 
-        const headers = this.sessionTokenService.getSessionHeader();
-        const url = `${this.baseUrl}/search/idProduto/${id}`; // Concatena o ID à URL base
-        console.log(id);
+    //     const headers = this.sessionTokenService.getSessionHeader();
+    //     const url = `${this.baseUrl}/search/idProduto/${id}`; // Concatena o ID à URL base
+    //     console.log(id);
 
-        if (page !== undefined && pageSize !== undefined) {
-            const params = new HttpParams()
-                .set('page', page.toString())
-                .set('pageSize', pageSize.toString());
+    //     if (page !== undefined && pageSize !== undefined) {
+    //         const params = new HttpParams()
+    //             .set('page', page.toString())
+    //             .set('pageSize', pageSize.toString());
 
-            if (headers) {
-                // Faz a requisição HTTP com o token de autenticação no cabeçalho
-                return this.httpClient.get<LoteRecebe[]>(url, { headers: headers, params: params })
-                    .pipe(
-                        catchError(this.handleError)
-                    );
-            } else {
-                // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-                return this.httpClient.get<LoteRecebe[]>(url, { params })
-                    .pipe(
-                        catchError(this.handleError)
-                    );
-            }
-        } else {
-            if (headers) {
-                // Faz a requisição HTTP com o token de autenticação no cabeçalho
-                return this.httpClient.get<LoteRecebe[]>(url, { headers })
-                    .pipe(
-                        catchError(this.handleError)
-                    );
-            } else {
-                // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
-                return this.httpClient.get<LoteRecebe[]>(url)
-                    .pipe(
-                        catchError(this.handleError)
-                    );
-            }
-        }
-    }
+    //         if (headers) {
+    //             // Faz a requisição HTTP com o token de autenticação no cabeçalho
+    //             return this.httpClient.get<LoteRecebe[]>(url, { headers: headers, params: params })
+    //                 .pipe(
+    //                     catchError(this.handleError)
+    //                 );
+    //         } else {
+    //             // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
+    //             return this.httpClient.get<LoteRecebe[]>(url, { params })
+    //                 .pipe(
+    //                     catchError(this.handleError)
+    //                 );
+    //         }
+    //     } else {
+    //         if (headers) {
+    //             // Faz a requisição HTTP com o token de autenticação no cabeçalho
+    //             return this.httpClient.get<LoteRecebe[]>(url, { headers })
+    //                 .pipe(
+    //                     catchError(this.handleError)
+    //                 );
+    //         } else {
+    //             // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
+    //             return this.httpClient.get<LoteRecebe[]>(url)
+    //                 .pipe(
+    //                     catchError(this.handleError)
+    //                 );
+    //         }
+    //     }
+    // }
 
     findByIdProdutoEnviado(id: number, page?: number, pageSize?: number): Observable<LoteRecebeClass[]> {
 

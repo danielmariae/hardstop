@@ -11,24 +11,21 @@
     </div>
 
     <div class="navbar-menu" id="navMenu">
+      <div class="navbar-start">
+        <div class="navbar-item">
+          <div class="field has-addons">
+            <p class="control"> 
+              <input class="input" type="text" placeholder="Procure um produto" [formControl]="buscadorForm">  <!-- Correção aqui -->
+            </p>
+            <p class="control">
+              <button class="button" (click)="buscarProduto()">Pesquise</button>
+            </p>
+          </div>
+        </div>
+      </div>
       <div class="navbar-end">
         <a class="navbar-item">Favoritos</a>
         <a class="navbar-item">Carrinho</a>
-        <div *ngIf="!admLogado && !usuarioLogado">
-          <div class="navbar-item"> 
-            <div class="buttons">
-              <a href='/loginF' class="button is-light">Login</a>
-            </div>
-          </div>
-        </div>
-        <div *ngIf="admLogado">
-          <div class="navbar-item">
-            <div class="buttons">
-              <a href='/adm/clientes' class="button is-light">Painel</a>
-              <a href='/loginF' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
-            </div>
-          </div>
-        </div>
         <div *ngIf="usuarioLogado">
           <div class="navbar-item">
             <div class="buttons">

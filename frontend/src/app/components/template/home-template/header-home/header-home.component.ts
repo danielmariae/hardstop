@@ -1,21 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { SessionTokenService } from './services/session-token.service';
-import { CommonModule } from '@angular/common';
-import { NavigationService } from './services/navigation.service';
-import { Observable, catchError, of } from 'rxjs';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { HeaderUserComponent } from "./components/template/user-template/header-user/header-user.component";
-
+import { RouterOutlet } from '@angular/router';
+import { SessionTokenService } from '../../../../services/session-token.service';
+import { NavigationService } from '../../../../services/navigation.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-root',
-    standalone: true,
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.css',
-    imports: [ReactiveFormsModule, RouterOutlet, CommonModule, HeaderUserComponent]
+  selector: 'app-header-home',
+  standalone: true,
+  imports: [RouterOutlet, CommonModule, ReactiveFormsModule],
+  templateUrl: './header-home.component.html',
+  styleUrl: './header-home.component.css'
 })
-export class AppComponent implements OnInit{
+export class HeaderHomeComponent {
   usuarioLogado: boolean = false;
   admLogado: boolean = false;
 
@@ -85,6 +82,7 @@ export class AppComponent implements OnInit{
     // Limpa a sessão do token
     this.sessionTokenService.clearSessionToken();
   }
+
   buscarProduto(): void{
     if(this.buscadorForm.value !== null){
       console.log("Buscando por: ", this.buscadorForm.value);
@@ -94,4 +92,3 @@ export class AppComponent implements OnInit{
     }
   }
 }
-

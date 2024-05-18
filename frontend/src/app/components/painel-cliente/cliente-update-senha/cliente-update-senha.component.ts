@@ -46,7 +46,7 @@ export class ClienteUpdateSenhaComponent
   }
 
   editarDados(): void{
-    this.navigationService.navigateTo("cliente/edit");
+    this.navigationService.navigateTo("user/edit");
   }
 
   salvarAlteracoes(): void{

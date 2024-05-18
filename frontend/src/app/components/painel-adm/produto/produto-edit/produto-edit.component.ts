@@ -59,6 +59,7 @@ export class ProdutoEditComponent implements OnInit {
             quantidadeNaoConvencional: [''],
             unidadeDeMedida: [''],
             nomeImagem: [''],
+            imagemPrincipal: [''],
             classificacao: [''],
             arquivos: this.formBuilder.array([]), 
         });
@@ -213,6 +214,7 @@ export class ProdutoEditComponent implements OnInit {
           unidadeDeMedida: this.produtoForm.value.unidadeDeMedida,
           classificacao: classificacaoEncontrada,
           nomeImagem: this.produto.nomeImagem,
+          imagemPrincipal: this.produto.imagemPrincipal
         }
     
         // Otenho também os valores do formulário específicos para o componente do produto a ser inserido

@@ -15,6 +15,7 @@ export class Produto {
     quantidadeNaoConvencional!: number;
     unidadeDeMedida!: string;
     nomeImagem!: string[] | null;
+    imagemPrincipal!: string;
     classificacao!: Classificacao | undefined;
 }
 
@@ -54,3 +55,9 @@ export class Classificacao {
     id!: number;
     nome!: string
 }
+
+export interface ProdutoResponse {
+    totalItems: number;
+    produtos: Produto[];
+  }
+  

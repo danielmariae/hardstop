@@ -5,7 +5,6 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import br.unitins.topicos1.dto.LoteDTO;
 import br.unitins.topicos1.dto.LotePatchQDTO;
 import br.unitins.topicos1.dto.LotePatchVDTO;
-import br.unitins.topicos1.dto.LoteResponseCDTO;
 import br.unitins.topicos1.dto.LoteResponseDTO;
 import br.unitins.topicos1.service.LoteService;
 import jakarta.annotation.security.RolesAllowed;
@@ -43,14 +42,13 @@ public class LoteResource {
     return Response.status(201).entity(retorno).build();
   }
 
-  @POST
-  @RolesAllowed({ "Func", "Admin" })
-  @Path("/insert2/lote")
-  public Response insertTeste(@Valid LoteDTO dto) {
-    LoteResponseCDTO retorno = service.insertTeste(dto);
-    return Response.status(201).entity(retorno).build();
-  }
-
+  // @POST
+  // @RolesAllowed({ "Func", "Admin" })
+  // @Path("/insert2/lote")
+  // public Response insertTeste(@Valid LoteDTO dto) {
+  //   LoteResponseCDTO retorno = service.insertTeste(dto);
+  //   return Response.status(201).entity(retorno).build();
+  // }
 
 
   @GET
@@ -100,7 +98,7 @@ public class LoteResource {
   @RolesAllowed({ "Func", "Admin" })
   @Path("/search/id2/{id}")
   public Response findByIdTeste(@PathParam("id") Long id) {
-    return Response.ok(service.findById(id)).build();
+    return Response.ok(service.findByIdTeste(id)).build();
   }
 
 

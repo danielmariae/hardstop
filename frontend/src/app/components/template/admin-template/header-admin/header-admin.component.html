@@ -1,0 +1,25 @@
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <h1 id="hardstoplogo">HARDSTOP</h1>
+      </a>
+      <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+      <div class="navbar-menu" id="navMenu" *ngIf="admLogado">
+        <div class="navbar-end">
+            <div *ngIf="admLogado">
+              <div class="navbar-item">
+                <div class="buttons">
+                  <a href='/adm/clientes' class="button is-light">Painel</a>
+                  <a href='/loginF' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
+                </div>
+              </div>
+            </div>
+          </div>  
+      </div>
+  </nav>

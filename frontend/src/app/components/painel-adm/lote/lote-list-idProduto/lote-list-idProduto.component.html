@@ -1,15 +1,11 @@
-
-
-  <div class="container box">
+<div class="box">
     <h1 class="title is-1">Ver lotes do produto #{{id}}</h1>
     <div class="table-container">
-      <table class="table is-fullwidth">
+      <table class="table">
         <tr>
           <th>ID</th>
           <th>Lote</th>
           <th>Status</th>
-          <th>CNPJ (Fornecedor)</th>
-          <th>Modelo do Produto</th>
           <th>Quantidade</th>
           <th>Custo</th>
           <th>Valor</th>
@@ -23,8 +19,6 @@
           <td>{{loteTeste.id}}</td>
           <td>{{loteTeste.lote}}</td>
           <td>{{loteTeste.statusDoLote.descricao}}</td>
-          <td>{{loteTeste.fornecedor.cnpj}}</td>
-          <td>{{loteTeste.produto.modelo}}</td>
           <td>{{loteTeste.quantidadeUnidades}}</td>
           <td>{{loteTeste.custoCompra}}</td>
           <td>{{loteTeste.valorVenda}}</td>
@@ -39,7 +33,7 @@
       </table>
     </div>
   </div>
-  <div class="container box">
+  <div class="box">
     <nav class="level">
       <div class="level-left">
         <div class="level-item">
@@ -77,4 +71,3 @@
         </div>
       </div>   
     </div>
-  </div>

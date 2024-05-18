@@ -90,7 +90,7 @@ insert into statusDoPedido (dataHora, status) values('2023-10-04 20:23:35', 1);
 insert into classificacao (nome) values('Processadores');
 insert into classificacao (nome) values('Placas Mãe');
 
-insert into produto (nome, modelo, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidadeUnidades, classificacao_id, version, nomeImagem, imagemprincipal) values('Processador Intel Core i7 11 gen', 'XYZ-FGH12', 'Processador Intel Core i7 11 gen', 'PICI711gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 1000.0, 10, 1, 1, '{"3a2c2c2e-7769-4610-8963-43f532517c9a.jpeg", "9e8c6c9e-0f0c-45e3-8bac-d35716579300.jpeg"}', '3a2c2c2e-7769-4610-8963-43f532517c9a.jpeg');
+insert into produto (nome, modelo, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidadeUnidades, classificacao_id, version, nomeImagem, imagemprincipal) values('Processador Intel Core i7 11 gen', 'XYZ-FGH12', 'Processador Intel Core i7 11 gen', 'PICI711gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 1000.50, 10, 1, 1, '{"3a2c2c2e-7769-4610-8963-43f532517c9a.jpeg", "9e8c6c9e-0f0c-45e3-8bac-d35716579300.jpeg"}', '3a2c2c2e-7769-4610-8963-43f532517c9a.jpeg');
 insert into processador (produto_id, bloqueado, canaismemoria) values (1, 'não', '256');
 insert into produto (nome, modelo, descricao, codigoBarras, marca, altura, largura, comprimento, peso, valorVenda, quantidadeUnidades, classificacao_id, version) values('Processador Intel Core i5 12 gen', 'CVBN-KLo34','Processador Intel Core i5 12 gen', 'PICI512gen07102023', 'Intel', 0.5, 0.5, 0.5, 0.25, 1200.0, 5, 1, 1);
 insert into processador (produto_id, bloqueado, canaismemoria) values (2, 'não', '512');
