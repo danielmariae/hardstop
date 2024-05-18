@@ -1,21 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { SessionTokenService } from '../../../../services/session-token.service';
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { NavigationService } from '../../../../services/navigation.service';
 
 @Component({
   selector: 'app-header-user',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './header-user.component.html',
   styleUrl: './header-user.component.css'
 })
 export class HeaderUserComponent implements OnInit {
   usuarioLogado: boolean = false;
-  admLogado: boolean = false;
+
+  buscadorForm: FormControl;
 
   constructor(
-      private sessionTokenService: SessionTokenService
-  ){}
+      private sessionTokenService: SessionTokenService,
+      private navigationService: NavigationService,
+      private formBuilder: FormBuilder,
+  ){
+    this.buscadorForm = this.formBuilder.control('');
+  }
   
   ngOnInit(): void {
         // Get all "navbar-burger" elements
@@ -55,10 +62,17 @@ export class HeaderUserComponent implements OnInit {
     // Limpa o estado de login e remove os dados do sessionStorage
     this.usuarioLogado = false;
     sessionStorage.removeItem('usuarioLogado');
-    this.admLogado = false;
-    sessionStorage.removeItem('admLogado');
 
     // Limpa a sessão do token
     this.sessionTokenService.clearSessionToken();
+  }
+
+  buscarProduto(): void{
+    if(this.buscadorForm.value !== null){
+      console.log("Buscando por: ", this.buscadorForm.value);
+      this.navigationService.navigateTo('home/buscador/'+this.buscadorForm.value);  
+    }else{
+      this.navigationService.navigateTo('home/buscador/%');
+    }
   }
 }

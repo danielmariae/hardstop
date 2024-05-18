@@ -70,6 +70,7 @@ export class ProdutoFormComponent implements OnInit {
       classificacao: [null],
       arquivos: this.formBuilder.array([]),
       nomeImagem: [null],
+      imagemPrincipal:[null]
     })
   }
 
@@ -206,6 +207,7 @@ salvarProduto(): void {
       unidadeDeMedida: this.produtoForm.value.unidadeDeMedida,
       classificacao: classificacaoEncontrada,
       nomeImagem: null,
+      imagemPrincipal: this.produtoForm.value
     }
 
     // Otenho também os valores do formulário específicos para o componente do produto a ser inserido

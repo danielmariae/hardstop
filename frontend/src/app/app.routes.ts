@@ -39,7 +39,8 @@ export const routes: Routes = [
         title: 'Painel do cliente',
         children: [
             {path: '', pathMatch: 'full', redirectTo: 'edit'},
-            {path: 'edit', component: ClienteThisEditComponent, title: 'Edite seu perfil'}
+            {path: 'edit', component: ClienteThisEditComponent, title: 'Edite seu perfil'},
+            {path: 'senha', component: ClienteUpdateSenhaComponent, title: 'Atualizar senha'},
         ],
     },
     { 
@@ -93,15 +94,18 @@ export const routes: Routes = [
                     {path: 'garantia/:id', component: ProdutoGarantiaComponent, title: 'Fornecedor de Produto Defeituoso'},
                 
                 ]
-            }
+            },
+            {
+                path:'lotes',
+                children:[
+                    {path: 'new', component: LoteFormComponent, title: 'Insercao de Lotes' },
+                    {path: 'produto/:id', component: LoteListComponent, title: 'Lista de Lotes por Produto'},                
+                ]
+            } 
+
         ]
     },
-    { path: 'loginF', component: SessionTokenComponent },
-    {path: 'adm/lotes/new', component: LoteFormComponent, title: 'Insercao de Lotes' },
-    {path: 'adm/lotes/:id', component: LoteListComponent, title: 'Lista de Lotes por Produto'},
-    {path: 'cliente/edit', component: ClienteThisEditComponent, title: 'Editar cliente'},
-    {path: 'cliente/senha', component: ClienteUpdateSenhaComponent, title: 'Atualizar senha'},
-
+    { path: 'login', component: SessionTokenComponent },
 ];
 
 @NgModule({

@@ -231,7 +231,7 @@ export class ClienteThisEditComponent implements OnInit {
     }
   
     atualizarSenha(): void{
-      this.navigationService.navigateTo('/cliente/senha')
+      this.navigationService.navigateTo('/user/senha')
     }
   
     salvarAlteracoes(): void {

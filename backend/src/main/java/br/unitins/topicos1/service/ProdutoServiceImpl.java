@@ -316,6 +316,10 @@ public class ProdutoServiceImpl implements ProdutoService {
       return repository.findById(id);
     }
 
+    public long countByName(String nome){
+      return repository.countByName(nome);
+    }
+
     @Override
     public ProdutoResponseDTO findByCodigoBarras(String codigoBarras) {
         return ProdutoResponseDTO.valueOf(repository.findByCodigoBarras(codigoBarras));

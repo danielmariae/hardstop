@@ -22,7 +22,8 @@ public record ProdutoResponseDTO(
     Double quantidadeNaoConvencional,
     String unidadeDeMedida,
     Classificacao classificacao,
-    List<String> listaImagem
+    List<String> nomeImagem, 
+    String imagemPrincipal
     ) {
         public static ProdutoResponseDTO valueOf(Produto produto){
             return new ProdutoResponseDTO(
@@ -41,7 +42,9 @@ public record ProdutoResponseDTO(
                 produto.getQuantidadeNaoConvencional(),
                 produto.getUnidadeDeMedida(),
                 produto.getClassificacao(),
-                produto.getNomeImagem()
+                produto.getNomeImagem(),
+                produto.getImagemPrincipal()
             );
         }
+        
     }

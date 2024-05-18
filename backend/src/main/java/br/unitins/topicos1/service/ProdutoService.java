@@ -49,6 +49,7 @@ public interface ProdutoService {
 
     // PROCURAR POR NOME:
     List<ProdutoResponseDTO> findByName(String nome, int page, int pageSize);
+    long countByName(String nome);
 
     // PROCURAR POR CLASSIFICAÇÃO
     List<ProdutoResponseDTO> findByClassificacao(Long idClassificacao);

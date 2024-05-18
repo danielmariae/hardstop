@@ -1,5 +1,9 @@
 package br.unitins.topicos1.resource;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
@@ -152,16 +156,41 @@ public class ProdutoResource {
     }
 
 
-    @GET
-    @Path("/search/nome/{nome}")
-    public Response findByName(
-        @PathParam("nome") String nome,
-        @QueryParam("page") @DefaultValue("0") int page,
-        @QueryParam("pageSize") @DefaultValue("100") int pageSize
-        ) {
-        return Response.ok(service.findByName(nome, page, pageSize)).build();
-    }
+// @GET
+// @Path("/search/nome/{nome}")
+// public Response findByName(
+//     @PathParam("nome") String nome,
+//     @QueryParam("page") @DefaultValue("0") int page,
+//     @QueryParam("pageSize") @DefaultValue("100") int pageSize
+// ) {
+//     List<ProdutoResponseDTO> produtos = service.findByName(nome, page, pageSize);
+//     long totalItems = service.countByName(nome); // Obtém o total de itens disponíveis
+//     // Crie um objeto que contenha tanto os itens quanto o total de itens
 
+//     Map<String, Object> responseMap = new HashMap<>();
+//     responseMap.put("produtos", produtos);
+//     responseMap.put("totalItems", totalItems);
+
+//     return Response.ok(responseMap).build();
+// }
+
+@GET
+@Path("/search/nome/{nome}")
+public Response findByName(
+    @PathParam("nome") String nome,
+    @QueryParam("page") @DefaultValue("0") int page,
+    @QueryParam("pageSize") @DefaultValue("100") int pageSize
+) {
+    List<ProdutoResponseDTO> produtos = service.findByName(nome, page, pageSize);
+    long totalItems = service.countByName(nome); // Obtém o total de itens disponíveis
+    // Crie um objeto que contenha tanto os itens quanto o total de itens
+
+    Map<String, Object> responseMap = new HashMap<>();
+    responseMap.put("produtos",produtos);
+    responseMap.put("totalItems", totalItems);
+
+    return Response.ok(responseMap).build();
+}
     @GET
     @Path("/search/nome/{idClassificacao}")
     public Response findByClassificacao(@PathParam("idClassificacao") Long id) {

@@ -24,8 +24,7 @@ martacesare    GfT12-   ADMIN
     {
       "nome": "Jair Figueiras",
       "rua": "Barão de Cotegipe",
-      "numero": "57",
-      "lote": "s/l",
+      "numeroLote": "57",
       "bairro": "'",
       "complemento": "Próximo a praça do Ancião",
       "cep": {
