@@ -29,6 +29,9 @@ import { ProdutoHomeListComponent } from './components/home/produto-home-list/pr
 import { UserTemplateComponent } from './components/template/user-template/user-template.component';
 import { HomeTemplateComponent } from './components/template/home-template/template-home/home-template.component';
 import { AdminTemplateComponent } from './components/template/admin-template/template-admin/admin-template.component';
+import { LoginAdmComponent } from './components/session-token/login-adm/login-adm.component';
+import { LoginUserComponent } from './components/session-token/login-user/login-user.component';
+import { CreateUserAccountComponent } from './components/session-token/create-user-account/create-user-account.component';
 
 
 export const routes: Routes = [
@@ -105,7 +108,21 @@ export const routes: Routes = [
 
         ]
     },
-    { path: 'login', component: SessionTokenComponent },
+    { 
+        path: 'login', 
+        children:[
+            {path: '', component: SessionTokenComponent, title: 'Login dos dois'},
+            {path: 'adm', component: LoginAdmComponent, title: 'Acesso ao Painel Administrativo'},
+            {path: 'user', component: LoginUserComponent, title: 'Bem vindo ao painel de cliente!'},
+        ]
+    },
+    {
+        path: 'new',
+        children:[
+            {path: 'user', component: CreateUserAccountComponent, title: 'Cadastre no melhor site de hardware!'},
+            // {path: 'adm', component: }
+        ]
+    }
 ];
 
 @NgModule({

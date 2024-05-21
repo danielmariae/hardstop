@@ -1,0 +1,28 @@
+<section class="hero is-fullheight">
+    <div class="hero-body">
+        <div class="container columns is-centered">
+            <div class="column is-5">
+                <div class="box">
+                    <h1 id="hardstoplogo" class="is-size-1 has-text-centered">HARDSTOP</h1>
+                    <h1 class="is-size-6 has-text-centered mb-4">Bem-vindo ao melhor site de compras online do Brasil!</h1>
+                    <form [formGroup]="loginClienteForm" (ngSubmit)="loginC()">
+                    <div class="field mb-4">
+                        <label class="label" for="username">Usuário:</label>
+                        <input class="input" placeholder="Digite aqui seu nome de usuário" type="text" id="usernameF" formControlName="username" required>
+                    </div>
+                    <div>
+                        <label class="label" for="password">Senha:</label>
+                        <input class="input" placeholder="Digite aqui sua senha" type="password" id="passwordF" formControlName="password" required>
+                    </div>
+                        <br>
+                    <div class="buttons is-centered">
+                        <button class="button is-primary" type="submit" [disabled]="loginClienteForm.invalid">Entrar</button>
+                        <button class="button is-text" (click)="cadastrarCliente()">Cadastrar-se</button>
+                    </div>
+                    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>  
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,38 @@
+<section class="hero is-fullheight">
+    <div class="hero-body">
+        <div class="container columns is-centered">
+            <div class="column is-5">
+                <div class="box">
+                    <h1 id="hardstoplogo" class="is-size-1 has-text-centered">HARDSTOP</h1>
+                    <h1 class="is-size-4 has-text-centered">Login Funcionário</h1>
+                    <form [formGroup]="loginForm" (ngSubmit)="loginF()">
+                    <div class="field mb-4">
+                        <label class="label" for="username">Usuário:</label>
+                        <input class="input" placeholder="Digite aqui seu nome de usuário" type="text" id="usernameF" formControlName="username" required>
+                    </div>
+                    <div>
+                        <label class="label" for="password">Senha:</label>
+                        <input class="input" placeholder="Digite aqui sua senha" type="password" id="passwordF" formControlName="password" required>
+                    </div>
+                        <br>
+                    <div class="buttons is-centered">
+                        <button class="button is-primary" type="submit" [disabled]="loginForm.invalid">Entrar</button>
+                    </div>
+                    <div class="notification is-info">
+                        Caso você não tenha conta no sistema, contate o setor de TI, através dos contatos:
+                        <br>
+                        <a href="tel:+5563999632459">(63) 99963-2459</a>
+                        /
+                        <a href="mailto:lucasdaniel@unitins.br">lucasdaniel&#64;unitins.br</a>
+                        (Lucas Santos)
+                        <br>
+                        <a href="mailto:leandrogarcia@unitins.br">leandrogarcia&#64;unitins.br</a>
+                        (Leandro Garcia)
+                    </div>
+                    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>  
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
