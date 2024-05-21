@@ -104,7 +104,7 @@ export class SessionTokenComponent implements OnInit {
       this.loginForm.reset();
       this.errorMessage = '';
       // Redirecionar o usuário para a página de perfil, por exemplo
-      this.navigationService.navigateTo('/cliente/edit');
+      this.navigationService.navigateTo('/user/edit');
       
     },
     error: (error) => {
