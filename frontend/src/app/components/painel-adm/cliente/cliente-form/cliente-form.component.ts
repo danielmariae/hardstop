@@ -12,7 +12,7 @@ import { dataValidator } from '../../../../validators/data-validator';
 import { HttpClient } from '@angular/common/http';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { formatarDataNascimento } from '../../../../converters/date-converter';
+import { formatarDataNascimento } from '../../../../utils/date-converter';
 
 @Component({
   selector: 'app-cliente',
@@ -254,7 +254,7 @@ export class ClienteFormComponent {
       next: (response) => {
       console.log('Cliente inserido com sucesso:', response);
         this.clienteService.notificarClienteInserido(); // Notificar outros componentes
-        this.navigationService.navigateTo('clientes')
+        this.navigationService.navigateTo('adm/clientes')
       },
       error: (error) => {
         // Este callback é executado quando ocorre um erro durante a emissão do valor

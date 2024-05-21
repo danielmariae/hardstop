@@ -6,7 +6,7 @@ import { Cliente } from '../../../../models/cliente.model';
 import { ClienteService } from '../../../../services/cliente.service';
 import { NavigationService } from '../../../../services/navigation.service';
 import { validarSenhaUpdate } from '../../../../validators/update-senha-validator';
-import { formatarDataNascimento } from '../../../../converters/date-converter';
+import { formatarDataNascimento } from '../../../../utils/date-converter';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
@@ -192,17 +192,22 @@ adicionarEndereco(endereco?: any): void {
 atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
   const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
 
+  // Adicionar verificação para evitar chamadas desnecessárias
+  if (enderecoFormGroup.get('cep')?.value === cepValue) {
+    return; // Se o valor do CEP não mudou, não faça nada
+  }
+
   if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
     this.viaCep.buscarPorCep(cepValue).subscribe({
       next: (endereco) => {
         if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
-          // Atualizando os valores do formulário com os dados do endereço
+          // Atualizando os valores do formulário com os dados do endereço apenas se houver mudanças
           enderecoFormGroup.patchValue({
-            cep: endereco.cep,
-            logradouro: endereco.logradouro,
-            bairro: endereco.bairro,
-            localidade: endereco.localidade,
-            uf: endereco.uf,
+            cep: endereco.cep !== enderecoFormGroup.get('cep')?.value ? endereco.cep : enderecoFormGroup.get('cep')?.value,
+            logradouro: endereco.logradouro !== enderecoFormGroup.get('logradouro')?.value ? endereco.logradouro : enderecoFormGroup.get('logradouro')?.value,
+            bairro: endereco.bairro !== enderecoFormGroup.get('bairro')?.value ? endereco.bairro : enderecoFormGroup.get('bairro')?.value,
+            localidade: endereco.localidade !== enderecoFormGroup.get('localidade')?.value ? endereco.localidade : enderecoFormGroup.get('localidade')?.value,
+            uf: endereco.uf !== enderecoFormGroup.get('uf')?.value ? endereco.uf : enderecoFormGroup.get('uf')?.value,
             pais: 'Brasil',
             cepInvalido: false // Adiciona uma propriedade para indicar que o CEP é válido
           });

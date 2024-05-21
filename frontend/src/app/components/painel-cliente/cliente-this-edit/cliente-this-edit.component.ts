@@ -8,7 +8,7 @@ import { ClienteService } from '../../../services/cliente.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { validarSenhaUpdate } from '../../../validators/update-senha-validator';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { formatarDataNascimento } from '../../../converters/date-converter';
+import { formatarDataNascimento } from '../../../utils/date-converter';
 
 @Component({
   selector: 'app-cliente-this-edit',

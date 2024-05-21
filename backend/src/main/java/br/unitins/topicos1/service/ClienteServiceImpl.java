@@ -24,6 +24,7 @@ import br.unitins.topicos1.dto.TelefonePatchDTO;
 import br.unitins.topicos1.model.Cliente;
 import br.unitins.topicos1.model.Endereco;
 import br.unitins.topicos1.model.Pedido;
+import br.unitins.topicos1.model.Produto;
 import br.unitins.topicos1.model.StatusDoPedido;
 import br.unitins.topicos1.model.Telefone;
 import br.unitins.topicos1.model.TipoTelefone;
@@ -473,11 +474,19 @@ cliente.getListaProduto().clear();
       }
     }
 
+    try{
+      cliente.setListaProduto(new ArrayList<Produto>());
+    }catch(Exception e){
+      throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui alocar memória para a lista de desejos do novo Cliente. Tente novamente mais tarde! " +  e.getCause());
+    }
+
     try {
       repository.persist(cliente);
     } catch (Exception e) {
       throw new GeneralErrorException("500", "Internal Server Error", "ClienteServiceImpl(insert)", "Não consegui persistir os dados do cliente no repositório " + e.getCause());
     }
+
+    
     
     return ClienteResponseDTO.valueOf(cliente);
   }

@@ -18,11 +18,14 @@ import { Observable, fromEvent, of } from 'rxjs';
 import { startWith, map, catchError, toArray, debounceTime, tap, switchMap } from 'rxjs/operators';
 import { NavigationService } from '../../../../services/navigation.service';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { getFormattedCurrency } from '../../../../utils/formatValues';
 
 @Component({
     selector: 'app-fornecedor-list',
     standalone: true,
-    imports: [NgFor, MatTableModule, MatToolbarModule, MatIconModule, MatButtonModule, RouterModule, CommonModule, MatPaginatorModule, MatAutocompleteModule, FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, AsyncPipe, NgSelectModule],
+    imports: [NgFor, RouterModule, CommonModule,FormsModule, MatFormFieldModule,
+    MatInputModule, ReactiveFormsModule, AsyncPipe, NgSelectModule,
+    ],
     templateUrl: './produto-list.component.html',
     styleUrl: './produto-list.component.css'
 })
@@ -246,5 +249,9 @@ paginar(event: PageEvent) : void {
 
   navegarParaClientes(): void{
     this.navigationService.navigateTo("adm/clientes");
+  }
+
+  converterParaReal(valor: number){
+    return getFormattedCurrency(valor);
   }
 }

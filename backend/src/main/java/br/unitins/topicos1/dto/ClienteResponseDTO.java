@@ -17,6 +17,7 @@ public record ClienteResponseDTO(
   Perfil perfil,
   List<EnderecoResponseDTO> listaEndereco,
   List<TelefoneResponseDTO> listaTelefone,
+  // List<PedidoResponseDTO> listaPedidos,
   List<ProdutoResponseDTO> listaDesejos
 ) {
   public static ClienteResponseDTO valueOf(Cliente cliente) {

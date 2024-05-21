@@ -6,7 +6,7 @@ import { Cliente } from '../../../../models/cliente.model';
 import { ClienteService } from '../../../../services/cliente.service';
 import { NavigationService } from '../../../../services/navigation.service';
 import { validarSenhaUpdate } from '../../../../validators/update-senha-validator';
-import { formatarDataNascimento } from '../../../../converters/date-converter';
+import { formatarDataNascimento } from '../../../../utils/date-converter';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 

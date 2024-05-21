@@ -11,7 +11,7 @@ import { cpfValidator } from '../../../../validators/cpf-validator';
 import { dataValidator } from '../../../../validators/data-validator';
 import { idadeValidator } from '../../../../validators/idade-validator';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { formatarDataNascimento } from '../../../../converters/date-converter';
+import { formatarDataNascimento } from '../../../../utils/date-converter';
 
 @Component({
   selector: 'app-funcionario',
