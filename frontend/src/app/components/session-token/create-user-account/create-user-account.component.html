@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                             <div class="columns">
-                                <div class="column">
+                                <div class="column is-half-desktop">
                                     <label class="field label">Sexo:</label>
                                     <div class="select" id="seletor-especial">
                                         <select formControlName="sexo">
@@ -44,8 +44,8 @@
                                         <p class="help is-danger">Por favor, escolha um sexo.</p>
                                     </div>
                                 </div>
-                                <div class="column">
-                                    <label class="field label">Data de Nascimento:</label>
+                                <div class="column ">
+                                    <label class="field label is-size-6">Data de nascimento:</label>
                                     <input class="control input" type="text" inputmode="numeric" id="dataNascimento"
                                         mask="00/00/0000" placeholder="Ex.: 01/01/2001" formControlName="dataNascimento">
                                     <div
@@ -112,11 +112,27 @@
                                                 placeholder="Número de Telefone">
                                         </div>
                                     </div>
-                                    <div class="col"> 
+                                    <div class="columns mb-5">
+                                        <div class="column">
+                                            <label class="field label">Selecione tipo de telefone:</label>
+                                            <div class="select" > 
+                                              <!-- id="seletor-especial" -->
+                                              <select formControlName="tipo">
+                                                <option disabled selected value="">Selecione um tipo de telefone</option>
+                                                <option *ngFor="let tipo of tiposTelefone" [value]="tipo.id">{{ tipo.descricao }}</option>
+                                              </select>
+                                            </div>
+                                        </div> 
+                                        <div class="column">
+                                            <label class="field label">Ação</label>
+                                            <div class="button is-default is-danger">
+                                            <button type="button" (click)="removerTelefone(i)">Remover</button>
+                                            </div>
+                                          </div>
                                     </div>
                                 </div>
                                 <div class="buttons is-centered mb-6">
-                                    <button class="button" (click)="adicionarTelefone()">Adicionar telefone</button>
+                                    <button type="button" class="button" (click)="adicionarTelefone()">Adicionar telefone</button>
                                 </div>
                             </div>
                             <h2 class="title is-3 has-text-centered">Endereços</h2>
@@ -128,10 +144,10 @@
                                             <input class="control input" formControlName="nome"
                                                 placeholder="Nome para este endereço:">
                                         </div>
-                                        <div class="column is-one-quarter">
+                                        <div class="column is-one-third-desktop">
                                             <label class="field label">CEP:</label>
                                             <input class="control input" formControlName="cep" inputmode="numeric"
-                                                mask="00000-000" placeholder="Ex: 00000-000">
+                                                mask="00000-000" placeholder="00000-000">
                                             <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
                                                 <p class="help is-danger">CEP inválido.</p>
                                             </div>
@@ -202,11 +218,11 @@
                                 </div>
                             </div>
                             <div class="buttons is-centered mb-6">
-                                <button class="button" (click)="adicionarEndereco()">Adicionar endereço</button>
+                                <button type="button" class="button" (click)="adicionarEndereco()">Adicionar endereço</button>
                             </div>
                             <div class="buttons is-centered">
-                                <button class="button is-primary" type="submit">Salvar</button>
-                                <button class="button is-text" (click)="cancelarInsercao()">Cancelar</button>
+                                <button type="submit" class="button is-primary">Salvar</button>
+                                <button class="button is-text" (click)="cancelarInsercao()">Já tem conta? Clique aqui para fazer login.</button>
                             </div>
                             <div *ngIf="errorDetails" class="notification is-danger">
                                 <div *ngFor="let error of errorDetails.errors">

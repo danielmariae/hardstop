@@ -29,9 +29,14 @@ export class CreateUserAccountComponent {
   tiposTelefone: any[];
   uf: any[];
 
-  constructor(private formBuilder: FormBuilder, private clienteService: ClienteService,
-    private router: Router, private activatedRoute: ActivatedRoute, private navigationService: NavigationService,
-    private http: HttpClient, private viaCep: NgxViacepService) {
+  constructor(
+    private formBuilder: FormBuilder, 
+    private clienteService: ClienteService,
+    private router: Router, 
+    private activatedRoute: ActivatedRoute, 
+    private navigationService: NavigationService,
+    private http: HttpClient, 
+    private viaCep: NgxViacepService) {
     this.tiposTelefone = [];
     this.uf = [];
     // Inicializar clienteForm no construtor
@@ -225,7 +230,7 @@ export class CreateUserAccountComponent {
 
   cancelarInsercao(): void {
     // Redireciona o usuário para a rota anterior
-    this.navigationService.navigateTo("adm/clientes");
+    this.navigationService.navigateTo("login/user");
   }
 
   salvarCliente(): void {
@@ -254,7 +259,7 @@ export class CreateUserAccountComponent {
       next: (response) => {
       console.log('Cliente inserido com sucesso:', response);
         this.clienteService.notificarClienteInserido(); // Notificar outros componentes
-        this.navigationService.navigateTo('adm/clientes')
+        this.navigationService.navigateTo('login/user')
       },
       error: (error) => {
         // Este callback é executado quando ocorre um erro durante a emissão do valor
