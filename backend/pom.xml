@@ -121,7 +121,6 @@
     <scope>provided</scope>
 </dependency>
 
-
 <!-- Dependência do Quarkus para PartType -->
 <dependency>
       <groupId>io.quarkus</groupId>

@@ -33,9 +33,6 @@ insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, lo
 -- ## Clientes ##
 -- senha 123VaA_
 insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('Katia de Ruim', '2010-08-08', 0, '23576472720', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com');
-insert into cliente_endereco (id_cliente, id_endereco) values(1,1);
-insert into cliente_endereco (id_cliente, id_endereco) values(1,6);
-insert into cliente_telefone (id_cliente, id_telefone) values(1,1);
 -- senha 1a2B3!
 insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('Flavio de Boa', '2007-10-02', 0, '20275068536', 'M', 'flavio1234', 'pTOqkVzjpPAXcO0Iau1rmMLSxHsi/CSmyX7a+k1h9oDcYjh2k2s+GQfTRhK9JECbQFkezUT2unji0ww04h7KDQ==', 'flavio1234@gmail.com');
 -- senha 123_@!
@@ -56,7 +53,7 @@ insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, emai
 insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Arruda de Alencar', '2000-09-12', '48202498783', 'M', 4, 'arrudaalencar', '1dFLdP3297AHwCVMOu5ScNEXaWxFW2TO7uj60UQY+PktBgoem0kVhF8b3FqvZDXn2eyOCHQab6aCK0oYGgm/2w==', 1, 'arrudaalencar@gmail.com');
 -- senha GfT12-
 insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Marta de Cesare', '2001-11-30', '19452476141', 'F', 5, 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 2,  'martacesare@gmail.com');
-insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Pedro Dantas Limacedo', '2002-05-18', '19452476141', 'F', 5, 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 2,  'martacesare@gmail.com');
+--insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Pedro Dantas Limacedo', '2002-05-18', '19452476141', 'F', 5, 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 2,  'martacesare@gmail.com');
 
 
 insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '20229087654321', 'www.net.com.br');
@@ -72,6 +69,9 @@ insert into telefone (tipoTelefone, ddd, numerotelefone) values(3, '11', '988885
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '61', '922704321');
 
 -- CLIENTES
+insert into cliente_endereco (id_cliente, id_endereco) values(1,1);
+insert into cliente_endereco (id_cliente, id_endereco) values(1,6);
+insert into cliente_telefone (id_cliente, id_telefone) values(1,1);
 insert into cliente_endereco (id_cliente, id_endereco) values(2,2);
 insert into cliente_telefone (id_cliente, id_telefone) values(2,3);
 
