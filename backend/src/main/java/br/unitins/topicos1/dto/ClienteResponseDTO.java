@@ -45,6 +45,7 @@ public record ClienteResponseDTO(
         .getListaProduto()
         .stream()
         .map(p -> ProdutoResponseDTO.valueOf(p))
-        .toList());
+        .toList()
+      );
   }
 }
