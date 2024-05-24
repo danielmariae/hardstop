@@ -22,33 +22,41 @@ $$; */
 insert into empresa (nomeReal, nomeFantasia, nomeResponsavel, cnpj, cpf, chavePixAleatoria, email, nomeBanco, codigoBanco, numeroConta, numeroAgencia, isEmpresa) values('Leandro Armações Ilimitadas Ltda', 'LAILPALMAS', 'Leandro Guimarães Garcia', '81.478.733/0001-38', '73522652363', 'a87a052f-64f7-4496-9399-8f898c416f28', 'leocid25@gmail.com', 'Banco do Brasil', '001', '124911-8', '1867-8', 'true');
 
 insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Katia de Ruim', 'Barão de Cotegipe', '15', 'Sul', 'Perto da igreja Assembléia', '64532-098', 'Rialma', 'GO', 'Brasil');
-
 insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Flávio de Boa', 'Palmares da Cruz', '88', 'Norte', 'Perto do supermercado Real', '38432-422', 'Ponte Alta', 'TO', 'Brasil');
-
 insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('.Net.Com', 'Aida Aguiar',  '18', 'Santa Efigênia', 'Proximo Açai', '77532-043', 'Sao Paulo', 'SP', 'Brasil');
-
 insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Arruda de Alencar', 'Martins Pontes', '55', 'Butantã', 'Sul', '73828-382', 'Sao Paulo', 'SP', 'Brasil');
-
 insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Marta de Cesare', 'dos Potiguares', '567', 'Anhangabaú', 'Centro', '70987-213', 'Sao Paulo', 'SP', 'Brasil');
-
 insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('Mãe da Katia de Ruim', 'Sermão de mãe', '58', 'Oeste', 'Ao lado da igreja do Véu', '73245-787', 'Araraquara', 'SP', 'Brasil');
-
 insert into endereco (nome, logradouro, numerolote, bairro, cep, localidade, uf, pais) values('Leandro Armações Ilimitadas Ltda', 'rua dos Guaytacazes', '1000', 'Santa Efigênia', '77226-654', 'Sao Paulo', 'SP', 'Brasil');
-
 insert into endereco (nome, logradouro, numerolote, bairro, complemento, cep, localidade, uf, pais) values('.Hardware.Com', 'Gal Costa',  '374', 'das Acacias', 's/c', '76093-120', 'Brasilia', 'DF', 'Brasil');
 
 -- ## Clientes ##
 -- senha 123VaA_
 insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('Katia de Ruim', '2010-08-08', 0, '23576472720', 'F', 'katiaflavia', 'GP4AIWFnDS2Iekw2MoCX2+/8mpxp6gIHk0WfwgyG4Je02Y0SPaFe5tJ30CiCl032fCnGYexOnR0XT09J2E9R/w==', 'katiaflavia@gmail.com');
+insert into cliente_endereco (id_cliente, id_endereco) values(1,1);
+insert into cliente_endereco (id_cliente, id_endereco) values(1,6);
+insert into cliente_telefone (id_cliente, id_telefone) values(1,1);
 -- senha 1a2B3!
 insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('Flavio de Boa', '2007-10-02', 0, '20275068536', 'M', 'flavio1234', 'pTOqkVzjpPAXcO0Iau1rmMLSxHsi/CSmyX7a+k1h9oDcYjh2k2s+GQfTRhK9JECbQFkezUT2unji0ww04h7KDQ==', 'flavio1234@gmail.com');
+-- senha 123_@!
+insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('Pedro Aires Damasceno', '1990-01-02', 0, '82139301201', 'M', 'pedroaires', 'SYb6CZac0GdFVBKIammxf0u/RY6UTWQD+KowVTMbFeZv0R+4AAnJVbrA75h/V5YgJHCxlOyBEiPae5OM+srDvQ==', 'pedroaires@gmail.com');
+-- senha @Joao123
+insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('João da Costa e Silva', '1991-10-03', 0, '77829300192', 'M', 'joaosilva', 'Xz+ooO8FcCXmnots7ZIFRRG1wPv9Z+IsFfU6CO/9WhpKHPyhl7b5X2uSQWbslorxNvyS1E4dQ/8kLkuCI5T9mg==', 'joaosilva@gmail.com');
+-- senha Mari4@!
+insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('Maria Teresa dos Andes Cunha', '1996-07-03', 0, '92388200782', 'F', 'mariateresa', '/0e7YJzsGmFPHs2xx0ePcwGrhElEhQuVfWX/ZrR4bVzu5gg34KL52ACNOIDkvHHirzvKU/qrrPr/GlvAUFrIJw==', 'mariateresa@gmail.com');
+-- senha V1rgil!o
+insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('Virgílio Dantas Caires', '1995-11-24', 0, '15782390201', 'M', 'virgiliodantas', 'zStMuq3/Jv+kaNweRwlkmyn4WIGpygop3+DR8YfLSpWuPsaDtxjUSAZboweiBXHkpKRIVLLPVR39vZDsoOeUYA==', 'virgiliodantas@gmail.com');
+-- senha Du!c3_
+insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('Dulce dos Reis Feitosa', '1989-05-21', 0, '92138210910', 'F', 'dulcefeitosa', 'IPLokYYVX1KPSIuIx/9qlzSrOJlNn7Yd0CBqr8Hr/Mdp0G65sd5cogxRC6zNLJXWyIaYPYscrnS47odc8pOq1g==', 'dulcefeitosa@gmail.com');
+-- senha Cam4n7_
+insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, email) values('Felipe Aires Camantelli', '2001-07-13', 0, '18238390145', 'M', 'felipecamantelli', '+f9i/RwxjTdjGPGQskQjp5VV4rkSKJ00qFooyjN2c09BcppRoHXzvYoWlR9gGkPKBLNku12bVpIy1WqlhMhj4w==', 'felipecamantelli@gmail.com');
 
 -- ## Funcionarios ##
 -- senha bVgH_-2
 insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Arruda de Alencar', '2000-09-12', '48202498783', 'M', 4, 'arrudaalencar', '1dFLdP3297AHwCVMOu5ScNEXaWxFW2TO7uj60UQY+PktBgoem0kVhF8b3FqvZDXn2eyOCHQab6aCK0oYGgm/2w==', 1, 'arrudaalencar@gmail.com');
-
 -- senha GfT12-
 insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Marta de Cesare', '2001-11-30', '19452476141', 'F', 5, 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 2,  'martacesare@gmail.com');
+insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Pedro Dantas Limacedo', '2002-05-18', '19452476141', 'F', 5, 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 2,  'martacesare@gmail.com');
 
 
 insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '20229087654321', 'www.net.com.br');
@@ -64,10 +72,7 @@ insert into telefone (tipoTelefone, ddd, numerotelefone) values(3, '11', '988885
 insert into telefone (tipoTelefone, ddd, numerotelefone) values(2, '61', '922704321');
 
 -- CLIENTES
-insert into cliente_endereco (id_cliente, id_endereco) values(1,1);
-insert into cliente_endereco (id_cliente, id_endereco) values(1,6);
 insert into cliente_endereco (id_cliente, id_endereco) values(2,2);
-insert into cliente_telefone (id_cliente, id_telefone) values(1,1);
 insert into cliente_telefone (id_cliente, id_telefone) values(2,3);
 
 -- FUNCIONÁRIOS 

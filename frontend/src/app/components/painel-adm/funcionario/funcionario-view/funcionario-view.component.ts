@@ -8,7 +8,6 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NavigationService } from '../../../../services/navigation.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
-import { formatarDataNascimento } from '../../../../converters/date-converter';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 

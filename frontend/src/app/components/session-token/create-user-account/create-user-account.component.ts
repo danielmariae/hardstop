@@ -2,36 +2,41 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { Cliente } from '../../../../models/cliente.model';
+import { Cliente } from '../../../models/cliente.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators, FormControl, ValidatorFn } from '@angular/forms';
-import { ClienteService } from '../../../../services/cliente.service';
-import { NavigationService } from '../../../../services/navigation.service';
-import { cpfValidator } from '../../../../validators/cpf-validator';
-import { idadeValidator } from '../../../../validators/idade-validator';
-import { dataValidator } from '../../../../validators/data-validator';
+import { ClienteService } from '../../../services/cliente.service';
+import { NavigationService } from '../../../services/navigation.service';
+import { cpfValidator } from '../../../validators/cpf-validator';
+import { idadeValidator } from '../../../validators/idade-validator';
+import { dataValidator } from '../../../validators/data-validator';
 import { HttpClient } from '@angular/common/http';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { formatarDataNascimento } from '../../../../utils/date-converter';
+import { formatarDataNascimento } from '../../../utils/date-converter';
 
 @Component({
-  selector: 'app-cliente',
+  selector: 'app-create-user-account',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, NgxMaskDirective],
-  templateUrl: './cliente-form.component.html',
-  styleUrl: './cliente-form.component.css',
+  templateUrl: './create-user-account.component.html',
+  styleUrl: './create-user-account.component.css',
   providers: [provideNgxMask()]
 })
-export class ClienteFormComponent {
+export class CreateUserAccountComponent {
   errorMessage: string | null = null;
   errorDetails: any | null = null; // Objeto JSON para armazenar os detalhes do erro
   clienteForm: FormGroup;
   tiposTelefone: any[];
   uf: any[];
 
-  constructor(private formBuilder: FormBuilder, private clienteService: ClienteService,
-    private router: Router, private activatedRoute: ActivatedRoute, private navigationService: NavigationService,
-    private http: HttpClient, private viaCep: NgxViacepService) {
+  constructor(
+    private formBuilder: FormBuilder, 
+    private clienteService: ClienteService,
+    private router: Router, 
+    private activatedRoute: ActivatedRoute, 
+    private navigationService: NavigationService,
+    private http: HttpClient, 
+    private viaCep: NgxViacepService) {
     this.tiposTelefone = [];
     this.uf = [];
     // Inicializar clienteForm no construtor
@@ -225,7 +230,7 @@ export class ClienteFormComponent {
 
   cancelarInsercao(): void {
     // Redireciona o usuário para a rota anterior
-    this.navigationService.navigateTo("adm/clientes");
+    this.navigationService.navigateTo("login/user");
   }
 
   salvarCliente(): void {
@@ -254,7 +259,7 @@ export class ClienteFormComponent {
       next: (response) => {
       console.log('Cliente inserido com sucesso:', response);
         this.clienteService.notificarClienteInserido(); // Notificar outros componentes
-        this.navigationService.navigateTo('adm/clientes')
+        this.navigationService.navigateTo('login/user')
       },
       error: (error) => {
         // Este callback é executado quando ocorre um erro durante a emissão do valor

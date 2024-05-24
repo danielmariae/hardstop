@@ -22,7 +22,7 @@ import { NavigationService } from '../../services/navigation.service';
   templateUrl: './session-token.component.html',
   styleUrls: ['./session-token.component.css']
 })
-export class SessionTokenComponent implements OnInit {
+export class SessionTokenComponent {
     loginClienteForm: FormGroup = this.formBuilder.group({
         username: ['', Validators.required],
         password: ['', Validators.required]
@@ -36,12 +36,8 @@ export class SessionTokenComponent implements OnInit {
   constructor(
             private formBuilder: FormBuilder,
             private sessionTokenService: SessionTokenService,
-            private httpClient: HttpClient,
             private navigationService: NavigationService,  
           ) {}
-
-  ngOnInit(): void {
-  }
 
   loginF() {
 
@@ -104,7 +100,7 @@ export class SessionTokenComponent implements OnInit {
       this.loginForm.reset();
       this.errorMessage = '';
       // Redirecionar o usuário para a página de perfil, por exemplo
-      this.navigationService.navigateTo('/cliente/edit');
+      this.navigationService.navigateTo('/user/edit');
       
     },
     error: (error) => {

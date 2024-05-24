@@ -1,0 +1,240 @@
+<section class="hero is-fullheight">
+    <div class="hero-body">
+        <div class="container columns is-centered">
+            <div class="column is-5">
+                <div class="box">
+                    <form [formGroup]="clienteForm" (ngSubmit)="salvarCliente()">
+                            <h2 class="title is-3 has-text-centered">Crie sua conta</h2>
+                            <h1 class="is-size-6 has-text-centered mb-4">E venha fazer parte do melhor site de compras online do Brasil!</h1>
+                            <div class="columns">
+                                <div class="column">
+                                    <label class="field label" for="nome">Nome:</label>
+                                    <input class="control input" type="text" id="nome" formControlName="nome"
+                                        placeholder="Insira aqui seu nome">
+                                    <div
+                                        *ngIf="clienteForm.get('nome')?.hasError('required') && clienteForm.get('nome')?.touched">
+                                        <p class="help is-danger">Campo obrigatório.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <label class="field label" for="cpf">CPF:</label>
+                                    <input class="control input" type="numeric" id="cpf" formControlName="cpf"
+                                        inputmode="numeric" mask="000.000.000-00">
+                                    <div
+                                        *ngIf="clienteForm.get('cpf')?.hasError('cpfInvalido') && clienteForm.get('cpf')?.touched">
+                                        <p class="help is-danger">CPF inválido. Verifique se CPF está correto.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column is-half-desktop">
+                                    <label class="field label">Sexo:</label>
+                                    <div class="select" id="seletor-especial">
+                                        <select formControlName="sexo">
+                                            <option disabled selected value="">Selecione um sexo:</option>
+                                            <option value="M">Masculino</option>
+                                            <option value="F">Feminino</option>
+                                            <option value="O">Outros</option>
+                                        </select>
+                                    </div>
+                                    <div
+                                        *ngIf="clienteForm.get('sexo')?.hasError('required') && clienteForm.get('sexo')?.touched">
+                                        <p class="help is-danger">Por favor, escolha um sexo.</p>
+                                    </div>
+                                </div>
+                                <div class="column ">
+                                    <label class="field label is-size-6">Data de nascimento:</label>
+                                    <input class="control input" type="text" inputmode="numeric" id="dataNascimento"
+                                        mask="00/00/0000" placeholder="Ex.: 01/01/2001" formControlName="dataNascimento">
+                                    <div
+                                        *ngIf="clienteForm.get('dataNascimento')?.hasError('idadeInvalida') && clienteForm.get('dataNascimento')?.touched">
+                                        <p class="help is-danger">Cliente deve ter mais de 18 anos.</p>
+                                    </div>
+                                    <div
+                                        *ngIf="clienteForm.get('dataNascimento')?.hasError('dataInvalida') && clienteForm.get('dataNascimento')?.touched">
+                                        <p class="help is-danger">Data inexistente.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column">
+                                    <label class="field label" for="email">Email:</label>
+                                    <input class="control input" type="email" id="email" formControlName="email"
+                                        inputmode="email">
+                                    <div *ngIf="clienteForm.get('email')?.invalid && clienteForm.get('email')?.touched">
+                                        <p class="help is-danger">Este email é inválido.</p>
+                                    </div>
+                                    <div
+                                        *ngIf="clienteForm.get('email')?.hasError('required') && clienteForm.get('email')?.touched">
+                                        <p class="help is-danger">Campo obrigatório.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column mb-4">
+                                    <label class="field label" for="login">Nome de Usuário:</label>
+                                    <input class="control input" type="text" id="login" formControlName="login">
+                                    <div
+                                        *ngIf="clienteForm.get('login')?.hasError('required') && clienteForm.get('login')?.touched">
+                                        <p class="help is-danger">Campo obrigatório.</p>
+                                    </div>
+                                </div>
+                                <div class="column mb-4">
+                                    <label class="field label" for="senha">Senha:</label>
+                                    <input class="control input" type="password" id="senha" formControlName="senha">
+                                    <div *ngIf="clienteForm.get('senha')?.invalid && clienteForm.get('senha')?.touched">
+                                        <p style="font-weight: bold" class="help is-danger">Essa senha está fraca ou nula.
+                                            Por favor, verificar padrão correto:</p>
+                                        <p class="help is-danger">Pelo menos 1 letra maiúscula, 1 letra minúscula, 1 dígito,
+                                            1 caractere especial. Entre 6 a 10 caracteres.</p>
+                                    </div>
+                                    <div
+                                        *ngIf="clienteForm.get('senha')?.hasError('required') && clienteForm.get('senha')?.touched">
+                                        <p class="help is-danger">Campo obrigatório.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <h2 class="title is-3 has-text-centered"> Telefones </h2>
+                            <div formArrayName="telefones" class="mb-4">
+                                <div *ngFor="let telefone of telefones.controls; let i = index" [formGroupName]="i">
+                                    <div class="columns">
+                                        <div class="column">
+                                            <label class="field label">DDD:</label>
+                                            <input class="control input" type="text" formControlName="ddd"
+                                                placeholder="Insira o DDD sem parênteses" inputmode="numeric" mask="(00)"
+                                                id="ddd">
+                                        </div>
+                                        <div class="column">
+                                            <label class="field label">Número:</label>
+                                            <input class="control input" formControlName="numeroTelefone"
+                                                placeholder="Número de Telefone">
+                                        </div>
+                                    </div>
+                                    <div class="columns mb-5">
+                                        <div class="column">
+                                            <label class="field label">Selecione tipo de telefone:</label>
+                                            <div class="select" > 
+                                              <!-- id="seletor-especial" -->
+                                              <select formControlName="tipo">
+                                                <option disabled selected value="">Selecione um tipo de telefone</option>
+                                                <option *ngFor="let tipo of tiposTelefone" [value]="tipo.id">{{ tipo.descricao }}</option>
+                                              </select>
+                                            </div>
+                                        </div> 
+                                        <div class="column">
+                                            <label class="field label">Ação</label>
+                                            <div class="button is-default is-danger">
+                                            <button type="button" (click)="removerTelefone(i)">Remover</button>
+                                            </div>
+                                          </div>
+                                    </div>
+                                </div>
+                                <div class="buttons is-centered mb-6">
+                                    <button type="button" class="button" (click)="adicionarTelefone()">Adicionar telefone</button>
+                                </div>
+                            </div>
+                            <h2 class="title is-3 has-text-centered">Endereços</h2>
+                            <div formArrayName="enderecos">
+                                <div *ngFor="let endereco of enderecos.controls; let i = index" [formGroupName]="i">
+                                    <div class="columns">
+                                        <div class="column">
+                                            <label class="field label">Nome do endereço:</label>
+                                            <input class="control input" formControlName="nome"
+                                                placeholder="Nome para este endereço:">
+                                        </div>
+                                        <div class="column is-one-third-desktop">
+                                            <label class="field label">CEP:</label>
+                                            <input class="control input" formControlName="cep" inputmode="numeric"
+                                                mask="00000-000" placeholder="00000-000">
+                                            <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
+                                                <p class="help is-danger">CEP inválido.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="columns">
+                                        <div class="column">
+                                            <label class="field label">Logradouro:</label>
+                                            <input class="control input" formControlName="logradouro"
+                                                placeholder="Logradouro (será preenchido automaticamente)"
+                                                [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="columns">
+                                        <div class="column is-one-fifth">
+                                            <label class="field label">Número/Lote: </label>
+                                            <input class="control input" formControlName="numeroLote"
+                                                placeholder="Número/Lote">
+                                        </div>
+                                        <div class="column">
+                                            <label class="field label">Complemento: </label>
+                                            <input class="control input" formControlName="complemento"
+                                                placeholder="Complemento">
+                                        </div>
+                                    </div>
+                                    <div class="columns">
+                                        <div class="column">
+                                            <label class="field label">Bairro: </label>
+                                            <input class="control input" formControlName="bairro" placeholder="Bairro"
+                                                [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+                                        </div>
+                                        <div class="column">
+                                            <label class="field label">Localidade:</label>
+                                            <input class="control input" formControlName="localidade"
+                                                placeholder="Localidade" [disabled]="!endereco.get('cepInvalido')?.value"
+                                                readonly>
+                                        </div>
+                                        <div class="column is-one-fifth">
+                                            <label class="field label">UF:</label>
+                                            <input class="control input" formControlName="uf" placeholder="UF"
+                                                [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+                                        </div>
+                                        <div class="column">
+                                            <label class="field label">País:</label>
+                                            <input class="control input" formControlName="pais" placeholder="País"
+                                                [disabled]="!endereco.get('cepInvalido')?.value" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="columns">
+                                        <div class="column">
+                                            <div class="notification is-info">
+                                                Os dados de Logradouro, Bairro, Localidade, UF e País são preenchidos com
+                                                base no seu CEP. Caso tenha alguma dificuldade, busque seu CEP através do
+                                                site: <a target="_blank"
+                                                    href='https://buscacepinter.correios.com.br/app/endereco/index.php'>Busca
+                                                    CEP (dos correios)</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="columns">
+                                        <div class="column">
+                                            <div class="button is-default is-danger">
+                                                <button type="button" (click)="removerEndereco(i)">Remover endereço</button>
+                                            </div>
+                                            <br><br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buttons is-centered mb-6">
+                                <button type="button" class="button" (click)="adicionarEndereco()">Adicionar endereço</button>
+                            </div>
+                            <div class="buttons is-centered">
+                                <button type="submit" class="button is-primary">Salvar</button>
+                                <button class="button is-text" (click)="cancelarInsercao()">Já tem conta? Clique aqui para fazer login.</button>
+                            </div>
+                            <div *ngIf="errorDetails" class="notification is-danger">
+                                <div *ngFor="let error of errorDetails.errors">
+                                    <p><b>{{error.fieldName}}:</b> {{error.message}}</p>
+                                </div>
+                            </div>
+                            <!--
+        <button type="submit" [disabled]="fornecedorForm.invalid">Salvar</button>
+        -->
+                    </form>    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
