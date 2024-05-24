@@ -7,9 +7,9 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Funcionario } from '../../../../models/funcionario.model';
 import { FuncionarioService } from '../../../../services/funcionario.service';
 import { NavigationService } from '../../../../services/navigation.service';
-import { cpfValidator } from '../../../../validators/cpf-validator';
-import { dataValidator } from '../../../../validators/data-validator';
-import { idadeValidator } from '../../../../validators/idade-validator';
+import { cpfValidator } from '../../../../validators/cpf.validator';
+import { dataValidator } from '../../../../validators/data.validator';
+import { idadeValidator } from '../../../../validators/idade.validator';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { formatarDataNascimento } from '../../../../utils/date-converter';
 

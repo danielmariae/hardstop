@@ -4,7 +4,7 @@ import { ClienteService } from '../../../services/cliente.service';
 import { NavigationService } from '../../../services/navigation.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SenhaUpdate } from '../../../models/senhaUpdate.model';
-import { validarSenhaUpdate } from '../../../validators/update-senha-validator';
+import { validarSenhaUpdate } from '../../../validators/update-senha.validator';
 
 @Component({
   selector: 'app-cliente-update-senha',
