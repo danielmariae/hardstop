@@ -53,7 +53,7 @@ insert into cliente (nome, datanascimento, perfil, cpf, sexo, login, senha, emai
 insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Arruda de Alencar', '2000-09-12', '48202498783', 'M', 4, 'arrudaalencar', '1dFLdP3297AHwCVMOu5ScNEXaWxFW2TO7uj60UQY+PktBgoem0kVhF8b3FqvZDXn2eyOCHQab6aCK0oYGgm/2w==', 1, 'arrudaalencar@gmail.com');
 -- senha GfT12-
 insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Marta de Cesare', '2001-11-30', '19452476141', 'F', 5, 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 2,  'martacesare@gmail.com');
-insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Pedro Dantas Limacedo', '2002-05-18', '19452476141', 'F', 5, 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 2,  'martacesare@gmail.com');
+--insert into funcionario (nome, datanascimento, cpf, sexo, endereco_id, login, senha, perfil, email) values('Pedro Dantas Limacedo', '2002-05-18', '19452476141', 'F', 5, 'martacesare', '5xUVJJKuIYyPjJxOW+bpINIeH2hof2GslHdDXYZDJiG15gET9agGaJ+g1GMr0KgGG0/4yaBDlkp0D3YU7Whgwg==', 2,  'martacesare@gmail.com');
 
 
 insert into fornecedor (nomeFantasia, cnpj, endSite) values('.Net.Com', '20229087654321', 'www.net.com.br');
