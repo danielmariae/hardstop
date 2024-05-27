@@ -16,6 +16,8 @@ export class HeaderHomeComponent {
   usuarioLogado: boolean = false;
   admLogado: boolean = false;
 
+  carrinhoSize = 0;
+  
   buscadorForm: FormControl;
 
   constructor(

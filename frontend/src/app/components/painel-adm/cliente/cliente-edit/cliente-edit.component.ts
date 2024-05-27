@@ -9,14 +9,19 @@ import { validarSenhaUpdate } from '../../../../validators/update-senha.validato
 import { formatarDataNascimento } from '../../../../utils/date-converter';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { idadeValidator } from '../../../../validators/idade.validator';
+import { dataValidator } from '../../../../validators/data.validator';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { cpfValidator } from '../../../../validators/cpf.validator';
 
 
 @Component({
   selector: 'app-cliente-edit',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxMaskDirective],
   templateUrl: './cliente-edit.component.html',
-  styleUrls: ['./cliente-edit.component.css']
+  styleUrls: ['./cliente-edit.component.css'],
+  providers: [provideNgxMask()]
 })
 
 export class ClienteEditComponent implements OnInit {
@@ -43,13 +48,29 @@ export class ClienteEditComponent implements OnInit {
     this.cliente = new Cliente(); // Inicialização no construtor
     this.clienteForm = formBuilder.group({
       id: [null],
-      nome: [''],
-      dataNascimento: [''],
-      cpf: [''],
-      sexo: [''],
-      login: [''],
+      nome: ['', Validators.required],
+      dataNascimento: this.formBuilder.control('', 
+        {
+          validators:[
+            Validators.required,
+            idadeValidator(), 
+            dataValidator()
+          ]
+        }
+      ),
+      cpf: this.formBuilder.control('',
+        {
+          validators:[
+            Validators.required,
+            cpfValidator()
+          ]
+        }
+      ),
+      //[''],
+      sexo: ['', Validators.required],
+      login: ['', Validators.required],
       senha: this.formBuilder.control('',validarSenhaUpdate()),
-      email: [''],
+      email: ['', Validators.required],
       telefones: this.formBuilder.array([]),
       enderecos: this.formBuilder.array([]),
   });
@@ -103,8 +124,8 @@ get telefones(): FormArray {
 
 adicionarTelefone(telefone?: any): void {
   const telefoneFormGroup = this.formBuilder.group({
-    ddd: [telefone ? telefone.ddd : ''],
-    numeroTelefone: [telefone ? telefone.numeroTelefone : ''],
+    ddd: [telefone ? telefone.ddd : '', Validators.required],
+    numeroTelefone: [telefone ? telefone.numeroTelefone : '', Validators.required],
     tipo: [telefone ? telefone.tipo : '']
   });
 
@@ -217,7 +238,6 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
     });
   }
 }
-
   // Método para converter o CEP para o formato desejado
   formatarCep(cep: string): string {
     // Remove caracteres não numéricos do CEP

@@ -14,14 +14,14 @@
     <div class="columns">
       <div class="column">
           <label class="field label" for="cpf">CPF:</label>
-          <input class="control input" type="text" id="cpf" formControlName="cpf" inputmode="numeric" mask="000.000.000-00">
+          <input class="control input" type="text" id="cpf" formControlName="cpf" inputmode="numeric" mask="000.000.000-00" [showMaskTyped] = "true">
           <div *ngIf="clienteForm.get('cpf')?.hasError('cpfInvalido') && clienteForm.get('cpf')?.touched">
             <p class="help is-danger">CPF inválido. Verifique se CPF está correto.</p>
           </div>
       </div>
       <div class="column">
         <label class="field label">Data de Nascimento:</label>
-        <input class="control input" type="text" inputmode="numerifc" id="dataNascimento" mask="00/00/0000" placeholder="Ex.: 01/01/2001" formControlName="dataNascimento">
+        <input class="control input" type="text" inputmode="numeric" id="dataNascimento" mask="00/00/0000" [showMaskTyped] = "true" placeholder="Ex.: 01/01/2001" formControlName="dataNascimento">
         <div *ngIf="clienteForm.get('dataNascimento')?.hasError('idadeInvalida') && clienteForm.get('dataNascimento')?.touched">
           <p class="help is-danger">Cliente deve ter mais de 18 anos.</p>
         </div>
@@ -79,11 +79,19 @@
             <div class="columns">
               <div class="column">
                 <label class="field label">DDD:</label>
-                <input class="control input" formControlName="ddd" placeholder="Insira o DDD sem parênteses">
+                <input class="control input" formControlName="ddd" placeholder="Insira o DDD sem parênteses" [showMaskTyped] = "true"
+                mask="(00)">
+                <div *ngIf="telefone.get('ddd')?.hasError('required') && telefone.get('ddd')?.touched">
+                  <p class="help is-danger">Campo obrigatório.</p>
+                </div>        
               </div> 
               <div class="column">
                 <label class="field label">Número:</label>
-                <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone">
+                <input class="control input" mask="" inputmode="numeric" formControlName="numeroTelefone" placeholder="Número de Telefone"
+                mask="z90000-0000" [showMaskTyped] = "true">
+                <div *ngIf="telefone.get('numeroTelefone')?.hasError('required') && telefone.get('numeroTelefone')?.touched">
+                  <p class="help is-danger">Campo obrigatório.</p>
+                </div>        
               </div>
               <div class="column">
                 <label class="field label">Selecione tipo de telefone:</label>

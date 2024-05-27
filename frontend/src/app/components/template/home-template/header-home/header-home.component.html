@@ -25,7 +25,9 @@
       </div>
       <div class="navbar-end">
         <a class="navbar-item">Favoritos</a>
-        <a class="navbar-item">Carrinho</a>
+        <a class="navbar-item">
+          <span class="icon is-small"><i class="mdi mdi-24px mdi-cart"></i></span><b class="badge">{{carrinhoSize}}</b>
+        </a>
         <div *ngIf="!admLogado && !usuarioLogado">
           <div class="navbar-item"> 
             <div class="buttons">
