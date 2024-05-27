@@ -9,25 +9,18 @@
             </div>
         </div>
         <div class="column">
-          <div class="columns">
-            <div *ngFor="let produto of produtos">
-              <div class="column is-narrow">
-                <div class="box">
-                    <div class="content">
-                        <div *ngIf="produto.imagemPrincipal && imagensBase64[produto.id]">
-                            <h1>
-                                <img class="image is-128x128" [src]="imagensBase64[produto.id]" alt="Imagem Principal do Produto">
-                            </h1>
-                        </div>
-                            <p class="title is-size-4">{{produto.nome}}</p>
-                            <p class="title is-size-5 has-text-primary">{{produto.valorVenda | currency: 'BRL'}}</p>
-                        </div>
-                        <div class="buttons">
-                          <button type="button" class="button is-primary">Adicionar ao carirnho</button>
-                        </div>
+          <div class="fixed-grid has-4-cols">
+          <div class="grid">
+              <div *ngFor="let card of cards()">
+                <div class="cell">
+                  <div class="box fixed-height">
+                    <p>{{card.urlImagem}}</p>  
+                    <p>{{card.titulo}}</p>
+                    <p>{{card.preco}}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+          </div>
           </div>
             <div class="box">
                 <div>

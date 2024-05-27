@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Produto } from '../../../models/produto.model';
 import { ActivatedRoute } from '@angular/router';
 import { ProdutoService } from '../../../services/produto.service';
@@ -6,6 +6,14 @@ import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { HeaderHomeComponent } from "../../template/home-template/header-home/header-home.component";
 import { PageEvent } from '@angular/material/paginator';
+
+// tipo personalizado de dados, como classes e interfaces, porém mais simples.
+type Card = {
+  idProduto: number;
+  titulo: string;
+  preco: number;
+  urlImagem: string;
+}
 
 @Component({
     selector: 'app-produto-home-list',
@@ -22,6 +30,7 @@ export class ProdutoHomeListComponent implements OnInit {
   pageSize = 0;
   totalPages = 0;
   produtos: Produto[] = [];
+  cards = signal<Card[]> ([]);
   imagensBase64: { [produtoId: number]: string } = {};
 
   constructor(
@@ -51,6 +60,7 @@ export class ProdutoHomeListComponent implements OnInit {
             this.totalRecords = response.totalItems;
             this.totalPages = Math.round(this.totalRecords/this.pageSize);
             this.carregarImagensParaProdutos();
+            this.carregarCards();
         },
         error: (error) => {
             // Este callback é executado quando ocorre um erro durante a emissão do valor
@@ -58,6 +68,19 @@ export class ProdutoHomeListComponent implements OnInit {
             window.alert(error);
         } 
     })
+  }
+
+  carregarCards(){
+    const cards: Card[] = [];
+    this.produtos.forEach(produto => {
+      cards.push({
+        idProduto: produto.id,
+        titulo: produto.nome,
+        preco: produto.valorVenda,
+        urlImagem: produto.imagemPrincipal
+      });
+    });
+    this.cards.set(cards);
   }
 
 

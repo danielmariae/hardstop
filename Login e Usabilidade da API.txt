@@ -140,7 +140,7 @@ OU
   "itemDaVenda": [
     {
       "preco": 1000,
-      "quantidade": 1,
+      "quantidadeUnidades": 1,
       "idProduto": 1
     }
   ],
