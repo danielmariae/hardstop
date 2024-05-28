@@ -1,7 +1,7 @@
 package br.unitins.topicos1.resource;
 
-import br.unitins.topicos1.dto.FornecedorDTO;
-import br.unitins.topicos1.dto.FornecedorResponseDTO;
+import br.unitins.topicos1.dto.fornecedor.FornecedorDTO;
+import br.unitins.topicos1.dto.fornecedor.FornecedorResponseDTO;
 import br.unitins.topicos1.service.FornecedorService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;

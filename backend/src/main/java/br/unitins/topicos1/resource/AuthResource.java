@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.FuncionarioResponseDTO;
-import br.unitins.topicos1.dto.LoginDTO;
+import br.unitins.topicos1.dto.cliente.ClienteResponseDTO;
+import br.unitins.topicos1.dto.funcionario.FuncionarioResponseDTO;
+import br.unitins.topicos1.dto.login.LoginDTO;
 import br.unitins.topicos1.service.ClienteService;
 import br.unitins.topicos1.service.FuncionarioService;
 import br.unitins.topicos1.service.HashService;
