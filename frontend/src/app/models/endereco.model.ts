@@ -12,4 +12,5 @@ export class ListaEndereco{
     localidade!: string;
     uf!: UnidadeFederativa;
     pais!: string;
+    erro!: boolean;
 }

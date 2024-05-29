@@ -28,20 +28,32 @@ export class FornecedorComponent {
     private fornecedorService: FornecedorService,
     private navigationService: NavigationService,
     private cepService: CepService
-  )
-  {
+  ) {
     this.tiposTelefone = [];
     this.uf = [];
     // Inicializar fornecedorForm no construtor
     this.fornecedorForm = formBuilder.group({
         id: [null],
         nomeFantasia: ['', Validators.required],
-        cnpj: [''],
-        endSite: ['http://'],
+        cnpj: ['',[
+          Validators.pattern('/^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$/'),
+          Validators.required
+        ]
+        ],
+        endSite: ['', Validators.required],
         telefones: this.formBuilder.array([]),
         enderecos: this.formBuilder.array([]),
     });
   }
+
+  
+  ngOnInit(): void {
+    this.fornecedorService.getTipoTelefone().subscribe(data => {
+      this.tiposTelefone = data;
+    });
+  }
+
+
   get telefones(): FormArray {
     return this.fornecedorForm.get('telefones') as FormArray;
   }
@@ -57,9 +69,9 @@ export class FornecedorComponent {
   criarTelefoneFormGroup(): FormGroup {
     return this.formBuilder.group({
       id:[null],
-      ddd: [''],
-      numeroTelefone: [''],
-      tipo: [null],
+      ddd: ['', Validators.required],
+      numeroTelefone: ['', Validators.required],
+      tipo: [null, Validators.required],
     });
   }
 
@@ -108,7 +120,8 @@ export class FornecedorComponent {
     if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
       this.cepService.findByStringCep(cepValue).subscribe({
         next: (endereco) => {
-          if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
+          if (endereco && !endereco.erro) { // Verifica se o campo erro é false
+            const formattedCep = endereco.cep ? this.formatarCep(endereco.cep) : null;
             // Atualizando os valores do formulário com os dados do endereço
             enderecoFormGroup.patchValue({
               cep: this.formatarCep(endereco.cep),
@@ -120,6 +133,7 @@ export class FornecedorComponent {
               cepInvalido: false // Adiciona uma propriedade para indicar que o CEP é válido
             });
           } else {
+            console.error('Erro de CEP!')
             // Limpar campos de endereço se o CEP não for válido
             enderecoFormGroup.patchValue({
               logradouro: null,
@@ -155,9 +169,11 @@ export class FornecedorComponent {
   }
 
   formatarCep(cep: string): string {
+      if (!cep) return ''; // Retorna string vazia se cep for undefined
+
     // Remove caracteres não numéricos do CEP
     const cepDigits = cep.replace(/\D/g, '');
-
+  
     // Verifica se o CEP possui 8 dígitos
     if (cepDigits.length === 8) {
       // Formata o CEP no formato desejado

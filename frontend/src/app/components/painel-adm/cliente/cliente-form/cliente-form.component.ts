@@ -167,7 +167,7 @@ export class ClienteFormComponent {
     if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
       this.cepService.findByStringCep(cepValue).subscribe({
         next: (endereco) => {
-          if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
+          if (endereco && !endereco.erro) { // Verifica se o campo erro é false
             // Atualizando os valores do formulário com os dados do endereço
             enderecoFormGroup.patchValue({
               cep: this.formatarCep(endereco.cep),

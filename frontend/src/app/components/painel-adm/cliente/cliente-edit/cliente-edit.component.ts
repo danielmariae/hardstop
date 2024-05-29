@@ -7,7 +7,6 @@ import { ClienteService } from '../../../../services/cliente.service';
 import { NavigationService } from '../../../../services/navigation.service';
 import { validarSenhaUpdate } from '../../../../validators/update-senha.validator';
 import { formatarDataNascimento } from '../../../../utils/date-converter';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { idadeValidator } from '../../../../validators/idade.validator';
 import { dataValidator } from '../../../../validators/data.validator';
@@ -194,7 +193,7 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
   if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
     this.cepService.findByStringCep(cepValue).subscribe({
       next: (endereco) => {
-        if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
+        if (endereco && !endereco.erro) { // Verifica se o campo erro é false
           // Atualizando os valores do formulário com os dados do endereço
           enderecoFormGroup.patchValue({
             cep: this.formatarCep(endereco.cep),

@@ -6,8 +6,8 @@ import { Cliente } from '../../../../models/cliente.model';
 import { ClienteService } from '../../../../services/cliente.service';
 import { NavigationService } from '../../../../services/navigation.service';
 import { validarSenhaUpdate } from '../../../../validators/update-senha.validator';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { CepService } from '../../../../services/cep.service';
 
 
 @Component({
@@ -35,7 +35,7 @@ export class ClienteViewComponent implements OnInit {
     private clienteService: ClienteService,
     private formBuilder: FormBuilder,
     private navigationService: NavigationService,
-    private viaCep: NgxViacepService
+    private cepService: CepService
   ) {
     this.tiposTelefone = [];
     this.uf = [];

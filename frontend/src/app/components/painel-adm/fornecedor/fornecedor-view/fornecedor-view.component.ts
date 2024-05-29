@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NavigationService } from '../../../../services/navigation.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
 
 
 @Component({
@@ -34,7 +33,6 @@ export class FornecedorViewComponent implements OnInit {
     private fornecedorService: FornecedorService,
     private formBuilder: FormBuilder,
     private navigationService: NavigationService,
-    private viaCep: NgxViacepService
   ) {
     this.tiposTelefone = [];
     this.uf = [];

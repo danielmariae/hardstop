@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Funcionario } from '../../../../models/funcionario.model';
 import { FuncionarioService } from '../../../../services/funcionario.service';
@@ -153,7 +152,7 @@ export class FuncionarioFormComponent {
     if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
       this.cepService.findByStringCep(cepValue).subscribe({
         next: (endereco) => {
-          if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
+          if (endereco && !endereco.erro) { // Verifica se o campo erro é false
             // Atualizando os valores do formulário com os dados do endereço
             enderecoFormGroup.patchValue({
               cep: this.formatarCep(endereco.cep),
