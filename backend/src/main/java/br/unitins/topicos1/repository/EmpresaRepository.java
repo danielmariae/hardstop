@@ -5,7 +5,8 @@ import io.quarkus.panache.common.Parameters;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.List;
-import br.unitins.topicos1.model.Empresa;
+
+import br.unitins.topicos1.model.utils.Empresa;
 
 @ApplicationScoped
 public class EmpresaRepository implements PanacheRepository<Empresa>{

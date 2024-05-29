@@ -5,9 +5,9 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.FuncionarioResponseDTO;
-import br.unitins.topicos1.model.Perfil;
+import br.unitins.topicos1.dto.cliente.ClienteResponseDTO;
+import br.unitins.topicos1.dto.funcionario.FuncionarioResponseDTO;
+import br.unitins.topicos1.model.utils.Perfil;
 import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
 

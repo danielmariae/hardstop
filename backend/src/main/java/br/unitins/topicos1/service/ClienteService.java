@@ -3,20 +3,20 @@ package br.unitins.topicos1.service;
 
 import java.util.List;
 
-import br.unitins.topicos1.dto.ClienteDTO;
-import br.unitins.topicos1.dto.ClienteNSDTO;
-import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.EnderecoDTO;
-import br.unitins.topicos1.dto.EnderecoPatchDTO;
-import br.unitins.topicos1.dto.PatchCpfDTO;
-import br.unitins.topicos1.dto.PatchEmailDTO;
-import br.unitins.topicos1.dto.PatchLoginDTO;
-import br.unitins.topicos1.dto.PatchNomeDTO;
-import br.unitins.topicos1.dto.PatchSenhaDTO;
-import br.unitins.topicos1.dto.PerfilDTO;
-import br.unitins.topicos1.dto.ProdutoResponseDTO;
-import br.unitins.topicos1.dto.TelefoneDTO;
-import br.unitins.topicos1.dto.TelefonePatchDTO;
+import br.unitins.topicos1.dto.cliente.ClienteDTO;
+import br.unitins.topicos1.dto.cliente.ClienteNSDTO;
+import br.unitins.topicos1.dto.cliente.ClienteResponseDTO;
+import br.unitins.topicos1.dto.endereco.EnderecoDTO;
+import br.unitins.topicos1.dto.endereco.EnderecoPatchDTO;
+import br.unitins.topicos1.dto.login.PerfilDTO;
+import br.unitins.topicos1.dto.patch.PatchCpfDTO;
+import br.unitins.topicos1.dto.patch.PatchEmailDTO;
+import br.unitins.topicos1.dto.patch.PatchLoginDTO;
+import br.unitins.topicos1.dto.patch.PatchNomeDTO;
+import br.unitins.topicos1.dto.patch.PatchSenhaDTO;
+import br.unitins.topicos1.dto.produto.ProdutoResponseDTO;
+import br.unitins.topicos1.dto.telefone.TelefoneDTO;
+import br.unitins.topicos1.dto.telefone.TelefonePatchDTO;
 
 public interface ClienteService {
   // Cadastra um novo cliente

@@ -1,12 +1,12 @@
 package br.unitins.topicos1.service;
 
 import br.unitins.topicos1.application.GeneralErrorException;
-import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.FuncionarioResponseDTO;
-import br.unitins.topicos1.dto.ProdutoResponseDTO;
-import br.unitins.topicos1.model.Funcionario;
-import br.unitins.topicos1.model.Produto;
-import br.unitins.topicos1.model.Cliente;
+import br.unitins.topicos1.dto.cliente.ClienteResponseDTO;
+import br.unitins.topicos1.dto.funcionario.FuncionarioResponseDTO;
+import br.unitins.topicos1.dto.produto.ProdutoResponseDTO;
+import br.unitins.topicos1.model.produto.Produto;
+import br.unitins.topicos1.model.utils.Cliente;
+import br.unitins.topicos1.model.utils.Funcionario;
 import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.FuncionarioRepository;
 import br.unitins.topicos1.repository.ProdutoRepository;

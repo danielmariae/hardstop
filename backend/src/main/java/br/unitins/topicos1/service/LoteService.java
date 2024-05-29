@@ -1,13 +1,13 @@
 package br.unitins.topicos1.service;
 
 
-import br.unitins.topicos1.dto.LoteDTO;
-import br.unitins.topicos1.dto.LotePatchQDTO;
-import br.unitins.topicos1.dto.LotePatchVDTO;
-import br.unitins.topicos1.dto.LoteResponseCDTO;
-import br.unitins.topicos1.dto.LoteResponseDTO;
-
 import java.util.List;
+
+import br.unitins.topicos1.dto.lote.LoteDTO;
+import br.unitins.topicos1.dto.lote.LotePatchQDTO;
+import br.unitins.topicos1.dto.lote.LotePatchVDTO;
+import br.unitins.topicos1.dto.lote.LoteResponseCDTO;
+import br.unitins.topicos1.dto.lote.LoteResponseDTO;
 
 public interface LoteService {
 

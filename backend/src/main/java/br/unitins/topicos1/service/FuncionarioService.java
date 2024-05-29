@@ -2,19 +2,19 @@ package br.unitins.topicos1.service;
 
 import java.util.List;
 
-import br.unitins.topicos1.dto.EnderecoFuncDTO;
-import br.unitins.topicos1.dto.EnderecoFuncPatchDTO;
-import br.unitins.topicos1.dto.FuncionarioDTO;
-import br.unitins.topicos1.dto.FuncionarioNSDTO;
-import br.unitins.topicos1.dto.FuncionarioResponseDTO;
-import br.unitins.topicos1.dto.PatchCpfDTO;
-import br.unitins.topicos1.dto.PatchEmailDTO;
-import br.unitins.topicos1.dto.PatchLoginDTO;
-import br.unitins.topicos1.dto.PatchNomeDTO;
-import br.unitins.topicos1.dto.PatchSenhaDTO;
-import br.unitins.topicos1.dto.PerfilDTO;
-import br.unitins.topicos1.dto.TelefoneDTO;
-import br.unitins.topicos1.dto.TelefonePatchDTO;
+import br.unitins.topicos1.dto.funcionario.EnderecoFuncDTO;
+import br.unitins.topicos1.dto.funcionario.EnderecoFuncPatchDTO;
+import br.unitins.topicos1.dto.funcionario.FuncionarioDTO;
+import br.unitins.topicos1.dto.funcionario.FuncionarioNSDTO;
+import br.unitins.topicos1.dto.funcionario.FuncionarioResponseDTO;
+import br.unitins.topicos1.dto.login.PerfilDTO;
+import br.unitins.topicos1.dto.patch.PatchCpfDTO;
+import br.unitins.topicos1.dto.patch.PatchEmailDTO;
+import br.unitins.topicos1.dto.patch.PatchLoginDTO;
+import br.unitins.topicos1.dto.patch.PatchNomeDTO;
+import br.unitins.topicos1.dto.patch.PatchSenhaDTO;
+import br.unitins.topicos1.dto.telefone.TelefoneDTO;
+import br.unitins.topicos1.dto.telefone.TelefonePatchDTO;
 
 
 public interface FuncionarioService {

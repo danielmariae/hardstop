@@ -2,10 +2,10 @@ package br.unitins.topicos1.resource;
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import br.unitins.topicos1.dto.LoteDTO;
-import br.unitins.topicos1.dto.LotePatchQDTO;
-import br.unitins.topicos1.dto.LotePatchVDTO;
-import br.unitins.topicos1.dto.LoteResponseDTO;
+import br.unitins.topicos1.dto.lote.LoteDTO;
+import br.unitins.topicos1.dto.lote.LotePatchQDTO;
+import br.unitins.topicos1.dto.lote.LotePatchVDTO;
+import br.unitins.topicos1.dto.lote.LoteResponseDTO;
 import br.unitins.topicos1.service.LoteService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
