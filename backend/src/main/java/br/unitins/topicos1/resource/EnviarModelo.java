@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 
 import org.jrimum.domkee.pessoa.UnidadeFederativa;
 
-import br.unitins.topicos1.dto.PerfilDTO;
-import br.unitins.topicos1.dto.StatusDoLoteDTO;
-import br.unitins.topicos1.dto.TipoTelefoneDTO;
 import br.unitins.topicos1.dto.UnidadeFederativaDTO;
-import br.unitins.topicos1.model.Perfil;
-import br.unitins.topicos1.model.StatusDoLote;
-import br.unitins.topicos1.model.TipoTelefone;
+import br.unitins.topicos1.dto.login.PerfilDTO;
+import br.unitins.topicos1.dto.lote.StatusDoLoteDTO;
+import br.unitins.topicos1.dto.telefone.TipoTelefoneDTO;
+import br.unitins.topicos1.model.lote.StatusDoLote;
+import br.unitins.topicos1.model.utils.Perfil;
+import br.unitins.topicos1.model.utils.TipoTelefone;
 import jakarta.annotation.security.PermitAll;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;

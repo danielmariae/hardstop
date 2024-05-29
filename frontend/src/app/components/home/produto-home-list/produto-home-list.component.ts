@@ -13,6 +13,7 @@ type Card = {
   titulo: string;
   preco: number;
   urlImagem: string;
+  quantidade: number;
 }
 
 @Component({
@@ -77,7 +78,8 @@ export class ProdutoHomeListComponent implements OnInit {
         idProduto: produto.id,
         titulo: produto.nome,
         preco: produto.valorVenda,
-        urlImagem: produto.imagemPrincipal
+        urlImagem: produto.imagemPrincipal,
+        quantidade: produto.quantidadeUnidades
       });
     });
     this.cards.set(cards);

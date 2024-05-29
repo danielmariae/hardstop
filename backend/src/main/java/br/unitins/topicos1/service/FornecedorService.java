@@ -4,10 +4,8 @@ import java.util.List;
 
 import org.postgresql.util.PSQLException;
 
-// import br.unitins.topicos1.dto.ClassificacaoDTO;
-// import br.unitins.topicos1.dto.LoteDTO;
-import br.unitins.topicos1.dto.FornecedorDTO;
-import br.unitins.topicos1.dto.FornecedorResponseDTO;
+import br.unitins.topicos1.dto.fornecedor.FornecedorDTO;
+import br.unitins.topicos1.dto.fornecedor.FornecedorResponseDTO;
 
 
 public interface FornecedorService {

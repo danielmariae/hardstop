@@ -1,8 +1,14 @@
 package br.unitins.topicos1.service;
 
 import br.unitins.topicos1.application.GeneralErrorException;
-import br.unitins.topicos1.dto.*;
-import br.unitins.topicos1.model.*;
+import br.unitins.topicos1.dto.lote.LoteDTO;
+import br.unitins.topicos1.dto.lote.LotePatchQDTO;
+import br.unitins.topicos1.dto.lote.LotePatchVDTO;
+import br.unitins.topicos1.dto.lote.LoteResponseCDTO;
+import br.unitins.topicos1.dto.lote.LoteResponseDTO;
+import br.unitins.topicos1.dto.produto.ProdutoPatchDTO;
+import br.unitins.topicos1.model.lote.Lote;
+import br.unitins.topicos1.model.lote.StatusDoLote;
 import br.unitins.topicos1.repository.FornecedorRepository;
 import br.unitins.topicos1.repository.LoteRepository;
 import br.unitins.topicos1.repository.ProdutoRepository;

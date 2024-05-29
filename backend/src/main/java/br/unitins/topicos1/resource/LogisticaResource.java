@@ -1,7 +1,7 @@
 package br.unitins.topicos1.resource;
 
-import br.unitins.topicos1.dto.LogisticaDTO;
-import br.unitins.topicos1.dto.LogisticaResponseDTO;
+import br.unitins.topicos1.dto.logistica.LogisticaDTO;
+import br.unitins.topicos1.dto.logistica.LogisticaResponseDTO;
 import br.unitins.topicos1.service.LogisticaService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;

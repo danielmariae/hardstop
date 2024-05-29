@@ -2,9 +2,9 @@ package br.unitins.topicos1.service;
 
 import java.io.IOException;
 
-import br.unitins.topicos1.dto.ClienteResponseDTO;
-import br.unitins.topicos1.dto.FuncionarioResponseDTO;
-import br.unitins.topicos1.dto.ProdutoResponseDTO;
+import br.unitins.topicos1.dto.cliente.ClienteResponseDTO;
+import br.unitins.topicos1.dto.funcionario.FuncionarioResponseDTO;
+import br.unitins.topicos1.dto.produto.ProdutoResponseDTO;
 import jakarta.ws.rs.core.StreamingOutput;
 
 public interface FileService {

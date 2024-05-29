@@ -37,8 +37,9 @@ import com.github.braully.boleto.LayoutsSuportados;
 import com.github.braully.boleto.RemessaArquivo;
 import com.github.braully.boleto.RetornoArquivo;
 import com.github.braully.boleto.TituloArquivo;
-import br.unitins.topicos1.model.Empresa;
-import br.unitins.topicos1.model.Cliente;
+
+import br.unitins.topicos1.model.utils.Cliente;
+import br.unitins.topicos1.model.utils.Empresa;
 
 
 @ApplicationScoped
@@ -231,7 +232,7 @@ public class GerarBoleto {
 
 
 
-public static String geraBoletoFinal(Integer intervalo, Double valorCompra, Cliente cliente, Empresa empresa, br.unitins.topicos1.model.Endereco enderecoCliente) throws IOException {
+public static String geraBoletoFinal(Integer intervalo, Double valorCompra, Cliente cliente, Empresa empresa, br.unitins.topicos1.model.utils.Endereco enderecoCliente) throws IOException {
 
         // Cedente
     Cedente cedente = new Cedente(empresa.getNomeReal(), empresa.getCnpj());

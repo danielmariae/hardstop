@@ -2,10 +2,8 @@ package br.unitins.topicos1.service;
 
 import java.util.List;
 
-// import br.unitins.topicos1.dto.ClassificacaoDTO;
-// import br.unitins.topicos1.dto.LoteDTO;
-import br.unitins.topicos1.dto.LogisticaDTO;
-import br.unitins.topicos1.dto.LogisticaResponseDTO;
+import br.unitins.topicos1.dto.logistica.LogisticaDTO;
+import br.unitins.topicos1.dto.logistica.LogisticaResponseDTO;
 
 
 public interface LogisticaService {
