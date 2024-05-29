@@ -1,13 +1,12 @@
 import { Fornecedor } from '../../../../models/fornecedor.model';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators } from '@angular/forms';
-import { FornecedorService } from '../../../../services/fornecedor.service'; 
-import { ActivatedRoute, Router } from '@angular/router';
+import { FornecedorService } from '../../../../services/fornecedor.service';
 import { CommonModule } from '@angular/common';
 import { NavigationService } from '../../../../services/navigation.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import {CepService} from "../../../../services/cep.service";
 
 @Component({
   selector: 'app-fornecedor',
@@ -24,12 +23,13 @@ export class FornecedorComponent {
   tiposTelefone: any[];
   uf: any[];
 
-  constructor(private formBuilder: FormBuilder, 
+  constructor(
+    private formBuilder: FormBuilder,
     private fornecedorService: FornecedorService,
-    private router: Router, 
-    private activatedRoute: ActivatedRoute,
     private navigationService: NavigationService,
-    private viaCep: NgxViacepService) {
+    private cepService: CepService
+  )
+  {
     this.tiposTelefone = [];
     this.uf = [];
     // Inicializar fornecedorForm no construtor
@@ -42,17 +42,6 @@ export class FornecedorComponent {
         enderecos: this.formBuilder.array([]),
     });
   }
-  
-  ngOnInit(): void {
-    this.fornecedorService.getTipoTelefone().subscribe(data => {
-      this.tiposTelefone = data;
-    });
-
-    this.fornecedorService.getUF().subscribe(data => {
-      this.uf = data;
-    });
-  }
-
   get telefones(): FormArray {
     return this.fornecedorForm.get('telefones') as FormArray;
   }
@@ -117,7 +106,7 @@ export class FornecedorComponent {
     const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
 
     if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
-      this.viaCep.buscarPorCep(cepValue).subscribe({
+      this.cepService.findByStringCep(cepValue).subscribe({
         next: (endereco) => {
           if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
             // Atualizando os valores do formulário com os dados do endereço

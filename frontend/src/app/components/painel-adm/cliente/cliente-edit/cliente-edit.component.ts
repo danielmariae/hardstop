@@ -13,6 +13,7 @@ import { idadeValidator } from '../../../../validators/idade.validator';
 import { dataValidator } from '../../../../validators/data.validator';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { cpfValidator } from '../../../../validators/cpf.validator';
+import {CepService} from "../../../../services/cep.service";
 
 
 @Component({
@@ -27,7 +28,7 @@ import { cpfValidator } from '../../../../validators/cpf.validator';
 export class ClienteEditComponent implements OnInit {
   errorMessage: string | null = null;
   errorDetails: any | null = null; // Objeto JSON para armazenar os detalhes do erro
-  
+
   cliente: Cliente;
   clienteForm: FormGroup;
   tiposTelefone: any[];
@@ -41,7 +42,7 @@ export class ClienteEditComponent implements OnInit {
     private clienteService: ClienteService,
     private formBuilder: FormBuilder,
     private navigationService: NavigationService,
-    private viaCep: NgxViacepService
+    private cepService: CepService
   ) {
     this.tiposTelefone = [];
     this.uf = [];
@@ -49,11 +50,11 @@ export class ClienteEditComponent implements OnInit {
     this.clienteForm = formBuilder.group({
       id: [null],
       nome: ['', Validators.required],
-      dataNascimento: this.formBuilder.control('', 
+      dataNascimento: this.formBuilder.control('',
         {
           validators:[
             Validators.required,
-            idadeValidator(), 
+            idadeValidator(),
             dataValidator()
           ]
         }
@@ -183,7 +184,7 @@ adicionarEndereco(endereco?: any): void {
         this.atualizarEndereco(cep, enderecoFormGroup);
       }
     });
-  
+
   this.enderecos.push(enderecoFormGroup);
 }
 
@@ -191,7 +192,7 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
   const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
 
   if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
-    this.viaCep.buscarPorCep(cepValue).subscribe({
+    this.cepService.findByStringCep(cepValue).subscribe({
       next: (endereco) => {
         if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
           // Atualizando os valores do formulário com os dados do endereço
@@ -303,7 +304,7 @@ removerEndereco(index: number): void {
          this.errorDetails = error;
         }
       });
-  
+
     }else{
           // Lógica para salvar as alterações do cliente
     this.clienteService.update(novoCliente, this.cliente.id).subscribe({

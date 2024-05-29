@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FuncionarioService } from '../../../../services/funcionario.service';
 import { Funcionario } from '../../../../models/funcionario.model';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -7,8 +7,8 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NavigationService } from '../../../../services/navigation.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import {CepService} from "../../../../services/cep.service";
 
 
 @Component({
@@ -16,7 +16,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
   standalone: true,
   imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxMaskDirective],
   templateUrl: './funcionario-view.component.html',
-  styleUrls: ['./funcionario-view.component.css'], 
+  styleUrls: ['./funcionario-view.component.css'],
   providers: [provideNgxMask()]
 })
 
@@ -33,12 +33,12 @@ funcionarios: any;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private funcionarioService: FuncionarioService,
     private formBuilder: FormBuilder,
     private navigationService: NavigationService,
-    private viaCep: NgxViacepService
-  ) {
+    private cepService: CepService
+  )
+  {
     this.tiposTelefone = [];
     this.tiposPerfil = [];
     this.uf = [];
@@ -110,7 +110,7 @@ funcionarios: any;
             this.adicionarTelefone(telefone);
           }
         );
-          
+
           console.log(this.funcionario);
         });
       } else {
@@ -143,15 +143,10 @@ adicionarTelefone(telefone?: any): void {
     numeroTelefone: [numeroTelefoneFormatado],
     tipo: [telefone ? telefone.tipo : '']
   });
-  
+
   this.telefones.push(telefoneFormGroup);
 }
-
-removerTelefone(index: number): void {
-  this.telefones.removeAt(index);
-}
-
-get endereco(): FormGroup {
+  get endereco(): FormGroup {
   return this.funcionarioForm.get('endereco') as FormGroup;
 }
 
@@ -159,7 +154,7 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
   const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
 
   if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
-    this.viaCep.buscarPorCep(cepValue).subscribe({
+    this.cepService.findByStringCep(cepValue).subscribe({
       next: (endereco) => {
         if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
           // Atualizando os valores do formulário com os dados do endereço
@@ -173,7 +168,7 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
             cepInvalido: false // Adiciona uma propriedade para indicar que o CEP é válido
           });
         } else {
-          // Limpar campos de endereço se o CEP não for válido
+          // Limpar campos de endereço se o CEP for inválido
           enderecoFormGroup.patchValue({
             logradouro: null,
             bairro: null,
@@ -225,11 +220,11 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
     const partesData = data.split('-');
     return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
   }
-  
+
   formatarCPF(cpf: string): string {
     // Remove todos os caracteres não numéricos
     const cpfDigits = cpf.replace(/\D/g, '');
-  
+
     // Verifica se o CPF possui 11 dígitos
     if (cpfDigits.length === 11) {
       // Formata o CPF no formato desejado
@@ -243,7 +238,7 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
   formatarTelefone(telefone: string): string {
     // Remove todos os caracteres não numéricos
     const telefoneDigits = telefone.replace(/\D/g, '');
-  
+
     // Verifica se o telefone possui 10 ou 11 dígitos
     if (telefoneDigits.length === 10) {
       // Formata o telefone no formato para telefones fixos (0000-0000)
@@ -256,8 +251,8 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
       return telefone;
     }
   }
-  
-  
+
+
   verFuncionarios(): void{
     const enderecoList: string = "funcionarios";
     this.navigationService.navigateTo(enderecoList);
@@ -269,7 +264,7 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
 }
 apagarFuncionario(id: number): void {
   this.funcionarioService.delete(id).subscribe({
-    next:  (response) => {
+    next:  () => {
           this.funcionarioService.notificarFuncionarioInserido();
       },
       error: (error) => {

@@ -7,8 +7,8 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NavigationService } from '../../../../services/navigation.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import {CepService} from "../../../../services/cep.service";
 
 
 @Component({
@@ -36,7 +36,7 @@ export class FuncionarioEditComponent implements OnInit {
     private funcionarioService: FuncionarioService,
     private formBuilder: FormBuilder,
     private navigationService: NavigationService,
-    private viaCep: NgxViacepService
+    private cepService: CepService
   ) {
     this.tiposTelefone = [];
     this.tiposPerfil = [];
@@ -107,7 +107,7 @@ export class FuncionarioEditComponent implements OnInit {
           funcionario.listaTelefone.forEach(telefone => {
             this.adicionarTelefone(telefone);
           });
-          
+
           // Formatando o número de telefone antes de adicionar ao FormArray
           funcionario.listaTelefone.forEach(telefone => {
             telefone.numeroTelefone = this.formatarTelefone(telefone.numeroTelefone);
@@ -159,7 +159,7 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
   const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
 
   if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
-    this.viaCep.buscarPorCep(cepValue).subscribe({
+    this.cepService.findByStringCep(cepValue).subscribe({
       next: (endereco) => {
         if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
           // Atualizando os valores do formulário com os dados do endereço
@@ -256,7 +256,7 @@ formatarTelefone(telefone: string): string {
       return cep; // Retorna o CEP original se não possuir 8 dígitos
     }
   }
-  
+
   cancelarEdicao(): void {
     // Redireciona o usuário para outra rota anterior
     this.navigationService.navigateTo('funcionarios');
@@ -264,7 +264,7 @@ formatarTelefone(telefone: string): string {
 
 
   salvarAlteracoes(): void {
-    
+
     // const idParam = Number(this.route.snapshot.paramMap.get('id'));
     console.log(this.id);
     const novoFuncionario: Funcionario = {
@@ -280,7 +280,7 @@ formatarTelefone(telefone: string): string {
       listaTelefone: this.funcionarioForm.value.telefones,
       listaEndereco: this.funcionarioForm.value.endereco,
     };
-    
+
     // IMPLEMENTAR LÓGICA DE ATUALIZAR SEM SENHA NOVA
     if(this.funcionarioForm.value.senha === undefined || this.funcionarioForm.value.senha === null){
       this.funcionarioService.updateNS(novoFuncionario, this.funcionario.id).subscribe({
@@ -300,7 +300,7 @@ formatarTelefone(telefone: string): string {
          window.alert(error);
         }
       });
-  
+
     }else{
           // Lógica para salvar as alterações do funcionario
     this.funcionarioService.update(novoFuncionario, this.funcionario.id).subscribe({

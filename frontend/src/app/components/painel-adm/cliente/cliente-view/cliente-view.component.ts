@@ -6,9 +6,7 @@ import { Cliente } from '../../../../models/cliente.model';
 import { ClienteService } from '../../../../services/cliente.service';
 import { NavigationService } from '../../../../services/navigation.service';
 import { validarSenhaUpdate } from '../../../../validators/update-senha.validator';
-import { formatarDataNascimento } from '../../../../utils/date-converter';
 import { NgxViacepService } from '@brunoc/ngx-viacep';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 
@@ -29,7 +27,6 @@ export class ClienteViewComponent implements OnInit {
   clienteForm: FormGroup;
   tiposTelefone: any[];
   uf: any[];
-  enderecoAnterior: string = '';
   id: number = 1;
 
   constructor(
@@ -102,43 +99,20 @@ ngOnInit(): void {
   desativarSeletores(): boolean{
     return true;
   }
-  
+
 get telefones(): FormArray {
   return this.clienteForm.get('telefones') as FormArray;
 }
 
-adicionarTelefone(telefone?: any): void {
-  const telefoneFormGroup = this.formBuilder.group({
-    ddd: [telefone ? telefone.ddd : ''],
-    numeroTelefone: [telefone ? telefone.numeroTelefone : ''],
-    tipo: [telefone ? telefone.tipo : '']
-  });
+  adicionarTelefone(telefone?: any): void {
+    const telefoneFormGroup = this.formBuilder.group({
+      ddd: [telefone ? telefone.ddd : '', Validators.required],
+      numeroTelefone: [telefone ? this.formatarTelefone(telefone.numeroTelefone) : '', Validators.required],
+      tipo: [telefone ? telefone.tipo : '']
+    });
 
-  this.telefones.push(telefoneFormGroup);
-}
-
-removerTelefone(index: number): void {
-  this.telefones.removeAt(index);
-}
-
-formatarData(data: string): string {
-  const partesData = data.split('-');
-  return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
-}
-
-formatarCPF(cpf: string): string {
-  // Remove todos os caracteres não numéricos
-  const cpfDigits = cpf.replace(/\D/g, '');
-
-  // Verifica se o CPF possui 11 dígitos
-  if (cpfDigits.length === 11) {
-    // Formata o CPF no formato desejado
-    return cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-  } else {
-    // Retorna o CPF original se não possuir 11 dígitos
-    return cpf;
+    this.telefones.push(telefoneFormGroup);
   }
-}
 
 formatarTelefone(telefone: string): string {
   // Remove todos os caracteres não numéricos
@@ -158,9 +132,28 @@ formatarTelefone(telefone: string): string {
 }
 
 
-get enderecos(): FormArray {
-  return this.clienteForm.get('enderecos') as FormArray;
-}
+  get enderecos(): FormArray {
+    return this.clienteForm.get('enderecos') as FormArray;
+  }
+
+  formatarData(data: string): string {
+    const partesData = data.split('-');
+    return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+  }
+
+  formatarCPF(cpf: string): string {
+    // Remove todos os caracteres não numéricos
+    const cpfDigits = cpf.replace(/\D/g, '');
+
+    // Verifica se o CPF possui 11 dígitos
+    if (cpfDigits.length === 11) {
+      // Formata o CPF no formato desejado
+      return cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    } else {
+      // Retorna o CPF original se não possuir 11 dígitos
+      return cpf;
+    }
+  }
 
 adicionarEndereco(endereco?: any): void {
   const enderecoFormGroup = this.formBuilder.group({
@@ -176,146 +169,10 @@ adicionarEndereco(endereco?: any): void {
     cepInvalido: [false],
   });
 
-    // Adicionar um observador para o campo de CEP dentro do FormGroup
-    enderecoFormGroup.get('cep')?.valueChanges.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe((cep: string | null) => {
-      if (cep !== null) {
-        this.atualizarEndereco(cep, enderecoFormGroup);
-      }
-    });
-  
   this.enderecos.push(enderecoFormGroup);
 }
 
-atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
-  const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
-
-  // Adicionar verificação para evitar chamadas desnecessárias
-  if (enderecoFormGroup.get('cep')?.value === cepValue) {
-    return; // Se o valor do CEP não mudou, não faça nada
-  }
-
-  if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
-    this.viaCep.buscarPorCep(cepValue).subscribe({
-      next: (endereco) => {
-        if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
-          // Atualizando os valores do formulário com os dados do endereço apenas se houver mudanças
-          enderecoFormGroup.patchValue({
-            cep: endereco.cep !== enderecoFormGroup.get('cep')?.value ? endereco.cep : enderecoFormGroup.get('cep')?.value,
-            logradouro: endereco.logradouro !== enderecoFormGroup.get('logradouro')?.value ? endereco.logradouro : enderecoFormGroup.get('logradouro')?.value,
-            bairro: endereco.bairro !== enderecoFormGroup.get('bairro')?.value ? endereco.bairro : enderecoFormGroup.get('bairro')?.value,
-            localidade: endereco.localidade !== enderecoFormGroup.get('localidade')?.value ? endereco.localidade : enderecoFormGroup.get('localidade')?.value,
-            uf: endereco.uf !== enderecoFormGroup.get('uf')?.value ? endereco.uf : enderecoFormGroup.get('uf')?.value,
-            pais: 'Brasil',
-            cepInvalido: false // Adiciona uma propriedade para indicar que o CEP é válido
-          });
-        } else {
-          // Limpar campos de endereço se o CEP não for válido
-          enderecoFormGroup.patchValue({
-            logradouro: null,
-            bairro: null,
-            localidade: null,
-            uf: null,
-            cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
-          });
-        }
-      },
-      error: (error) => {
-        console.error('Erro ao buscar endereço por CEP:', error);
-        // Limpar campos de endereço em caso de erro na busca
-        enderecoFormGroup.patchValue({
-          logradouro: null,
-          bairro: null,
-          localidade: null,
-          uf: null,
-          cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
-        });
-      }
-    });
-  } else {
-    // Limpar campos de endereço se o CEP não possuir 8 dígitos
-    enderecoFormGroup.patchValue({
-      logradouro: null,
-      bairro: null,
-      localidade: null,
-      uf: null,
-      cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
-    });
-  }
-}
-
-  // Método para converter o CEP para o formato desejado
-  formatarCep(cep: string): string {
-    // Remove caracteres não numéricos do CEP
-    const cepDigits = cep.replace(/\D/g, '');
-
-    // Verifica se o CEP possui 8 dígitos
-    if (cepDigits.length === 8) {
-      // Formata o CEP no formato desejado
-      return cepDigits.replace(/(\d{5})(\d{3})/, '$1-$2');
-    } else {
-      return cep; // Retorna o CEP original se não possuir 8 dígitos
-    }
-  }
-
-
-removerEndereco(index: number): void {
-  this.enderecos.removeAt(index);
-}
-
-  cancelarEdicao(): void {
-    // Redireciona o usuário para outra rota anterior
-    this.navigationService.navigateTo('clientes');
-  }
-
-  
-
-
-  salvarAlteracoes(): void {
-    // const idParam = Number(this.route.snapshot.paramMap.get('id'));
-    console.log(this.clienteForm.value.id)
-    if (this.clienteForm.errors) {
-      console.error('Formulário inválido. Por favor, corrigir campos incorretos.')
-      return;
-    }
-
-    const novoCliente: Cliente = {
-      id: this.clienteForm.value.id,
-      nome: this.clienteForm.value.nome,
-      dataNascimento: formatarDataNascimento(this.clienteForm.value.dataNascimento),
-      cpf: this.clienteForm.value.cpf,
-      sexo: this.clienteForm.value.sexo,
-      login: this.clienteForm.value.login,
-      senha: this.clienteForm.value.senha,
-      email: this.clienteForm.value.email,
-      listaTelefone: this.clienteForm.value.telefones,
-      listaEndereco: this.clienteForm.value.enderecos
-    };
-
-    
-    // Lógica para salvar as alterações do cliente
-    this.clienteService.update(novoCliente, this.cliente.id).subscribe({
-      next: (response) => {
-        console.log(novoCliente);
-        if(this.navigationService.getPreviousEndPoint() === 'clientes') {
-          this.clienteService.notificarClienteInserido(); // Notificar outros componentes
-        } else {
-          this.navigationService.navigateTo('clientes');
-        }
-      },
-      error: (error) => {
-       // Este callback é executado quando ocorre um erro durante a emissão do valor
-       console.error('Erro:', error);
-       //window.alert(error)
-       this.errorMessage = error.error.errorMessage;
-       this.errorDetails = error;
-     }
-    });
-  }
-
-    // Método para apagar um fornecedor escolhido
+  // Método para apagar um fornecedor escolhido
     apagarCliente(id: number): void {
       this.clienteService.delete(id).subscribe({
         next:  (response) => {
