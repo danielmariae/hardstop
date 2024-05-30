@@ -24,8 +24,8 @@
         </div>
       </div>
       <div class="navbar-end">
-        <a class="navbar-item">Favoritos</a>
-        <a class="navbar-item">
+      <!--  <a class="navbar-item">Favoritos</a> -->
+        <a class="navbar-item" [routerLink]="carrinhoRoute">
           <span class="icon is-small"><i class="mdi mdi-24px mdi-cart"></i></span><b class="badge">{{carrinhoSize}}</b>
         </a>
         <div *ngIf="!admLogado && !usuarioLogado">
@@ -46,8 +46,20 @@
         <div *ngIf="usuarioLogado">
           <div class="navbar-item">
             <div class="buttons">
-              <a href='/user/edit' class="button is-light">Painel</a>
-              <a href='/login/user' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
+            <!-- <a href='/user/edit' class="button is-light">Painel</a>
+              <a href='/login/user' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a> --> 
+
+              <div class="balao-container" (mouseover)="mostrarBalao = true" (mouseleave)="mostrarBalao = false">
+                <span>{{clienteLogado?.nome || 'Cliente Desconhecido'}}</span>
+                <div class="balao-conteudo" *ngIf="mostrarBalao">
+                  <ul>
+                    <li><a href='/user/edit'>Editar Cadastro</a></li>
+                    <li><a href='/user/senha'>Editar Senha</a></li>
+                    <li><a href="#">Favoritos</a></li>
+                    <li><a href='/login/user' (click)="deslogarUsuario()">Sair</a></li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>

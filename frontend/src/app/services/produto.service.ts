@@ -107,33 +107,33 @@ export class ProdutoService {
                 .set('page', page.toString())
                 .set('pageSize', pageSize.toString());
 
-            if (headers) {
+           // if (headers) {
                 // Faz a requisição HTTP com o token de autenticação no cabeçalho
-                return this.httpClient.get<Produto[]>(this.baseUrl, { headers: headers, params: params })
-                    .pipe(
-                        catchError(this.handleError)
-                    );
-            } else {
+              //  return this.httpClient.get<Produto[]>(this.baseUrl, { headers: headers, params: params })
+               //     .pipe(
+                //        catchError(this.handleError)
+                //    );
+          //  } else {
                 // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
                 return this.httpClient.get<Produto[]>(this.baseUrl, { params })
                     .pipe(
                         catchError(this.handleError)
                     );
-            }
+         //   }
         } else {
-            if (headers) {
+           // if (headers) {
                 // Faz a requisição HTTP com o token de autenticação no cabeçalho
-                return this.httpClient.get<Produto[]>(this.baseUrl, { headers })
-                    .pipe(
-                        catchError(this.handleError)
-                    );
-            } else {
+              //  return this.httpClient.get<Produto[]>(this.baseUrl, { headers })
+               //     .pipe(
+                  //      catchError(this.handleError)
+                //    );
+          //  } else {
                 // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
                 return this.httpClient.get<Produto[]>(this.baseUrl)
                     .pipe(
                         catchError(this.handleError)
                     );
-            }
+           // }
         }
     }
 

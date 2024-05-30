@@ -22,7 +22,8 @@ public record ClienteResponseDTO(
   List<EnderecoResponseDTO> listaEndereco,
   List<TelefoneResponseDTO> listaTelefone,
   // List<PedidoResponseDTO> listaPedidos,
-  List<ProdutoResponseDTO> listaDesejos
+  List<ProdutoResponseDTO> listaDesejos,
+  String token
 ) {
   public static ClienteResponseDTO valueOf(Cliente cliente) {
     return new ClienteResponseDTO(
@@ -49,7 +50,8 @@ public record ClienteResponseDTO(
         .getListaProduto()
         .stream()
         .map(p -> ProdutoResponseDTO.valueOf(p))
-        .toList()
+        .toList(),
+        "teste"
       );
   }
 }

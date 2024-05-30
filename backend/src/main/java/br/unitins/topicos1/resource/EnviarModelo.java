@@ -9,8 +9,10 @@ import org.jrimum.domkee.pessoa.UnidadeFederativa;
 import br.unitins.topicos1.dto.UnidadeFederativaDTO;
 import br.unitins.topicos1.dto.login.PerfilDTO;
 import br.unitins.topicos1.dto.lote.StatusDoLoteDTO;
+import br.unitins.topicos1.dto.pedido.formaPagamento.ModalidadePagamentoDTO;
 import br.unitins.topicos1.dto.telefone.TipoTelefoneDTO;
 import br.unitins.topicos1.model.lote.StatusDoLote;
+import br.unitins.topicos1.model.pagamento.ModalidadePagamento;
 import br.unitins.topicos1.model.utils.Perfil;
 import br.unitins.topicos1.model.utils.TipoTelefone;
 import jakarta.annotation.security.PermitAll;
@@ -26,6 +28,15 @@ import jakarta.ws.rs.core.MediaType;
 @PermitAll
 
 public class EnviarModelo {
+
+    @GET
+    @Path("/modalidadePagamento")
+    public List<ModalidadePagamentoDTO> obterModalidadePagamento() {
+        return Arrays.asList(ModalidadePagamento.values())
+            .stream()
+            .map(modalidadePagamento -> ModalidadePagamentoDTO.valueOf(modalidadePagamento))
+            .collect(Collectors.toList());
+    }
   
     @GET
     @Path("/tipoTelefone")

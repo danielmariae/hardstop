@@ -32,9 +32,12 @@ import { AdminTemplateComponent } from './components/template/admin-template/tem
 import { LoginAdmComponent } from './components/session-token/login-adm/login-adm.component';
 import { LoginUserComponent } from './components/session-token/login-user/login-user.component';
 import { CreateUserAccountComponent } from './components/session-token/create-user-account/create-user-account.component';
+import { CarrinhoComponent } from './components/carrinho/carrinho.component';
 
 
 export const routes: Routes = [
+
+    {path: 'carrinho', component: CarrinhoComponent, title: 'Visualizar carrinho'},
     {path:'', pathMatch: 'full', redirectTo:'home'},
     {
         path: 'user',

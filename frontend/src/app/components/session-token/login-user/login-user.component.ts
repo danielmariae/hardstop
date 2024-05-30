@@ -46,25 +46,43 @@ export class LoginUserComponent {
     return;
   }
 
+  console.log("TESTE");
   this.sessionTokenService.authenticateUserC(username, password)
   .subscribe({
-    next: (response) => {
-      const token = response.token;
-      //console.log('55555'+ ' ' + token);
-      this.sessionTokenService.saveSessionToken(token);
-      this.loginClienteForm.reset();
-      this.errorMessage = '';
-      // Redirecionar o usuário para a página de perfil, por exemplo
-      this.navigationService.navigateTo('/user/edit');
+       next: (response: any) => {
+        this.navigationService.navigateTo('/home');
+      },
+         error: (error) => {
+           console.log('Erro:', error);
+           console.log(username + ' ' + password);
+           this.errorMessage = 'Usuário ou senha inválidos.';
+         }
+        });
+
+  // this.sessionTokenService.authenticateUserC(username, password)
+  // .subscribe({
+  //   next: (response: any) => {
+  //     const token = response.headers.get('Authorization') ?? '';
+  //     if(token) {
+  //       console.log('55555'+ ' ' + token);
+  //       this.sessionTokenService.saveSessionToken(token);
+  //       const usuarioLogado = response.body;
+  //       console.log(usuarioLogado);
+  //       this.loginClienteForm.reset();
+  //       this.errorMessage = '';
+  //       // Redirecionar o usuário para a página de perfil, por exemplo
+  //       this.navigationService.navigateTo('/home');
+  //     }
       
-    },
-    error: (error) => {
-      console.log('Erro:', error);
-      console.log(username + ' ' + password);
-      this.errorMessage = 'Usuário ou senha inválidos.';
-    }
-  });
-  }
+      
+  //   },
+  //   error: (error) => {
+  //     console.log('Erro:', error);
+  //     console.log(username + ' ' + password);
+  //     this.errorMessage = 'Usuário ou senha inválidos.';
+  //   }
+  // });
+   }
 
   cadastrarCliente(): void{
     this.navigationService.navigateTo('new/user');

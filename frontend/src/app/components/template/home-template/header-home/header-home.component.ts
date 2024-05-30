@@ -4,19 +4,29 @@ import { RouterOutlet } from '@angular/router';
 import { SessionTokenService } from '../../../../services/session-token.service';
 import { NavigationService } from '../../../../services/navigation.service';
 import { CommonModule } from '@angular/common';
+import { LocalStorageService } from '../../../../services/local-storage.service';
+import { CarrinhoService } from '../../../../services/carrinho.service';
+import { RouterModule } from '@angular/router';
+import { Observable, Subscription, map, of } from 'rxjs';
+import { Cliente } from '../../../../models/cliente.model';
+
 
 @Component({
   selector: 'app-header-home',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, ReactiveFormsModule],
+  imports: [RouterOutlet, CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './header-home.component.html',
   styleUrl: './header-home.component.css'
 })
 export class HeaderHomeComponent {
   usuarioLogado: boolean = false;
   admLogado: boolean = false;
+  clienteLogado: Cliente | null = null;
+  private subscription = new Subscription();
+  mostrarBalao: boolean = false;
+  
 
-  carrinhoSize = 0;
+  carrinhoSize: number = 0;
   
   buscadorForm: FormControl;
 
@@ -24,12 +34,20 @@ export class HeaderHomeComponent {
     private sessionTokenService: SessionTokenService,
     private navigationService: NavigationService,
     private formBuilder: FormBuilder,
+    private carrinhoService: CarrinhoService,
   ){
     this.buscadorForm = this.formBuilder.control('');
   }
 
   ngOnInit(
   ): void {
+    
+    this.obterQtdItensCarrinho();
+    this.clienteLogado = JSON.parse(localStorage.getItem('clienteLogado') || 'null');
+    if (!this.clienteLogado) {
+      this.obterClienteLogado();
+    }
+
     // Get all "navbar-burger" elements
     const navbarBurgers = Array.from(document.querySelectorAll('.navbar-burger'));
 
@@ -74,6 +92,27 @@ export class HeaderHomeComponent {
     });
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+        obterQtdItensCarrinho() {
+         this.carrinhoService.carrinho$.subscribe(itens => {
+           this.carrinhoSize = itens.length;
+         });
+        }
+
+        obterClienteLogado() {
+          this.subscription.add(this.sessionTokenService.getClienteLogado().subscribe(
+          cliente => this.clienteLogado = cliente
+        ));
+        }
+
+       get carrinhoRoute(): string {
+       console.log(this.sessionTokenService.hasValidSessionToken());
+       return this.sessionTokenService.hasValidSessionToken() ? '/carrinho' : '/login/user';
+      }
+
   deslogarUsuario(): void {
     // Limpa o estado de login e remove os dados do sessionStorage
     this.usuarioLogado = false;
@@ -83,6 +122,12 @@ export class HeaderHomeComponent {
 
     // Limpa a sessão do token
     this.sessionTokenService.clearSessionToken();
+
+    // Limpa o carrinho de compras
+    this.carrinhoService.removerTudo();
+
+    // Limpa o Cliente Logado
+    this.sessionTokenService.removeClienteLogado();
   }
 
   buscarProduto(): void{
@@ -94,3 +139,71 @@ export class HeaderHomeComponent {
     }
   }
 }
+
+
+
+
+// import { Component, OnDestroy, OnInit } from '@angular/core';
+// import { MatIcon } from '@angular/material/icon';
+// import { MatToolbar } from '@angular/material/toolbar';
+// import { MatBadge } from '@angular/material/badge';
+// import { Usuario } from '../../../../models/usuario.model';
+// import { SessionTokenService } from '../../../../services/session-token.service';
+// import { LocalStorageService } from '../../../../services/local-storage.service';
+// import { SidebarService } from '../../../../services/sidebar.service';
+// import { CarrinhoService } from '../../../../services/carrinho.service';
+// import { Subscription } from 'rxjs';
+// import { MatButton, MatIconButton } from '@angular/material/button';
+// import { RouterModule } from '@angular/router';
+
+// @Component({
+//   selector: 'app-header-home',
+//   standalone: true,
+//   imports: [MatToolbar, MatIcon, MatBadge, MatButton, MatIconButton, RouterModule],
+//   templateUrl: './header-home.component.html',
+//   styleUrl: './header-home.component.css'
+// })
+// export class HeaderHomeComponent implements OnInit, OnDestroy {
+
+//   usuarioLogado: Usuario | null = null;
+//   private subscription = new Subscription();
+
+//   qtdItensCarrinho: number = 0;
+
+//   constructor(private sidebarService: SidebarService,
+//     private carrinhoService: CarrinhoService,
+//     //private authService: AuthService,
+//     private localStorageService: LocalStorageService) {
+
+//   }
+
+//   ngOnInit(): void {
+//     this.obterQtdItensCarrinho();
+//     //this.obterUsuarioLogado();
+//   }
+
+//   ngOnDestroy() {
+//     this.subscription.unsubscribe();
+//   }
+
+//   clickMenu() {
+//     this.sidebarService.toggle();
+//   }
+
+//   obterQtdItensCarrinho() {
+//     this.carrinhoService.carrinho$.subscribe(itens => {
+//       this.qtdItensCarrinho = itens.length
+//     });
+//   }
+
+//   // obterUsuarioLogado() {
+//   //   this.subscription.add(this.authService.getUsuarioLogado().subscribe(
+//   //     usuario => this.usuarioLogado = usuario
+//   //   ));
+//   // }
+
+//   // deslogar() {
+//   //   this.authService.removeToken()
+//   //   this.authService.removeUsuarioLogado();
+//   // }
+// }

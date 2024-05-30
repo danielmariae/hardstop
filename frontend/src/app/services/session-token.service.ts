@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ClienteService } from './cliente.service';
 import { FuncionarioService } from './funcionario.service';
+import { Cliente } from '../models/cliente.model';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +14,17 @@ export class SessionTokenService {
   private baseUrl = 'http://localhost:8080/auth'; // URL base da sua API
   private loginAdmSubject = new Subject<void>();
   private loginClienteSubject = new Subject<void>();
+  private clienteLogadoKey = 'clienteLogado';
+  private clienteLogadoSubject = new BehaviorSubject<Cliente | null>(null);
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasValidSessionToken());
 
   loginAdmSuccess$ = this.loginAdmSubject.asObservable();
   loginClienteSuccess$ = this.loginClienteSubject.asObservable();
 
 
   constructor(
-    private httpClient: HttpClient  ) { }
+    private httpClient: HttpClient,
+    private localStorageService: LocalStorageService) { }
 
   // Método para salvar o token de sessão no armazenamento local
   saveSessionToken(token: string) {
@@ -51,12 +57,16 @@ export class SessionTokenService {
   }
 }
 
-  // Método para verificar se o usuário está autenticado
-  isAuthenticated(): Observable<boolean> {
+  // Método para verificar se existe um token de sessão válido
+  hasValidSessionToken(): boolean {
     const sessionToken = this.getSessionToken();
     // Verificar se o token de sessão está presente e válido (adicione sua lógica de validação aqui)
-    const isAuthenticated = !!sessionToken; // Neste exemplo, estamos verificando apenas se o token de sessão está presente
-    return of(isAuthenticated);
+    return !!sessionToken; // Verifique se o token é válido
+  }
+
+  // Método para verificar se o usuário está autenticado
+  isAuthenticated(): Observable<boolean> {
+    return this.isAuthenticatedSubject.asObservable();
   }
 
   // Exemplo de método para fazer uma solicitação HTTP para a API para autenticar o Funcionario
@@ -74,12 +84,48 @@ export class SessionTokenService {
     // Exemplo de método para fazer uma solicitação HTTP para a API para autenticar o Cliente
     authenticateUserC(username: string, password: string): Observable<any> {
       const loginUrl = `${this.baseUrl}/loginU`;
-      return this.httpClient.post(loginUrl, { login: username, senha: password }).pipe(
-        tap(() => {
+      const params = {
+        login: username, 
+        senha: password
+      }
+
+      // return this.httpClient.post(loginUrl, { login: username, senha: password }).pipe(
+      //   tap(() => {
+      //     this.notifyLoginClienteSucess();
+      //   })
+      // );
+
+      return this.httpClient.post(loginUrl, params, {observe: 'response'}).pipe(
+        tap((res: any) => {
+          console.log(res);
+          const authToken = res.headers.get('authorization') ?? '';
+          if (authToken) {
+            console.log(authToken);
+            this.saveSessionToken(authToken);
+            const usuarioLogado = res.body;
+            console.log(usuarioLogado);
+            if (usuarioLogado) {
+              this.setClienteLogado(usuarioLogado);
+              this.clienteLogadoSubject.next(usuarioLogado);
+            }
+          }
           this.notifyLoginClienteSucess();
         })
       );
      }
+
+     setClienteLogado(cliente: Cliente): void {
+        this.localStorageService.setItem(this.clienteLogadoKey, cliente);
+    }
+
+    getClienteLogado() {
+      return this.clienteLogadoSubject.asObservable();
+    }
+
+    removeClienteLogado(): void {
+      this.localStorageService.removeItem(this.clienteLogadoKey);
+      this.clienteLogadoSubject.next(null);
+    }
 
      notifyLoginAdmSucess(){
       this.loginAdmSubject.next();
