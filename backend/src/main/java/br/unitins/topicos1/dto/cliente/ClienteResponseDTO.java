@@ -22,7 +22,7 @@ public record ClienteResponseDTO(
   List<EnderecoResponseDTO> listaEndereco,
   List<TelefoneResponseDTO> listaTelefone,
   // List<PedidoResponseDTO> listaPedidos,
-  List<ProdutoResponseDTO> listaDesejos
+  List<ProdutoResponseDTO> listaDesejos // teste de commit linux
 ) {
   public static ClienteResponseDTO valueOf(Cliente cliente) {
     return new ClienteResponseDTO(
