@@ -110,6 +110,8 @@ export class HeaderHomeComponent {
 
        get carrinhoRoute(): string {
        console.log(this.sessionTokenService.hasValidSessionToken());
+       console.log(this.sessionTokenService.getSessionToken());
+       console.log(this.clienteLogado);
        return this.sessionTokenService.hasValidSessionToken() ? '/carrinho' : '/login/user';
       }
 

@@ -23,11 +23,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 export class CarrinhoComponent implements OnInit {
 
   carrinhoItens: ItemCarrinho[] = [];
-  cliente: Cliente;
   clienteForm: FormGroup;
   clienteLogado: Cliente | null = null;
+  enderecoFormGroup: FormGroup;
   private subscription = new Subscription();
-  selectedAddress: number = -1; // Initialize to null
+  enderecos: FormArray;
+  selectedAddress: number | null;
+  showNewAddressForm = false; // usado para esconder o formulário para novo endereço
+  addressesAdded = false; // usado para desabilitar o botão Adicionar endereço após seu uso
 
   constructor(private carrinhoService: CarrinhoService,
               private clienteService: ClienteService,
@@ -36,10 +39,30 @@ export class CarrinhoComponent implements OnInit {
               private viaCep: NgxViacepService,
 
   ) {
-    this.cliente = new Cliente();
-    this.clienteForm = formBuilder.group({
+   
+    this.selectedAddress = null;
+
+    this.clienteForm = this.formBuilder.group({
       enderecos: this.formBuilder.array([]),
   });
+  this.enderecos = this.clienteForm.get('enderecos') as FormArray;
+
+  this.enderecoFormGroup = this.formBuilder.group({
+    id: [null],
+    nome: ['', Validators.required],
+    cep: [''],
+    logradouro: [''],
+    numeroLote: [''],
+    bairro: [''],
+    complemento: [''],
+    localidade: [''],
+    uf: [''],
+    pais: [''],
+    cepInvalido: [false],
+  });
+
+  this.setupCepObserver();
+
   }
 
   ngOnInit(): void {
@@ -47,16 +70,38 @@ export class CarrinhoComponent implements OnInit {
       this.carrinhoItens = itens;
     });
 
+    this.clienteLogado = JSON.parse(localStorage.getItem('clienteLogado') || 'null');
+    if (!this.clienteLogado) {
+      this.obterClienteLogado();
+    }
+    console.log(this.clienteLogado);
+
+     // Carregar endereços pré-existentes
+     this.carregarEnderecos();
+
+  }
+
+  obterClienteLogado() {
     this.subscription.add(this.sessionTokenService.getClienteLogado().subscribe(
-      cliente => this.clienteLogado = cliente
-    ));
+    cliente => this.clienteLogado = cliente
+  ));
+  }
+
+  carregarEnderecos(): void {
 
     // Populando o FormArray com os dados existentes de cliente.listaEndereco
-    if(this.cliente.listaEndereco)
-    this.cliente.listaEndereco.forEach(endereco => {
-      this.adicionarEndereco(endereco);
-    });
+    // if(this.cliente.listaEndereco)
+    //   this.cliente.listaEndereco.forEach(endereco => {
+    //     this.adicionarEndereco(endereco);
+    //   });
 
+    if(this.clienteLogado) {
+    console.log(this.clienteLogado.listaEndereco);
+    
+         this.clienteLogado.listaEndereco.forEach(endereco => {
+           this.enderecos.push(this.formBuilder.group(endereco));
+         });
+        }
   }
 
   removerItem(item: ItemCarrinho): void {
@@ -90,36 +135,95 @@ export class CarrinhoComponent implements OnInit {
   return total;
   }
 
-  get enderecos(): FormArray {
-    return this.clienteForm.get('enderecos') as FormArray;
-  }
+  // get enderecos(): FormArray {
+  //   return this.clienteForm.get('enderecos') as FormArray;
+  // }
   
-  adicionarEndereco(endereco?: any): void {
-    const enderecoFormGroup = this.formBuilder.group({
-      nome: [endereco && endereco.nome ? endereco.nome : '', Validators.required],
-      logradouro: [endereco && endereco.logradouro ? endereco.logradouro : ''],
-      numeroLote: [endereco && endereco.numeroLote ? endereco.numeroLote : ''],
-      bairro: [endereco && endereco.bairro ? endereco.bairro : ''],
-      complemento: [endereco && endereco.complemento ? endereco.complemento : ''],
-      cep: [endereco && endereco.cep ? endereco.cep : ''],
-      localidade: [endereco && endereco.localidade ? endereco.localidade : ''],
-      uf: [endereco && endereco.uf ? endereco.uf : ''],
-      pais: [endereco && endereco.pais ? endereco.pais : ''],
-      cepInvalido: [false],
+  setupCepObserver(): void {
+    this.enderecoFormGroup.get('cep')?.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe((cep: string | null) => {
+      if (cep !== null) {
+        this.atualizarEndereco(cep, this.enderecoFormGroup);
+      }
     });
-  
-      // Adicionar um observador para o campo de CEP dentro do FormGroup
-      enderecoFormGroup.get('cep')?.valueChanges.pipe(
-        debounceTime(300),
-        distinctUntilChanged()
-      ).subscribe((cep: string | null) => {
-        if (cep !== null) {
-          this.atualizarEndereco(cep, enderecoFormGroup);
-        }
-      });
-    
-    this.enderecos.push(enderecoFormGroup);
   }
+
+  adicionarEndereco(endereco?: any): void {
+    this.selectedAddress = null; // Deseleciona qualquer seleção que tenha sido feita para algum endereço pre-existente.
+    this.addressesAdded = true; // Habilita o Disable do botão Adicionar endereço
+    if (this.showNewAddressForm) {
+      // Se o formulário já está sendo exibido, não faz nada.
+      return;
+    }
+
+    if (endereco) {
+      this.enderecoFormGroup.patchValue({
+        nome: endereco.nome || '',
+        logradouro: endereco.logradouro || '',
+        numeroLote: endereco.numeroLote || '',
+        bairro: endereco.bairro || '',
+        complemento: endereco.complemento || '',
+        cep: endereco.cep || '',
+        localidade: endereco.localidade || '',
+        uf: endereco.uf || '',
+        pais: endereco.pais || '',
+      });
+    } else {
+      this.enderecoFormGroup.reset();
+    }
+
+    this.showNewAddressForm = true;
+  }
+
+  salvarEndereco(): void {
+    this.enderecos.push(this.formBuilder.group(this.enderecoFormGroup.value));
+    this.showNewAddressForm = false;
+    this.addressesAdded = true;
+  }
+
+  cancelarEndereco(): void {
+    this.showNewAddressForm = false;
+    this.enderecoFormGroup.reset();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+
+
+  // adicionarEndereco(endereco?: any): void {
+ 
+  //   this.enderecoFormGroup = this.formBuilder.group({
+  //     nome: [endereco && endereco.nome ? endereco.nome : '', Validators.required],
+  //     logradouro: [endereco && endereco.logradouro ? endereco.logradouro : ''],
+  //     numeroLote: [endereco && endereco.numeroLote ? endereco.numeroLote : ''],
+  //     bairro: [endereco && endereco.bairro ? endereco.bairro : ''],
+  //     complemento: [endereco && endereco.complemento ? endereco.complemento : ''],
+  //     cep: [endereco && endereco.cep ? endereco.cep : ''],
+  //     localidade: [endereco && endereco.localidade ? endereco.localidade : ''],
+  //     uf: [endereco && endereco.uf ? endereco.uf : ''],
+  //     pais: [endereco && endereco.pais ? endereco.pais : ''],
+  //     cepInvalido: [false],
+  //   });
+  
+  //     // Adicionar um observador para o campo de CEP dentro do FormGroup
+  //     this.enderecoFormGroup.get('cep')?.valueChanges.pipe(
+  //       debounceTime(300),
+  //       distinctUntilChanged()
+  //     ).subscribe((cep: string | null) => {
+  //       if (cep !== null) {
+  //         this.atualizarEndereco(cep, this.enderecoFormGroup);
+  //       }
+  //     });
+    
+  //   this.enderecos.push(this.enderecoFormGroup);
+  //   this.addressesAdded = true;
+  //   this.showNewAddressForm = true; // Mostra o formulário
+    
+  // }
   
   atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
     const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
@@ -192,10 +296,13 @@ export class CarrinhoComponent implements OnInit {
   }
 
   getSelectedAddress() {
-    if (this.selectedAddress !== -1) {
+    if (this.selectedAddress !== null) {
+      console.log(this.selectedAddress);
+      const selectedEndereco = this.enderecos.controls[this.selectedAddress].value;
+      console.log("Selected Endereço:", selectedEndereco);
       return this.enderecos.at(this.selectedAddress);
     }
-    return null; // Handle cases where no address is selected
+    return null; // Casos onde nenhum endereço é selecionado
   }
 
 }

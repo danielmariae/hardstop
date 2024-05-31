@@ -23,8 +23,9 @@
 
 
    
-    <div class="box">
-      <h2 class="title is-3">Endereços</h2>
+    <!-- <div class="box">
+      <h2 class="title is-3">Endereço de Entrega</h2>
+      <h4 class="title is-4">Escolha um endereço de entrega ou adicione um novo endereço</h4>
       <form [formGroup]="clienteForm"> 
       <div formArrayName="enderecos">
       <div *ngFor="let endereco of enderecos.controls; let i = index" [formGroupName]="i">
@@ -88,22 +89,187 @@
           </div>
           <div class="columns">
             <div class="column">                
-              <div class="button is-default is-danger">
-                <button type="button" (click)="removerEndereco(i)">Remover endereço</button>      
-              </div>
-              <br><br>
             </div>
           </div>
           </div>
       </div>
-      <div class="button is-primary is-default">
-        <button type="button" (click)="adicionarEndereco()">Adicionar endereço</button>
-       </div>
+      <div class="button-container">
+        <button class="button is-primary is-default" type="button" (click)="adicionarEndereco()" [disabled]="addressesAdded">Adicionar endereço</button>
+    </div>    
       </form> 
-    </div>
+    </div> -->
   
 
 
+
+    <div class="box">
+      <h2 class="title is-3">Endereço de Entrega</h2>
+      <h4 class="title is-4">Escolha um endereço de entrega ou adicione um novo endereço</h4>
+    
+      <div *ngFor="let endereco of enderecos.controls; let i = index">
+        <div class="columns">
+          <div class="column">
+            <input type="radio" name="selectedAddress" [(ngModel)]="selectedAddress" [value]="i">
+            <label class="field label">Nome do endereço:</label>
+            <span class="info-text">{{ endereco.get('nome')?.value }}</span>
+          </div>
+          <div class="column is-one-quarter">
+            <label class="field label">CEP:</label>
+            <span class="info-text">{{ endereco.get('cep')?.value }}</span>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <label class="field label">Logradouro:</label>
+            <span class="info-text">{{ endereco.get('logradouro')?.value }}</span>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-one-fifth">
+            <label class="field label">Número/Lote:</label>
+            <span class="info-text">{{ endereco.get('numeroLote')?.value }}</span>
+          </div>
+          <div class="column">
+            <label class="field label">Complemento:</label>
+            <span class="info-text">{{ endereco.get('complemento')?.value }}</span>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column">
+            <label class="field label">Bairro:</label>
+            <span class="info-text">{{ endereco.get('bairro')?.value }}</span>
+          </div>
+          <div class="column">
+            <label class="field label">Localidade:</label>
+            <span class="info-text">{{ endereco.get('localidade')?.value }}</span>
+          </div>
+          <div class="column is-one-fifth">
+            <label class="field label">UF:</label>
+            <span class="info-text">{{ endereco.get('uf')?.value }}</span>
+          </div>
+          <div class="column">
+            <label class="field label">País:</label>
+            <span class="info-text">{{ endereco.get('pais')?.value }}</span>
+          </div>
+        </div>
+      </div>
+
+     
+
+
+      
+      <!-- <form [formGroup]="clienteForm">
+      <div formArrayName="enderecos">
+        <div *ngFor="let endereco of enderecos.controls; let i = index" [formGroupName]="i">
+          <div class="columns">
+            <div class="column">
+              <input type="radio" name="selectedAddress" [(ngModel)]="selectedAddress" [value]="i">
+              <input type="radio" name="selectedAddress" [(ngModel)]="selectedAddress" [value]="i">
+              <label class="field label">Nome do endereço:</label>
+              <input class="control input" formControlName="nome" placeholder="Nome para este endereço:" readonly>
+            </div>
+            <div class="column is-one-quarter">
+              <label class="field label">CEP:</label>
+              <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000" readonly>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Logradouro:</label>
+              <input class="control input" formControlName="logradouro" placeholder="Logradouro" readonly>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column is-one-fifth">
+              <label class="field label">Número/Lote:</label>
+              <input class="control input" formControlName="numeroLote" placeholder="Número/Lote" readonly>
+            </div>
+            <div class="column">
+              <label class="field label">Complemento:</label>
+              <input class="control input" formControlName="complemento" placeholder="Complemento" readonly>
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Bairro:</label>
+              <input class="control input" formControlName="bairro" placeholder="Bairro" readonly>
+            </div>
+            <div class="column">
+              <label class="field label">Localidade:</label>
+              <input class="control input" formControlName="localidade" placeholder="Localidade" readonly>
+            </div>
+            <div class="column is-one-fifth">
+              <label class="field label">UF:</label>
+              <input class="control input" formControlName="uf" placeholder="UF" readonly>
+            </div>
+            <div class="column">
+              <label class="field label">País:</label>
+              <input class="control input" formControlName="pais" placeholder="País" readonly>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>  -->
+    
+      <!-- Seção para Adicionar Novo Endereço -->
+      <div *ngIf="showNewAddressForm">
+        <h4 class="title is-4">Adicionar Novo Endereço</h4>
+        <form [formGroup]="enderecoFormGroup">
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Nome do endereço:</label>
+              <input class="control input" formControlName="nome" placeholder="Nome para este endereço:">
+            </div>
+            <div class="column is-one-quarter">
+              <label class="field label">CEP:</label>
+              <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Logradouro:</label>
+              <input class="control input" formControlName="logradouro" placeholder="Logradouro (será preenchido automaticamente)">
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column is-one-fifth">
+              <label class="field label">Número/Lote:</label>
+              <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
+            </div>
+            <div class="column">
+              <label class="field label">Complemento:</label>
+              <input class="control input" formControlName="complemento" placeholder="Complemento">
+            </div>
+          </div>
+          <div class="columns">
+            <div class="column">
+              <label class="field label">Bairro:</label>
+              <input class="control input" formControlName="bairro" placeholder="Bairro">
+            </div>
+            <div class="column">
+              <label class="field label">Localidade:</label>
+              <input class="control input" formControlName="localidade" placeholder="Localidade">
+            </div>
+            <div class="column is-one-fifth">
+              <label class="field label">UF:</label>
+              <input class="control input" formControlName="uf" placeholder="UF">
+            </div>
+            <div class="column">
+              <label class="field label">País:</label>
+              <input class="control input" formControlName="pais" placeholder="País">
+            </div>
+          </div>
+          <div class="buttons">
+            <button class="button is-primary" type="button" (click)="salvarEndereco()">Salvar Endereço</button>
+            <button class="button is-secondary" type="button" (click)="cancelarEndereco()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="button-container">
+      <button class="button is-primary is-default" type="button" (click)="adicionarEndereco()" [disabled]="addressesAdded">Adicionar endereço</button>
+  </div>    
+    
 
 
 
