@@ -1,0 +1,65 @@
+<div class="pagamento-container">
+    <form [formGroup]="tiposPagamentoForm">
+      <div class="column">
+        <label class="field label">Selecione forma de Pagamento:</label>
+        <div class="select">
+          <select formControlName="metodoEscolhido">
+            <option disabled selected value="">Selecione uma forma de Pagamento</option>
+            <option *ngFor="let tipo of tiposPagamento" [value]="tipo.id">{{ tipo.descricao }}</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  
+    <form [formGroup]="pagamentoFormGroup">
+      <div class="form-group" *ngIf="metodoPagamento === 0"> <!-- 1 Representa o tipo de pagamento por cartão -->
+        <label for="numeroCartao">Número do Cartão:</label>
+        <input id="numeroCartao" type="text" formControlName="numeroCartao" />
+        <div *ngIf="numeroCartaoControl.invalid && (numeroCartaoControl.dirty || numeroCartaoControl.touched)">
+          <div *ngIf="numeroCartaoControl.errors?.['required']">Número do cartão é obrigatório.</div>
+          <div *ngIf="numeroCartaoControl.errors?.['pattern']">Número do cartão inválido.</div>
+        </div>
+  
+        <label for="mesValidade">Mês de Validade:</label>
+        <input id="mesValidade" type="text" formControlName="mesValidade" />
+        <div *ngIf="mesValidadeControl.invalid && (mesValidadeControl.dirty || mesValidadeControl.touched)">
+          <div *ngIf="mesValidadeControl.errors?.['required']">Mês de validade é obrigatório.</div>
+          <div *ngIf="mesValidadeControl.errors?.['pattern']">Mês de validade inválido.</div>
+          <div *ngIf="mesValidadeControl.errors?.['min']">Mês de validade inválido.</div>
+          <div *ngIf="mesValidadeControl.errors?.['max']">Mês de validade inválido.</div>
+        </div>
+  
+        <label for="anoValidade">Ano de Validade:</label>
+        <input id="anoValidade" type="text" formControlName="anoValidade" />
+        <div *ngIf="anoValidadeControl.invalid && (anoValidadeControl.dirty || anoValidadeControl.touched)">
+          <div *ngIf="anoValidadeControl.errors?.['required']">Ano de validade é obrigatório.</div>
+          <div *ngIf="anoValidadeControl.errors?.['pattern']">Ano de validade inválido.</div>
+          <div *ngIf="anoValidadeControl.errors?.['min']">Ano de validade inválido.</div>
+        </div>
+  
+        <label for="codSeguranca">Código de Segurança:</label>
+        <input id="codSeguranca" type="text" formControlName="codSeguranca" />
+        <div *ngIf="codSegurancaControl.invalid && (codSegurancaControl.dirty || codSegurancaControl.touched)">
+          <div *ngIf="codSegurancaControl.errors?.['required']">Código de segurança é obrigatório.</div>
+          <div *ngIf="codSegurancaControl.errors?.['pattern']">Código de segurança inválido.</div>
+        </div>
+      </div>
+  
+      <div class="form-group" *ngIf="metodoPagamento === 2"> <!-- 2 Representa o tipo de pagamento por Pix -->
+        
+      </div>
+  
+      <div class="form-group" *ngIf="metodoPagamento === 1"> <!-- 0 representa o tipo de pagamento por Boleto -->
+        <label for="diasVencimento">Dias para Vencimento:</label>
+        <input id="diasVencimento" type="text" formControlName="diasVencimento" />
+        <div *ngIf="diasVencimentoControl.invalid && (diasVencimentoControl.dirty || diasVencimentoControl.touched)">
+          <div *ngIf="diasVencimentoControl.errors?.['required']">Dias para vencimento é obrigatório.</div>
+          <div *ngIf="diasVencimentoControl.errors?.['pattern']">Dias para vencimento inválido.</div>
+          <div *ngIf="diasVencimentoControl.errors?.['min']">Dias para vencimento inválido.</div>
+        </div>
+      </div>
+  
+      <button type="submit" (click)="efetuarPagamento()">Efetuar Pagamento</button>
+    </form>
+  </div>
+  

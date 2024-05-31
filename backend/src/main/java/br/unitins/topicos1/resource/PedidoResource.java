@@ -37,14 +37,14 @@ PedidoService service;
   @POST
   @RolesAllowed({"User"})
   @Path("/insert/")
-  public Response insert(@Valid PedidoDTO dto, Long idCliente) {
-
+  public Response insert(@Valid PedidoDTO dto) {
+ 
     // obtendo o login pelo token jwt
-    String login = jwt.getSubject();
+    //String login = jwt.getSubject();
 
-    Long id = serviceC.findByLogin(login).id();
+    //Long id = serviceC.findByLogin(login).id();
 
-    return Response.status(200).entity(service.insert(dto, id)).build();
+    return Response.status(200).entity(service.insert(dto)).build();
   }
 
   @PATCH

@@ -260,7 +260,6 @@
             </div>
           </div>
           <div class="buttons">
-            <button class="button is-primary" type="button" (click)="salvarEndereco()">Salvar Endereço</button>
             <button class="button is-secondary" type="button" (click)="cancelarEndereco()">Cancelar</button>
           </div>
         </form>
@@ -268,7 +267,11 @@
     </div>
     <div class="button-container">
       <button class="button is-primary is-default" type="button" (click)="adicionarEndereco()" [disabled]="addressesAdded">Adicionar endereço</button>
-  </div>    
+  </div>
+  <br>
+  <div class="button-salvarendereco">
+    <button class="button is-primary" type="button" (click)="salvarEndereco()"[disabled]="enderecoSalvo">Salvar Endereço</button>
+    </div>
     
 
 
@@ -277,7 +280,7 @@
 
 
     <p>Total do Carrinho: {{ calcularTotal() }}</p>
-    <button mat-raised-button color="primary" (click)="finalizarCompra()" >Finalizar Compra</button>
+    <button mat-raised-button color="primary" (click)="finalizarCompra()" >Ir para Pagamento</button>
   </ng-container>
   <ng-template #carrinhoVazio>
     <p>O carrinho está vazio.</p>

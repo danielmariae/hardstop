@@ -8,7 +8,7 @@ import { HeaderHomeComponent } from "../template/home-template/header-home/heade
     templateUrl: './pedido.component.html',
     styleUrl: './pedido.component.css'
   })
-  export class CarrinhoComponent implements OnInit {
+  export class PedidoComponent implements OnInit {
     ngOnInit(): void {
         
     }

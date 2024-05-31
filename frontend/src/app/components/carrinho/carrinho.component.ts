@@ -12,6 +12,8 @@ import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LocalStorageService } from '../../services/local-storage.service';
+import { NavigationService } from '../../services/navigation.service';
 
 @Component({
   selector: 'app-carrinho',
@@ -31,13 +33,15 @@ export class CarrinhoComponent implements OnInit {
   selectedAddress: number | null;
   showNewAddressForm = false; // usado para esconder o formulário para novo endereço
   addressesAdded = false; // usado para desabilitar o botão Adicionar endereço após seu uso
+  enderecoSalvo = false; // usado para desabilitar o botão de Salvar Endereço após clicado
 
   constructor(private carrinhoService: CarrinhoService,
               private clienteService: ClienteService,
               private formBuilder: FormBuilder,
               private sessionTokenService: SessionTokenService,
               private viaCep: NgxViacepService,
-
+              private localStorageService: LocalStorageService,
+              private navigationService: NavigationService
   ) {
    
     this.selectedAddress = null;
@@ -74,7 +78,7 @@ export class CarrinhoComponent implements OnInit {
     if (!this.clienteLogado) {
       this.obterClienteLogado();
     }
-    console.log(this.clienteLogado);
+    //console.log(this.clienteLogado);
 
      // Carregar endereços pré-existentes
      this.carregarEnderecos();
@@ -96,7 +100,7 @@ export class CarrinhoComponent implements OnInit {
     //   });
 
     if(this.clienteLogado) {
-    console.log(this.clienteLogado.listaEndereco);
+    //console.log(this.clienteLogado.listaEndereco);
     
          this.clienteLogado.listaEndereco.forEach(endereco => {
            this.enderecos.push(this.formBuilder.group(endereco));
@@ -109,7 +113,8 @@ export class CarrinhoComponent implements OnInit {
   }
   
   finalizarCompra(): void {
-
+    this.localStorageService.setItem('valorFinal', this.calcularTotal());
+    this.navigationService.navigateTo("/pagamento");
   }
 
   diminuirQuantidade(item: ItemCarrinho) {
@@ -178,13 +183,29 @@ export class CarrinhoComponent implements OnInit {
   }
 
   salvarEndereco(): void {
-    this.enderecos.push(this.formBuilder.group(this.enderecoFormGroup.value));
-    this.showNewAddressForm = false;
-    this.addressesAdded = true;
+    if (this.selectedAddress !== null) { // Significa que o usuário clicou no radiobutton
+      console.log(this.selectedAddress);
+      const selectedEndereco = this.enderecos.controls[this.selectedAddress].value;
+      console.log("Selected Endereço:", selectedEndereco);
+      this.addressesAdded = true; // bloqueia o botão Adicionar endereço
+      this.enderecoSalvo = true; // desabilita o botão Salvar Endereço
+      this.localStorageService.setItem('enderecoEscolhido', selectedEndereco);
+    } else if(this.addressesAdded == true) { // significa que o usuário clicou no botão Adicionar endereço
+      const selectedEndereco = this.enderecoFormGroup.value;
+      console.log("Selected Endereço:", selectedEndereco);
+      this.enderecoSalvo = true; // desabilita o botão Salvar Endereço
+    //this.enderecos.push(this.formBuilder.group(this.enderecoFormGroup.value));
+    //this.showNewAddressForm = false;
+    //this.addressesAdded = true;
+    this.localStorageService.setItem('enderecoEscolhido', selectedEndereco);
+    } else { // O usuário clicou no botão Salvar Endereço sem escolher nenhuma opção de endereço
+        alert("Escolha uma opção de Endereço primeiro");
+    }
   }
 
   cancelarEndereco(): void {
     this.showNewAddressForm = false;
+    this.addressesAdded = false;
     this.enderecoFormGroup.reset();
   }
 

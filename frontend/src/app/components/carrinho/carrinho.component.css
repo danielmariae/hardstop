@@ -2,3 +2,8 @@ button.button.is-primary.is-default:disabled {
     background-color: gray !important;
     color: white !important; /* Ajuste a cor do texto se necessário */
 }
+
+button.button.is-primary:disabled {
+    background-color: gray !important;
+    color: white !important; /* Ajuste a cor do texto se necessário */
+}

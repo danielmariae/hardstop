@@ -1,9 +1,9 @@
 package br.unitins.topicos1.model.pagamento;
 
 public enum ModalidadePagamento {
-  CARTAO_DE_CREDITO(0, "Aguardando confirmação do pagamento"),
-  BOLETO_BANCARIO(1, "Pagamento não autorizado pela financeira"),
-  PIX(2, "Pagamento recebido");
+  CARTAO_DE_CREDITO(0, "Cartão de Crédito"),
+  BOLETO_BANCARIO(1, "Boleto Bancário"),
+  PIX(2, "Pix");
  
 
   private Integer id;

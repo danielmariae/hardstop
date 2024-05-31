@@ -14,7 +14,9 @@ public record PedidoDTO(
     @NotNull(message = "O campo Item da Venda não pode ser nulo")
     List<ItemDaVendaDTO> itemDaVenda,
     @NotNull(message = "O campo idEndereco não pode ser nulo")
-    Long idEndereco
+    Long idEndereco,
+    @NotNull(message = "O campo idCliente não pode ser nulo")
+    Long idCliente
 ) {
     }
 

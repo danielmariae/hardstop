@@ -1,10 +1,14 @@
 import { ListaEndereco } from "./endereco.model";
 import { ItemDaVenda } from "./itemDaVenda";
 import { FormaDePagamento } from "./formaDePagamento";
+import { StatusDoPedido } from "./statusDoPedido.model";
 
 export class Pedido{
-    id!: number;
-    endereco!: ListaEndereco;
+    id!: number | null;
+    idCliente!: number | null;
+    codigoDeRastreamento!: string | null;
+    idEndereco!: number;
     formaDePagamento!: FormaDePagamento;
-    itemDaVendaDTO!: ItemDaVenda[];
+    itemDaVenda!: ItemDaVenda[];
+    statusDoPedido!: StatusDoPedido | null;
 }

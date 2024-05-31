@@ -1,9 +1,9 @@
 export class FormaDePagamento {
-    id!: number;
+    id!: number | null;
     modalidade!: number;
-    numeroCartao!: string;
-    mesValidade!: number;
-    anoValidade!: number;
-    codSeguranca!: number;
-    diasVencimento!: number;
+    numeroCartao!: string | null;
+    mesValidade!: number | null;
+    anoValidade!: number | null;
+    codSeguranca!: number | null;
+    diasVencimento!: number | null;
 }
