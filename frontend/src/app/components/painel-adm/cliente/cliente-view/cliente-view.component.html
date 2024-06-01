@@ -7,11 +7,11 @@
         <div class="columns">
           <div class="column">
           <label class="field label" for="nome">Nome:</label>
-          <input class="control input" type="text" id="nome" formControlName="nome" readonly>  
+          <input class="control input" type="text" id="nome" formControlName="nome" readonly>
           <div *ngIf="clienteForm.get('nome')?.hasError('required') && clienteForm.get('nome')?.touched">
             <p class="help is-danger">Campo obrigatório.</p>
           </div>
-    
+
           </div>
         </div>
         <div class="columns">
@@ -34,7 +34,7 @@
           </div>
           <div class="column">
             <label class="field label" formControlName="sexo">Sexo:</label>
-            <div class="select" id="seletor-especial">
+            <div class="select">
               <select formControlName="sexo" [disabled]="desativarSeletores()">
                 <option disabled selected value=" ">Selecione um sexo:ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ</option>
                 <option disabled value="M">Masculino</option>
@@ -44,7 +44,7 @@
             </div>
           </div>
         </div>
-    
+
         <div class="columns">
           <div class="column">
             <label class="field label" for="email">Email:</label>
@@ -66,16 +66,16 @@
           </div>
         </div>
         </div>
-    
+
         <div class="container box">
-              <h2 class="title is-3"> Telefones </h2>  
+              <h2 class="title is-3"> Telefones </h2>
               <div formArrayName="telefones">
-              <div *ngFor="let telefone of telefones.controls; let i = index" [formGroupName]="i">  
+              <div *ngFor="let telefone of telefones.controls; let i = index" [formGroupName]="i">
                 <div class="columns">
                   <div class="column">
                     <label class="field label">DDD:</label>
                     <input class="control input" type="text" formControlName="ddd" placeholder="Insira o DDD sem parênteses" inputmode="numeric" mask="(00)" id="ddd" readonly>
-                  </div> 
+                  </div>
                   <div class="column">
                     <label class="field label">Número:</label>
                     <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone" mask="00000-0000" id="numeroTelefone" readonly>
@@ -91,14 +91,14 @@
                   </div>
             </div>
             <br>
-          </div>  
+          </div>
         </div>
         </div>
-    
+
         <br>
-        
+
         <div class="container box">
-          <h2 class="title is-3">Endereços</h2>  
+          <h2 class="title is-3">Endereços</h2>
           <div formArrayName="enderecos">
           <div *ngFor="let endereco of enderecos.controls; let i = index" [formGroupName]="i">
             <div class="columns">
@@ -109,7 +109,7 @@
               <div class="column is-one-quarter">
                 <label class="field label">CEP:</label>
                 <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000" readonly>
-              </div>  
+              </div>
             </div>
               <div class="columns">
                 <div class="column">
@@ -151,7 +151,7 @@
               </div>
           </div>
         </div>
-    
+
       <!--
         <button type="submit" [disabled]="fornecedorForm.invalid">Salvar</button>
         -->
@@ -164,7 +164,7 @@
           <div *ngIf="errorDetails" class="notification is-danger">
             <p><b>{{errorDetails.status}}:</b> {{errorDetails.statusText}}</p>
           </div>
-      </div> 
+      </div>
     </form>
     </div>
   </div>

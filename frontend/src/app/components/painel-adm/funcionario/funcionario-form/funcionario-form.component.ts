@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Funcionario } from '../../../../models/funcionario.model';
 import { FuncionarioService } from '../../../../services/funcionario.service';
@@ -12,9 +11,10 @@ import { dataValidator } from '../../../../validators/data.validator';
 import { idadeValidator } from '../../../../validators/idade.validator';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { formatarDataNascimento } from '../../../../utils/date-converter';
+import {CepService} from "../../../../services/cep.service";
 
 @Component({
-  selector: 'app-funcionario',
+  selector: 'app-funcionario-form',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, NgxMaskDirective],
   templateUrl: './funcionario-form.component.html',
@@ -24,17 +24,15 @@ import { formatarDataNascimento } from '../../../../utils/date-converter';
 export class FuncionarioFormComponent {
   errorMessage: string | null = null;
   errorDetails: any | null = null;
-    funcionarioForm: FormGroup;
+  funcionarioForm: FormGroup;
   tiposTelefone: any[];
   tiposPerfil: any[];
   uf: any[];
 
-  constructor(private formBuilder: FormBuilder, 
+  constructor(private formBuilder: FormBuilder,
     private funcionarioService: FuncionarioService,
-    private router: Router, 
-    private activatedRoute: ActivatedRoute,
     private navigationService: NavigationService,
-    private viaCep: NgxViacepService) {
+    private cepService: CepService) {
     this.tiposTelefone = [];
     this.uf = [];
     this.tiposPerfil = [];
@@ -97,7 +95,7 @@ export class FuncionarioFormComponent {
           cepInvalido: [false],
         }),
     });
-    
+
     // Adicionar um observador para o campo de CEP
     this.endereco.get('cep')?.valueChanges.pipe(
         debounceTime(300), // Aguarda 300ms após a última mudança no campo
@@ -108,7 +106,7 @@ export class FuncionarioFormComponent {
               }
     })
   }
-  
+
   ngOnInit(): void {
     this.funcionarioService.getTipoTelefone().subscribe(data => {
       this.tiposTelefone = data;
@@ -152,9 +150,9 @@ export class FuncionarioFormComponent {
     const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
 
     if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
-      this.viaCep.buscarPorCep(cepValue).subscribe({
+      this.cepService.findByStringCep(cepValue).subscribe({
         next: (endereco) => {
-          if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
+          if (endereco && !endereco.erro) { // Verifica se o campo erro é false
             // Atualizando os valores do formulário com os dados do endereço
             enderecoFormGroup.patchValue({
               cep: this.formatarCep(endereco.cep),
@@ -214,25 +212,6 @@ export class FuncionarioFormComponent {
     }
   }
 
-  formatarData(data: string): string {
-    const partesData = data.split('-');
-    return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
-  }
-  
-  formatarCPF(cpf: string): string {
-    // Remove todos os caracteres não numéricos
-    const cpfDigits = cpf.replace(/\D/g, '');
-  
-    // Verifica se o CPF possui 11 dígitos
-    if (cpfDigits.length === 11) {
-      // Formata o CPF no formato desejado
-      return cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-    } else {
-      // Retorna o CPF original se não possuir 11 dígitos
-      return cpf;
-    }
-  }
-  
   cancelarInsercao(): void {
     // Redireciona o usuário para a rota anterior
     this.navigationService.navigateTo('funcionarios');

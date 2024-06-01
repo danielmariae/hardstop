@@ -97,6 +97,7 @@
                                 </div>
                             </div>
                             <h2 class="title is-3 has-text-centered"> Telefones </h2>
+                            <p class="text has-text-centered mb-4">Obrigatório ao menos um telefone.</p>
                             <div formArrayName="telefones" class="mb-4">
                                 <div *ngFor="let telefone of telefones.controls; let i = index" [formGroupName]="i">
                                     <div class="columns">
@@ -112,30 +113,30 @@
                                                 placeholder="Número de Telefone">
                                         </div>
                                     </div>
-                                    <div class="columns mb-5">
+                                    <div class="columns">
                                         <div class="column">
                                             <label class="field label">Selecione tipo de telefone:</label>
-                                            <div class="select" > 
-                                              <!-- id="seletor-especial" -->
+                                            <div class="select"> 
                                               <select formControlName="tipo">
-                                                <option disabled selected value="">Selecione um tipo de telefone</option>
+                                                <option disabled selected value=" ">Selecione um tipo de telefone</option>
                                                 <option *ngFor="let tipo of tiposTelefone" [value]="tipo.id">{{ tipo.descricao }}</option>
                                               </select>
                                             </div>
                                         </div> 
-                                        <div class="column">
-                                            <label class="field label">Ação</label>
-                                            <div class="button is-default is-danger">
-                                            <button type="button" (click)="removerTelefone(i)">Remover</button>
-                                            </div>
-                                          </div>
+                                    </div>
+                                    <div class="buttons is-centered mb-5">
+                                        <div class="button is-default is-danger">
+                                            <button type="button" (click)="removerTelefone(i)">Remover telefone</button>
+                                        </div>    
                                     </div>
                                 </div>
-                                <div class="buttons is-centered mb-6">
+                                <div class="buttons is-centered mb-5">
                                     <button type="button" class="button" (click)="adicionarTelefone()">Adicionar telefone</button>
                                 </div>
                             </div>
                             <h2 class="title is-3 has-text-centered">Endereços</h2>
+                            <p class="text has-text-centered mb-4">Obrigatório ao menos um endereço.</p>
+
                             <div formArrayName="enderecos">
                                 <div *ngFor="let endereco of enderecos.controls; let i = index" [formGroupName]="i">
                                     <div class="columns">
@@ -162,7 +163,7 @@
                                         </div>
                                     </div>
                                     <div class="columns">
-                                        <div class="column is-one-fifth">
+                                        <div class="column is-one-third">
                                             <label class="field label">Número/Lote: </label>
                                             <input class="control input" formControlName="numeroLote"
                                                 placeholder="Número/Lote">
@@ -176,9 +177,11 @@
                                     <div class="columns">
                                         <div class="column">
                                             <label class="field label">Bairro: </label>
-                                            <input class="control input" formControlName="bairro" placeholder="Bairro"
+                                            <input class="control input" formControlName="bairro" placeholder="Bairro (será preenchido automaticamente)"
                                                 [disabled]="!endereco.get('cepInvalido')?.value" readonly>
                                         </div>
+                                    </div>
+                                    <div class="columns">
                                         <div class="column">
                                             <label class="field label">Localidade:</label>
                                             <input class="control input" formControlName="localidade"
@@ -207,13 +210,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="columns">
-                                        <div class="column">
-                                            <div class="button is-default is-danger">
-                                                <button type="button" (click)="removerEndereco(i)">Remover endereço</button>
-                                            </div>
-                                            <br><br>
-                                        </div>
+                                    <div class="buttons is-centered mb-5">
+                                        <div class="button is-default is-danger">
+                                            <button type="button" (click)="removerEndereco(i)">Remover endereço</button>
+                                        </div>    
                                     </div>
                                 </div>
                             </div>
