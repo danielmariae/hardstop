@@ -1,0 +1,49 @@
+<app-header-home></app-header-home>
+<!-- pedido.component.html -->
+<ng-container *ngIf="pedidoItens.length > 0">
+    <div *ngFor="let item of pedidoItens" class="pedido-item">
+        <table>
+        <tr>
+      <td>Id do Pedido: {{ item.id }}</td>
+      <td>Forma de Pagamento: {{ item.formaDePagamento.modalidade }}</td>
+
+      <td>Endereço: {{ item.endereco.nome }}</td>
+      <td>Endereço: {{ item.endereco.logradouro }}</td>
+      <td>Endereço: {{ item.endereco.numeroLote }}</td>
+      <td>Endereço: {{ item.endereco.bairro }}</td>
+      <td>Endereço: {{ item.endereco.complemento }}</td>
+      <td>Endereço: {{ item.endereco.cep }}</td>
+      <td>Endereço: {{ item.endereco.localidade }}</td>
+      <td>Endereço: {{ item.endereco.uf }}</td>
+      <td>Endereço: {{ item.endereco.pais }}</td>
+      <ng-container *ngIf="item.itemDaVenda.length > 0">
+        <div *ngFor="let itemVenda of item.itemDaVenda" class="pedido-item">
+            <table>
+            <tr>
+            <td>Nome: {{ itemVenda.nome }}</td>
+            <td>Quantidade: {{ itemVenda.quantidadeUnidades }}</td>
+        </tr>
+    </table>
+  </div>
+</ng-container>
+
+
+ <ng-container *ngIf="item.statusDoPedido.length > 0">
+    <div *ngFor="let status of item.statusDoPedido" class="pedido-item">
+        <table>
+        <tr>
+        <td>Status: {{ status.status }}</td>
+        <td>Data e Hora: {{ status.dataHora }}</td>
+    </tr>
+</table>
+</div>
+</ng-container>
+
+
+
+
+
+</tr>
+</table>
+</div>
+</ng-container>

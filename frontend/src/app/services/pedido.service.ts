@@ -4,6 +4,8 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular
 import { Observable, throwError, catchError } from 'rxjs';
 import { SessionTokenService } from "./session-token.service";
 import { Cliente } from "../models/cliente.model";
+import { ListaEndereco } from "../models/endereco.model";
+import { PedidoRecebe } from "../models/pedidoRecebe.modelo";
 @Injectable({
     providedIn: 'root'
 })
@@ -39,10 +41,36 @@ export class PedidoService {
         return this.httpClient.post<Pedido>(url, pedido);
         
       }
-
     }
 
+      insertEndereco(endereco: ListaEndereco): Observable<ListaEndereco> {
 
+        const url = 'http://localhost:8080/pedidos/insert/endereco';
+        const headers = this.sessionTokenService.getSessionHeader();
+        if(headers) {
+        //  console.log(endereco);
+        //  console.log(headers);
+        return this.httpClient.post<ListaEndereco>(url, endereco, { headers });
+        
+        } else {
+          return this.httpClient.post<ListaEndereco>(url, endereco);
+          
+        }
+    }
+
+    findAll(): Observable<PedidoRecebe[]> {
+
+      const url = 'http://localhost:8080/pedidos/search/pedidos/';
+      const headers = this.sessionTokenService.getSessionHeader();
+      if(headers) {
+        console.log(headers);
+      return this.httpClient.get<PedidoRecebe[]>(url, { headers });
+      
+      } else {
+        return this.httpClient.get<PedidoRecebe[]>(url);
+        
+      }
+    }
 
 
     private handleError(error: HttpErrorResponse) {

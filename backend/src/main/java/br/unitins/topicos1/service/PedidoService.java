@@ -3,6 +3,7 @@ package br.unitins.topicos1.service;
 import java.util.List;
 
 import br.unitins.topicos1.dto.cliente.DesejoResponseDTO;
+import br.unitins.topicos1.dto.endereco.EnderecoDTO;
 import br.unitins.topicos1.dto.endereco.EnderecoResponseDTO;
 import br.unitins.topicos1.dto.pedido.PedidoDTO;
 import br.unitins.topicos1.dto.pedido.PedidoPatchEnderecoDTO;
@@ -11,6 +12,9 @@ import br.unitins.topicos1.dto.pedido.PedidoResponseDTO;
 
 
 public interface PedidoService {
+
+// Insere um pedido desatrelado de um usuário no banco de dados
+public EnderecoResponseDTO insertEndereco(EnderecoDTO dto);
 
 // Cria um novo pedido atrelado a um dado cliente
 public PedidoResponseDTO insert(PedidoDTO dto);

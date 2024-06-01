@@ -46,7 +46,7 @@ carregarConsultas() {
     // buscando todos as consultas
     this.consultaService.findAll(0, 10).subscribe(data => {
       this.consultas = data;
-      console.log(data);
+      // console.log(data);
       this.carregarCards();
     });
   }

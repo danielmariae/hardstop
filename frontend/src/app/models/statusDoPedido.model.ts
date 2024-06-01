@@ -1,5 +1,5 @@
 export class StatusDoPedido{
     id!: number;
     dataHora!: string;
-    status!: number;
+    status!: string;
 }

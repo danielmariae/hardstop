@@ -34,12 +34,14 @@ import { LoginUserComponent } from './components/session-token/login-user/login-
 import { CreateUserAccountComponent } from './components/session-token/create-user-account/create-user-account.component';
 import { CarrinhoComponent } from './components/carrinho/carrinho.component';
 import { PagamentoComponent } from './components/pagamento/pagamento.component';
+import { PedidoComponent } from './components/pedido/pedido.component';
 
 
 export const routes: Routes = [
 
     {path: 'carrinho', component: CarrinhoComponent, title: 'Visualizar carrinho'},
     {path: 'pagamento', component: PagamentoComponent, title: 'Realizar Pagamento'},
+    {path: 'pedidos', component: PedidoComponent, title: 'Visualizar pedidos'},
     {path:'', pathMatch: 'full', redirectTo:'home'},
     {
         path: 'user',
