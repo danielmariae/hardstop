@@ -5,15 +5,27 @@
     <div class="columns">
       <div class="column">
         <label class="field label" for="nomeFantasia">Nome Fantasia:</label>
-        <input class="control input" type="text" id="nomeFantasia" formControlName="nomeFantasia">      
+        <input class="control input" type="text" id="nomeFantasia" formControlName="nomeFantasia">
+        <div *ngIf="fornecedorForm.get('nomeFantasia')?.hasError('required') && fornecedorForm.get('nomeFantasia')?.touched">
+          <p class="help is-danger">Campo obrigatório.</p>
+        </div>     
       </div>
       <div class="column">
         <label class="field label" for="cnpj">CNPJ:</label>
-        <input class="control input" type="text" id="cnpj" formControlName="cnpj" mask="00.000.000/0000-00">      
+        <input class="control input" type="text" inputmode="numeric" id="cnpj" formControlName="cnpj" [showMaskTyped]="true" mask="00.000.000/0000-00">
+        <div *ngIf="fornecedorForm.get('cnpj')?.hasError('pattern') && fornecedorForm.get('cnpj')?.touched">
+          <p class="help is-danger">CPF inválido. Verifique se CPF está correto.</p>
+        </div>
+        <div *ngIf="fornecedorForm.get('cnpj')?.hasError('required') && fornecedorForm.get('cnpj')?.touched">
+          <p class="help is-danger">Campo obrigatório.</p>
+        </div>
       </div>
       <div class="column">
         <label class="field label" for="endSite">Site:</label>
-        <input class="control input" type="url" id="endSite" formControlName="endSite">      
+        <input class="control input" type="url" id="endSite" formControlName="endSite">
+        <div *ngIf="fornecedorForm.get('endSite')?.hasError('required') && fornecedorForm.get('endSite')?.touched">
+          <p class="help is-danger">Campo obrigatório.</p>
+        </div>    
       </div>
     </div>
   </div>
@@ -23,27 +35,44 @@
     <div *ngFor="let telefone of telefones.controls; let i = index" [formGroupName]="i">
       <div class="columns">
         <div class="column">
-          <label class="field label">DDD:</label>
-          <input class="control input" formControlName="ddd" placeholder="Insira o DDD sem parênteses">
-        </div> 
-        <div class="column">
-          <label class="field label">Número:</label>
-          <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone">
-        </div>
-        <div class="column">
           <label class="field label">Selecione tipo de telefone:</label>
           <div class="select" > 
             <!-- id="seletor-especial" -->
             <select formControlName="tipo">
-              <option disabled selected value="">Selecione um tipo de telefone</option>
-              <option *ngFor="let tipo of tiposTelefone" [value]="tipo.id">{{ tipo.descricao }}</option>
+              <option disabled selected [value]=" ">Selecione um tipo de telefone</option>
+              <option *ngFor="let tipo of tiposTelefone" [value]="tipo.id">#{{tipo.id}} - {{ tipo.descricao }}</option>
             </select>
+            <div *ngIf="telefone.get('tipo')?.hasError('required') && telefone.get('tipo')?.touched">
+              <p class="help is-danger">Campo obrigatório.</p>
+            </div>  
+          </div>
         </div>
+        <div class="column">
+          <label class="field label">DDD:</label>
+          <input class="control input" formControlName="ddd" placeholder="Insira o DDD sem parênteses" type="text" mask="(00)" [showMaskTyped]="true">
+          <div *ngIf="telefone.get('ddd')?.hasError('required') && telefone.get('ddd')?.touched">
+            <p class="help is-danger">Campo obrigatório.</p>
+          </div>  
+        </div> 
+        <div *ngIf="telefone.get('tipo') && telefone.get('tipo')?.value > -1  &&telefone.get('tipo')?.value < 2">
+          <div class="column">
+            <label class="field label">Número:</label>
+            <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone" mask="0000-0000" [showMaskTyped]="true">
+            <div *ngIf="telefone.get('numeroTelefone')?.hasError('required') && telefone.get('numeroTelefone')?.touched">
+              <p class="help is-danger">Campo obrigatório.</p>
+            </div>  
+          </div>
+        </div>
+        <div *ngIf="telefone.get('tipo') && telefone.get('tipo')?.value >= 2  &&telefone.get('tipo')?.value < 5">
+          <div class="column">
+            <label class="field label">Número:</label>
+            <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone" mask="00000-0000" [showMaskTyped]="true">
+          </div>
         </div>
         <div class="column">
           <label class="field label">Ação</label>
           <div class="button is-default is-danger">
-          <button type="button" (click)="removerTelefone(i)">Remover</button>
+            <button type="button" (click)="removerTelefone(i)">Remover</button>
           </div>
     </div>
   </div>

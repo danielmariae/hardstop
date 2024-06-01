@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { NavigationService } from '../../../../services/navigation.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
+import {CepService} from "../../../../services/cep.service";
 
 
 @Component({
@@ -34,7 +34,7 @@ export class FornecedorEditComponent implements OnInit {
     private fornecedorService: FornecedorService,
     private formBuilder: FormBuilder,
     private navigationService: NavigationService,
-    private viaCep: NgxViacepService
+    private cepService: CepService
   ) {
     this.tiposTelefone = [];
     this.uf = [];
@@ -45,7 +45,7 @@ export class FornecedorEditComponent implements OnInit {
       endSite: [''],
       telefones: this.formBuilder.array([]),
       enderecos: this.formBuilder.array([]),
-    }); 
+    });
   }
 
   ngOnInit(): void {
@@ -136,8 +136,8 @@ adicionarEndereco(endereco?: any): void {
         this.atualizarEndereco(cep, enderecoFormGroup);
       }
     });
-  
-  
+
+
 
   this.enderecos.push(enderecoFormGroup);
 }
@@ -146,7 +146,7 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
   const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
 
   if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
-    this.viaCep.buscarPorCep(cepValue).subscribe({
+    this.cepService.findByStringCep(cepValue).subscribe({
       next: (endereco) => {
         if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
           // Atualizando os valores do formulário com os dados do endereço
@@ -220,7 +220,7 @@ removerEndereco(index: number): void {
 
 
   salvarAlteracoes(): void {
-    
+
     // const idParam = Number(this.route.snapshot.paramMap.get('id'));
     console.log(this.id);
     const novoFornecedor: Fornecedor = {
@@ -231,7 +231,7 @@ removerEndereco(index: number): void {
       listaTelefone: this.fornecedorForm.value.telefones,
       listaEndereco: this.fornecedorForm.value.enderecos
     };
-    
+
     // Lógica para salvar as alterações do fornecedor
     this.fornecedorService.update(novoFornecedor).subscribe({
       next: (response) => {

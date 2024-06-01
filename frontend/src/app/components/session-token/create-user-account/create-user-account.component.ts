@@ -10,9 +10,9 @@ import { cpfValidator } from '../../../validators/cpf.validator';
 import { idadeValidator } from '../../../validators/idade.validator';
 import { dataValidator } from '../../../validators/data.validator';
 import { HttpClient } from '@angular/common/http';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { formatarDataNascimento } from '../../../utils/date-converter';
+import { CepService } from '../../../services/cep.service';
 
 @Component({
   selector: 'app-create-user-account',
@@ -36,7 +36,7 @@ export class CreateUserAccountComponent {
     private activatedRoute: ActivatedRoute, 
     private navigationService: NavigationService,
     private http: HttpClient, 
-    private viaCep: NgxViacepService) {
+    private cepService: CepService) {
     this.tiposTelefone = [];
     this.uf = [];
     // Inicializar clienteForm no construtor
@@ -95,6 +95,9 @@ export class CreateUserAccountComponent {
     this.clienteService.getUF().subscribe(data => {
       this.uf = data;
     });
+
+    this.adicionarTelefone();
+    this.adicionarEndereco();
   }
 
   get telefones(): FormArray {
@@ -106,6 +109,10 @@ export class CreateUserAccountComponent {
   }
 
   removerTelefone(index: number): void {
+    if(index <= 0){
+      console.error('Proibido remover o primeiro telefone.')
+      return;
+    }
     this.telefones.removeAt(index);
   }
 
@@ -127,6 +134,10 @@ export class CreateUserAccountComponent {
   }
 
   removerEndereco(index: number): void {
+    if(index <= 0){
+      console.error('Proibido remover o primeiro endereço.')
+      return;
+    }
     this.enderecos.removeAt(index);
   }
 
@@ -165,7 +176,7 @@ export class CreateUserAccountComponent {
     const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
 
     if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
-      this.viaCep.buscarPorCep(cepValue).subscribe({
+      this.cepService.findByStringCep(cepValue).subscribe({
         next: (endereco) => {
           if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
             // Atualizando os valores do formulário com os dados do endereço

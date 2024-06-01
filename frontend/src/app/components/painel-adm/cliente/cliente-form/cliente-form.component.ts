@@ -10,9 +10,9 @@ import { cpfValidator } from '../../../../validators/cpf.validator';
 import { idadeValidator } from '../../../../validators/idade.validator';
 import { dataValidator } from '../../../../validators/data.validator';
 import { HttpClient } from '@angular/common/http';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { formatarDataNascimento } from '../../../../utils/date-converter';
+import {CepService} from "../../../../services/cep.service";
 
 @Component({
   selector: 'app-cliente',
@@ -29,9 +29,14 @@ export class ClienteFormComponent {
   tiposTelefone: any[];
   uf: any[];
 
-  constructor(private formBuilder: FormBuilder, private clienteService: ClienteService,
-    private router: Router, private activatedRoute: ActivatedRoute, private navigationService: NavigationService,
-    private http: HttpClient, private viaCep: NgxViacepService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private clienteService: ClienteService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private navigationService: NavigationService,
+    private http: HttpClient,
+    private cepService: CepService) {
     this.tiposTelefone = [];
     this.uf = [];
     // Inicializar clienteForm no construtor
@@ -141,7 +146,7 @@ export class ClienteFormComponent {
       pais: [''],
       cepInvalido: [false],
     });
-  
+
     // Adicionar um observador para o campo de CEP
     enderecoFormGroup.get('cep')?.valueChanges.pipe(
       debounceTime(300), // Aguarda 300ms após a última mudança no campo
@@ -151,7 +156,7 @@ export class ClienteFormComponent {
         this.atualizarEndereco(cep, enderecoFormGroup);
       }
     });
-  
+
     return enderecoFormGroup;
   }
 
@@ -160,9 +165,9 @@ export class ClienteFormComponent {
     const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
 
     if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
-      this.viaCep.buscarPorCep(cepValue).subscribe({
+      this.cepService.findByStringCep(cepValue).subscribe({
         next: (endereco) => {
-          if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
+          if (endereco && !endereco.erro) { // Verifica se o campo erro é false
             // Atualizando os valores do formulário com os dados do endereço
             enderecoFormGroup.patchValue({
               cep: this.formatarCep(endereco.cep),
@@ -221,7 +226,7 @@ export class ClienteFormComponent {
       return cep; // Retorna o CEP original se não possuir 8 dígitos
     }
   }
-      
+
 
   cancelarInsercao(): void {
     // Redireciona o usuário para a rota anterior
@@ -248,7 +253,7 @@ export class ClienteFormComponent {
       listaEndereco: this.clienteForm.value.enderecos
     };
 
-    
+
     // Chamando o serviço para inserir o cliente
     this.clienteService.insert(novoCliente).subscribe({
       next: (response) => {
