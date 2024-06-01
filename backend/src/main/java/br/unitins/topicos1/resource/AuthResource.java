@@ -3,8 +3,8 @@
 
 package br.unitins.topicos1.resource;
 
-import java.util.HashMap;
-import java.util.Map;
+// import java.util.HashMap;
+// import java.util.Map;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import br.unitins.topicos1.dto.cliente.ClienteResponseDTO;
@@ -54,11 +54,15 @@ public class AuthResource {
         ClienteResponseDTO result = serviceC.findByLoginAndSenha(dto.login(), hashSenha);
 
         String token = jwtService.generateJwt(result);
+        
         //System.out.println(token);
 
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("token", token);
-        return Response.ok(responseBody).build();
+        // Map<String, Object> responseBody = new HashMap<>();
+        // responseBody.put("token", token);
+        // return Response.ok(responseBody).build();
+        return Response.ok(result)
+                .header("authorization", token)
+                .build();
 
         //return Response.ok().header("Authorization", token).build();
     }
@@ -76,9 +80,12 @@ public class AuthResource {
 
         //System.out.println(token);
 
-        Map<String, Object> responseBody = new HashMap<>();
-        responseBody.put("token", token);
-        return Response.ok(responseBody).build();
+        // Map<String, Object> responseBody = new HashMap<>();
+        // responseBody.put("token", token);
+        // return Response.ok(responseBody).build();
+        return Response.ok(result)
+                .header("Authorization", token)
+                .build();
     
         //return Response.ok().header("Authorization", token).build();
         

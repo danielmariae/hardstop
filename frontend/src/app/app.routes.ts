@@ -32,9 +32,14 @@ import { AdminTemplateComponent } from './components/template/admin-template/tem
 import { LoginAdmComponent } from './components/session-token/login-adm/login-adm.component';
 import { LoginUserComponent } from './components/session-token/login-user/login-user.component';
 import { CreateUserAccountComponent } from './components/session-token/create-user-account/create-user-account.component';
+import { CarrinhoComponent } from './components/carrinho/carrinho.component';
+import { PagamentoComponent } from './components/pagamento/pagamento.component';
 
 
 export const routes: Routes = [
+
+    {path: 'carrinho', component: CarrinhoComponent, title: 'Visualizar carrinho'},
+    {path: 'pagamento', component: PagamentoComponent, title: 'Realizar Pagamento'},
     {path:'', pathMatch: 'full', redirectTo:'home'},
     {
         path: 'user',

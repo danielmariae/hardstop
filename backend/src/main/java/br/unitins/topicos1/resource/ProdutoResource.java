@@ -114,7 +114,7 @@ public class ProdutoResource {
     }
 
     @GET
-    @RolesAllowed({"Func", "Admin"})
+    // @RolesAllowed({"Func", "Admin"})
     public Response findAll(
         @QueryParam("page") @DefaultValue("0") int page,
         @QueryParam("pageSize") @DefaultValue("100") int pageSize) {

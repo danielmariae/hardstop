@@ -8,13 +8,12 @@ import br.unitins.topicos1.dto.pedido.PedidoDTO;
 import br.unitins.topicos1.dto.pedido.PedidoPatchEnderecoDTO;
 import br.unitins.topicos1.dto.pedido.PedidoPatchStatusDTO;
 import br.unitins.topicos1.dto.pedido.PedidoResponseDTO;
-import jakarta.ws.rs.PathParam;
 
 
 public interface PedidoService {
 
 // Cria um novo pedido atrelado a um dado cliente
-public PedidoResponseDTO insert(PedidoDTO dto, @PathParam("id") Long id);
+public PedidoResponseDTO insert(PedidoDTO dto);
 
 // Apaga todos os pedidos de um determinado cliente
 public void deletePedidoByCliente(Long idCliente, Long idPedido);

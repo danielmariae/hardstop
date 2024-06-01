@@ -1,5 +1,26 @@
-<div class="container">
+ <div class="container">
     <app-header-home></app-header-home>
-    <router-outlet></router-outlet>
+    <!-- <router-outlet></router-outlet> -->
+<div class="container responsive-grid">
+    <mat-card *ngFor="let card of cards()">
+        <img mat-card-image [src]="card.urlImagem" >
+       
+        <mat-card-title class="centered-text"> {{card.titulo}} </mat-card-title>
+        
+        <!-- <mat-card-content class="centered-text"> {{card.modalidade}} </mat-card-content> -->
+    
+        <mat-card-content class="centered-text">Preço: R${{card.preco}} </mat-card-content>
+        <mat-card-content class="centered-text">Quantidade disponível: {{card.quantidade}} </mat-card-content>
+        <!-- <mat-card-actions class="centered-text">
+            <button mat-button color="primary">Ver mais ...</button>
+        </mat-card-actions> -->
+
+        <mat-card-footer>
+            <button mat-flat-button color="accent"
+                (click)="adicionarAoCarrinho(card)"
+                style="width: 100%; padding: 16px;">Adicionar ao carrinho</button>
+        </mat-card-footer>
+    </mat-card>
+</div>
     <app-footer-home></app-footer-home>
 </div>

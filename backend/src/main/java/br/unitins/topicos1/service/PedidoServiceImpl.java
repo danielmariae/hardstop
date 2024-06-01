@@ -75,12 +75,13 @@ public class PedidoServiceImpl implements PedidoService {
 
   @Override
   @Transactional
-  public PedidoResponseDTO insert(PedidoDTO dto, Long id) {
+  public PedidoResponseDTO insert(PedidoDTO dto) {
+   
     // Carrega os dados da empresa.
     Empresa empresa = repositoryEmpresa.findById(Long.valueOf(1));
 
     // Verifica o id do cliente. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
-    if (!verificaCliente1(id)) {
+    if (!verificaCliente1(dto.idCliente())) {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
@@ -90,7 +91,7 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     // Verifica o cliente. Caso o id inexista no banco de dados, o sistema não realiza a operação.
-    Cliente cliente = repository.findById(id);
+    Cliente cliente = repository.findById(dto.idCliente());
     if (!verificaCliente2(cliente)) {
       throw new GeneralErrorException(
         "400",
@@ -110,9 +111,12 @@ public class PedidoServiceImpl implements PedidoService {
     for (ItemDaVendaDTO idv : dto.itemDaVenda()) {
       ItemDaVenda item = new ItemDaVenda();
       item.setPreco(idv.preco());
+     // System.out.println(item.getPreco());
       item.setQuantidadeUnidades(idv.quantidadeUnidades());
+      //System.out.println(item.getQuantidadeUnidades());
 
-      // Verifica o id do prduto. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+      // Verifica o id do produto. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+      System.out.println(idv.idProduto());
       if (!verificaProduto1(idv.idProduto())) {
         throw new GeneralErrorException(
           "400",
@@ -121,7 +125,6 @@ public class PedidoServiceImpl implements PedidoService {
           "id do produto é nulo ou tem valor inferior a 1."
         );
       }
-
       // Verifica o pedido. Caso o id inexista no banco de dados, o sistema não realiza a operação.
       Produto produto = repositoryProduto.findById(idv.idProduto());
       if (!verificaProduto2(produto)) {
@@ -135,9 +138,11 @@ public class PedidoServiceImpl implements PedidoService {
       Integer quant;
       try{
         quant = produto.getQuantidadeUnidades() - idv.quantidadeUnidades();
+        System.out.println(quant);
         if(quant > 0) {
           produto.setQuantidadeUnidades(quant);
           item.setProduto(produto);
+          System.out.println(item.getProduto().getQuantidadeUnidades());
           pedido.getItemDaVenda().add(item);
           valorCompra = valorCompra + idv.quantidadeUnidades() * idv.preco();
         } else if(quant == 0) {
@@ -158,7 +163,6 @@ public class PedidoServiceImpl implements PedidoService {
           "Inexiste esta quantidade de produto em estoque."
         );
         }
-      
       } catch (OptimisticLockException e) {
         throw new GeneralErrorException(
     "500",
@@ -218,7 +222,7 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     // Verifica se o id fornecido para o endereço de entrega do pedido é nulo
-    if (!verificaEndereco1(id)) {
+    if (!verificaEndereco1(dto.idEndereco())) {
       throw new GeneralErrorException(
         "400",
         "Bad Resquest",
