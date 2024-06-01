@@ -44,23 +44,17 @@
           </div>
         </div>
         <div *ngIf="clienteLogado">
-          <div class="navbar-item">
-            <div class="buttons">
-            <!-- <a href='/user/edit' class="button is-light">Painel</a>
-              <a href='/login/user' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a> --> 
-
-              <div class="balao-container" (mouseover)="mostrarBalao = true" (mouseleave)="mostrarBalao = false">
-                <span>{{clienteLogado.nome || 'Cliente Desconhecido'}}</span>
-                <div class="balao-conteudo" *ngIf="mostrarBalao">
-                  <ul>
-                    <li><a href='/user/edit'>Editar Cadastro</a></li>
-                    <li><a href='/user/senha'>Editar Senha</a></li>
-                    <li><a href="#">Favoritos</a></li>
-                    <li><a href="#">Meus Pedidos</a></li>
-                    <li><a href='/login/user' (click)="deslogarUsuario()">Sair</a></li>
-                  </ul>
-                </div>
-              </div>
+          <div class="navbar-item is-hoverable">
+            <div class="has-dropdown">
+            <a class="navbar-link">{{clienteLogado.nome || 'Cliente Desconhecido'}}</a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item"></a>
+              <a class="navbar-item" href='/user/edit'>Editar Cadastro</a>
+              <a class="navbar-item" href='/user/senha'>Editar Senha</a>
+              <a class="navbar-item" href="#">Favoritos</a>
+              <a class="navbar-item" href="#">Meus Pedidos</a>
+              <a class="navbar-item" href='/login/user' (click)="deslogarUsuario()">Sair</a>
+            </div>
             </div>
           </div>
         </div>

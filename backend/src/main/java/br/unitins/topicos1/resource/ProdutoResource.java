@@ -129,7 +129,7 @@ public class ProdutoResource {
     }
 
     @GET
-    @RolesAllowed({"Func", "Admin"})
+    // @RolesAllowed({"Func", "Admin"})
     public Response findTodos() {
         return Response.ok(service.findTodos()).build();
     }
