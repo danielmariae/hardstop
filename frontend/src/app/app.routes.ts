@@ -35,6 +35,7 @@ import { CreateUserAccountComponent } from './components/session-token/create-us
 import { CarrinhoComponent } from './components/carrinho/carrinho.component';
 import { PagamentoComponent } from './components/pagamento/pagamento.component';
 import { PedidoComponent } from './components/pedido/pedido.component';
+import { FavoritosComponent } from './components/favoritos/favoritos.component';
 
 
 export const routes: Routes = [
@@ -42,6 +43,8 @@ export const routes: Routes = [
     {path: 'carrinho', component: CarrinhoComponent, title: 'Visualizar carrinho'},
     {path: 'pagamento', component: PagamentoComponent, title: 'Realizar Pagamento'},
     {path: 'pedidos', component: PedidoComponent, title: 'Visualizar pedidos'},
+    {path: 'favoritos', component: FavoritosComponent, title: 'Visualizar favoritos'},
+
     {path:'', pathMatch: 'full', redirectTo:'home'},
     {
         path: 'user',

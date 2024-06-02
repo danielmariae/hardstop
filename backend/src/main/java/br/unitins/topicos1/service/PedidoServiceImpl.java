@@ -819,6 +819,7 @@ public class PedidoServiceImpl implements PedidoService {
   @Override
   @Transactional
   public void deleteDesejos(Long idProduto, Long idCliente) {
+ 
     Cliente cliente = repository.findById(idCliente);
     if (!verificaCliente2(cliente)) {
       throw new GeneralErrorException(
@@ -849,13 +850,15 @@ public class PedidoServiceImpl implements PedidoService {
         );
       }
 
-      
       Boolean chave = true;
       for(Produto prod : cliente.getListaProduto()) {
-        if(prod.getId() == idProduto) {
+        System.out.println(prod.getId() + " " + idProduto);
+        if(Long.valueOf(prod.getId()).equals(idProduto)) {
           chave = false;
+          break;
         }
       }
+      System.out.println(chave);
 
       if(chave) {
         throw new GeneralErrorException(
@@ -866,6 +869,7 @@ public class PedidoServiceImpl implements PedidoService {
         );
       }
 
+      
       cliente.getListaProduto().remove(produto);
       
   }

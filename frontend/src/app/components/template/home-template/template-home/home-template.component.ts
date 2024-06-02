@@ -11,6 +11,7 @@ import { SessionTokenService } from '../../../../services/session-token.service'
 import { CarrinhoService } from '../../../../services/carrinho.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConsultaService } from '../../../../services/consulta.service';
+import { ClienteService } from '../../../../services/cliente.service';
 
 
 
@@ -36,7 +37,8 @@ export class HomeTemplateComponent implements OnInit{
 
     constructor(private consultaService: ConsultaService, 
         private carrinhoService: CarrinhoService,
-        private snackBar: MatSnackBar) {}
+        private snackBar: MatSnackBar,
+        private clienteService: ClienteService) {}
 
 ngOnInit(): void {
 this.carregarConsultas();
@@ -76,6 +78,19 @@ carregarConsultas() {
       urlImagem: card.urlImagem
     })
 
+  }
+
+  adicionarAfavoritos(card: Card) {
+    this.clienteService.insertListaDesejos(card.idConsulta).subscribe({
+      next: (response) => {
+      console.log('Resultado:', response);
+      },
+      error: (error) => {
+        // Este callback é executado quando ocorre um erro durante a emissão do valor
+        console.error('Erro ao inserir produto na Lista de Favoritos:', error);
+        //window.alert(error)
+      }
+  });
   }
 
   showSnackbarTopPosition(content:any, action:any) {

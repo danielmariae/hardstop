@@ -1,0 +1,17 @@
+<app-header-home></app-header-home>
+<ng-container *ngIf="produtoItens.length > 0">
+  <div *ngFor="let item of produtoItens" class="favoritos-itens">
+    <td>
+      <img
+        mat-card-image
+        [src]="item.imagemPrincipal"
+        style="max-width: 50px; max-height: 50px; object-fit: cover"
+      />
+    </td>
+
+    <td>{{ item.nome }}</td>
+    <td>Preço: {{ item.valorVenda }}</td>
+    <td>Quantidade: {{ item.quantidadeUnidades }}</td>
+    <td><button mat-raised-button color="warn" (click)="removerItem(item.id)">Remover dos Favoritos</button></td>
+  </div>
+</ng-container>
