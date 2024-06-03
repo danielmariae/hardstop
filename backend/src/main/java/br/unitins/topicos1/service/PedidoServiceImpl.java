@@ -2,6 +2,7 @@ package br.unitins.topicos1.service;
 
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.cliente.DesejoResponseDTO;
+import br.unitins.topicos1.dto.endereco.EnderecoDTO;
 import br.unitins.topicos1.dto.endereco.EnderecoResponseDTO;
 import br.unitins.topicos1.dto.pedido.PedidoDTO;
 import br.unitins.topicos1.dto.pedido.PedidoPatchEnderecoDTO;
@@ -142,7 +143,7 @@ public class PedidoServiceImpl implements PedidoService {
         if(quant > 0) {
           produto.setQuantidadeUnidades(quant);
           item.setProduto(produto);
-          System.out.println(item.getProduto().getQuantidadeUnidades());
+         //System.out.println("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT ");
           pedido.getItemDaVenda().add(item);
           valorCompra = valorCompra + idv.quantidadeUnidades() * idv.preco();
         } else if(quant == 0) {
@@ -230,7 +231,7 @@ public class PedidoServiceImpl implements PedidoService {
         "id do endereço é nulo ou tem valor inferior a 1."
       );
     }
-
+    //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     Endereco endereco = repositoryEndereco.findById(dto.idEndereco());
 
     // Verifica se o id fornecido aponta para um endereço que existe no banco de dados.
@@ -242,18 +243,19 @@ public class PedidoServiceImpl implements PedidoService {
         "id do endereço não existe no banco de dados."
       );
     }
-
+//System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     // Retorna true se o dto.idEndereco() é de um endereço que pertença ao cliente.
-    if (verificaEnderecoCliente(cliente, endereco)) {
-      pedido.setEndereco(endereco);
-    } else {
-      throw new GeneralErrorException(
-        "400",
-        "Bad Request",
-        "PedidoServiceImpl(insert)",
-        "O id passado como índice de endereço não pertence ao cliente!"
-      );
-    }
+   // if (verificaEnderecoCliente(cliente, endereco)) {
+    pedido.setEndereco(endereco);
+  //System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEee");
+    // } else {
+    //   throw new GeneralErrorException(
+    //     "400",
+    //     "Bad Request",
+    //     "PedidoServiceImpl(insert)",
+    //     "O id passado como índice de endereço não pertence ao cliente!"
+    //   );
+    // }
 
     if (dto.formaDePagamento().modalidade() == 0) {
       CartaoDeCredito pagamento = new CartaoDeCredito();
@@ -634,6 +636,30 @@ public class PedidoServiceImpl implements PedidoService {
 
   @Override
   @Transactional
+  public EnderecoResponseDTO insertEndereco(EnderecoDTO dto) {
+      try {
+        Endereco listaEndereco = new Endereco();
+        listaEndereco.setNome(dto.nome());
+        listaEndereco.setLogradouro(dto.logradouro());
+        listaEndereco.setNumeroLote(dto.numeroLote());
+        listaEndereco.setBairro(dto.bairro());
+        listaEndereco.setComplemento(dto.complemento());
+        listaEndereco.setCep(dto.cep());
+        listaEndereco.setLocalidade(dto.localidade());
+        listaEndereco.setUF(dto.uf());
+        listaEndereco.setPais(dto.pais());
+        repositoryEndereco.persist(listaEndereco);
+        return EnderecoResponseDTO.valueOf(listaEndereco);
+      } catch (Exception e) {
+        throw new GeneralErrorException("500", "Internal Server Error", "PedidoServiceImpl(insertEndereco)", "Não consegui alocar memória para o novo Endereço. Tente novamente mais tarde! " +  e.getCause());
+      }
+      
+    }
+
+
+
+  @Override
+  @Transactional
   public EnderecoResponseDTO updateEndereco(
     PedidoPatchEnderecoDTO dto,
     Long id
@@ -691,14 +717,14 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     // Verifica se o endereço pertence ao cliente. Caso o endereço não pertença ao cliente, o sistema não realiza a operação.
-    if (!verificaEndereco3(cliente, dto.idEndereco())) {
-      throw new GeneralErrorException(
-        "400",
-        "Bad Resquest",
-        "PedidoServiceImpl(updateEndereco)",
-        "O novo endereço não pertence a este cliente."
-      );
-    }
+    // if (!verificaEndereco3(cliente, dto.idEndereco())) {
+    //   throw new GeneralErrorException(
+    //     "400",
+    //     "Bad Resquest",
+    //     "PedidoServiceImpl(updateEndereco)",
+    //     "O novo endereço não pertence a este cliente."
+    //   );
+    // }
 
     // Verifica se o endereço pode ser alterado de acordo com o status do pedido.
     if (!podeTrocarEndereco(pedido)) {
@@ -793,6 +819,7 @@ public class PedidoServiceImpl implements PedidoService {
   @Override
   @Transactional
   public void deleteDesejos(Long idProduto, Long idCliente) {
+ 
     Cliente cliente = repository.findById(idCliente);
     if (!verificaCliente2(cliente)) {
       throw new GeneralErrorException(
@@ -823,13 +850,15 @@ public class PedidoServiceImpl implements PedidoService {
         );
       }
 
-      
       Boolean chave = true;
       for(Produto prod : cliente.getListaProduto()) {
-        if(prod.getId() == idProduto) {
+        System.out.println(prod.getId() + " " + idProduto);
+        if(Long.valueOf(prod.getId()).equals(idProduto)) {
           chave = false;
+          break;
         }
       }
+      System.out.println(chave);
 
       if(chave) {
         throw new GeneralErrorException(
@@ -840,19 +869,20 @@ public class PedidoServiceImpl implements PedidoService {
         );
       }
 
+      
       cliente.getListaProduto().remove(produto);
       
   }
 
-  private Boolean verificaEnderecoCliente(Cliente cliente, Endereco endereco) {
-    for (Endereco end : cliente.getListaEndereco()) {
-      // O pedido repassado ao método pertence ao Cliente repassado ao método.
-      if (end.getId() == endereco.getId()) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // private Boolean verificaEnderecoCliente(Cliente cliente, Endereco endereco) {
+  //   for (Endereco end : cliente.getListaEndereco()) {
+  //     // O pedido repassado ao método pertence ao Cliente repassado ao método.
+  //     if (end.getId() == endereco.getId()) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   private Boolean verificaProduto1(Long id) {
     if (id == null) {
@@ -914,14 +944,14 @@ public class PedidoServiceImpl implements PedidoService {
     }
   }
 
-  private Boolean verificaEndereco3(Cliente cliente, Long idEndereco) {
-    for (Endereco end : cliente.getListaEndereco()) {
-      if (end.getId() == idEndereco) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // private Boolean verificaEndereco3(Cliente cliente, Long idEndereco) {
+  //   for (Endereco end : cliente.getListaEndereco()) {
+  //     if (end.getId() == idEndereco) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   private Boolean verificaPedido1(Long id) {
     if (id == null) {

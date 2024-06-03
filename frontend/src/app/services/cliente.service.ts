@@ -5,6 +5,7 @@ import { Cliente } from '../models/cliente.model';
 import { SessionTokenService } from './session-token.service';
 import { Perfil } from '../models/perfil.model';
 import { SenhaUpdate } from '../models/senhaUpdate.model';
+import { Produto } from '../models/produto.model';
 
 
 
@@ -343,6 +344,75 @@ export class ClienteService {
   
     return throwError(() => errorDetails); // Retorna os detalhes do erro como uma Observable
   }
+
+  findListaDesejos(): Observable<Produto[]> {
+
+    const url = 'http://localhost:8080/cliente/search/listaDesejos/';
+    const headers = this.sessionTokenService.getSessionHeader();
+    if(headers) {
+      console.log(headers);
+    return this.httpClient.get<Produto[]>(url, { headers });
+    
+    } else {
+      return this.httpClient.get<Produto[]>(url);
+      
+    }
+  }
+
+    deleteListaDesejos(id: number): Observable<any> {
+
+      const url = `http://localhost:8080/cliente/delete/desejos/${id}`;
+      const headers = this.sessionTokenService.getSessionHeader();
   
-}
+      if (headers) {
+        // Faz a requisição HTTP com o token de autenticação no cabeçalho
+        return this.httpClient.delete<any>(url, { headers })
+          .pipe(
+            catchError(this.handleError)
+          );
+      } else {
+        // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
+        return this.httpClient.delete<any>(url)
+          .pipe(
+            catchError(this.handleError)
+          );
+      }
+    }
+
+    insertListaDesejos(idProduto: number): Observable<Produto> {
+
+      const url = 'http://localhost:8080/cliente/insert/desejos/';
+      const headers = this.sessionTokenService.getSessionHeader();
+      if(headers) {
+        console.log(headers);
+      return this.httpClient.post<Produto>(url, idProduto, { headers });
+      
+      } else {
+        return this.httpClient.post<Produto>(url, idProduto);
+        
+      }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+  
+
 

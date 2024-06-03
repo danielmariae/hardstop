@@ -268,8 +268,8 @@ FileService fileService;
 
   @DELETE
   @RolesAllowed({"User"})
-  @Path("/delete/desejos/")
-  public Response deleteDesejos(Long idProduto) {
+  @Path("/delete/desejos/{idProduto}")
+  public Response deleteDesejos(@PathParam("idProduto") Long idProduto) {
 
     // obtendo o login pelo token jwt
     String login = jwt.getSubject();

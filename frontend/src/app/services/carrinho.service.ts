@@ -18,12 +18,12 @@ export class CarrinhoService {
 
   adicionar(consulta: ItemCarrinho): void {
     const carrinhoAtual = this.carrinhoSubject.value;
-    console.log(this.carrinhoSubject.value);
+    //console.log(this.carrinhoSubject.value);
     const itemExistente = carrinhoAtual.find(item => item.id === consulta.id);
-    console.log(consulta);
+   // console.log(consulta);
     if (itemExistente) {
       itemExistente.quantidade += consulta.quantidade || 1;
-      console.log(itemExistente);
+      //console.log(itemExistente);
     } else {
       carrinhoAtual.push({ ...consulta });
     }

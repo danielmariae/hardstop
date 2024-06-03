@@ -6,6 +6,7 @@ import { ClienteService } from './cliente.service';
 import { FuncionarioService } from './funcionario.service';
 import { Cliente } from '../models/cliente.model';
 import { LocalStorageService } from './local-storage.service';
+import { Funcionario } from '../models/funcionario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,9 @@ export class SessionTokenService {
   private loginAdmSubject = new Subject<void>();
   private loginClienteSubject = new Subject<void>();
   private clienteLogadoKey = 'clienteLogado';
+  private funcionarioLogadoKey = 'funcionarioLogado';
   private clienteLogadoSubject = new BehaviorSubject<Cliente | null>(null);
+  private funcionarioLogadoSubject = new BehaviorSubject<Funcionario | null>(null);
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasValidSessionToken());
 
   loginAdmSuccess$ = this.loginAdmSubject.asObservable();
@@ -72,14 +75,42 @@ export class SessionTokenService {
   // Exemplo de método para fazer uma solicitação HTTP para a API para autenticar o Funcionario
     authenticateUserF(username: string, password: string): Observable<any> {
      const loginUrl = `${this.baseUrl}/loginF`;
-     return this.httpClient.post(loginUrl, { login: username, senha: password }).pipe(
-      tap(() => {
-        this.notifyLoginAdmSucess();
-      })
-     );
+     const params = {
+      login: username, 
+      senha: password
     }
 
+    return this.httpClient.post(loginUrl, params, {observe: 'response'}).pipe(
+      tap((res: any) => {
+       // console.log(res);
+        const authToken = res.headers.get('authorization') ?? '';
+        if (authToken) {
+          // console.log(authToken);
+          this.saveSessionToken(authToken);
+          const funcionarioLogado = res.body;
+         // console.log(funcionarioLogado);
+          if (funcionarioLogado) {
+            this.setFuncionarioLogado(funcionarioLogado);
+            this.funcionarioLogadoSubject.next(funcionarioLogado);
+          }
+        }
+        this.notifyLoginAdmSucess();
+      })
+    );
+    }
 
+  setFuncionarioLogado(funcionario: Funcionario): void {
+      this.localStorageService.setItem(this.funcionarioLogadoKey, funcionario);
+  }
+
+  getFuncionarioLogado() {
+    return this.funcionarioLogadoSubject.asObservable();
+  }
+
+  removeFuncionarioLogado(): void {
+    this.localStorageService.removeItem(this.funcionarioLogadoKey);
+    this.funcionarioLogadoSubject.next(null);
+  }
 
     // Exemplo de método para fazer uma solicitação HTTP para a API para autenticar o Cliente
     authenticateUserC(username: string, password: string): Observable<any> {
@@ -89,21 +120,15 @@ export class SessionTokenService {
         senha: password
       }
 
-      // return this.httpClient.post(loginUrl, { login: username, senha: password }).pipe(
-      //   tap(() => {
-      //     this.notifyLoginClienteSucess();
-      //   })
-      // );
-
       return this.httpClient.post(loginUrl, params, {observe: 'response'}).pipe(
         tap((res: any) => {
-          console.log(res);
+         // console.log(res);
           const authToken = res.headers.get('authorization') ?? '';
           if (authToken) {
-            console.log(authToken);
+            // console.log(authToken);
             this.saveSessionToken(authToken);
             const usuarioLogado = res.body;
-            console.log(usuarioLogado);
+            // console.log(usuarioLogado);
             if (usuarioLogado) {
               this.setClienteLogado(usuarioLogado);
               this.clienteLogadoSubject.next(usuarioLogado);
@@ -114,7 +139,7 @@ export class SessionTokenService {
       );
      }
 
-     setClienteLogado(cliente: Cliente): void {
+    setClienteLogado(cliente: Cliente): void {
         this.localStorageService.setItem(this.clienteLogadoKey, cliente);
     }
 

@@ -14,6 +14,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
+import { ListaEndereco } from '../../models/endereco.model';
+import { PedidoService } from '../../services/pedido.service';
 
 @Component({
   selector: 'app-carrinho',
@@ -41,7 +43,8 @@ export class CarrinhoComponent implements OnInit {
               private sessionTokenService: SessionTokenService,
               private viaCep: NgxViacepService,
               private localStorageService: LocalStorageService,
-              private navigationService: NavigationService
+              private navigationService: NavigationService,
+              private pedidoService: PedidoService
   ) {
    
     this.selectedAddress = null;
@@ -184,24 +187,35 @@ export class CarrinhoComponent implements OnInit {
 
   salvarEndereco(): void {
     if (this.selectedAddress !== null) { // Significa que o usuário clicou no radiobutton
-      console.log(this.selectedAddress);
+      //console.log(this.selectedAddress);
       const selectedEndereco = this.enderecos.controls[this.selectedAddress].value;
-      console.log("Selected Endereço:", selectedEndereco);
+      //console.log("Selected Endereço:", selectedEndereco);
       this.addressesAdded = true; // bloqueia o botão Adicionar endereço
       this.enderecoSalvo = true; // desabilita o botão Salvar Endereço
       this.localStorageService.setItem('enderecoEscolhido', selectedEndereco);
     } else if(this.addressesAdded == true) { // significa que o usuário clicou no botão Adicionar endereço
       const selectedEndereco = this.enderecoFormGroup.value;
-      console.log("Selected Endereço:", selectedEndereco);
+      //console.log("Selected Endereço:", selectedEndereco);
       this.enderecoSalvo = true; // desabilita o botão Salvar Endereço
     //this.enderecos.push(this.formBuilder.group(this.enderecoFormGroup.value));
     //this.showNewAddressForm = false;
     //this.addressesAdded = true;
-    this.localStorageService.setItem('enderecoEscolhido', selectedEndereco);
+      this.pedidoService.insertEndereco(selectedEndereco).subscribe({
+        next: (response) => {
+        this.localStorageService.setItem('enderecoEscolhido', response);
+        //console.log('Endereco:', response);
+        },
+        error: (error) => {
+          // Este callback é executado quando ocorre um erro durante a emissão do valor
+          console.error('Erro ao inserir novo endereço para este pedido:', error);
+          //window.alert(error)
+        }
+    });
     } else { // O usuário clicou no botão Salvar Endereço sem escolher nenhuma opção de endereço
         alert("Escolha uma opção de Endereço primeiro");
     }
   }
+
 
   cancelarEndereco(): void {
     this.showNewAddressForm = false;
