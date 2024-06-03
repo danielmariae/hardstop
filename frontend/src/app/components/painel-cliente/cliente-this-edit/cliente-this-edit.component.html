@@ -1,16 +1,4 @@
-<div class="container">
     <div class="columns">
-        <div class="column is-one-fifth">
-            <div class="box">
-                <p class="title is-4">Painel do cliente</p>
-                <aside class="menu">
-                    <ul class="menu-list">
-                        <li><a class="is-active">Editar dados pessoais</a></li>
-                        <li><a (click)="atualizarSenha()">Atualizar senha</a></li>
-                    </ul>
-                </aside>
-            </div>
-        </div>
         <div class="column">
             <form [formGroup]="clienteForm" (ngSubmit)="salvarAlteracoes()">
             <div class="box">
@@ -206,4 +194,3 @@
           </form>
          </div>
     </div>
-</div>

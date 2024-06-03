@@ -6,8 +6,13 @@ const CURRENCY = "BRL";
  * @param {number} value - The numeric value to be formatted.
  * @returns {string} The formatted currency string.
 */
-function getFormattedCurrency(value: number):string {
-  return value.toLocaleString(
+function getFormattedCurrency(value: number | null | undefined):string | null | undefined{
+  if(null)
+    return null;
+  if(undefined)
+    return undefined;
+  else
+  return value?.toLocaleString(
     LANG,
     {
       style: "currency",

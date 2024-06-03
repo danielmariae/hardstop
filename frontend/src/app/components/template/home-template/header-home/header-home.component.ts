@@ -25,7 +25,6 @@ export class HeaderHomeComponent {
   private subscription = new Subscription();
   mostrarBalao: boolean = false;
   
-
   carrinhoSize: number = 0;
   
   buscadorForm: FormControl;

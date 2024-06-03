@@ -3,7 +3,7 @@ package br.unitins.topicos1.dto.pedido.itemVenda;
 import br.unitins.topicos1.model.pedido.ItemDaVenda;
 
 public record ItemDaVendaResponseDTO(
-    Long id,
+    Long idProduto,
     Double preco,
     Integer quantidadeUnidades,
     Double quantidadeNaoConvencional,

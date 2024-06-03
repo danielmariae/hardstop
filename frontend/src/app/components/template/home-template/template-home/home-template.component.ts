@@ -7,7 +7,6 @@ import { FooterHomeComponent } from "../footer-home/footer-home.component";
 import { Consulta } from '../../../../models/consulta.model';
 import { MatCard, MatCardActions, MatCardContent, MatCardFooter, MatCardTitle } from '@angular/material/card';
 import { MatButton } from '@angular/material/button';
-import { SessionTokenService } from '../../../../services/session-token.service';
 import { CarrinhoService } from '../../../../services/carrinho.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConsultaService } from '../../../../services/consulta.service';
@@ -15,12 +14,13 @@ import { ClienteService } from '../../../../services/cliente.service';
 import { ProdutoService } from '../../../../services/produto.service';
 import { PageEvent } from '@angular/material/paginator';
 import { Produto } from '../../../../models/produto.model';
+import { getFormattedCurrency } from '../../../../utils/formatValues';
 
 
 
 // tipo personalizado de dados, como classes e interfaces, porém mais simples.
 type Card = {
-    idConsulta: number;
+    idProduto: number;
     titulo: string;
     preco: number;
     quantidade: number;
@@ -30,7 +30,8 @@ type Card = {
 @Component({
     selector: 'app-home-template',
     standalone: true,
-    imports: [MatCard, MatCardActions, MatCardContent, MatCardTitle, MatCardFooter, NgFor, MatButton, RouterOutlet, HeaderHomeComponent, FooterHomeComponent, CommonModule],
+    imports: [MatCard, MatCardActions, MatCardContent, MatCardTitle, MatCardFooter, NgFor, 
+      MatButton, RouterOutlet, HeaderHomeComponent, FooterHomeComponent, CommonModule],
     templateUrl: './home-template.component.html',
     styleUrl: './home-template.component.css',
 })
@@ -52,9 +53,9 @@ export class HomeTemplateComponent implements OnInit{
       ) {}
 
 ngOnInit(): void {
-  this.pageSize = 2; 
+  this.pageSize = 4; 
   this.page=0;
-  this.carregarProdutos(this.page, this.pageSize);
+  this.atualizarDadosDaPagina();
   console.log(this.produtos);
 }
 
@@ -105,35 +106,47 @@ carregarConsultas() {
     });
   }
 
-  carregarCards() {
+  // carregarCards() {
+  //   const cards: Card[] = [];
+  //   this.consultas.forEach(consulta => {
+  //     cards.push({
+  //       idConsulta: consulta.id,
+  //       titulo: consulta.nome,
+  //       preco: consulta.valorVenda,
+  //       quantidade: consulta.quantidadeUnidades,
+  //       urlImagem: this.consultaService.getUrlImagem(consulta.imagemPrincipal)
+  //     });
+  //   });
+  //   this.cards.set(cards);
+  // }
+
+  carregarCards(){
     const cards: Card[] = [];
-    this.consultas.forEach(consulta => {
+    this.produtos.forEach(produto => {
       cards.push({
-        idConsulta: consulta.id,
-        titulo: consulta.nome,
-        preco: consulta.valorVenda,
-        quantidade: consulta.quantidadeUnidades,
-        urlImagem: this.consultaService.getUrlImagem(consulta.imagemPrincipal)
-      });
+        idProduto: produto.id,
+        titulo: produto.nome,
+        preco: produto.valorVenda,
+        quantidade: produto.quantidadeUnidades,
+        urlImagem: this.produtoService.getUrlImagem(produto.imagemPrincipal)
+});
     });
     this.cards.set(cards);
   }
-
   adicionarAoCarrinho(card: Card) {
     this.showSnackbarTopPosition('Produto adicionado ao carrinho!', 'Fechar');
     this.carrinhoService.adicionar({
-      id: card.idConsulta,
+      id: card.idProduto,
       nome: card.titulo,
       preco: card.preco,
       quantidade: 1,
       quantidadeLimite: card.quantidade,
       urlImagem: card.urlImagem
     })
-
   }
 
   adicionarAfavoritos(card: Card) {
-    this.clienteService.insertListaDesejos(card.idConsulta).subscribe({
+    this.clienteService.insertListaDesejos(card.idProduto).subscribe({
       next: (response) => {
       console.log('Resultado:', response);
       },
@@ -168,10 +181,18 @@ onChange(event:any): void{
   // Método para paginar os resultados
   atualizarDadosDaPagina(): void {
     this.carregarProdutos(this.page, this.pageSize);
+    this.produtoService.count().subscribe(data => {
+      this.totalRecords = data;
+      this.totalPages = Math.round(this.totalRecords/this.pageSize);
+      if(this.totalPages < 1){
+        this.totalPages = 1;
+      }
+    });
 }
 
-
-
+formatValues(valor: number): String {
+  return getFormattedCurrency(valor);
+}
 
 }
 

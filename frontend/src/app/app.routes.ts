@@ -42,9 +42,6 @@ export const routes: Routes = [
 
     {path: 'carrinho', component: CarrinhoComponent, title: 'Visualizar carrinho'},
     {path: 'pagamento', component: PagamentoComponent, title: 'Realizar Pagamento'},
-    {path: 'pedidos', component: PedidoComponent, title: 'Visualizar pedidos'},
-    {path: 'favoritos', component: FavoritosComponent, title: 'Visualizar favoritos'},
-
     {path:'', pathMatch: 'full', redirectTo:'home'},
     {
         path: 'user',
@@ -54,12 +51,16 @@ export const routes: Routes = [
             {path: '', pathMatch: 'full', redirectTo: 'edit'},
             {path: 'edit', component: ClienteThisEditComponent, title: 'Edite seu perfil'},
             {path: 'senha', component: ClienteUpdateSenhaComponent, title: 'Atualizar senha'},
+            {path: 'pedidos', component: PedidoComponent, title: 'Visualizar pedidos'},
+            {path: 'favoritos', component: FavoritosComponent, title: 'Visualizar favoritos'},        
         ],
     },
     { 
         path: 'home',
         component: HomeTemplateComponent,
         children: [
+            {path: '', pathMatch: 'full', redirectTo: 'edit'},
+            {path: '', component: HomeComponent},
             {path: 'buscador/:nome', component: ProdutoHomeListComponent}
         ]
     },
@@ -137,7 +138,7 @@ export const routes: Routes = [
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
-    declarations: [HomeComponent], // Declare o HomeComponent aqui
+    declarations: [], // Declare o HomeComponent aqui
     exports: [RouterModule]
   })
   export class AppRoutingModule { }

@@ -77,6 +77,19 @@ export class ProdutoService {
         });
     }
 
+    getUrlImagem(nomeImagem: string): string {
+        return `${this.baseUrl}/download/imagem/${nomeImagem}`;
+    }
+    
+    uploadImagem(id: number, nomeImagem: string, imagem: File): Observable<any> {
+        const formData: FormData = new FormData();
+        formData.append('id', id.toString());
+        formData.append('nomeImagem', imagem.name);
+        formData.append('imagem', imagem, imagem.name);
+        
+        return this.httpClient.patch<Produto>(`${this.baseUrl}/image/upload`, formData);
+    }
+
     // Método para trazer todas as instâncias de Produto do banco de dados do servidor
     findTodos(): Observable<Produto[]> {
 

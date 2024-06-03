@@ -122,5 +122,12 @@ onChange(event:any): void{
   // Método para paginar os resultados
   atualizarDadosDaPagina(): void {
     this.carregarProdutos(this.page, this.pageSize);
+    this.produtoService.count().subscribe(data => {
+      this.totalRecords = data;
+      this.totalPages = Math.round(this.totalRecords/this.pageSize);
+      if(this.totalPages < 1){
+        this.totalPages = 1;
+      }
+    });
 }
 }

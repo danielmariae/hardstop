@@ -4,6 +4,7 @@ import { ClienteService } from "../../services/cliente.service";
 import { CommonModule } from "@angular/common";
 import { Produto } from "../../models/produto.model";
 import { ConsultaService } from "../../services/consulta.service";
+import { getFormattedCurrency } from "../../utils/formatValues";
 
 @Component({
     selector: 'app-favoritos',
@@ -41,9 +42,11 @@ import { ConsultaService } from "../../services/consulta.service";
           //window.alert(error)
         }
     });
-  
     }
 
+    formatValues(valor: number): String{
+      return getFormattedCurrency(valor);
+    }
 
 
   }

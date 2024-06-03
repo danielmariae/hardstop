@@ -16,6 +16,7 @@ import { NavigationService } from '../../services/navigation.service';
 import { ListaEndereco } from '../../models/endereco.model';
 import { PedidoService } from '../../services/pedido.service';
 import { CepService } from '../../services/cep.service';
+import { getFormattedCurrency } from '../../utils/formatValues';
 
 @Component({
   selector: 'app-carrinho',
@@ -340,5 +341,10 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
     }
     return null; // Casos onde nenhum endereço é selecionado
   }
+
+  formatValues(valor: number): String {
+    return getFormattedCurrency(valor);
+    }
+    
 
 }

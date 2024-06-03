@@ -3,25 +3,118 @@ import { HeaderHomeComponent } from "../template/home-template/header-home/heade
 import { PedidoService } from "../../services/pedido.service";
 import { PedidoRecebe } from "../../models/pedidoRecebe.modelo";
 import { CommonModule } from "@angular/common";
+import { getFormattedCurrency } from "../../utils/formatValues";
+import { Produto } from "../../models/produto.model";
+import { ProdutoService } from "../../services/produto.service";
+import { Observable, catchError, forkJoin, map, of } from "rxjs";
 
 @Component({
     selector: 'app-pedido',
     standalone: true,
     imports: [HeaderHomeComponent, CommonModule],
     templateUrl: './pedido.component.html',
-    styleUrl: './pedido.component.css'
-  })
-  export class PedidoComponent implements OnInit {
+    styleUrls: ['./pedido.component.css'] // Correção de 'styleUrl' para 'styleUrls'
+})
+export class PedidoComponent implements OnInit {
     pedidoItens: PedidoRecebe[] = [];
+    produtosPorPedido: { [pedidoId: number]: Produto[] } = {};
 
-    constructor(private pedidoService: PedidoService) {}
-
+    constructor(
+      private pedidoService: PedidoService,
+      public produtoService: ProdutoService
+    ) {}
 
     ngOnInit(): void {
-      this.pedidoService.findAll().subscribe( (itens: PedidoRecebe[]) => {
-        this.pedidoItens = itens;
-        console.log(this.pedidoItens);
+      this.carregarPedidos();
+      this.carregarProdutosParaPedidos();
+    }
+
+    
+    getUltimoStatus(pedido: PedidoRecebe): string | null {
+      return pedido.statusDoPedido.at(pedido.statusDoPedido.length - 1)?.status || null;
+    }
+
+    getDataHoraPedido(pedido: PedidoRecebe): string | null {
+      return pedido.statusDoPedido.at(0)?.dataHora || null;
+    }
+
+    getTotalPedido(pedido: PedidoRecebe): number {
+      return pedido.itemDaVenda.reduce((total, itemPedido) => {
+        if (itemPedido.preco && itemPedido.quantidadeUnidades) {
+          return total + (itemPedido.preco * itemPedido.quantidadeUnidades);
+        }
+        return total;
+      }, 0);
+    }
+
+    carregarPedidos(): void {
+      this.pedidoService.findAll().subscribe({
+          next: (response) => {
+              console.log(response);
+              this.pedidoItens = response;
+              this.carregarProdutosParaPedidos();
+          },
+          error: (error) => {
+              // Este callback é executado quando ocorre um erro durante a emissão do valor
+              console.error('Erro:', error);
+              window.alert(error);
+          } 
+      })
+    }
+
+    carregarProdutosParaPedidos(): void {
+      // Mapeia cada ID de pedido aos seus produtos correspondentes
+      this.pedidoItens.forEach(pedido => {
+        pedido.itemDaVenda.forEach(itemPedido => {
+          if (itemPedido.idProduto) {
+            this.produtoService.findById(itemPedido.idProduto).subscribe(
+              produto => {
+                if (produto && pedido.id) {
+                  // Adiciona o produto ao array de produtos do pedido
+                  this.produtosPorPedido[pedido.id] = this.produtosPorPedido[pedido.id] || [];
+                  this.produtosPorPedido[pedido.id].push(produto);
+                  console.log(this.produtosPorPedido[pedido.id]);
+                }
+              },
+              error => {
+                console.error(`Erro ao buscar produto com id ${itemPedido.idProduto}:`, error);
+              }
+            );
+          }
+        });
       });
     }
+            
+    // getProdutosOfPedido(pedido: PedidoRecebe): Observable<Produto[]> {
+    //   const observables = pedido.itemDaVenda
+    //       .filter(itemPedido => itemPedido.idProduto !== null && itemPedido.idProduto !== undefined)
+    //       .map(itemPedido => 
+    //           this.produtoService.findById(itemPedido.idProduto as number)
+    //             .pipe(
+    //               catchError(error => {
+    //                 console.error(`Erro ao buscar produto com id ${itemPedido.idProduto}:`, error);
+    //                 return of(null); // Retorna null em caso de erro
+    //               })
+    //             )
+    //       );
+
+    //     console.log(observables);
+
+    //   return forkJoin(observables).pipe(
+    //     map(produtos => produtos.filter(produto => produto !== null)) // Filtra produtos válidos
+    //   );
+    // }
+
+    getProdutoOfPedido(id: number): Observable<Produto> {
+      return this.produtoService.findById(id);
+    }
+
+    formatValues(valor: number | null | undefined): string | null | undefined {
+      if(null)
+        return null;
+      if(undefined)
+        return undefined;
+      else
+        return getFormattedCurrency(valor);
+    }      
   }
-  

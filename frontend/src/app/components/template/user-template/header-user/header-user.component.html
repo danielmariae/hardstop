@@ -24,16 +24,9 @@
         </div>
       </div>
       <div class="navbar-end">
-        <a class="navbar-item">Favoritos</a>
-        <a class="navbar-item">Carrinho</a>
-        <div *ngIf="usuarioLogado">
-          <div class="navbar-item">
-            <div class="buttons">
-              <a href='/cliente/edit' class="button is-light">Painel</a>
-              <a href='/login/user' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
-            </div>
-          </div>
+            <a *ngIf="usuarioLogado" class="navbar-item">
+              {{clienteLogado?.nome || 'Cliente Desconhecido'}}
+            </a>
         </div>
       </div>
-    </div>
   </nav>

@@ -1,17 +1,34 @@
-<app-header-home></app-header-home>
-<ng-container *ngIf="produtoItens.length > 0">
-  <div *ngFor="let item of produtoItens" class="favoritos-itens">
-    <td>
-      <img
-        mat-card-image
-        [src]="item.imagemPrincipal"
-        style="max-width: 50px; max-height: 50px; object-fit: cover"
-      />
-    </td>
-
-    <td>{{ item.nome }}</td>
-    <td>Preço: {{ item.valorVenda }}</td>
-    <td>Quantidade: {{ item.quantidadeUnidades }}</td>
-    <td><button mat-raised-button color="warn" (click)="removerItem(item.id)">Remover dos Favoritos</button></td>
-  </div>
-</ng-container>
+<div class="container box content">
+  <h1>Lista de favoritos</h1>
+  <ng-container *ngIf="produtoItens.length > 0">
+    <div class="table-container">
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>Imagem</th>
+            <th>Nome do produto</th>
+            <th>Preço</th>
+            <th>Quantidade</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of produtoItens" class="favoritos-itens">
+            <td>
+              <img
+                [src]="item.imagemPrincipal"
+                style="max-width: 50px; max-height: 50px; object-fit: cover"
+              />
+            </td>
+        
+            <td>{{ item.nome }}</td>
+            <td>{{ formatValues(item.valorVenda) }}</td>
+            <td>{{ item.quantidadeUnidades }}</td>
+            <!-- <td><button mat-raised-button color="warn" (click)="removerItem(item.id)">Remover dos Favoritos</button></td> -->
+            <td><button (click)="removerItem(item.id)"><span class="icon is-small"><i class="mdi mdi-delete" title="Remover dos favoritos"></i></span></button></td>
+          </tr>      
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+</div>

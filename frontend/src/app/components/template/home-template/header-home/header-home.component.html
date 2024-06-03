@@ -48,11 +48,10 @@
             <div class="has-dropdown">
             <a class="navbar-link">{{clienteLogado.nome || 'Cliente Desconhecido'}}</a>
             <div class="navbar-dropdown">
-              <a class="navbar-item"></a>
               <a class="navbar-item" href='/user/edit'>Editar Cadastro</a>
               <a class="navbar-item" href='/user/senha'>Editar Senha</a>
-              <a class="navbar-item" href="favoritos">Favoritos</a>
-              <a class="navbar-item" href="/pedidos">Meus Pedidos</a>
+              <a class="navbar-item" href="/user/favoritos">Favoritos</a>
+              <a class="navbar-item" href="/user/pedidos">Meus Pedidos</a>
               <a class="navbar-item" href='/login/user' (click)="deslogarUsuario()">Sair</a>
             </div>
             </div>
