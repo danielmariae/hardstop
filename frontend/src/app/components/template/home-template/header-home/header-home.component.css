@@ -9,49 +9,5 @@
 .badge{
     padding-left: 0.5rem;
     padding-right: 0.5rem;
-    padding-top: 0.1rem;
     padding-bottom: 0.1rem;
 }
-
- .balao-container {
-    position: relative; /* Posicionar o container relativamente ao seu pai */
-  }
-  
-  .balao-conteudo {
-    position: absolute; /* Posicionar o conteúdo do balão de forma absoluta */
-    top: 100%; /* Posicionar o topo do balão abaixo do nome do cliente */
-    left: 0; /* Alinhar o balão à esquerda do container */
-    width: 100%; /* Garantir que o balão ocupe toda a largura do container */
-    background-color: #fff; /* Cor de fundo do balão */
-    border: 1px solid #ccc; /* Borda do balão */
-    padding: 10px; /* Espaçamento interno do balão */
-    border-radius: 5px; /* Arredondar os cantos do balão */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra do balão */
-    box-sizing: border-box; /* Incluir padding e bordas na largura total */
-    text-align: left; /* Centralizar o texto */
-  }
-  
-  .balao-conteudo ul {
-    list-style: none; /* Remover marcadores da lista */
-    padding: 0; /* Remover padding padrão da lista */
-    margin: 0; /* Remover margens padrão da lista */
-    padding-left: 20px; /* Adicionar padding à esquerda da lista */
-  }
-  
-  .balao-conteudo li {
-    margin: 5px 0; /* Adicionar margem entre os itens da lista */
-    padding: 0; /* Remover padding dos itens da lista */
-  }
-  
-  .balao-conteudo a {
-    color: #000; /* Cor padrão do texto */
-    text-decoration: none; /* Remover sublinhado do link */
-    transition: color 0.3s; /* Suavizar transição da cor */
-  }
-  
-  .balao-conteudo a:hover {
-    color: #007bff; /* Cor do texto ao passar o mouse */
-  } 
-  
-  
-  
