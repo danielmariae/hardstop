@@ -75,6 +75,18 @@ export class PedidoService {
       }
     }
 
+    findById(id: number): Observable<PedidoRecebe> {
+
+      const url = 'http://localhost:8080/pedidos/search/pedidos/';
+      const headers = this.sessionTokenService.getSessionHeader();
+      if(headers) {
+        console.log(headers);
+        return this.httpClient.get<PedidoRecebe>(url, { headers });
+      } else {
+        return this.httpClient.get<PedidoRecebe>(url);
+      }
+    }
+
 
     private handleError(error: HttpErrorResponse) {
       let errorDetails: any = {}; // Objeto para armazenar os detalhes do erro

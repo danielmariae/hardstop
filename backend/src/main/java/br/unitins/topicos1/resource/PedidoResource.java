@@ -17,6 +17,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -92,4 +93,12 @@ PedidoService service;
     Long idCliente = serviceC.findByLogin(login).id();
     return Response.status(200).entity(service.findPedidoByCliente(idCliente)).build();
   }
+
+  @GET
+  @Path("/search/pedidos/{id}")
+  @RolesAllowed({"User", "Func", "Admin"})
+  public Response findPedidoById(@PathParam("id") Long id) {
+    return Response.status(200).entity(service.findPedidoById(id)).build();
+  }
+
 }

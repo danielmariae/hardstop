@@ -1,23 +1,23 @@
 import { Component, OnInit } from "@angular/core";
-import { HeaderHomeComponent } from "../template/home-template/header-home/header-home.component";
-import { PedidoService } from "../../services/pedido.service";
-import { PedidoRecebe } from "../../models/pedidoRecebe.modelo";
+import { HeaderHomeComponent } from "../../template/home-template/header-home/header-home.component";
+import { PedidoService } from "../../../services/pedido.service";
+import { PedidoRecebe } from "../../../models/pedidoRecebe.modelo";
 import { CommonModule } from "@angular/common";
-import { getFormattedCurrency } from "../../utils/formatValues";
-import { Produto } from "../../models/produto.model";
-import { ProdutoService } from "../../services/produto.service";
+import { getFormattedCurrency } from "../../../utils/formatValues";
+import { Produto } from "../../../models/produto.model";
+import { ProdutoService } from "../../../services/produto.service";
 import { Observable, catchError, forkJoin, map, of } from "rxjs";
-import { ItemDaVenda } from "../../models/itemDaVenda";
-import { NavigationService } from "../../services/navigation.service";
+import { ItemDaVenda } from "../../../models/itemDaVenda";
+import { NavigationService } from "../../../services/navigation.service";
 
 @Component({
-    selector: 'app-pedido',
+    selector: 'app-pedido-user-list',
     standalone: true,
     imports: [HeaderHomeComponent, CommonModule],
-    templateUrl: './pedido.component.html',
-    styleUrls: ['./pedido.component.css'] // Correção de 'styleUrl' para 'styleUrls'
+    templateUrl: './pedido-user-list.component.html',
+    styleUrls: ['./pedido-user-list.component.css'] // Correção de 'styleUrl' para 'styleUrls'
 })
-export class PedidoComponent implements OnInit {
+export class PedidoUserListComponent implements OnInit {
     pedidoItens: PedidoRecebe[] = [];
     produtosPorPedido: { [pedidoId: number]: Produto[] } = {};
 
@@ -34,7 +34,7 @@ export class PedidoComponent implements OnInit {
 
     
     getUltimoStatus(pedido: PedidoRecebe): string | null {
-      return pedido.statusDoPedido.at(pedido.statusDoPedido.length - 1)?.status || null;
+      return pedido.statusDoPedido.at(pedido.statusDoPedido.length - 1)?.descricaoStatus || null;
     }
 
     getDataHoraPedido(pedido: PedidoRecebe): string | null {

@@ -1,0 +1,13 @@
+<div *ngIf="pedido" class="columns">
+    <div class="column">
+        <div *ngIf="pedido.endereco" class="box content">
+            <h2>Endereço: </h2>
+            <p>{{pedido.endereco.nome}}</p>
+        </div>
+    </div>
+    <div class="column">
+        <div class="box content">
+            <p>{{this.pedido.id?.toString}}</p>
+        </div>
+    </div>
+</div>

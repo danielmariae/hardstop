@@ -1164,4 +1164,9 @@ public class PedidoServiceImpl implements PedidoService {
     }
   }
 
+    @Override
+    public PedidoResponseDTO findPedidoById(Long id) {
+      return PedidoResponseDTO.valueOf(repositoryPedido.findById(id));
+    }
+
 }

@@ -31,6 +31,9 @@ public void deletePedidoByCliente(Long idCliente, Long idPedido);
     // Retorna todos os pedidos relacionados a um cliente específico
   public List<PedidoResponseDTO> findPedidoByCliente(Long idCliente);
 
+  // Retorna um pedido pelo id.
+  public PedidoResponseDTO findPedidoById(Long id);
+
   // Insere produtos na lista de desejos do Cliente
   public DesejoResponseDTO insertDesejos(Long idProduto, Long idCliente);
 
