@@ -176,12 +176,7 @@ atualizarDadosDaPagina(): void {
   });
 }
 
-formatValues(valor: number | null | undefined) {
-  if(null)
-    return null;
-  if(undefined)
-    return undefined;
-  else
+formatValues(valor: number) {
     return getFormattedCurrency(valor);
 }      
 

@@ -7,6 +7,8 @@ import { getFormattedCurrency } from "../../utils/formatValues";
 import { Produto } from "../../models/produto.model";
 import { ProdutoService } from "../../services/produto.service";
 import { Observable, catchError, forkJoin, map, of } from "rxjs";
+import { ItemDaVenda } from "../../models/itemDaVenda";
+import { NavigationService } from "../../services/navigation.service";
 
 @Component({
     selector: 'app-pedido',
@@ -21,7 +23,8 @@ export class PedidoComponent implements OnInit {
 
     constructor(
       private pedidoService: PedidoService,
-      public produtoService: ProdutoService
+      public produtoService: ProdutoService,
+      private navigationService: NavigationService
     ) {}
 
     ngOnInit(): void {
@@ -46,6 +49,15 @@ export class PedidoComponent implements OnInit {
         return total;
       }, 0);
     }
+
+    // getTotalPorItemVenda(itemDaVenda: ItemDaVenda | undefined | null): number | undefined | null{
+    //   if(itemDaVenda === undefined)
+    //     return undefined;
+    //   else if(itemDaVenda === null)
+    //     return null;
+    //   else if(itemDaVenda.preco !== null && itemDaVenda.preco !== undefined && itemDaVenda.quantidadeUnidades !== null && itemDaVenda.quantidadeUnidades !== undefined)
+    //     return itemDaVenda.preco * itemDaVenda.quantidadeUnidades;
+    // }
 
     carregarPedidos(): void {
       this.pedidoService.findAll().subscribe({
@@ -109,12 +121,11 @@ export class PedidoComponent implements OnInit {
       return this.produtoService.findById(id);
     }
 
-    formatValues(valor: number | null | undefined): string | null | undefined {
-      if(null)
-        return null;
-      if(undefined)
-        return undefined;
-      else
-        return getFormattedCurrency(valor);
+    formatValues(valor: number): string {
+      return getFormattedCurrency(valor);
     }      
+
+    comprarMaisProdutos(): void{
+      this.navigationService.navigateTo('/home');
+    }
   }

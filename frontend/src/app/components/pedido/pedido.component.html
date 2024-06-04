@@ -1,7 +1,10 @@
 <!-- pedido.component.html -->
 <ng-container *ngIf="pedidoItens.length > 0">
-    <div class="block" *ngFor="let item of pedidoItens">
-      <div class="box content">
+  <div class="content">
+    <h1>Lista de pedidos</h1>
+  </div>
+  <div class="block" *ngFor="let item of pedidoItens">
+      <div  class="box content">
         <div class="columns">
           <div class="column">
             <h4>ID:</h4>
@@ -22,18 +25,31 @@
         </div>
       </div>
       <div *ngIf="item.id">
-          <div class="box content" *ngFor="let produto of produtosPorPedido[item.id]">
-            <div class="columns">
-              <div class="column">
-                <img [src]='this.produtoService.getUrlImagem(produto.imagemPrincipal)'
-                style="max-width: 50px; max-height: 50px; object-fit: cover">
-              </div>
-              <div class="column">
-                <h4>{{produto.nome}}</h4>
-                <p *ngIf="item.itemDaVenda.at(produto.id-1)">{{item.itemDaVenda.at(produto.id-1)?.quantidadeUnidades}} un.: {{formatValues(item.itemDaVenda.at(produto.id-1)?.preco)}}</p>
-              </div>
+        <div class="box content">
+          <h2>Produtos do pedido #{{item.id}}</h2>
+          <div class="table-container">
+            <table class="table is-fullwidth">
+              <thead>
+              </thead>
+              <tbody>
+                <tr *ngFor="let produto of produtosPorPedido[item.id]">
+                  <td>
+                    <img [src]='this.produtoService.getUrlImagem(produto.imagemPrincipal)'
+                    style="max-width: 50px; max-height: 50px; object-fit: cover">  
+                  </td>
+                  <td>
+                    <h4>{{produto.nome}}</h4>
+                    <p *ngIf="item.itemDaVenda.at(produto.id-1)">{{item.itemDaVenda.at(produto.id-1)?.quantidadeUnidades}} un.:
+                      {{item.itemDaVenda.at(produto.id-1)?.preco?.toLocaleString('PT-BR',{style:'currency', currency: 'BRL'})}} x {{item.itemDaVenda.at(produto.id-1)?.quantidadeUnidades}}</p>
+                  </td>
+                  <td>
+                    <button class="button is-primary" type="button" (click)="comprarMaisProdutos()">Compre novamente</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>  
-          </div>
+        </div>
       </div>
     </div>
   
