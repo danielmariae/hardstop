@@ -32,15 +32,15 @@
               <thead>
               </thead>
               <tbody>
-                <tr *ngFor="let produto of produtosPorPedido[item.id]">
+                <tr *ngFor="let produto of item.itemDaVenda">
                   <td>
                     <img [src]='this.produtoService.getUrlImagem(produto.imagemPrincipal)'
                     style="max-width: 50px; max-height: 50px; object-fit: cover">  
                   </td>
                   <td>
                     <h4>{{produto.nome}}</h4>
-                    <p *ngIf="item.itemDaVenda.at(produto.id-1)">{{item.itemDaVenda.at(produto.id-1)?.quantidadeUnidades}} un.:
-                      {{item.itemDaVenda.at(produto.id-1)?.preco?.toLocaleString('PT-BR',{style:'currency', currency: 'BRL'})}} x {{item.itemDaVenda.at(produto.id-1)?.quantidadeUnidades}}</p>
+                    <p>{{produto.quantidadeUnidades}} un.:
+                      {{produto.preco?.toLocaleString('PT-BR',{style:'currency', currency: 'BRL'})}} x {{produto.quantidadeUnidades}}</p>
                   </td>
                   <td>
                     <button class="button is-primary" type="button" (click)="comprarMaisProdutos()">Compre novamente</button>

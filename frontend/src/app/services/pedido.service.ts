@@ -32,14 +32,17 @@ export class PedidoService {
 
       const url = 'http://localhost:8080/pedidos/insert';
       const headers = this.sessionTokenService.getSessionHeader();
+
+      for (const i in pedido.itemDaVenda) {
+        console.log(i);
+      }
+      
       if(headers) {
         console.log(pedido);
         console.log(headers);
       return this.httpClient.post<Pedido>(url, pedido, { headers });
-      
       } else {
         return this.httpClient.post<Pedido>(url, pedido);
-        
       }
     }
 

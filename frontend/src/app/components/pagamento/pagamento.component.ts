@@ -245,38 +245,40 @@ import { ItemDaVenda } from "../../models/itemDaVenda";
       }
     }
     
+    
     salvarPedido(formaDePagamento: FormaDePagamento): void {
       if (this.clienteLogado && this.clienteLogado.id !== undefined) {
-      if(this.enderecoEscolhido && this.enderecoEscolhido.id !== undefined) {
-      const novoPedido: Pedido = {
-        id: null,
-        idCliente: this.clienteLogado.id,
-        codigoDeRastreamento: null,
-        idEndereco: this.enderecoEscolhido.id,
-        statusDoPedido: null,
-        itemDaVenda: this.itensDaVenda,
-        formaDePagamento: formaDePagamento
-      };
-
-      this.pedidoService.insert(novoPedido).subscribe({
-        next: (response) => {
-        console.log('Resultado:', response);
-        this.carrinhoService.removerTudo();
-        },
-        error: (error) => {
-          // Este callback é executado quando ocorre um erro durante a emissão do valor
-          console.error('Erro ao inserir novo pedido:', error);
-          //window.alert(error)
+        if (this.enderecoEscolhido && this.enderecoEscolhido.id !== undefined) {
+          const novoPedido: Pedido = {
+            id: null,
+            idCliente: this.clienteLogado.id,
+            codigoDeRastreamento: null,
+            idEndereco: this.enderecoEscolhido.id,
+            statusDoPedido: null,
+            itemDaVenda: this.itensDaVenda,
+            formaDePagamento: formaDePagamento
+          };
+    
+          // Log do objeto antes de fazer a chamada para a API
+          console.log('Objeto Pedido antes de enviar para API:', JSON.stringify(novoPedido));
+    
+          this.pedidoService.insert(novoPedido).subscribe({
+            next: (response) => {
+              console.log('Resultado:', response);
+            },
+            error: (error) => {
+              console.error('Erro ao inserir novo pedido:', error);
+            }
+          });
+    
+        } else {
+          console.error('Endereço Escolhido sem id definido.');
         }
-    });
-
-       } else {
-         console.error('Endereço Escolhido sem id definido.');
-       }
       } else {
         console.error('Cliente Logado sem id definido.');
       }
     }
+    
 
   }
   

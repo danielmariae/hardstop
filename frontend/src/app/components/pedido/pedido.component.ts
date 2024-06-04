@@ -85,7 +85,6 @@ export class PedidoComponent implements OnInit {
                   // Adiciona o produto ao array de produtos do pedido
                   this.produtosPorPedido[pedido.id] = this.produtosPorPedido[pedido.id] || [];
                   this.produtosPorPedido[pedido.id].push(produto);
-                  console.log(this.produtosPorPedido[pedido.id]);
                 }
               },
               error => {

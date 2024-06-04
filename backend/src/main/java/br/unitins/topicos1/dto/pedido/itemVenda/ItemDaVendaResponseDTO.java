@@ -8,16 +8,18 @@ public record ItemDaVendaResponseDTO(
     Integer quantidadeUnidades,
     Double quantidadeNaoConvencional,
     String unidadeDeMedida,
-    String nome
+    String nome,
+    String imagemPrincipal
 ) {
     public static ItemDaVendaResponseDTO valueOf(ItemDaVenda idv) {
         return new ItemDaVendaResponseDTO(
-            idv.getId(),
+            idv.getProduto().getId(),
             idv.getPreco(),
             idv.getQuantidadeUnidades(),
             idv.getQuantidadeNaoConvencional(),
             idv.getUnidadeDeMedida(),
-            idv.getProduto().getNome()
+            idv.getProduto().getNome(),
+            idv.getProduto().getImagemPrincipal()
         );
     }
     
