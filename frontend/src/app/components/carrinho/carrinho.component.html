@@ -1,28 +1,139 @@
-   <app-header-home></app-header-home>
-<!-- carrinho.component.html -->
-<ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
-    <div *ngFor="let item of carrinhoItens" class="carrinho-item">
-      <td>
-        <img
-          mat-card-image
-          [src]="item.urlImagem"
-          style="max-width: 50px; max-height: 50px; object-fit: cover"
-        />
-      </td>
-
-      <td>{{ item.nome }}</td>
-      <td>Preço: {{ item.preco }}</td>
-      <td> Quantidade:
-        <button (click)="diminuirQuantidade(item)">-</button>
-        {{ item.quantidade }}
-        <button (click)="aumentarQuantidade(item)">+</button>
-      </td>
-      <td>Total: {{ item.quantidade * item.preco }}</td>
-      <td><button mat-raised-button color="warn" (click)="removerItem(item)">Remover do Carrinho</button></td>
+<div class="container">
+  <app-header-home></app-header-home>
+  <ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
+  <div class="columns">
+    <div class="column is-three-quarters">
+      <div class="box">
+      <h1 class="is-size-3 has-text-white has-text-weight-bold">Carrinho</h1>
+      <br>
+      <div class="table-container">
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th>Imagem</th>
+              <th>Nome do produto</th>
+              <th>Preço (un.)</th>
+              <th>Quantidade</th>
+              <th>Total</th>
+              <th>Ações</th>
+              </tr>
+          </thead>    
+          <tbody>
+          <tr *ngFor="let item of carrinhoItens">
+              <td>
+                <img
+                  [src]="item.urlImagem"
+                  style="max-width: 50px; max-height: 50px; object-fit: cover">
+              </td>
+              <td>{{ item.nome }}</td>
+              <td>{{ formatValues(item.preco) }}</td>
+              <td>
+                <div class="columns is-mobile">
+                  <div class="column">
+                    <a (click)="diminuirQuantidade(item)">-</a>
+                  </div>
+                  <div class="column">
+                    {{item.quantidade}}
+                  </div>
+                  <div class="column">
+                    <a (click)="aumentarQuantidade(item)">+</a>
+                  </div>
+                </div>
+              </td>
+              <td>{{ formatValues(item.quantidade * item.preco) }}</td>
+              <td><button (click)="removerItem(item)"><span class="icon is-small"><i class="mdi mdi-delete" title="Remover do carrinho"></i></span></button></td>  
+            </tr>    
+          </tbody>
+        </table>
+        </div>
+      </div>  
+      <div class="box">
+        <h2 class="title is-3">Endereço de Entrega</h2>
+        <h4 class="title is-4">Escolha um endereço de entrega ou adicione um novo endereço</h4>
+      
+        <div class="columns">
+            <div *ngFor="let endereco of enderecos.controls; let i = index">
+              <div class="column">
+                <div>
+                  <input [disabled]="addressesAdded"  class="select-input" type="radio" id="control_0{{i}}" name="selectedAddress" [(ngModel)]="selectedAddress" [value]="i" checked>
+                  <label class="select-label" for="control_0{{i}}">
+                    <h1>Nome: {{endereco.get('nome')?.value}}</h1>
+                    <p>{{endereco.get('logradouro')?.value}}, {{endereco.get('numeroLote')?.value}}, {{endereco.get('complemento')?.value}}, {{endereco.get('bairro')?.value}},
+                      {{endereco.get('localidade')?.value}}/{{endereco.get('uf')?.value}}</p>
+                      <p>{{endereco.get('cep')?.value}} </p>
+                    </label>
+                  </div>      
+                </div>
+              </div>
+            </div>
+            <div class="buttons">
+              <button class="button is-link is-default" type="button" (click)="adicionarEndereco()" [disabled]="addressesAdded">Adicionar endereço</button>
+          </div>
+            <button *ngIf="!showNewAddressForm" class="button is-link" type="button" (click)="salvarEndereco()"[disabled]="enderecoSalvo">Salvar Endereço</button>
+          </div>
+          <!-- Seção para Adicionar Novo Endereço -->
+          <div class="box" *ngIf="showNewAddressForm">
+            <h4 class="title is-4">Adicionar novo endereço</h4>
+            <form [formGroup]="enderecoFormGroup">
+              <div class="columns">
+                      <div class="column">
+                        <label class="field label">Nome do endereço:</label>
+                        <input class="control input" formControlName="nome" placeholder="Nome para este endereço:">
+                      </div>
+                      <div class="column is-one-quarter">
+                        <label class="field label">CEP:</label>
+                        <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
+                      </div>
+                    </div>
+                    <div class="columns">
+                      <div class="column">
+                        <label class="field label">Logradouro:</label>
+                        <input class="control input" formControlName="logradouro" placeholder="Logradouro (será preenchido automaticamente)">
+                      </div>
+                    </div>
+                    <div class="columns">
+                      <div class="column is-one-fifth">
+                        <label class="field label">Número/Lote:</label>
+                        <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
+                      </div>
+                      <div class="column">
+                        <label class="field label">Complemento:</label>
+                        <input class="control input" formControlName="complemento" placeholder="Complemento">
+                      </div>
+                    </div>
+                    <div class="columns">
+                      <div class="column">
+                        <label class="field label">Bairro:</label>
+                        <input class="control input" formControlName="bairro" placeholder="Bairro">
+                      </div>
+                      <div class="column">
+                        <label class="field label">Localidade:</label>
+                        <input class="control input" formControlName="localidade" placeholder="Localidade">
+                      </div>
+                      <div class="column is-one-fifth">
+                        <label class="field label">UF:</label>
+                        <input class="control input" formControlName="uf" placeholder="UF">
+                      </div>
+                      <div class="column">
+                        <label class="field label">País:</label>
+                        <input class="control input" formControlName="pais" placeholder="País">
+                      </div>
+                    </div>
+                    <div class="buttons">
+                      <button class="button is-secondary" type="button" (click)="cancelarEndereco()">Cancelar</button>
+                      <button *ngIf="showNewAddressForm" class="button is-link" type="button" (click)="salvarEndereco()"[disabled]="enderecoSalvo">Salvar Endereço</button>
+                    </div>
+                  </form>
+      </div>
     </div>
-
-
-   
+    <div class="column">
+      <div class="box content">
+        <h2>Resumo</h2>
+        <p>Total: {{ formatValues(calcularTotal()) }}</p>
+        <button class="button is-primary" type="button" (click)="finalizarCompra()" >Ir para Pagamento</button>
+      </div>
+    </div>
+  </div>
     <!-- <div class="box">
       <h2 class="title is-3">Endereço de Entrega</h2>
       <h4 class="title is-4">Escolha um endereço de entrega ou adicione um novo endereço</h4>
@@ -98,190 +209,8 @@
     </div>    
       </form> 
     </div> -->
-  
-
-
-
-    <div class="box">
-      <h2 class="title is-3">Endereço de Entrega</h2>
-      <h4 class="title is-4">Escolha um endereço de entrega ou adicione um novo endereço</h4>
-    
-      <div *ngFor="let endereco of enderecos.controls; let i = index">
-        <div class="columns">
-          <div class="column">
-            <input type="radio" name="selectedAddress" [(ngModel)]="selectedAddress" [value]="i">
-            <label class="field label">Nome do endereço:</label>
-            <span class="info-text">{{ endereco.get('nome')?.value }}</span>
-          </div>
-          <div class="column is-one-quarter">
-            <label class="field label">CEP:</label>
-            <span class="info-text">{{ endereco.get('cep')?.value }}</span>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column">
-            <label class="field label">Logradouro:</label>
-            <span class="info-text">{{ endereco.get('logradouro')?.value }}</span>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column is-one-fifth">
-            <label class="field label">Número/Lote:</label>
-            <span class="info-text">{{ endereco.get('numeroLote')?.value }}</span>
-          </div>
-          <div class="column">
-            <label class="field label">Complemento:</label>
-            <span class="info-text">{{ endereco.get('complemento')?.value }}</span>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column">
-            <label class="field label">Bairro:</label>
-            <span class="info-text">{{ endereco.get('bairro')?.value }}</span>
-          </div>
-          <div class="column">
-            <label class="field label">Localidade:</label>
-            <span class="info-text">{{ endereco.get('localidade')?.value }}</span>
-          </div>
-          <div class="column is-one-fifth">
-            <label class="field label">UF:</label>
-            <span class="info-text">{{ endereco.get('uf')?.value }}</span>
-          </div>
-          <div class="column">
-            <label class="field label">País:</label>
-            <span class="info-text">{{ endereco.get('pais')?.value }}</span>
-          </div>
-        </div>
-      </div>
-
-     
-
-
-      
-      <!-- <form [formGroup]="clienteForm">
-      <div formArrayName="enderecos">
-        <div *ngFor="let endereco of enderecos.controls; let i = index" [formGroupName]="i">
-          <div class="columns">
-            <div class="column">
-              <input type="radio" name="selectedAddress" [(ngModel)]="selectedAddress" [value]="i">
-              <input type="radio" name="selectedAddress" [(ngModel)]="selectedAddress" [value]="i">
-              <label class="field label">Nome do endereço:</label>
-              <input class="control input" formControlName="nome" placeholder="Nome para este endereço:" readonly>
-            </div>
-            <div class="column is-one-quarter">
-              <label class="field label">CEP:</label>
-              <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000" readonly>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <label class="field label">Logradouro:</label>
-              <input class="control input" formControlName="logradouro" placeholder="Logradouro" readonly>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column is-one-fifth">
-              <label class="field label">Número/Lote:</label>
-              <input class="control input" formControlName="numeroLote" placeholder="Número/Lote" readonly>
-            </div>
-            <div class="column">
-              <label class="field label">Complemento:</label>
-              <input class="control input" formControlName="complemento" placeholder="Complemento" readonly>
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <label class="field label">Bairro:</label>
-              <input class="control input" formControlName="bairro" placeholder="Bairro" readonly>
-            </div>
-            <div class="column">
-              <label class="field label">Localidade:</label>
-              <input class="control input" formControlName="localidade" placeholder="Localidade" readonly>
-            </div>
-            <div class="column is-one-fifth">
-              <label class="field label">UF:</label>
-              <input class="control input" formControlName="uf" placeholder="UF" readonly>
-            </div>
-            <div class="column">
-              <label class="field label">País:</label>
-              <input class="control input" formControlName="pais" placeholder="País" readonly>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>  -->
-    
-      <!-- Seção para Adicionar Novo Endereço -->
-      <div *ngIf="showNewAddressForm">
-        <h4 class="title is-4">Adicionar Novo Endereço</h4>
-        <form [formGroup]="enderecoFormGroup">
-          <div class="columns">
-            <div class="column">
-              <label class="field label">Nome do endereço:</label>
-              <input class="control input" formControlName="nome" placeholder="Nome para este endereço:">
-            </div>
-            <div class="column is-one-quarter">
-              <label class="field label">CEP:</label>
-              <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <label class="field label">Logradouro:</label>
-              <input class="control input" formControlName="logradouro" placeholder="Logradouro (será preenchido automaticamente)">
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column is-one-fifth">
-              <label class="field label">Número/Lote:</label>
-              <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
-            </div>
-            <div class="column">
-              <label class="field label">Complemento:</label>
-              <input class="control input" formControlName="complemento" placeholder="Complemento">
-            </div>
-          </div>
-          <div class="columns">
-            <div class="column">
-              <label class="field label">Bairro:</label>
-              <input class="control input" formControlName="bairro" placeholder="Bairro">
-            </div>
-            <div class="column">
-              <label class="field label">Localidade:</label>
-              <input class="control input" formControlName="localidade" placeholder="Localidade">
-            </div>
-            <div class="column is-one-fifth">
-              <label class="field label">UF:</label>
-              <input class="control input" formControlName="uf" placeholder="UF">
-            </div>
-            <div class="column">
-              <label class="field label">País:</label>
-              <input class="control input" formControlName="pais" placeholder="País">
-            </div>
-          </div>
-          <div class="buttons">
-            <button class="button is-secondary" type="button" (click)="cancelarEndereco()">Cancelar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-    <div class="button-container">
-      <button class="button is-primary is-default" type="button" (click)="adicionarEndereco()" [disabled]="addressesAdded">Adicionar endereço</button>
-  </div>
-  <br>
-  <div class="button-salvarendereco">
-    <button class="button is-primary" type="button" (click)="salvarEndereco()"[disabled]="enderecoSalvo">Salvar Endereço</button>
-    </div>
-    
-
-
-
-
-
-
-    <p>Total do Carrinho: {{ calcularTotal() }}</p>
-    <button mat-raised-button color="primary" (click)="finalizarCompra()" >Ir para Pagamento</button>
   </ng-container>
   <ng-template #carrinhoVazio>
     <p>O carrinho está vazio.</p>
   </ng-template>
+</div>

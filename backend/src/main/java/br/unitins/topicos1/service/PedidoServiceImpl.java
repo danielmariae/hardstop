@@ -117,7 +117,7 @@ public class PedidoServiceImpl implements PedidoService {
       //System.out.println(item.getQuantidadeUnidades());
 
       // Verifica o id do produto. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
-      System.out.println(idv.idProduto());
+      System.out.println("Verificação ID PRODUTO: "+idv.idProduto());
       if (!verificaProduto1(idv.idProduto())) {
         throw new GeneralErrorException(
           "400",
@@ -136,10 +136,11 @@ public class PedidoServiceImpl implements PedidoService {
           "id do produto não existe no banco de dados."
         );
       }
+      System.out.println("Id do produto buscado no BD: "+produto.getId());
       Integer quant;
       try{
         quant = produto.getQuantidadeUnidades() - idv.quantidadeUnidades();
-        System.out.println(quant);
+        System.out.println("Quantidade: "+quant);
         if(quant > 0) {
           produto.setQuantidadeUnidades(quant);
           item.setProduto(produto);
@@ -1162,5 +1163,10 @@ public class PedidoServiceImpl implements PedidoService {
  
     }
   }
+
+    @Override
+    public PedidoResponseDTO findPedidoById(Long id) {
+      return PedidoResponseDTO.valueOf(repositoryPedido.findById(id));
+    }
 
 }

@@ -66,12 +66,10 @@
       <artifactId>rest-assured</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/io.quarkus/quarkus-hibernate-validator -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-validator</artifactId>
     </dependency>
-    <!-- Inserção de dependencias para usar o JWT-->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-jwt</artifactId>
@@ -80,64 +78,51 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-jwt-build</artifactId>
     </dependency>
-    <!-- Geração de QR code para pagamento com Pix -->
     <dependency>
-    <groupId>com.google.zxing</groupId>
-    <artifactId>core</artifactId>
-    <version>3.5.2</version> 
+      <groupId>com.google.zxing</groupId>
+      <artifactId>core</artifactId>
+      <version>3.5.2</version> 
     </dependency>
     <dependency>
-    <groupId>com.google.zxing</groupId>
-    <artifactId>javase</artifactId>
-    <version>3.5.2</version>
+      <groupId>com.google.zxing</groupId>
+      <artifactId>javase</artifactId>
+      <version>3.5.2</version>
     </dependency>
-<dependency>
-    <groupId>io.github.alesaudate</groupId>
-    <artifactId>pix-qrcodegen</artifactId>
-    <version>1.0</version>
-</dependency>
-     <!-- Geração de boleto -->
-<dependency>
-    <groupId>io.github.braully</groupId>
-    <artifactId>bpp-cobranca</artifactId>
-    <version>1.0.1</version>
-</dependency>
-<dependency>
-    <groupId>org.apache.directory.studio</groupId>
-    <artifactId>org.apache.commons.io</artifactId>
-    <version>2.4</version>
-</dependency>
-  <!-- Dependência do Quarkus para o Kafka -->
-<!-- <dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
-</dependency> -->
- <!-- Dependência do Quarkus para o CORS -->
-<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
-<dependency>
-    <groupId>javax.servlet</groupId>
-    <artifactId>javax.servlet-api</artifactId>
-    <version>4.0.1</version>
-    <scope>provided</scope>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-<dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-core</artifactId>
-    <version>3.0.0-beta2</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
-<dependency>
-    <groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-api</artifactId>
-    <version>3.0.0-beta2</version>
-</dependency>
-<!-- Dependência do Quarkus para PartType -->
-<dependency>
+    <dependency>
+      <groupId>io.github.alesaudate</groupId>
+      <artifactId>pix-qrcodegen</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.braully</groupId>
+      <artifactId>bpp-cobranca</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.directory.studio</groupId>
+      <artifactId>org.apache.commons.io</artifactId>
+      <version>2.4</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>4.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>3.0.0-beta2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-multipart</artifactId>
     </dependency>
-</dependencies>
+  </dependencies>
   <build>
     <plugins>
       <plugin>

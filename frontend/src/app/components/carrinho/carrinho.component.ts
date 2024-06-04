@@ -8,7 +8,6 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClienteService } from '../../services/cliente.service';
 import { Subscription, debounceTime, distinctUntilChanged } from 'rxjs';
 import { SessionTokenService } from '../../services/session-token.service';
-import { NgxViacepService } from '@brunoc/ngx-viacep';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +15,8 @@ import { LocalStorageService } from '../../services/local-storage.service';
 import { NavigationService } from '../../services/navigation.service';
 import { ListaEndereco } from '../../models/endereco.model';
 import { PedidoService } from '../../services/pedido.service';
+import { CepService } from '../../services/cep.service';
+import { getFormattedCurrency } from '../../utils/formatValues';
 
 @Component({
   selector: 'app-carrinho',
@@ -41,7 +42,7 @@ export class CarrinhoComponent implements OnInit {
               private clienteService: ClienteService,
               private formBuilder: FormBuilder,
               private sessionTokenService: SessionTokenService,
-              private viaCep: NgxViacepService,
+              private cepService: CepService,
               private localStorageService: LocalStorageService,
               private navigationService: NavigationService,
               private pedidoService: PedidoService
@@ -260,37 +261,26 @@ export class CarrinhoComponent implements OnInit {
     
   // }
   
-  atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
-    const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
   
-    if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
-      this.viaCep.buscarPorCep(cepValue).subscribe({
-        next: (endereco) => {
-          if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
-            // Atualizando os valores do formulário com os dados do endereço
-            enderecoFormGroup.patchValue({
-              cep: this.formatarCep(endereco.cep),
-              logradouro: endereco.logradouro,
-              bairro: endereco.bairro,
-              localidade: endereco.localidade,
-              uf: endereco.uf,
-              pais: 'Brasil',
-              cepInvalido: false // Adiciona uma propriedade para indicar que o CEP é válido
-            });
-          } else {
-            // Limpar campos de endereço se o CEP não for válido
-            enderecoFormGroup.patchValue({
-              logradouro: null,
-              bairro: null,
-              localidade: null,
-              uf: null,
-              cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
-            });
-          }
-        },
-        error: (error) => {
-          console.error('Erro ao buscar endereço por CEP:', error);
-          // Limpar campos de endereço em caso de erro na busca
+atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
+  const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+
+  if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
+    this.cepService.findByStringCep(cepValue).subscribe({
+      next: (endereco) => {
+        if (endereco && !endereco.erro) { // Verifica se o campo erro é false
+          // Atualizando os valores do formulário com os dados do endereço
+          enderecoFormGroup.patchValue({
+            cep: this.formatarCep(endereco.cep),
+            logradouro: endereco.logradouro,
+            bairro: endereco.bairro,
+            localidade: endereco.localidade,
+            uf: endereco.uf,
+            pais: 'Brasil',
+            cepInvalido: false // Adiciona uma propriedade para indicar que o CEP é válido
+          });
+        } else {
+          // Limpar campos de endereço se o CEP não for válido
           enderecoFormGroup.patchValue({
             logradouro: null,
             bairro: null,
@@ -299,18 +289,30 @@ export class CarrinhoComponent implements OnInit {
             cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
           });
         }
-      });
-    } else {
-      // Limpar campos de endereço se o CEP não possuir 8 dígitos
-      enderecoFormGroup.patchValue({
-        logradouro: null,
-        bairro: null,
-        localidade: null,
-        uf: null,
-        cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
-      });
-    }
+      },
+      error: (error) => {
+        console.error('Erro ao buscar endereço por CEP:', error);
+        // Limpar campos de endereço em caso de erro na busca
+        enderecoFormGroup.patchValue({
+          logradouro: null,
+          bairro: null,
+          localidade: null,
+          uf: null,
+          cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+        });
+      }
+    });
+  } else {
+    // Limpar campos de endereço se o CEP não possuir 8 dígitos
+    enderecoFormGroup.patchValue({
+      logradouro: null,
+      bairro: null,
+      localidade: null,
+      uf: null,
+      cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+    });
   }
+}
   
     // Método para converter o CEP para o formato desejado
     formatarCep(cep: string): string {
@@ -339,5 +341,10 @@ export class CarrinhoComponent implements OnInit {
     }
     return null; // Casos onde nenhum endereço é selecionado
   }
+
+  formatValues(valor: number): String {
+    return getFormattedCurrency(valor);
+    }
+    
 
 }

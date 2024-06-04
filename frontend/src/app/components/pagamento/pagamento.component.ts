@@ -184,6 +184,7 @@ import { ItemDaVenda } from "../../models/itemDaVenda";
     }
   
     efetuarPagamento() {
+      console.log("INICIANDO PAGAMENTO E FINALIZAÇÃO DO PEDIDO!")
       this.converterItemCarrinho();
       if(this.metodoPagamento === 2) { // Pagamento por Pix
         const formaDePagamento: FormaDePagamento = {
@@ -227,51 +228,57 @@ import { ItemDaVenda } from "../../models/itemDaVenda";
     }
 
     converterItemCarrinho(): void {
-      this.itensDaVenda = this.carrinhoItens.map(() => ({ idProduto: null, nome: null, quantidadeUnidades: null,  quantidadeNaoConvencional: null, unidadeDeMedida: null, preco: null }));
-      for (let i = 0; i < this.carrinhoItens.length; i++) {
-        this.itensDaVenda[i].idProduto = this.carrinhoItens[i].id;
-        console.log(this.itensDaVenda[i].idProduto);
-        this.itensDaVenda[i].nome = this.carrinhoItens[i].nome;
+      this.itensDaVenda = this.carrinhoItens.map(item => ({
+        idProduto: item.id,
+        nome: item.nome,
+        quantidadeUnidades: item.quantidade,
+        quantidadeNaoConvencional: null,
+        unidadeDeMedida: null,
+        preco: item.preco
+      }));
+    
+      for (let i = 0; i < this.itensDaVenda.length; i++) {
+        console.log("ID DO PRODUTO: ", this.itensDaVenda[i].idProduto);
         console.log(this.itensDaVenda[i].nome);
-        this.itensDaVenda[i].quantidadeUnidades = this.carrinhoItens[i].quantidade;
         console.log(this.itensDaVenda[i].quantidadeUnidades);
-        this.itensDaVenda[i].preco = this.carrinhoItens[i].preco;
         console.log(this.itensDaVenda[i].preco);
       }
     }
-
+    
+    
     salvarPedido(formaDePagamento: FormaDePagamento): void {
-
       if (this.clienteLogado && this.clienteLogado.id !== undefined) {
-      if(this.enderecoEscolhido && this.enderecoEscolhido.id !== undefined) {
-      const novoPedido: Pedido = {
-        id: null,
-        idCliente: this.clienteLogado.id,
-        codigoDeRastreamento: null,
-        idEndereco: this.enderecoEscolhido.id,
-        statusDoPedido: null,
-        itemDaVenda: this.itensDaVenda,
-        formaDePagamento: formaDePagamento
-      };
-
-      this.pedidoService.insert(novoPedido).subscribe({
-        next: (response) => {
-        console.log('Resultado:', response);
-        },
-        error: (error) => {
-          // Este callback é executado quando ocorre um erro durante a emissão do valor
-          console.error('Erro ao inserir novo pedido:', error);
-          //window.alert(error)
+        if (this.enderecoEscolhido && this.enderecoEscolhido.id !== undefined) {
+          const novoPedido: Pedido = {
+            id: null,
+            idCliente: this.clienteLogado.id,
+            codigoDeRastreamento: null,
+            idEndereco: this.enderecoEscolhido.id,
+            statusDoPedido: null,
+            itemDaVenda: this.itensDaVenda,
+            formaDePagamento: formaDePagamento
+          };
+    
+          // Log do objeto antes de fazer a chamada para a API
+          console.log('Objeto Pedido antes de enviar para API:', JSON.stringify(novoPedido));
+    
+          this.pedidoService.insert(novoPedido).subscribe({
+            next: (response) => {
+              console.log('Resultado:', response);
+            },
+            error: (error) => {
+              console.error('Erro ao inserir novo pedido:', error);
+            }
+          });
+    
+        } else {
+          console.error('Endereço Escolhido sem id definido.');
         }
-    });
-
-       } else {
-         console.error('Endereço Escolhido sem id definido.');
-       }
       } else {
         console.error('Cliente Logado sem id definido.');
       }
     }
+    
 
   }
   

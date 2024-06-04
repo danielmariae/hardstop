@@ -12,10 +12,6 @@ img {
     object-fit: cover;
 }
 
-.container {
-    padding: 20px;
-}
-
 .responsive-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -29,3 +25,16 @@ img {
     justify-content: center;
 }
 
+.fixed-height{
+    height: 33rem;
+}
+
+.fixed-title {
+    max-width: 80ch; /* Ajuste conforme necessário para seu design */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.5; /* Ajuste a altura da linha conforme necessário */
+    height: calc(1.5em * 2); /* Altura da linha multiplicada pelo número de linhas */  
+}

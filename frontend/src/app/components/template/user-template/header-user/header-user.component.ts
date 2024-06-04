@@ -3,16 +3,23 @@ import { SessionTokenService } from '../../../../services/session-token.service'
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NavigationService } from '../../../../services/navigation.service';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { Cliente } from '../../../../models/cliente.model';
+import { CarrinhoService } from '../../../../services/carrinho.service';
+import { RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-header-user',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [RouterOutlet, CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './header-user.component.html',
   styleUrl: './header-user.component.css'
 })
 export class HeaderUserComponent implements OnInit {
   usuarioLogado: boolean = false;
+  private subscription = new Subscription();
+  clienteLogado: Cliente | null = null;
+  carrinhoSize: number = 0;
 
   buscadorForm: FormControl;
 
@@ -20,6 +27,7 @@ export class HeaderUserComponent implements OnInit {
       private sessionTokenService: SessionTokenService,
       private navigationService: NavigationService,
       private formBuilder: FormBuilder,
+      private carrinhoService: CarrinhoService
   ){
     this.buscadorForm = this.formBuilder.control('');
   }
@@ -28,6 +36,12 @@ export class HeaderUserComponent implements OnInit {
         // Get all "navbar-burger" elements
         const navbarBurgers = Array.from(document.querySelectorAll('.navbar-burger'));
 
+        this.obterQtdItensCarrinho();
+        this.clienteLogado = JSON.parse(localStorage.getItem('clienteLogado') || 'null');
+        if (!this.clienteLogado) {
+          this.obterClienteLogado();
+        }
+    
         // Add a click event on each of them
         navbarBurgers.forEach(el => {
           el.addEventListener('click', () => {
@@ -58,6 +72,8 @@ export class HeaderUserComponent implements OnInit {
         });
   }
 
+  
+
   deslogarUsuario(): void {
     // Limpa o estado de login e remove os dados do sessionStorage
     this.usuarioLogado = false;
@@ -75,4 +91,21 @@ export class HeaderUserComponent implements OnInit {
       this.navigationService.navigateTo('home/buscador/%');
     }
   }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+        obterQtdItensCarrinho() {
+         this.carrinhoService.carrinho$.subscribe(itens => {
+           this.carrinhoSize = itens.length;
+         });
+        }
+
+        obterClienteLogado() {
+          this.subscription.add(this.sessionTokenService.getClienteLogado().subscribe(
+          cliente => this.clienteLogado = cliente
+        ));
+        }
+
 }

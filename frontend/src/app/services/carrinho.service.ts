@@ -16,16 +16,16 @@ export class CarrinhoService {
     this.carrinhoSubject.next(carrinhoArmazenado);
   }
 
-  adicionar(consulta: ItemCarrinho): void {
+  adicionar(produto: ItemCarrinho): void {
     const carrinhoAtual = this.carrinhoSubject.value;
     //console.log(this.carrinhoSubject.value);
-    const itemExistente = carrinhoAtual.find(item => item.id === consulta.id);
+    const itemExistente = carrinhoAtual.find(item => item.id === produto.id);
    // console.log(consulta);
     if (itemExistente) {
-      itemExistente.quantidade += consulta.quantidade || 1;
+      itemExistente.quantidade += produto.quantidade || 1;
       //console.log(itemExistente);
     } else {
-      carrinhoAtual.push({ ...consulta });
+      carrinhoAtual.push({ ...produto });
     }
 
     this.carrinhoSubject.next(carrinhoAtual);
@@ -47,7 +47,6 @@ export class CarrinhoService {
 
   obter(): ItemCarrinho[] {
     return this.carrinhoSubject.value;
-    
   }
 
   private atualizarArmazenamentoLocal(): void {

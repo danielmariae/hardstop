@@ -19,7 +19,6 @@ import { ProdutoEditComponent } from './components/painel-adm/produto/produto-ed
 import { ProdutoFormComponent } from './components/painel-adm/produto/produto-form/produto-form/produto-form.component';
 import { ProdutoGarantiaComponent } from './components/painel-adm/produto/produto-garantia/produto-garantia.component';
 import { ProdutoListComponent } from './components/painel-adm/produto/produto-list/produto-list.component';
-import { AuthResolver } from './components/session-token/resolver/session-token.resolver';
 import { SessionTokenComponent } from './components/session-token/session-token.component';
 import { ProdutoViewComponent } from './components/painel-adm/produto/produto-view/produto-view/produto-view.component';
 import { ProdutoEscolhidoComponent } from './components/painel-adm/produto/produto-escolhido/produto-escolhido.component';
@@ -34,17 +33,15 @@ import { LoginUserComponent } from './components/session-token/login-user/login-
 import { CreateUserAccountComponent } from './components/session-token/create-user-account/create-user-account.component';
 import { CarrinhoComponent } from './components/carrinho/carrinho.component';
 import { PagamentoComponent } from './components/pagamento/pagamento.component';
-import { PedidoComponent } from './components/pedido/pedido.component';
+import { PedidoUserListComponent } from './components/pedido/pedido-user-list/pedido-user-list.component';
 import { FavoritosComponent } from './components/favoritos/favoritos.component';
+import { PedidoUserViewComponent } from './components/pedido/pedido-user-view/pedido-user-view.component';
 
 
 export const routes: Routes = [
 
     {path: 'carrinho', component: CarrinhoComponent, title: 'Visualizar carrinho'},
     {path: 'pagamento', component: PagamentoComponent, title: 'Realizar Pagamento'},
-    {path: 'pedidos', component: PedidoComponent, title: 'Visualizar pedidos'},
-    {path: 'favoritos', component: FavoritosComponent, title: 'Visualizar favoritos'},
-
     {path:'', pathMatch: 'full', redirectTo:'home'},
     {
         path: 'user',
@@ -54,12 +51,22 @@ export const routes: Routes = [
             {path: '', pathMatch: 'full', redirectTo: 'edit'},
             {path: 'edit', component: ClienteThisEditComponent, title: 'Edite seu perfil'},
             {path: 'senha', component: ClienteUpdateSenhaComponent, title: 'Atualizar senha'},
+            {
+                path: 'pedidos', 
+                children: [
+                    {path: '', component: PedidoUserListComponent, title: 'Ver pedidos'},
+                    {path: ':id', component: PedidoUserViewComponent, title:'Ver um pedido'}
+                ]
+            },
+            {path: 'favoritos', component: FavoritosComponent, title: 'Visualizar favoritos'},        
         ],
     },
     { 
         path: 'home',
         component: HomeTemplateComponent,
         children: [
+            {path: '', pathMatch: 'full', redirectTo: 'home'},
+            {path: '', component: HomeComponent},
             {path: 'buscador/:nome', component: ProdutoHomeListComponent}
         ]
     },
@@ -137,7 +144,7 @@ export const routes: Routes = [
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
-    declarations: [HomeComponent], // Declare o HomeComponent aqui
+    declarations: [], // Declare o HomeComponent aqui
     exports: [RouterModule]
   })
   export class AppRoutingModule { }

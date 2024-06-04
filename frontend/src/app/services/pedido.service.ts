@@ -32,14 +32,17 @@ export class PedidoService {
 
       const url = 'http://localhost:8080/pedidos/insert';
       const headers = this.sessionTokenService.getSessionHeader();
+
+      for (const i in pedido.itemDaVenda) {
+        console.log(i);
+      }
+      
       if(headers) {
         console.log(pedido);
         console.log(headers);
       return this.httpClient.post<Pedido>(url, pedido, { headers });
-      
       } else {
         return this.httpClient.post<Pedido>(url, pedido);
-        
       }
     }
 
@@ -69,6 +72,18 @@ export class PedidoService {
       } else {
         return this.httpClient.get<PedidoRecebe[]>(url);
         
+      }
+    }
+
+    findById(id: number): Observable<PedidoRecebe> {
+
+      const url = 'http://localhost:8080/pedidos/search/pedidos/';
+      const headers = this.sessionTokenService.getSessionHeader();
+      if(headers) {
+        console.log(headers);
+        return this.httpClient.get<PedidoRecebe>(url, { headers });
+      } else {
+        return this.httpClient.get<PedidoRecebe>(url);
       }
     }
 
