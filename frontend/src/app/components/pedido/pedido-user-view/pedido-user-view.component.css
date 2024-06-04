@@ -1,0 +1,5 @@
+@import url('../../../../assets/bulma-steps.min.css');
+
+::marker{
+    display: none;
+}

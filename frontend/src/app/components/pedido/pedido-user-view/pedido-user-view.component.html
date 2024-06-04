@@ -1,13 +1,98 @@
-<div *ngIf="pedido" class="columns">
-    <div class="column">
-        <div *ngIf="pedido.endereco" class="box content">
-            <h2>Endereço: </h2>
-            <p>{{pedido.endereco.nome}}</p>
+<div *ngIf="pedido">
+    <div class="box content">
+        <h1>Ver pedido com id #{{pedido.id}}</h1>
+        <div class="columns">
+            <div class="column">
+                <div *ngIf="pedido.endereco">
+                    <h4>Endereço do pedido: </h4>
+                    <p><b>Nome:</b> {{pedido.endereco.nome}}</p>
+                    <p><b>Linha de endereço: </b>{{pedido.endereco.logradouro}}, {{pedido.endereco.numeroLote}}, {{pedido.endereco.complemento}} - {{pedido.endereco.bairro}}</p>
+                    <p><b>CEP: </b>{{pedido.endereco.cep}}</p>
+                    <p><b>Localidade: </b>{{pedido.endereco.localidade}}/{{pedido.endereco.uf}}</p>
+                </div>
+            </div>
+            <div class="column">
+                <h4> Método de pagamento: </h4>
+                <p><b>Modalidade: </b> {{ this.formaPagamento }}</p>
+                <div *ngIf="this.cartaoDeCredito !== undefined">
+                    <p><b>Número do cartão: </b> ****{{this.cartaoDeCredito.numeroCartao}}</p>
+                </div>
+                <p><b>Valor pago: </b>{{pedido.formaDePagamento.valorPago?.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                })}}</p>
+                </div>
+            <div class="column">
+                <div>
+                    <h4>Resumo do pedido:</h4>
+                    <p><b>ID do pedido: </b>{{pedido.id}}</p>
+                    <p><b>Total do pedido: </b> {{getTotalPedido(pedido).toLocaleString('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    })}}</p>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="column">
-        <div class="box content">
-            <p>{{this.pedido.id?.toString}}</p>
+    <div class="box content">
+        <h1>Acompanhe seu pedido:</h1>
+        <div class="columns is-centered">
+            <div class="column">
+                <ul class="steps is-vertical" *ngIf="showStatus">
+                    <li [ngClass]="{'is-active': statusIgual(status.id), 'steps-segment': showStatus}" *ngFor="let status of statusPadrao">
+                        <span class="steps-marker"></span>
+                        <div class="steps-content">
+                            <p>{{status.descricao}}</p>
+                            <p>{{pedido.statusDoPedido.at(status.id)?.dataHora}}</p>
+                            <!-- <p>{{status.}}</p> -->
+                        </div>          
+                    </li>
+                </ul> 
+                <div class="notification is-warning" *ngIf="!showStatus">
+                  <h2 class="has-text-black">Seu pedido teve o seguinte status:</h2>
+                  <b>{{this.ultimoStatus?.descricaoStatus}}</b>
+                  <p>Caso necessário, contate o suporte pelos contatos abaixo:</p>
+
+                </div>
+            </div>
         </div>
+    </div>
+    <div class="box content">
+        <h1>Produtos comprados: </h1>
+        <div class="table-container">
+            <table class="table is-fullwidth">
+              <thead>
+                <tr>
+                    <th> </th>
+                    <th>Produto:</th>
+                    <th>Preço: </th>
+                    <th>Quantidade: </th>
+                    <th>Subtotal: </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let produto of pedido.itemDaVenda">
+                  <td>
+                    <img [src]='this.produtoService.getUrlImagem(produto.imagemPrincipal)'
+                    style="max-width: 50px; max-height: 50px; object-fit: cover">  
+                  </td>
+                  <td>
+                    <h4>{{produto.nome}}</h4>
+                  </td>
+                  <td>
+                    <p>{{produto.preco?.toLocaleString('PT-BR',{style:'currency', currency: 'BRL'})}}</p>  
+                  </td>
+                  <td>
+                    <p>{{produto.quantidadeUnidades}} un.</p>
+                  </td>
+                  <td>
+                    <p>{{getSubtotal(produto).toLocaleString('PT-BR',{style:'currency', currency: 'BRL'})}}</p>
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>  
     </div>
 </div>

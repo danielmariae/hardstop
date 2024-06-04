@@ -101,4 +101,21 @@ PedidoService service;
     return Response.status(200).entity(service.findPedidoById(id)).build();
   }
 
+  @GET
+  @Path("/search/pedidos/cartao/{id}")
+  @RolesAllowed({"User", "Func", "Admin"})
+  public Response findCartaoByPedido(@PathParam("id") Long id){
+    return Response.status(200).entity(service.findCartaoByPedido(id)).build();
+  }
+
+  @GET
+  @Path("/search/pedidos/status/{id}")
+  @RolesAllowed({"User", "Func", "Admin"})
+  public Response findStatusPedidoById(@PathParam("id") Long id){
+    return Response.status(200).entity(service.findByStatus(id)).build();
+  }
+
+
+
+
 }

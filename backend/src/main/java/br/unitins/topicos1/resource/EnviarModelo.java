@@ -10,9 +10,11 @@ import br.unitins.topicos1.dto.UnidadeFederativaDTO;
 import br.unitins.topicos1.dto.login.PerfilDTO;
 import br.unitins.topicos1.dto.lote.StatusDoLoteDTO;
 import br.unitins.topicos1.dto.pedido.formaPagamento.ModalidadePagamentoDTO;
+import br.unitins.topicos1.dto.pedido.status.StatusDTO;
 import br.unitins.topicos1.dto.telefone.TipoTelefoneDTO;
 import br.unitins.topicos1.model.lote.StatusDoLote;
 import br.unitins.topicos1.model.pagamento.ModalidadePagamento;
+import br.unitins.topicos1.model.pedido.Status;
 import br.unitins.topicos1.model.utils.Perfil;
 import br.unitins.topicos1.model.utils.TipoTelefone;
 import jakarta.annotation.security.PermitAll;
@@ -62,6 +64,16 @@ public class EnviarModelo {
         return Arrays.asList(StatusDoLote.values())
             .stream()
             .map(statusDoLote -> StatusDoLoteDTO.valueOf(statusDoLote))
+            .collect(Collectors.toList());
+    }
+
+    @GET
+    @Path("/statusDoPedido/default")
+    public List<StatusDTO> obtertStatusDoPedido() {
+        return Arrays.asList(Status.values())
+            .stream()
+            .filter(status -> status != Status.PAGAMENTO_NÃO_AUTORIZADO && status != Status.DESISTIDO && status != Status.DEVOLVIDO)
+            .map(status -> StatusDTO.valueOf(status))
             .collect(Collectors.toList());
     }
 

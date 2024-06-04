@@ -83,15 +83,6 @@ export class HeaderUserComponent implements OnInit {
     this.sessionTokenService.clearSessionToken();
   }
 
-  buscarProduto(): void{
-    if(this.buscadorForm.value !== null){
-      console.log("Buscando por: ", this.buscadorForm.value);
-      this.navigationService.navigateTo('home/buscador/'+this.buscadorForm.value);  
-    }else{
-      this.navigationService.navigateTo('home/buscador/%');
-    }
-  }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

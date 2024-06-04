@@ -13,13 +13,6 @@
     <div class="navbar-menu" id="navMenu">
       <div class="navbar-start">
         <div class="navbar-item">
-          <div class="field has-addons">
-            <p class="control"> 
-              <input class="input" type="text" placeholder="Procure um produto" [formControl]="buscadorForm">  <!-- Correção aqui -->
-            </p>
-            <p class="control">
-              <button class="button" (click)="buscarProduto()">Pesquise</button>
-            </p>
           </div>
         </div>
       </div>
@@ -27,6 +20,5 @@
             <a *ngIf="usuarioLogado" class="navbar-item">
               {{clienteLogado?.nome || 'Cliente Desconhecido'}}
             </a>
-        </div>
       </div>
   </nav>
