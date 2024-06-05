@@ -32,6 +32,15 @@ import jakarta.ws.rs.core.MediaType;
 public class EnviarModelo {
 
     @GET
+    @Path("/statusPedido")
+    public List<StatusDTO> obterStatusPedido() {
+        return Arrays.asList(Status.values())
+        .stream()
+        .map(status -> StatusDTO.valueOf(status))
+        .collect(Collectors.toList());
+    }
+
+    @GET
     @Path("/modalidadePagamento")
     public List<ModalidadePagamentoDTO> obterModalidadePagamento() {
         return Arrays.asList(ModalidadePagamento.values())
@@ -39,6 +48,7 @@ public class EnviarModelo {
             .map(modalidadePagamento -> ModalidadePagamentoDTO.valueOf(modalidadePagamento))
             .collect(Collectors.toList());
     }
+  
   
     @GET
     @Path("/tipoTelefone")

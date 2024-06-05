@@ -30,6 +30,14 @@ export class PedidoService {
         );
     }
 
+    getStatusPedido(): Observable<any[]> {
+      const url = 'http://localhost:8080/enum/statusPedido';
+      return this.httpClient.get<any[]>(url)
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+
     insert(pedido: Pedido): Observable<Pedido> {
 
       const url = 'http://localhost:8080/pedidos/insert';
@@ -77,9 +85,40 @@ export class PedidoService {
       }
     }
 
+    findAllFuncStatus(idStatus: number): Observable<PedidoRecebe[]> {
+
+      const url = `http://localhost:8080/pedidos/func/search/all/${idStatus}`;
+      const headers = this.sessionTokenService.getSessionHeader();
+      console.log(this.sessionTokenService.getSessionToken());
+      console.log(headers);
+      if(headers) {
+        console.log(headers);
+      return this.httpClient.get<PedidoRecebe[]>(url, { headers });
+      
+      } else {
+        return this.httpClient.get<PedidoRecebe[]>(url);
+        
+      }
+    }
+
+    
+    findAllFuncCliente(id: number): Observable<PedidoRecebe[]> {
+
+      const url = 'http://localhost:8080/pedidos/func/search/pedidos/cliente/${id}';
+      const headers = this.sessionTokenService.getSessionHeader();
+      if(headers) {
+        console.log(headers);
+      return this.httpClient.get<PedidoRecebe[]>(url, { headers });
+      
+      } else {
+        return this.httpClient.get<PedidoRecebe[]>(url);
+        
+      }
+    }
+
     findById(id: number): Observable<PedidoRecebe> {
 
-      const url = `http://localhost:8080/pedidos/search/pedidos/${id}`;
+      const url = 'http://localhost:8080/pedidos/search/pedidos/${id}';
       const headers = this.sessionTokenService.getSessionHeader();
       if(headers) {
         return this.httpClient.get<PedidoRecebe>(url, { headers });

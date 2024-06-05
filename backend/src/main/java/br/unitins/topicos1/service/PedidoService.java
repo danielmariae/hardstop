@@ -15,6 +15,12 @@ import br.unitins.topicos1.dto.pedido.status.StatusDoPedidoResponseDTO;
 
 public interface PedidoService {
 
+// Busca todos os pedidos com um determinado Status
+public List<PedidoResponseDTO> findAllFuncStatus(Long id);
+
+// Busca todos os pedidos de um determinado cliente
+public List<PedidoResponseDTO> findPedidoByClienteId(Long id);
+
 // Insere um pedido desatrelado de um usuário no banco de dados
 public EnderecoResponseDTO insertEndereco(EnderecoDTO dto);
 

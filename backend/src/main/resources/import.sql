@@ -89,9 +89,6 @@ insert into fornecedor_telefone (id_fornecedor, id_telefone) values(1,7);
 insert into fornecedor_endereco (id_fornecedor, id_endereco) values(2,8);
 insert into fornecedor_telefone (id_fornecedor, id_telefone) values(2,8);
 
-insert into statusDoPedido (dataHora, status) values('2023-10-01 16:11:26', 0);
-insert into statusDoPedido (dataHora, status) values('2023-10-04 20:23:35', 1);
-
 insert into classificacao (nome) values('Processadores');
 insert into classificacao (nome) values('Placas Mãe');
 
@@ -129,9 +126,10 @@ insert into formaDePagamento (modalidade, valorPago) values(0, 5900);
 insert into cartaodecredito (anovalidade, codseguranca, mesvalidade, datahorapagamento, numerocartao, formaPagamento_id) values(24, 237, 3, '2023-10-01 16:11:26', '345690872106', 1);
 insert into pedido (id_formaDePagamento, id_endereco, id_cliente) values(1, 1, 1);
 
-
-insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,1);
-insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,2);
+insert into statusDoPedido (dataHora, status, id_pedido) values('2023-10-01 16:11:26', 0, 1);
+insert into statusDoPedido (dataHora, status, id_pedido) values('2023-10-04 20:23:35', 1, 1);
+/* insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,1);
+insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,2); */
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,1);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,2);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,3);

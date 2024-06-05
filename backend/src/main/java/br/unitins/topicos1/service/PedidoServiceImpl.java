@@ -360,6 +360,7 @@ public class PedidoServiceImpl implements PedidoService {
     LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
     status.setDataHora(novoDateTime);
     status.setStatus(Status.valueOf(0));
+    status.setPedido(pedido);
     pedido.getStatusDoPedido().add(status);
 
     try {
@@ -638,6 +639,24 @@ public class PedidoServiceImpl implements PedidoService {
   public List<PedidoResponseDTO> findPedidoByCliente(Long idcliente) {
     return repositoryPedido
       .findAll(idcliente)
+      .stream()
+      .map(p -> PedidoResponseDTO.valueOf(p))
+      .toList();
+  }
+
+  @Override
+  public List<PedidoResponseDTO> findPedidoByClienteId(Long idcliente) {
+    return repositoryPedido
+      .findAll(idcliente)
+      .stream()
+      .map(p -> PedidoResponseDTO.valueOf(p))
+      .toList();
+  }
+
+  @Override
+  public List<PedidoResponseDTO> findAllFuncStatus(Long idStatus) {
+    return repositoryPedido
+      .findAllStatus(idStatus)
       .stream()
       .map(p -> PedidoResponseDTO.valueOf(p))
       .toList();

@@ -36,10 +36,12 @@ import { PagamentoComponent } from './components/pagamento/pagamento.component';
 import { PedidoUserListComponent } from './components/pedido/pedido-user-list/pedido-user-list.component';
 import { FavoritosComponent } from './components/favoritos/favoritos.component';
 import { PedidoUserViewComponent } from './components/pedido/pedido-user-view/pedido-user-view.component';
+import { PedidoFuncListComponent } from './components/pedido/pedido-func-list/pedido-func-list.component';
 
 
 export const routes: Routes = [
 
+    {path: 'func/pedidos', component: PedidoFuncListComponent, title: 'Realizar Pagamento'},
     {path: 'carrinho', component: CarrinhoComponent, title: 'Visualizar carrinho'},
     {path: 'pagamento', component: PagamentoComponent, title: 'Realizar Pagamento'},
     {path:'', pathMatch: 'full', redirectTo:'home'},
