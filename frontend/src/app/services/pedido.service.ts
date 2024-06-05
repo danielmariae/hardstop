@@ -148,7 +148,6 @@ export class PedidoService {
       }
     }
 
-<<<<<<< HEAD
     updatePedidoSeparadoEstoque(idPedido: number, idStatus: number): Observable<PedidoRecebe> {
       const url = 'http://localhost:8080/pedidos/patch/status/';
       const headers = this.sessionTokenService.getSessionHeader();
@@ -167,7 +166,9 @@ export class PedidoService {
       return this.httpClient.patch<PedidoRecebe>(url, body, { headers });
       } else {
         return this.httpClient.patch<PedidoRecebe>(url, body);
-=======
+      }
+    }
+    
     findByIdStatus(id: number): Observable<StatusDoPedido> {
       const url = `http://localhost:8080/pedidos/search/pedidos/status/${id}`;
       const headers = this.sessionTokenService.getSessionHeader();
@@ -175,9 +176,9 @@ export class PedidoService {
         return this.httpClient.get<StatusDoPedido>(url, { headers });
       } else {
         return this.httpClient.get<StatusDoPedido>(url);
->>>>>>> 39b8e7286e2012d03d8ba1dcea0f97b473bf23eb
       }
     }
+  
 
 
     private handleError(error: HttpErrorResponse) {
