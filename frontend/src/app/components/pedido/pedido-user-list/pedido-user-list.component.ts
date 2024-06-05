@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { HeaderHomeComponent } from "../../template/home-template/header-home/header-home.component";
 import { PedidoService } from "../../../services/pedido.service";
-import { PedidoRecebe } from "../../../models/pedidoRecebe.modelo";
+import { PedidoRecebe } from "../../../models/pedidoRecebe.model";
 import { CommonModule } from "@angular/common";
 import { getFormattedCurrency } from "../../../utils/formatValues";
 import { Produto } from "../../../models/produto.model";
@@ -126,5 +126,9 @@ export class PedidoUserListComponent implements OnInit {
 
     comprarMaisProdutos(): void{
       this.navigationService.navigateTo('/home');
+    }
+
+    verPedido(id: number): void{
+      this.navigationService.navigateTo('/user/pedidos/'+id);
     }
   }

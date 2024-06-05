@@ -6,12 +6,13 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SidebarService {
 
-  public sideNavToggleSubject: BehaviorSubject<any> =
-    new BehaviorSubject(null);
+  private sidebarVisibleSource = new BehaviorSubject<boolean>(false);
+  sidebarVisible$ = this.sidebarVisibleSource.asObservable();
 
-  constructor() { }
-
-  public toggle() {
-    return this.sideNavToggleSubject.next(null);
+  toggleSidebar() {
+    this.sidebarVisibleSource.next(!this.sidebarVisibleSource.value);
   }
-}
+
+  setSidebarVisible(visible: boolean) {
+    this.sidebarVisibleSource.next(visible);
+  }}

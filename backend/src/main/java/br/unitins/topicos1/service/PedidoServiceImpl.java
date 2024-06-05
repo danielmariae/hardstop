@@ -25,7 +25,6 @@ import br.unitins.topicos1.model.utils.Endereco;
 import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.EmpresaRepository;
 import br.unitins.topicos1.repository.EnderecoRepository;
-import br.unitins.topicos1.repository.LoteRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
 import br.unitins.topicos1.repository.ProdutoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,11 +36,17 @@ import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.PersistenceUnit;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import br.unitins.topicos1.dto.pedido.formaPagamento.CartaoDeCreditoResponseDTO;
+import br.unitins.topicos1.dto.pedido.status.StatusDoPedidoResponseDTO;
+import br.unitins.topicos1.repository.CartaoDeCreditoRepository;
+import br.unitins.topicos1.repository.StatusDoPedidoRepository;
 
 // import org.eclipse.microprofile.reactive.messaging.Channel;
 // import org.eclipse.microprofile.reactive.messaging.Emitter;
@@ -69,7 +74,10 @@ public class PedidoServiceImpl implements PedidoService {
   EmpresaRepository repositoryEmpresa;
 
   @Inject
-  LoteRepository repositoryLote;
+  StatusDoPedidoRepository repositoryStatus;
+
+  @Inject
+  CartaoDeCreditoRepository repositoryCartao;
 
   @PersistenceUnit
   EntityManagerFactory emf;
@@ -107,7 +115,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     pedido.setCliente(cliente);
 
-    pedido.setItemDaVenda(new ArrayList<ItemDaVenda>());
+    pedido.setItemDaVenda(new ArrayList<>());
     Double valorCompra = 0.0;
     for (ItemDaVendaDTO idv : dto.itemDaVenda()) {
       ItemDaVenda item = new ItemDaVenda();
@@ -1365,4 +1373,14 @@ public class PedidoServiceImpl implements PedidoService {
       return PedidoResponseDTO.valueOf(repositoryPedido.findById(id));
     }
 
+    @Override
+    public CartaoDeCreditoResponseDTO findCartaoByPedido(Long id){
+      Pedido pedido = repositoryPedido.findById(id);
+      return CartaoDeCreditoResponseDTO.valueOf(repositoryCartao.findByFormaPagamentoId(pedido.getFormaDePagamento().getId()));
+    } 
+
+    @Override
+    public StatusDoPedidoResponseDTO findByStatus(Long id){
+      return StatusDoPedidoResponseDTO.valueOf(repositoryStatus.findById(id));
+    }
 }

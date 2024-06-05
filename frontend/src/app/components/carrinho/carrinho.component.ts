@@ -346,5 +346,7 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
     return getFormattedCurrency(valor);
     }
     
-
+  voltarAoMenuPrincipal() {
+    this.navigationService.navigateTo('home')
+  } 
 }

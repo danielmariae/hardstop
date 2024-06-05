@@ -211,6 +211,18 @@
     </div> -->
   </ng-container>
   <ng-template #carrinhoVazio>
-    <p>O carrinho está vazio.</p>
+    <div class="content">
+      <div class="column has-text-centered">
+        <h1 class="">
+          <i class="mdi mdi-48px mdi-cart"></i>
+          <br>
+          O carrinho está vazio.
+        </h1>
+        <p>Continue comprando conosco no HARDSTOP e volte aqui para finalizar!</p>
+        <button class="button" type="button" (click)="voltarAoMenuPrincipal()">
+          Voltar para menu de produtos
+        </button>
+      </div>
+    </div>
   </ng-template>
 </div>

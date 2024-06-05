@@ -1,0 +1,8 @@
+@media print{
+    #sidebar-user {
+        display: none;
+    }
+    #header-user {
+        display: none;
+    }
+}

@@ -19,6 +19,8 @@ export class NavigationService {
         this.router.navigate([endpoint]);
     }
 
+    
+
     navigateBack(): void {
         // Navega de volta para o endpoint anterior
         if (this.previousEndpoint) {

@@ -9,6 +9,8 @@ import br.unitins.topicos1.dto.pedido.PedidoDTO;
 import br.unitins.topicos1.dto.pedido.PedidoPatchEnderecoDTO;
 import br.unitins.topicos1.dto.pedido.PedidoPatchStatusDTO;
 import br.unitins.topicos1.dto.pedido.PedidoResponseDTO;
+import br.unitins.topicos1.dto.pedido.formaPagamento.CartaoDeCreditoResponseDTO;
+import br.unitins.topicos1.dto.pedido.status.StatusDoPedidoResponseDTO;
 
 
 public interface PedidoService {
@@ -48,4 +50,14 @@ public void deletePedidoByCliente(Long idCliente, Long idPedido);
 
   // Remove produtos na lista de desejos do Cliente
   public void deleteDesejos(Long idProduto, Long idCliente);
+
+  // Procurar cartão relacionado ao pedido
+  public CartaoDeCreditoResponseDTO findCartaoByPedido(Long id);
+
+  // Procurar boleto relacionado ao pedido
+  // public BoletoResponseDTO findBoletoByPedido(Long id);
+
+  // Procurar stauts do pedido
+  public StatusDoPedidoResponseDTO findByStatus(Long id);
+  
 }

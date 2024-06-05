@@ -123,6 +123,7 @@ FuncionarioService serviceF;
     return Response.status(200).entity(service.findPedidoByClienteId(id)).build();
   }
 
+<<<<<<< HEAD
   @DELETE
   @Path("func/delete/{id}")
   @RolesAllowed({"Func", "Admin"})
@@ -131,5 +132,20 @@ FuncionarioService serviceF;
         return Response.status(Status.NO_CONTENT).build();
   }
   
+=======
+  @Path("/search/pedidos/cartao/{id}")
+  @RolesAllowed({"User", "Func", "Admin"})
+  public Response findCartaoByPedido(@PathParam("id") Long id){
+    return Response.status(200).entity(service.findCartaoByPedido(id)).build();
+  }
+
+  @GET
+  @Path("/search/pedidos/status/{id}")
+  @RolesAllowed({"User", "Func", "Admin"})
+  public Response findStatusPedidoById(@PathParam("id") Long id){
+    return Response.status(200).entity(service.findByStatus(id)).build();
+  }
+
+>>>>>>> 39b8e7286e2012d03d8ba1dcea0f97b473bf23eb
 
 }
