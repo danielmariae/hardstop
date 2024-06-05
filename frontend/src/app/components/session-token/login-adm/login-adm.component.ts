@@ -49,10 +49,6 @@ export class LoginAdmComponent implements OnInit {
   this.sessionTokenService.authenticateUserF(username, password)
   .subscribe({
     next: (response) => {
-      const token = response.token;
-      //console.log('12334'+ ' ' + token);
-      this.sessionTokenService.saveSessionToken(token);
-      this.loginForm.reset();
       this.errorMessage = '';
       this.navigationService.navigateTo('/adm/clientes');
     },

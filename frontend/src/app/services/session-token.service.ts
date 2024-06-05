@@ -82,7 +82,7 @@ export class SessionTokenService {
 
     return this.httpClient.post(loginUrl, params, {observe: 'response'}).pipe(
       tap((res: any) => {
-       // console.log(res);
+        console.log(res);
         const authToken = res.headers.get('authorization') ?? '';
         if (authToken) {
           // console.log(authToken);
