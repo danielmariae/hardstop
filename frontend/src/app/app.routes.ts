@@ -65,7 +65,6 @@ export const routes: Routes = [
         path: 'home',
         component: HomeTemplateComponent,
         children: [
-            {path: '', pathMatch: 'full', redirectTo: 'home'},
             {path: '', component: HomeComponent},
             {path: 'buscador/:nome', component: ProdutoHomeListComponent}
         ]
@@ -144,7 +143,6 @@ export const routes: Routes = [
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
-    declarations: [], // Declare o HomeComponent aqui
     exports: [RouterModule]
   })
   export class AppRoutingModule { }
