@@ -84,7 +84,7 @@ public class AuthResource {
         // responseBody.put("token", token);
         // return Response.ok(responseBody).build();
         return Response.ok(result)
-                .header("Authorization", token)
+                .header("authorization", token)
                 .build();
     
         //return Response.ok().header("Authorization", token).build();

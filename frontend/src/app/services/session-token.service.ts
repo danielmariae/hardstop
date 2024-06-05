@@ -82,11 +82,12 @@ export class SessionTokenService {
 
     return this.httpClient.post(loginUrl, params, {observe: 'response'}).pipe(
       tap((res: any) => {
-       // console.log(res);
+        console.log(res);
         const authToken = res.headers.get('authorization') ?? '';
         if (authToken) {
-          // console.log(authToken);
+           console.log(authToken);
           this.saveSessionToken(authToken);
+          console.log(this.getSessionHeader());
           const funcionarioLogado = res.body;
          // console.log(funcionarioLogado);
           if (funcionarioLogado) {
@@ -110,6 +111,7 @@ export class SessionTokenService {
   removeFuncionarioLogado(): void {
     this.localStorageService.removeItem(this.funcionarioLogadoKey);
     this.funcionarioLogadoSubject.next(null);
+    this.clearSessionToken();
   }
 
     // Exemplo de método para fazer uma solicitação HTTP para a API para autenticar o Cliente
@@ -150,6 +152,7 @@ export class SessionTokenService {
     removeClienteLogado(): void {
       this.localStorageService.removeItem(this.clienteLogadoKey);
       this.clienteLogadoSubject.next(null);
+      this.clearSessionToken();
     }
 
      notifyLoginAdmSucess(){

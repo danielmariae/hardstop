@@ -8,6 +8,7 @@ import br.unitins.topicos1.dto.pedido.PedidoDTO;
 import br.unitins.topicos1.dto.pedido.PedidoPatchEnderecoDTO;
 import br.unitins.topicos1.dto.pedido.PedidoPatchStatusDTO;
 import br.unitins.topicos1.service.ClienteService;
+import br.unitins.topicos1.service.FuncionarioService;
 import br.unitins.topicos1.service.PedidoService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
@@ -35,6 +36,9 @@ ClienteService serviceC;
 
 @Inject
 PedidoService service;
+
+@Inject
+FuncionarioService serviceF;
 
   @POST
   @RolesAllowed({"User"})
@@ -95,10 +99,26 @@ PedidoService service;
   }
 
   @GET
-  @Path("/search/pedidos/{id}")
-  @RolesAllowed({"User", "Func", "Admin"})
+  @Path("func/search/pedidos/{id}") // Aqui o id corresponde ao id de um pedido de um cliente
+  @RolesAllowed({"Func", "Admin"})
   public Response findPedidoById(@PathParam("id") Long id) {
     return Response.status(200).entity(service.findPedidoById(id)).build();
   }
+
+  @GET
+  @Path("func/search/all/{id}") // Aqui o id corresponde ao status do pedido
+  @RolesAllowed({"Func", "Admin"})
+  public Response findAllFuncStatus(@PathParam("id") Long id) {
+    System.out.println("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+    return Response.status(200).entity(service.findAllFuncStatus(id)).build();
+  }
+
+  @GET
+  @Path("func/search/pedidos/cliente/{id}") // Aqui o id corresponde ao id de um cliente
+  @RolesAllowed({"Func", "Admin"})
+  public Response findPedidoByClienteId(@PathParam("id") Long id) {
+    return Response.status(200).entity(service.findPedidoByClienteId(id)).build();
+  }
+
 
 }

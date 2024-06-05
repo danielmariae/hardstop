@@ -10,9 +10,11 @@ import br.unitins.topicos1.dto.UnidadeFederativaDTO;
 import br.unitins.topicos1.dto.login.PerfilDTO;
 import br.unitins.topicos1.dto.lote.StatusDoLoteDTO;
 import br.unitins.topicos1.dto.pedido.formaPagamento.ModalidadePagamentoDTO;
+import br.unitins.topicos1.dto.pedido.status.StatusDTO;
 import br.unitins.topicos1.dto.telefone.TipoTelefoneDTO;
 import br.unitins.topicos1.model.lote.StatusDoLote;
 import br.unitins.topicos1.model.pagamento.ModalidadePagamento;
+import br.unitins.topicos1.model.pedido.Status;
 import br.unitins.topicos1.model.utils.Perfil;
 import br.unitins.topicos1.model.utils.TipoTelefone;
 import jakarta.annotation.security.PermitAll;
@@ -30,6 +32,15 @@ import jakarta.ws.rs.core.MediaType;
 public class EnviarModelo {
 
     @GET
+    @Path("/statusPedido")
+    public List<StatusDTO> obterStatusPedido() {
+        return Arrays.asList(Status.values())
+        .stream()
+        .map(status -> StatusDTO.valueOf(status))
+        .collect(Collectors.toList());
+    }
+
+    @GET
     @Path("/modalidadePagamento")
     public List<ModalidadePagamentoDTO> obterModalidadePagamento() {
         return Arrays.asList(ModalidadePagamento.values())
@@ -37,6 +48,7 @@ public class EnviarModelo {
             .map(modalidadePagamento -> ModalidadePagamentoDTO.valueOf(modalidadePagamento))
             .collect(Collectors.toList());
     }
+  
   
     @GET
     @Path("/tipoTelefone")

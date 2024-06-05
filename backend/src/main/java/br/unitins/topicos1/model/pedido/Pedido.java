@@ -18,26 +18,27 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Pedido extends DefaultEntity {
     private String codigoDeRastreamento;
-    private Long idEndereco;
+    // private Long idEndereco;
 
-    public Long getIdEndereco() {
-        return idEndereco;
-    }
+    // public Long getIdEndereco() {
+    //     return idEndereco;
+    // }
 
-    public void setIdEndereco(Long idEndereco) {
-        this.idEndereco = idEndereco;
-    }
+    // public void setIdEndereco(Long idEndereco) {
+    //     this.idEndereco = idEndereco;
+    // }
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(
-    name = "pedido_statusDoPedido",
-    joinColumns = @JoinColumn(name = "id_pedido"),
-    inverseJoinColumns = @JoinColumn(name = "id_statusDoPedido")
-    )
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    //@JoinTable(
+    //name = "pedido_statusDoPedido",
+    //joinColumns = @JoinColumn(name = "id_pedido"),
+    //inverseJoinColumns = @JoinColumn(name = "id_statusDoPedido")
+    //)
     private List<StatusDoPedido> statusDoPedido;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

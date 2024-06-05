@@ -48,19 +48,14 @@ export class LoginAdmComponent implements OnInit {
 
   this.sessionTokenService.authenticateUserF(username, password)
   .subscribe({
-    next: (response) => {
-      const token = response.token;
-      //console.log('12334'+ ' ' + token);
-      this.sessionTokenService.saveSessionToken(token);
-      this.loginForm.reset();
-      this.errorMessage = '';
-      this.navigationService.navigateTo('/adm/clientes');
-    },
-    error: (error) => {
-      console.log('Erro:', error);
-      console.log(username + ' ' + password);
-      this.errorMessage = 'Usuário ou senha inválidos.';
-    }
-  });
+    next: (response: any) => {
+     this.navigationService.navigateTo('/adm/clientes');
+   },
+      error: (error) => {
+        console.log('Erro:', error);
+        console.log(username + ' ' + password);
+        this.errorMessage = 'Usuário ou senha inválidos.';
+      }
+     });
   }
 }

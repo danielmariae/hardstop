@@ -31,10 +31,11 @@ export class FuncionarioService {
   findTodos(): Observable<Funcionario[]> {
 
     const headers = this.sessionTokenService.getSessionHeader();
+    const url = `${this.baseUrl}/all`;
 
     if (headers) {
       // Faz a requisição HTTP com o token de autenticação no cabeçalho
-      return this.httpClient.get<Funcionario[]>(this.baseUrl, { headers })
+      return this.httpClient.get<Funcionario[]>(url, { headers })
         .pipe(
           catchError(this.handleError)
         );

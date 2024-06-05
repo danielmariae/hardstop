@@ -144,7 +144,6 @@ import { ItemDaVenda } from "../../models/itemDaVenda";
       //console.log('Valor selecionado:', value);
       this.metodoPagamento = Number(value);
       console.log(this.metodoPagamento);
-      // Aqui você pode adicionar lógica adicional para manipular o valor selecionado
     }
 
 
