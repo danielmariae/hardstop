@@ -41,6 +41,8 @@ public void deletePedidoByCliente(Long idCliente, Long idPedido);
 
   // Retorna um pedido pelo id.
   public PedidoResponseDTO findPedidoById(Long id);
+  
+  public PedidoResponseDTO findPedidoById(Long id, String user);
 
   // Insere produtos na lista de desejos do Cliente
   public DesejoResponseDTO insertDesejos(Long idProduto, Long idCliente);
@@ -50,6 +52,8 @@ public void deletePedidoByCliente(Long idCliente, Long idPedido);
 
   // Procurar cartão relacionado ao pedido
   public CartaoDeCreditoResponseDTO findCartaoByPedido(Long id);
+
+  public List<PedidoResponseDTO> findAll(int page, int pageSize);
 
   // Procurar boleto relacionado ao pedido
   // public BoletoResponseDTO findBoletoByPedido(Long id);

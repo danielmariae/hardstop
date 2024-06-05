@@ -62,7 +62,7 @@ export class PedidoUserViewComponent implements OnInit {
   }
 
   loadPedido(): void {
-    this.pedidoService.findById(this.id).subscribe({
+    this.pedidoService.findByIdCliente(this.id).subscribe({
       next: (response) => {
         console.log('Pedido carregado:', response);
         this.pedido = response;

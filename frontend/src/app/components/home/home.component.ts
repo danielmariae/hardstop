@@ -12,6 +12,7 @@ import { getFormattedCurrency } from '../../utils/formatValues';
 import { HeaderHomeComponent } from '../template/home-template/header-home/header-home.component';
 import { FooterHomeComponent } from '../template/home-template/footer-home/footer-home.component';
 import { ClienteService } from '../../services/cliente.service';
+import { SessionTokenService } from '../../services/session-token.service';
 
 // tipo personalizado de dados, como classes e interfaces, porém mais simples.
 type Card = {
@@ -39,19 +40,46 @@ export class HomeComponent implements OnInit {
   totalPages = 0;
   imagensBase64: { [produtoId: number]: string } = {};
 
+  usuarioLogado: boolean = false;
+  admLogado: boolean = false;
+
   constructor(
     private produtoService: ProdutoService,
     private carrinhoService: CarrinhoService,
     private snackBar: MatSnackBar,
     private clienteService: ClienteService,
+    private sessionTokenService: SessionTokenService
     ) {}
 
-ngOnInit(): void {
-this.pageSize = 4; 
-this.page=0;
-this.atualizarDadosDaPagina();
-console.log(this.produtos);
-}
+  ngOnInit(): void {
+    this.pageSize = 4; 
+    this.page=0;
+    
+    // Verifica se há um estado de login armazenado no sessionStorage ao inicializar o componente
+    const usuarioLogadoState = sessionStorage.getItem('usuarioLogado');
+    if (usuarioLogadoState !== null) {
+      this.usuarioLogado = JSON.parse(usuarioLogadoState);
+    }
+
+    const admLogadoState = sessionStorage.getItem('admLogado');
+    if (admLogadoState !== null) {
+      this.admLogado = JSON.parse(admLogadoState);
+    }
+
+    // Subscreve-se aos eventos de login bem-sucedido para atualizar o estado de login
+    this.sessionTokenService.loginAdmSuccess$.subscribe(() => {
+      this.admLogado = true;
+      sessionStorage.setItem('admLogado', JSON.stringify(true));
+    });
+
+    this.sessionTokenService.loginClienteSuccess$.subscribe(() => {
+      this.usuarioLogado = true;
+      sessionStorage.setItem('usuarioLogado', JSON.stringify(true));
+    });
+
+    this.atualizarDadosDaPagina();
+    console.log(this.produtos);
+  }
 
 
 carregarProdutos(page: number, pageSize: number): void {

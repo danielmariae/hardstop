@@ -1196,6 +1196,60 @@ public class PedidoServiceImpl implements PedidoService {
       return PedidoResponseDTO.valueOf(repositoryPedido.findById(id));
     }
 
+    @Override 
+    public PedidoResponseDTO findPedidoById(Long id, String login) {
+        Cliente cliente = repository.findByLogin(login);
+        Pedido pedidoDesejado = repositoryPedido.findById(id);
+    
+        if (cliente == null) {
+            throw new GeneralErrorException(
+                "404",
+                "Not Found",
+                "PedidoServiceImpl(findPedidoById)",
+                "Cliente não encontrado com o login fornecido."
+            );
+        }
+    
+        if (pedidoDesejado == null) {
+            throw new GeneralErrorException(
+                "404",
+                "Not Found",
+                "PedidoServiceImpl(findPedidoById)",
+                "Pedido não encontrado com o ID fornecido."
+            );
+        }
+    
+        try {
+            if (verificaPedido3(cliente, pedidoDesejado)) {
+                return PedidoResponseDTO.valueOf(pedidoDesejado);
+            } else {
+                throw new GeneralErrorException(
+                    "401",
+                    "Unauthorized",
+                    "PedidoServiceImpl(findPedidoById)",
+                    "Cliente não autorizado a buscar esse pedido."
+                );
+            }
+        } catch (GeneralErrorException e) {
+            throw new GeneralErrorException(
+                "401",
+                "Unauthorized",
+                "PedidoServiceImpl(findPedidoById)",
+                "Erro interno ao verificar o pedido. " + e.getMessage()
+            );
+        }
+    }
+    
+
+    @Override
+    public List<PedidoResponseDTO> findAll(int page, int pageSize) {
+      return repositoryPedido
+      .findAll(page, pageSize)
+      .stream()
+      .map(p -> PedidoResponseDTO.valueOf(p))
+      .toList();
+    }
+
     @Override
     public CartaoDeCreditoResponseDTO findCartaoByPedido(Long id){
       Pedido pedido = repositoryPedido.findById(id);

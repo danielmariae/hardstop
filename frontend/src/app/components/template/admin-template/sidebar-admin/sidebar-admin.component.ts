@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { NavigationService } from '../../../../services/navigation.service';
+import { SidebarService } from '../../../../services/sidebar.service';
 
 @Component({
   selector: 'app-sidebar-admin',
@@ -14,6 +15,7 @@ export class SidebarAdminComponent {
   constructor(
     private navigationService: NavigationService,
   ){}
+
 
   navegarParaFornecedor(): void{
     this.navigationService.navigateTo("adm/fornecedores/");

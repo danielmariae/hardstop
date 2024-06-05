@@ -41,7 +41,6 @@ import { PedidoFuncListComponent } from './components/pedido/pedido-func-list/pe
 
 export const routes: Routes = [
 
-    {path: 'func/pedidos', component: PedidoFuncListComponent, title: 'Realizar Pagamento'},
     {path: 'carrinho', component: CarrinhoComponent, title: 'Visualizar carrinho'},
     {path: 'pagamento', component: PagamentoComponent, title: 'Realizar Pagamento'},
     {path:'', pathMatch: 'full', redirectTo:'home'},
@@ -122,7 +121,13 @@ export const routes: Routes = [
                     {path: 'new', component: LoteFormComponent, title: 'Insercao de Lotes' },
                     {path: 'produto/:id', component: LoteListComponent, title: 'Lista de Lotes por Produto'},                
                 ]
-            } 
+            },
+            {
+                path:'pedidos',
+                children:[
+                    {path: 'status', component: PedidoFuncListComponent}
+                ]
+            }
 
         ]
     },

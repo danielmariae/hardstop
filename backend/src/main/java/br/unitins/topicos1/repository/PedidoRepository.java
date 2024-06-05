@@ -23,6 +23,10 @@ public class PedidoRepository implements PanacheRepository<Pedido>{
     public List<Pedido> findAll(Long idUsuario) {
         return find("cliente.id = ?1", idUsuario).list();
     }
+
+    public List<Pedido> findAll(int page, int pageSize) {
+        return find("SELECT p from Pedido p").page(page, pageSize).list();
+    }
     // public List<Pedido> findAllStatus(Long idStatus) {
     //     String queryString = "SELECT p FROM Pedido p " +
     //                          "JOIN p.statusDoPedido s " +
@@ -53,16 +57,33 @@ public class PedidoRepository implements PanacheRepository<Pedido>{
     //   }
       
       
-    public List<Pedido> findAllStatus(Long idStatus) {
-        Status status = Status.valueOf(Integer.valueOf(Long.toString(idStatus)));
-            String queryString = "select p from Pedido p, StatusDoPedido sp where sp.status = :status AND sp.pedido = p AND NOT EXISTS (select sp1.pedido from StatusDoPedido sp1 where sp1.status > :status)";
+    // public List<Pedido> findAllStatus(Long idStatus) {
+    //     Status status = Status.valueOf(Integer.valueOf(Long.toString(idStatus)));
+    //         String queryString = "select p from Pedido p, StatusDoPedido sp where sp.status = :status AND sp.pedido = p AND NOT EXISTS (select sp1.pedido from StatusDoPedido sp1 where sp1.status > :status)";
 
     
-            TypedQuery<Pedido> query = entityManager.createQuery(queryString, Pedido.class);
-            query.setParameter("status", status);
-            return query.getResultList();
-        }
-      
+    //         TypedQuery<Pedido> query = entityManager.createQuery(queryString, Pedido.class);
+    //         query.setParameter("status", status);
+    //         return query.getResultList();
+    //     }
+    
+        public List<Pedido> findAllStatus(Long idStatus) {
+            Status status = Status.valueOf(Integer.valueOf(Long.toString(idStatus)));
+            String queryString = "select p from Pedido p " +
+            "join StatusDoPedido sp on sp.pedido = p " +
+            "where sp.status = :status " +
+            "and sp.dataHora = (select max(spp.dataHora) " +
+                               "from StatusDoPedido spp " +
+                               "where spp.pedido = p)";
+
+        
+                TypedQuery<Pedido> query = entityManager.createQuery(queryString, Pedido.class);
+                query.setParameter("status", status);
+                return query.getResultList();
+            }
+    
+    }  
+  
       
       
       

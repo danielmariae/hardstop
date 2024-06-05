@@ -87,12 +87,12 @@ export class PedidoService {
 
     findAllFuncStatus(idStatus: number): Observable<PedidoRecebe[]> {
 
-      const url = `http://localhost:8080/pedidos/func/search/all/${idStatus}`;
+      const url = `http://localhost:8080/pedidos/func/search/status/all/${idStatus}`;
       const headers = this.sessionTokenService.getSessionHeader();
-      console.log(this.sessionTokenService.getSessionToken());
-      console.log(headers);
+      // console.log(this.sessionTokenService.getSessionToken());
+      // console.log(headers);
       if(headers) {
-        console.log(headers);
+        // console.log(headers);
       return this.httpClient.get<PedidoRecebe[]>(url, { headers });
       
       } else {
@@ -116,9 +116,21 @@ export class PedidoService {
       }
     }
 
+    // ESSE AQUI DEVE SER USADO POR ADM
     findById(id: number): Observable<PedidoRecebe> {
+      const url = `http://localhost:8080/pedidos/func/search/pedidos/${id}`;
+      const headers = this.sessionTokenService.getSessionHeader();
+      if(headers) {
+        return this.httpClient.get<PedidoRecebe>(url, { headers });
+      } else {
+        return this.httpClient.get<PedidoRecebe>(url);
+      }
+    }
 
-      const url = 'http://localhost:8080/pedidos/search/pedidos/${id}';
+    // ESSE AQUI DEVE SER USADO POR CLIENTE
+    findByIdCliente(id: number): Observable<PedidoRecebe> {
+
+      const url = `http://localhost:8080/pedidos/search/pedidos/${id}`;
       const headers = this.sessionTokenService.getSessionHeader();
       if(headers) {
         return this.httpClient.get<PedidoRecebe>(url, { headers });

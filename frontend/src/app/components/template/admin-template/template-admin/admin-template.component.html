@@ -1,7 +1,7 @@
 <div class="container">
     <app-header-admin></app-header-admin>
     <div class="columns">
-        <div class="column is-one-fifth">
+        <div *ngIf="sidebarVisible" class="column is-one-fifth">
             <app-sidebar-admin></app-sidebar-admin>
         </div>
         <div class="column">

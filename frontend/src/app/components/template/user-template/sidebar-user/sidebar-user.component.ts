@@ -38,8 +38,8 @@ export class SidebarUserComponent {
     // Limpa o estado de login e remove os dados do sessionStorage
     this.usuarioLogado = false;
     sessionStorage.removeItem('usuarioLogado');
-
-    // Limpa a sessão do token
     this.sessionTokenService.clearSessionToken();
+    this.navigationService.navigateTo('home');
+    window.rel
   }
 }

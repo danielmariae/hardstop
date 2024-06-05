@@ -6,7 +6,8 @@ import { Router } from '@angular/router';
 })
 export class NavigationService {
     private previousEndpoint: string = '';
-
+    private actualEndpoint: string = '';
+    
     constructor(private router: Router) { }
 
     getPreviousEndPoint() {
@@ -17,6 +18,8 @@ export class NavigationService {
         // Salva o endpoint atual antes de navegar para o próximo
         this.previousEndpoint = this.router.url;
         this.router.navigate([endpoint]);
+        this.actualEndpoint = this.router.url;
+        console.log(this.actualEndpoint);
     }
 
     
