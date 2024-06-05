@@ -78,6 +78,16 @@ public class EnviarModelo {
     }
 
     @GET
+    @Path("/statusDoPedido/default")
+    public List<StatusDTO> obtertStatusDoPedido() {
+        return Arrays.asList(Status.values())
+            .stream()
+            .filter(status -> status != Status.PAGAMENTO_NÃO_AUTORIZADO && status != Status.DESISTIDO && status != Status.DEVOLVIDO)
+            .map(status -> StatusDTO.valueOf(status))
+            .collect(Collectors.toList());
+    }
+
+    @GET
     @Path("/perfil")
     public List<PerfilDTO> obterPerfil() {
         return Arrays.asList(Perfil.values())

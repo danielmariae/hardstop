@@ -1,5 +1,7 @@
 package br.unitins.topicos1.model.pagamento;
 
+import java.util.Objects;
+
 public enum ModalidadePagamento {
   CARTAO_DE_CREDITO(0, "Cartão de Crédito"),
   BOLETO_BANCARIO(1, "Boleto Bancário"),
@@ -34,7 +36,7 @@ public enum ModalidadePagamento {
     if (id == null) return null;
 
     for (ModalidadePagamento modalidade : ModalidadePagamento.values()) {
-      if (modalidade.getId() == id) {
+      if (Objects.equals(modalidade.getId(), id)) {
         return modalidade;
       }
     }

@@ -14,6 +14,7 @@ import { ItemCarrinho } from "../../models/itemcarrinho.model";
 import { Pedido } from "../../models/pedido.model";
 import { FormaDePagamento } from "../../models/formaDePagamento";
 import { ItemDaVenda } from "../../models/itemDaVenda";
+import { NavigationService } from "../../services/navigation.service";
 
 @Component({
     selector: 'app-pagamento',
@@ -55,7 +56,8 @@ import { ItemDaVenda } from "../../models/itemDaVenda";
                 private formBuilder: FormBuilder,
                 private sessionTokenService: SessionTokenService,
                 private localStorageService: LocalStorageService,
-                private carrinhoService: CarrinhoService
+                private carrinhoService: CarrinhoService,
+                private navigationService: NavigationService
     ) {
       this.tiposPagamentoForm = formBuilder.group({
         metodoEscolhido: [null]
@@ -264,6 +266,8 @@ import { ItemDaVenda } from "../../models/itemDaVenda";
           this.pedidoService.insert(novoPedido).subscribe({
             next: (response) => {
               console.log('Resultado:', response);
+              this.carrinhoService.removerTudo();
+              this.navigationService.navigateTo('/user/pedidos');
             },
             error: (error) => {
               console.error('Erro ao inserir novo pedido:', error);

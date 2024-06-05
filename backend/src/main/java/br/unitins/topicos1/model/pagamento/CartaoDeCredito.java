@@ -33,6 +33,9 @@ public class CartaoDeCredito extends FormaDePagamento{
     public String getNumeroCartao() {
         return numeroCartao;
     }
+    public String getNumeroCartaoFront(){
+        return numeroCartao.substring(numeroCartao.length() - 4);
+    }
     public void setNumeroCartao(String numeroCartao) {
         this.numeroCartao = numeroCartao;
     }

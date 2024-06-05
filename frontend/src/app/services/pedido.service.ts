@@ -5,7 +5,9 @@ import { Observable, throwError, catchError } from 'rxjs';
 import { SessionTokenService } from "./session-token.service";
 import { Cliente } from "../models/cliente.model";
 import { ListaEndereco } from "../models/endereco.model";
-import { PedidoRecebe } from "../models/pedidoRecebe.modelo";
+import { PedidoRecebe } from "../models/pedidoRecebe.model";
+import { CartaoRecebe } from "../models/cartaoRecebe.model";
+import { StatusDoPedido } from "../models/statusDoPedido.model";
 @Injectable({
     providedIn: 'root'
 })
@@ -119,10 +121,19 @@ export class PedidoService {
       const url = 'http://localhost:8080/pedidos/search/pedidos/${id}';
       const headers = this.sessionTokenService.getSessionHeader();
       if(headers) {
-        console.log(headers);
         return this.httpClient.get<PedidoRecebe>(url, { headers });
       } else {
         return this.httpClient.get<PedidoRecebe>(url);
+      }
+    }
+
+    findByIdStatus(id: number): Observable<StatusDoPedido> {
+      const url = `http://localhost:8080/pedidos/search/pedidos/status/${id}`;
+      const headers = this.sessionTokenService.getSessionHeader();
+      if(headers) {
+        return this.httpClient.get<StatusDoPedido>(url, { headers });
+      } else {
+        return this.httpClient.get<StatusDoPedido>(url);
       }
     }
 
@@ -160,7 +171,30 @@ export class PedidoService {
       return throwError(() => errorDetails); // Retorna os detalhes do erro como uma Observable
     }
 
+    findCartaoById(id: number): Observable<CartaoRecebe> {
+      const url = `http://localhost:8080/pedidos/search/pedidos/cartao/${id}`;
+      const headers = this.sessionTokenService.getSessionHeader();
 
-
-      
+      if(headers) {
+        console.log(headers);
+        return this.httpClient.get<CartaoRecebe>(url, { headers });
+      } else {
+        return this.httpClient.get<CartaoRecebe>(url);
+      }
     }
+    getFormaPagamento(): Observable<any[]> {
+      const url = 'http://localhost:8080/enum/modalidadePagamento';
+      return this.httpClient.get<any[]>(url)
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+    getStatusPedidoPadrao(): Observable<any[]> {
+      const url = 'http://localhost:8080/enum/statusDoPedido/default';
+      return this.httpClient.get<any[]>(url)
+        .pipe(
+          catchError(this.handleError)
+        );
+    }
+
+  }

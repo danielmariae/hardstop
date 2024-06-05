@@ -1,6 +1,6 @@
 export class FormaDePagamento {
     id!: number | null;
-    modalidade!: number;
+    modalidade!: number | null;
     numeroCartao!: string | null;
     mesValidade!: number | null;
     anoValidade!: number | null;

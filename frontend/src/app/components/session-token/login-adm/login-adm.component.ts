@@ -57,5 +57,6 @@ export class LoginAdmComponent implements OnInit {
         this.errorMessage = 'Usuário ou senha inválidos.';
       }
      });
+
   }
 }
