@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { Cliente } from '../../../../models/cliente.model';
 import { CarrinhoService } from '../../../../services/carrinho.service';
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { SidebarService } from '../../../../services/sidebar.service';
 
 @Component({
   selector: 'app-header-user',
@@ -27,9 +28,14 @@ export class HeaderUserComponent implements OnInit {
       private sessionTokenService: SessionTokenService,
       private navigationService: NavigationService,
       private formBuilder: FormBuilder,
-      private carrinhoService: CarrinhoService
+      private carrinhoService: CarrinhoService,
+      private sidebarService: SidebarService
   ){
     this.buscadorForm = this.formBuilder.control('');
+  }
+  
+  toggleSidebar() {
+    this.sidebarService.toggleSidebar();
   }
   
   ngOnInit(): void {
