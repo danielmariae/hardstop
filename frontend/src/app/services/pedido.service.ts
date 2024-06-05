@@ -168,7 +168,29 @@ export class PedidoService {
         return this.httpClient.patch<PedidoRecebe>(url, body);
       }
     }
-    
+
+    updatePedidoEntregue(idPedido: number, idStatus: number, codRast: string, idLog: number): Observable<PedidoRecebe> {
+      const url = 'http://localhost:8080/pedidos/patch/status/';
+      const headers = this.sessionTokenService.getSessionHeader();
+      // const params = new HttpParams()
+      //           .set('idPedido', idPedido)
+      //           .set('idStatus', idStatus);
+      // const body = JSON.stringify(params);
+
+      const body = {
+        idPedido: idPedido,
+        idStatus: idStatus,
+        codigoDeRastreamento: codRast,
+        idTransportadora: idLog
+      };
+
+      if(headers) {
+      return this.httpClient.patch<PedidoRecebe>(url, body, { headers });
+      } else {
+        return this.httpClient.patch<PedidoRecebe>(url, body);
+      }
+    }
+
     findByIdStatus(id: number): Observable<StatusDoPedido> {
       const url = `http://localhost:8080/pedidos/search/pedidos/status/${id}`;
       const headers = this.sessionTokenService.getSessionHeader();
