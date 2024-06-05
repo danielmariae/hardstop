@@ -62,6 +62,7 @@ public class PedidoRepository implements PanacheRepository<Pedido>{
             query.setParameter("status", status);
             return query.getResultList();
         }
+    }
       
       
       
