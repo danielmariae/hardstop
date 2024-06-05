@@ -268,7 +268,7 @@ editarProduto(id: number): void {
 }
 
 listarLote(id: number): void {
-  const listaLote: string = "adm/lotes/" + id.toString();
+  const listaLote: string = "adm/lotes/produto/" + id.toString();
   this.navigationService.navigateTo(listaLote);
 }
 

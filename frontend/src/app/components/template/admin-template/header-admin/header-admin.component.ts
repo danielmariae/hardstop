@@ -4,6 +4,7 @@ import { NavigationService } from '../../../../services/navigation.service';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { SidebarService } from '../../../../services/sidebar.service';
 
 @Component({
   selector: 'app-header-admin',
@@ -22,8 +23,14 @@ export class HeaderAdminComponent {
     private sessionTokenService: SessionTokenService,
     private navigationService: NavigationService,
     private formBuilder: FormBuilder,
+    private sidebarService: SidebarService
   ){
     this.buscadorForm = this.formBuilder.control('');
+  }
+
+  
+  toggleSidebar() {
+    this.sidebarService.toggleSidebar();
   }
 
   ngOnInit(

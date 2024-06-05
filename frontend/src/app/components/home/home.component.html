@@ -9,7 +9,7 @@
               <p>Estoque: {{card.quantidade}}</p>
               <p class="has-text-primary has-text-weight-bold is-size-4">{{this.formatValues(card.preco)}}</p>  
             </div>
-            <div class="buttons">
+            <div class="buttons" *ngIf="!admLogado">
               <div class="button is-primary is-default">
                 <button type="button" (click)="adicionarAoCarrinho(card)">Adicionar ao carrinho</button>
               </div>
