@@ -233,6 +233,7 @@ import { ItemDaVenda } from "../../models/itemDaVenda";
         quantidadeUnidades: item.quantidade,
         quantidadeNaoConvencional: null,
         unidadeDeMedida: null,
+        status: null,
         preco: item.preco
       }));
     

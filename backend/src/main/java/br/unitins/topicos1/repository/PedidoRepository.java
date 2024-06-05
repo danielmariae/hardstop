@@ -56,7 +56,7 @@ public class PedidoRepository implements PanacheRepository<Pedido>{
       
     public List<Pedido> findAllStatus(Long idStatus) {
         Status status = Status.valueOf(Integer.valueOf(Long.toString(idStatus)));
-            String queryString = "select p from Pedido p, StatusDoPedido sp where sp.status = :status AND sp.pedido = p AND NOT EXISTS (select sp1.pedido from StatusDoPedido sp1 where sp1.status > :status)";
+            String queryString = "select p from Pedido p, StatusDoPedido sp where sp.status = :status AND sp.pedido = p AND NOT EXISTS (select sp1.pedido from StatusDoPedido sp1 where sp1.status > :status AND sp1.pedido = p)";
 
     
             TypedQuery<Pedido> query = entityManager.createQuery(queryString, Pedido.class);

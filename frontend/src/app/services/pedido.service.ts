@@ -89,6 +89,7 @@ export class PedidoService {
       const headers = this.sessionTokenService.getSessionHeader();
       console.log(this.sessionTokenService.getSessionToken());
       console.log(headers);
+      console.log(url);
       if(headers) {
         console.log(headers);
       return this.httpClient.get<PedidoRecebe[]>(url, { headers });
@@ -114,6 +115,26 @@ export class PedidoService {
       }
     }
 
+    deletePedidoByFunc(id: number): Observable<any> {
+
+      const headers = this.sessionTokenService.getSessionHeader();
+      const url = `${this.baseUrl}/func/delete/${id}`; // Concatena o ID à URL base
+
+      if (headers) {
+          // Faz a requisição HTTP com o token de autenticação no cabeçalho
+          return this.httpClient.delete<any>(url, { headers })
+              .pipe(
+                  catchError(this.handleError)
+              );
+      } else {
+          // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
+          return this.httpClient.delete<any>(url)
+              .pipe(
+                  catchError(this.handleError)
+              );
+      }
+  }
+
     findById(id: number): Observable<PedidoRecebe> {
 
       const url = 'http://localhost:8080/pedidos/search/pedidos/${id}';
@@ -123,6 +144,27 @@ export class PedidoService {
         return this.httpClient.get<PedidoRecebe>(url, { headers });
       } else {
         return this.httpClient.get<PedidoRecebe>(url);
+      }
+    }
+
+    updatePedidoSeparadoEstoque(idPedido: number, idStatus: number): Observable<PedidoRecebe> {
+      const url = 'http://localhost:8080/pedidos/patch/status/';
+      const headers = this.sessionTokenService.getSessionHeader();
+      // const params = new HttpParams()
+      //           .set('idPedido', idPedido)
+      //           .set('idStatus', idStatus);
+      // const body = JSON.stringify(params);
+
+      const body = {
+        idPedido: idPedido,
+        idStatus: idStatus,
+        codigoDeRastreamento: null // Adicione aqui se precisar de um valor
+      };
+
+      if(headers) {
+      return this.httpClient.patch<PedidoRecebe>(url, body, { headers });
+      } else {
+        return this.httpClient.patch<PedidoRecebe>(url, body);
       }
     }
 
