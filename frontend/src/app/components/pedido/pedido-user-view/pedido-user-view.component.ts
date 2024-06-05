@@ -92,6 +92,10 @@ export class PedidoUserViewComponent implements OnInit {
         return false;
   }
 
+  isStatusMatching(pedido: PedidoRecebe, statusId: number): boolean {
+    return pedido.statusDoPedido.some(status => status.idStatus === statusId);
+  }
+
   getHoraPorStatus(id: number): void{
     this.pedidoService.findByIdStatus(id).subscribe({
       next: (data) => {

@@ -149,7 +149,7 @@ insert into pix (formaPagamento_id) values(2);
 insert into pedido (id_formaDePagamento, id_endereco, id_cliente) values(2, 1, 1);
 
 insert into statusDoPedido (dataHora, status, id_pedido) values('2023-10-01 16:11:26', 0, 2);
-insert into statusDoPedido (dataHora, status, id_pedido) values('2023-10-04 20:23:35', 1, 2);
+-- insert into statusDoPedido (dataHora, status, id_pedido) values('2023-10-04 20:23:35', 1, 2);
 insert into statusDoPedido (dataHora, status, id_pedido) values('2023-10-05 09:10:40', 2, 2);
 
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(2,5);
