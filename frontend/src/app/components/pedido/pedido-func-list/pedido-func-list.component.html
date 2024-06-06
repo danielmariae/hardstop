@@ -14,7 +14,7 @@
         </form>
     
     
-
+<div class="form-group" *ngIf="statusEscolhido === 0"> <!-- Aguardando confirmação do pagamento -->
   <ng-container *ngIf="pedidoItens.length > 0">
     <h1>Lista de pedidos</h1>
 
@@ -57,9 +57,9 @@
                     <p>{{produto.quantidadeUnidades}} un.:
                       {{produto.preco?.toLocaleString('PT-BR',{style:'currency', currency: 'BRL'})}} x {{produto.quantidadeUnidades}}</p>
                   </td>
-                  <td>
+                  <!-- <td>
                     <button class="button is-primary" type="button" (click)="separarDoEstoque()">Separado do Estoque</button>
-                  </td>
+                  </td> -->
                 </tr>
               </tbody>
             </table>
@@ -67,43 +67,149 @@
         </div>
       </div>
     </div>
-  
-    <!-- <table class="table is-fullwidth">
-      <thead>
-        <tr>
-          <th>ID: </th>
-          <th>Endereço: </th>
-          <th>Status atual:</th>
-          <th>Total da venda:</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr >
-          <td>Id do Pedido: {{ item.id }}</td>
-  
-          <td>{{ item.endereco.nome }}</td>
-          <ng-container *ngIf="item.itemDaVenda.length > 0">
-            <div *ngFor="let itemVenda of item.itemDaVenda" class="pedido-item">
-              <table>
-                <tr>
-                  <td>Nome: {{ itemVenda.nome }}</td>
-                  <td>Quantidade: {{ itemVenda.quantidadeUnidades }}</td>
-                </tr>
-              </table>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="item.statusDoPedido.length > 0">
-            <div *ngFor="let status of item.statusDoPedido" class="pedido-item">
-              <table>
-                <tr>
-                  <td>Status: {{ status.status }}</td>
-                  <td>Data e Hora: {{ status.dataHora }}</td>
-                </tr>
-              </table>
-            </div>
-          </ng-container>
-        </tr>
-      </tbody>
-    </table> -->
-
 </ng-container>
+</div>
+
+<div class="form-group" *ngIf="statusEscolhido === 1"> <!-- Pagamento não autorizado pela financeira -->
+  <ng-container *ngIf="pedidoItens.length > 0">
+    <h1>Lista de pedidos</h1>
+  <div class="block" *ngFor="let item of pedidoItens">
+      <div  class="box content">
+        <div class="columns">
+          <div class="column">
+            <h4>ID:</h4>
+            <p>{{item.id}}</p>
+          </div>
+          <div class="column">
+            <h4>Data/Hora da Compra:</h4>
+            <p>{{getDataHoraPedido(item)}}</p>
+          </div>
+          <div class="column">
+            <h4>Status atual:</h4>
+            <p>{{getUltimoStatus(item)}}</p>
+          </div>
+          <div class="column">
+            <h4>Total:</h4>
+            <p>{{formatValues(getTotalPedido(item))}}</p>
+          </div>
+        </div>
+        <button class="button is-primary" type="button" (click)="deletarPedido(item.id!)">Deletar Pedido</button>
+      </div>
+    </div>
+</ng-container>
+</div>
+
+<div class="form-group" *ngIf="statusEscolhido === 2"> <!-- Pagamento recebido -->
+  <ng-container *ngIf="pedidoItens.length > 0">
+    <h1>Lista de pedidos</h1>
+
+  <div class="block" *ngFor="let item of pedidoItens; let i = index">
+      <div  class="box content">
+        <div class="columns">
+          <div class="column">
+            <h4>ID:</h4>
+            <p>{{item.id}}</p>
+          </div>
+          <div class="column">
+            <h4>Data/Hora da Compra:</h4>
+            <p>{{getDataHoraPedido(item)}}</p>
+          </div>
+          <div class="column">
+            <h4>Status atual:</h4>
+            <p>{{getUltimoStatus(item)}}</p>
+          </div>
+          <div class="column">
+            <h4>Total:</h4>
+            <p>{{formatValues(getTotalPedido(item))}}</p>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="item.id">
+        <div class="box content">
+          <h2>Produtos do pedido #{{item.id}}</h2>
+          <div class="table-container">
+            <table class="table is-fullwidth">
+              <thead>
+              </thead>
+              <tbody>
+                <tr *ngFor="let produto of item.itemDaVenda">
+                  <td>
+                    <img [src]='this.produtoService.getUrlImagem(produto.imagemPrincipal)'
+                    style="max-width: 50px; max-height: 50px; object-fit: cover">  
+                  </td>
+                  <td>
+                    <h4>{{produto.nome}}</h4>
+                    <p>{{produto.quantidadeUnidades}} un.:
+                      {{produto.preco?.toLocaleString('PT-BR',{style:'currency', currency: 'BRL'})}} x {{produto.quantidadeUnidades}}</p>
+                  </td>
+                  <!-- <td>
+                    <button class="button is-primary" type="button" (click)="separarDoEstoque()">Separado do Estoque</button>
+                  </td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>  
+        </div>
+        <td>
+          <button class="button is-primary" type="button" (click)="separadoDoEstoque(item.id)">Separado do Estoque</button>
+          </td>
+      </div>
+    </div>
+</ng-container>
+</div>
+
+<div class="form-group" *ngIf="statusEscolhido === 3"> <!-- Separado do estoque -->
+  <ng-container *ngIf="pedidoItens.length > 0">
+    <h1>Lista de pedidos</h1>
+
+  <div class="block" *ngFor="let item of pedidoItens; let i = index">
+      <div  class="box content">
+        <div class="columns">
+          <div class="column">
+            <h4>ID:</h4>
+            <p>{{item.id}}</p>
+          </div>
+          <div class="column">
+            <h4>Data/Hora da Compra:</h4>
+            <p>{{getDataHoraPedido(item)}}</p>
+          </div>
+          <div class="column">
+            <h4>Status atual:</h4>
+            <p>{{getUltimoStatus(item)}}</p>
+          </div>
+          <div class="column">
+            <h4>Total:</h4>
+            <p>{{formatValues(getTotalPedido(item))}}</p>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="item.id">
+        <div class="box content">
+          <h2>Produtos do pedido #{{item.id}}</h2>
+          <div class="table-container">
+            <table class="table is-fullwidth">
+              <thead>
+              </thead>
+              <tbody>
+                <tr *ngFor="let produto of item.itemDaVenda; let j = index">
+                  <td>
+                    <img [src]='this.produtoService.getUrlImagem(produto.imagemPrincipal)'
+                    style="max-width: 50px; max-height: 50px; object-fit: cover">  
+                  </td>
+                  <td>
+                    <h4>{{produto.nome}}</h4>
+                    <p>{{produto.quantidadeUnidades}} un.:
+                      {{produto.preco?.toLocaleString('PT-BR',{style:'currency', currency: 'BRL'})}} x {{produto.quantidadeUnidades}}</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>  
+        </div>
+        <td>
+          <button class="button is-primary" type="button" (click)="separadoDoEstoque(item.id)">Entregue para transportadora</button>
+          </td>
+      </div>
+    </div>
+</ng-container>
+</div>

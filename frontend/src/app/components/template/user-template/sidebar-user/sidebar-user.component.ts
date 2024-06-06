@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavigationService } from '../../../../services/navigation.service';
 import { SessionTokenService } from '../../../../services/session-token.service';
+import { CarrinhoService } from '../../../../services/carrinho.service';
 
 @Component({
   selector: 'app-sidebar-user',
@@ -14,7 +15,8 @@ export class SidebarUserComponent {
 
   constructor(
     private navigationService: NavigationService,
-    private sessionTokenService: SessionTokenService
+    private sessionTokenService: SessionTokenService,
+    private carrinhoService: CarrinhoService
   ){}
 
   editarDados(): void{
@@ -36,10 +38,18 @@ export class SidebarUserComponent {
 
   deslogarUsuario(): void {
     // Limpa o estado de login e remove os dados do sessionStorage
+    // Limpa o estado de login e remove os dados do sessionStorage
     this.usuarioLogado = false;
     sessionStorage.removeItem('usuarioLogado');
+
+    // Limpa a sessão do token
     this.sessionTokenService.clearSessionToken();
+
+    // Limpa o carrinho de compras
+    this.carrinhoService.removerTudo();
+
+    // Limpa o Cliente Logado
+    this.sessionTokenService.removeClienteLogado();
     this.navigationService.navigateTo('home');
-    window.rel
   }
 }

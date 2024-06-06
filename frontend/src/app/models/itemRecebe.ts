@@ -6,4 +6,5 @@ export class ItemDaVendaRecebe {
     unidadeDeMedida!: string | null;
     preco!: number | null;
     imagemPrincipal!: string;
+    status!: string | null;
 }

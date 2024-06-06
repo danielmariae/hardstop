@@ -235,6 +235,7 @@ import { NavigationService } from "../../services/navigation.service";
         quantidadeUnidades: item.quantidade,
         quantidadeNaoConvencional: null,
         unidadeDeMedida: null,
+        status: null,
         preco: item.preco
       }));
     

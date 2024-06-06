@@ -117,12 +117,14 @@ update produto set loteAtual_id = 2 where id = 2;
 update produto set loteAtual_id = 3 where id = 3;
 update produto set loteAtual_id = 6 where id = 4;
 
+-- Pedido 1
 insert into itemDaVenda (preco, quantidadeUnidades, produto_id) values(900.0, 3, 1);
 insert into itemDaVenda (preco, quantidadeUnidades, produto_id) values(1200.0, 1, 2);
 insert into itemDaVenda (preco, quantidadeUnidades, produto_id) values(1000.0, 2, 3);
 insert into itemDaVenda (preco, quantidadeUnidades, produto_id) values(1500.0, 10, 4);
 
-insert into formaDePagamento (modalidade, valorPago) values(0, 5900);
+insert into formaDePagamento (modalidade, valorPago) values(0, 20900);
+
 insert into cartaodecredito (anovalidade, codseguranca, mesvalidade, datahorapagamento, numerocartao, formaPagamento_id) values(24, 237, 3, '2023-10-01 16:11:26', '345690872106', 1);
 insert into pedido (id_formaDePagamento, id_endereco, id_cliente) values(1, 1, 1);
 
@@ -130,8 +132,29 @@ insert into statusDoPedido (dataHora, status, id_pedido) values('2023-10-01 16:1
 insert into statusDoPedido (dataHora, status, id_pedido) values('2023-10-04 20:23:35', 1, 1);
 /* insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,1);
 insert into pedido_statusDoPedido (id_pedido, id_statusDoPedido) values(1,2); */
+
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,1);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,2);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,3);
 insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(1,4);
+
+-- Pedido 2
+insert into itemDaVenda (preco, quantidadeUnidades, produto_id) values(1000.0, 1, 3);
+insert into itemDaVenda (preco, quantidadeUnidades, produto_id) values(1500.0, 2, 4);
+
+insert into formaDePagamento (modalidade, valorPago) values(2, 4000);
+
+insert into pix (formaPagamento_id) values(2);
+
+insert into pedido (id_formaDePagamento, id_endereco, id_cliente) values(2, 1, 1);
+
+insert into statusDoPedido (dataHora, status, id_pedido) values('2023-10-01 16:11:26', 0, 2);
+-- insert into statusDoPedido (dataHora, status, id_pedido) values('2023-10-04 20:23:35', 1, 2);
+insert into statusDoPedido (dataHora, status, id_pedido) values('2023-10-05 09:10:40', 2, 2);
+
+insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(2,5);
+insert into pedido_itemDaVenda (id_pedido, id_itemDaVenda) values(2,6);
+
+
+
 insert into lista_de_desejos (id_cliente, id_produto) values(2,1);

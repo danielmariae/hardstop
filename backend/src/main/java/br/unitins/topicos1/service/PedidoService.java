@@ -15,6 +15,9 @@ import br.unitins.topicos1.dto.pedido.status.StatusDoPedidoResponseDTO;
 
 public interface PedidoService {
 
+// Deleção de Pedido pelo Funcionário
+public void deletePedidoByFunc(Long idPedido);
+
 // Busca todos os pedidos com um determinado Status
 public List<PedidoResponseDTO> findAllFuncStatus(Long id);
 

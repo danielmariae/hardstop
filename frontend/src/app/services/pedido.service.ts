@@ -89,8 +89,9 @@ export class PedidoService {
 
       const url = `http://localhost:8080/pedidos/func/search/status/all/${idStatus}`;
       const headers = this.sessionTokenService.getSessionHeader();
-      // console.log(this.sessionTokenService.getSessionToken());
-      // console.log(headers);
+      console.log(this.sessionTokenService.getSessionToken());
+      console.log(headers);
+      console.log(url);
       if(headers) {
         // console.log(headers);
       return this.httpClient.get<PedidoRecebe[]>(url, { headers });
@@ -116,6 +117,26 @@ export class PedidoService {
       }
     }
 
+    deletePedidoByFunc(id: number): Observable<any> {
+
+      const headers = this.sessionTokenService.getSessionHeader();
+      const url = `${this.baseUrl}/func/delete/${id}`; // Concatena o ID à URL base
+
+      if (headers) {
+          // Faz a requisição HTTP com o token de autenticação no cabeçalho
+          return this.httpClient.delete<any>(url, { headers })
+              .pipe(
+                  catchError(this.handleError)
+              );
+      } else {
+          // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
+          return this.httpClient.delete<any>(url)
+              .pipe(
+                  catchError(this.handleError)
+              );
+      }
+  }
+
     // ESSE AQUI DEVE SER USADO POR ADM
     findById(id: number): Observable<PedidoRecebe> {
       const url = `http://localhost:8080/pedidos/func/search/pedidos/${id}`;
@@ -139,6 +160,49 @@ export class PedidoService {
       }
     }
 
+    updatePedidoSeparadoEstoque(idPedido: number, idStatus: number): Observable<PedidoRecebe> {
+      const url = 'http://localhost:8080/pedidos/patch/status/';
+      const headers = this.sessionTokenService.getSessionHeader();
+      // const params = new HttpParams()
+      //           .set('idPedido', idPedido)
+      //           .set('idStatus', idStatus);
+      // const body = JSON.stringify(params);
+
+      const body = {
+        idPedido: idPedido,
+        idStatus: idStatus,
+        codigoDeRastreamento: null // Adicione aqui se precisar de um valor
+      };
+
+      if(headers) {
+      return this.httpClient.patch<PedidoRecebe>(url, body, { headers });
+      } else {
+        return this.httpClient.patch<PedidoRecebe>(url, body);
+      }
+    }
+
+    updatePedidoEntregue(idPedido: number, idStatus: number, codRast: string, idLog: number): Observable<PedidoRecebe> {
+      const url = 'http://localhost:8080/pedidos/patch/status/';
+      const headers = this.sessionTokenService.getSessionHeader();
+      // const params = new HttpParams()
+      //           .set('idPedido', idPedido)
+      //           .set('idStatus', idStatus);
+      // const body = JSON.stringify(params);
+
+      const body = {
+        idPedido: idPedido,
+        idStatus: idStatus,
+        codigoDeRastreamento: codRast,
+        idTransportadora: idLog
+      };
+
+      if(headers) {
+      return this.httpClient.patch<PedidoRecebe>(url, body, { headers });
+      } else {
+        return this.httpClient.patch<PedidoRecebe>(url, body);
+      }
+    }
+
     findByIdStatus(id: number): Observable<StatusDoPedido> {
       const url = `http://localhost:8080/pedidos/search/pedidos/status/${id}`;
       const headers = this.sessionTokenService.getSessionHeader();
@@ -148,6 +212,7 @@ export class PedidoService {
         return this.httpClient.get<StatusDoPedido>(url);
       }
     }
+  
 
 
     private handleError(error: HttpErrorResponse) {

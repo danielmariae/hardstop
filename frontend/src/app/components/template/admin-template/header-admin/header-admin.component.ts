@@ -14,7 +14,6 @@ import { SidebarService } from '../../../../services/sidebar.service';
   styleUrl: './header-admin.component.css'
 })
 export class HeaderAdminComponent {
-  usuarioLogado: boolean = false;
   admLogado: boolean = false;
 
   buscadorForm: FormControl;
@@ -56,12 +55,6 @@ export class HeaderAdminComponent {
       });
     });
 
-    // Verifica se há um estado de login armazenado no sessionStorage ao inicializar o componente
-    const usuarioLogadoState = sessionStorage.getItem('usuarioLogado');
-    if (usuarioLogadoState !== null) {
-      this.usuarioLogado = JSON.parse(usuarioLogadoState);
-    }
-
     const admLogadoState = sessionStorage.getItem('admLogado');
     if (admLogadoState !== null) {
       this.admLogado = JSON.parse(admLogadoState);
@@ -72,22 +65,19 @@ export class HeaderAdminComponent {
       this.admLogado = true;
       sessionStorage.setItem('admLogado', JSON.stringify(true));
     });
-
-    this.sessionTokenService.loginClienteSuccess$.subscribe(() => {
-      this.usuarioLogado = true;
-      sessionStorage.setItem('usuarioLogado', JSON.stringify(true));
-    });
   }
 
-  deslogarUsuario(): void {
-    // Limpa o estado de login e remove os dados do sessionStorage
-    this.usuarioLogado = false;
-    sessionStorage.removeItem('usuarioLogado');
-    this.admLogado = false;
-    sessionStorage.removeItem('admLogado');
-
-    // Limpa a sessão do token
-    this.sessionTokenService.clearSessionToken();
+  deslogarUsuario(){
+        // Limpa o estado de login e remove os dados do sessionStorage
+        this.admLogado = false;
+        sessionStorage.removeItem('admLogado');
+    
+        // Limpa a sessão do token
+        this.sessionTokenService.clearSessionToken();
+        
+        // Limpa o Cliente Logado
+        this.sessionTokenService.removeFuncionarioLogado();
+        
   }
 
   buscarProduto(): void{

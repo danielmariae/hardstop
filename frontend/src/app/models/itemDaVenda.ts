@@ -5,4 +5,5 @@ export class ItemDaVenda {
     quantidadeNaoConvencional!: number | null;
     unidadeDeMedida!: string | null;
     preco!: number | null;
+    status!: string | null;
 }

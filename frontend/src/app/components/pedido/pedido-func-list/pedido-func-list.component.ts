@@ -24,8 +24,7 @@ export class PedidoFuncListComponent implements OnInit {
     statusPedidos: any[];
     statusPedidosForm: FormGroup;
     statusEscolhido: number | null;
-
-
+   
     constructor(
       private pedidoService: PedidoService,
       public produtoService: ProdutoService,
@@ -52,7 +51,6 @@ export class PedidoFuncListComponent implements OnInit {
         this.onStatusChange(value);
       });
 
-      // this.carregarProdutosParaPedidos();
     }
 
     onStatusChange(value: any) {
@@ -147,7 +145,35 @@ export class PedidoFuncListComponent implements OnInit {
       return getFormattedCurrency(valor);
     }      
 
-    separarDoEstoque(): void{
+    separadoDoEstoque(index1: number): void{
+      this.pedidoService.updatePedidoSeparadoEstoque(index1, 3).subscribe({
+        next: (response) => {
+            console.log(response);
+            window.location.reload();
+        },
+        error: (error) => {
+            // Este callback é executado quando ocorre um erro durante a emissão do valor
+            console.error('Erro:', error);
+            window.alert(error);
+        } 
+    })
+      
       //this.navigationService.navigateTo('/home');
     }
+
+    deletarPedido(id: number): void {
+
+      this.pedidoService.deletePedidoByFunc(id).subscribe({
+        next:  (response) => {
+          console.log(response);
+          window.location.reload();
+          },
+          error: (error) => {
+          console.error(error);
+          window.alert(error); // Exibe a mensagem de erro usando window.alert()
+          }
+      });
+    }
+
+
   }

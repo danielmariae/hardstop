@@ -14,7 +14,7 @@ import br.unitins.topicos1.model.pagamento.CartaoDeCredito;
 import br.unitins.topicos1.model.pagamento.ModalidadePagamento;
 import br.unitins.topicos1.model.pagamento.Pix;
 import br.unitins.topicos1.model.pedido.ItemDaVenda;
-import br.unitins.topicos1.model.pedido.ObjetoRetorno;
+// import br.unitins.topicos1.model.pedido.ObjetoRetorno;
 import br.unitins.topicos1.model.pedido.Pedido;
 import br.unitins.topicos1.model.pedido.Status;
 import br.unitins.topicos1.model.pedido.StatusDoPedido;
@@ -449,6 +449,53 @@ public class PedidoServiceImpl implements PedidoService {
 
   @Override
   @Transactional
+  public void deletePedidoByFunc(Long idPedido) {
+    
+    // Verifica o id do pedido. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
+    if (!verificaPedido1(idPedido)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(deletePedidoByCliente)",
+        "id do pedido é nulo ou tem valor inferior a 1."
+      );
+    }
+
+    // Verifica o pedido. Caso o id inexista no banco de dados, o sistema não realiza a operação.
+    Pedido pedido = repositoryPedido.findById(idPedido);
+    if (!verificaPedido2(pedido)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Resquest",
+        "PedidoServiceImpl(deletePedidoByCliente)",
+        "id do pedido não existe no banco de dados."
+      );
+    }
+
+    if (!podeDeletar(pedido)) {
+      throw new GeneralErrorException(
+        "400",
+        "Bad Request",
+        "PedidoServiceImpl(deletePedidoByCliente)",
+        "O pedido não pode ser desfeito!"
+      );
+    }
+
+    try {
+      // Persito a alteração no banco
+      repositoryPedido.delete(pedido);
+    } catch (Exception e) {
+      throw new GeneralErrorException(
+        "500",
+        "Server Error",
+        "PedidoServiceImpl(deletePedidoByCliente)",
+        "Não consegui apagar o pedido no banco de dados!"
+      );
+    }
+  }
+
+  @Override
+  @Transactional
   public PedidoResponseDTO updateStatusDoPedido(PedidoPatchStatusDTO ppsdto) {
     // Verifica o id do pedido. Caso o id seja nulo ou negativo, o sistema não realiza a operação.
     if (!verificaPedido1(ppsdto.idPedido())) {
@@ -477,6 +524,7 @@ public class PedidoServiceImpl implements PedidoService {
     String dataFormatada = agora.format(formatter);
     LocalDateTime novoDateTime = LocalDateTime.parse(dataFormatada, formatter);
     statusVenda.setDataHora(novoDateTime);
+    statusVenda.setPedido(pedido);
 
     // Coletando o Status de número mais elevado neste pedido
     Integer status = 0;
@@ -583,6 +631,7 @@ public class PedidoServiceImpl implements PedidoService {
       return PedidoResponseDTO.valueOf(pedido);
     } else if (status == 3) {
       statusVenda.setStatus(Status.valueOf(ppsdto.idStatus()));
+      System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
       pedido.getStatusDoPedido().add(statusVenda);
       try {
         repositoryPedido.persist(pedido);
@@ -1174,22 +1223,150 @@ public class PedidoServiceImpl implements PedidoService {
     
   // }
 
-    // @Incoming("card-in")
-    @Transactional
-    public void alteraStatusCompraCredito(ObjetoRetorno objR) {
 
-    if(objR.getBoo()) {
-      Long idPedido = Long.parseLong(objR.getIdPedido());
-      PedidoPatchStatusDTO update = new PedidoPatchStatusDTO(idPedido, 2, null);
-      updateStatusDoPedido(update);
+  private Boolean podeDeletar(Pedido pedido) {
+  
+        // Coletando o Status de número mais elevado neste pedido
+        Integer chaveDelecao = 0;
+        for (StatusDoPedido statusPedido : pedido.getStatusDoPedido()) {
+          if (chaveDelecao < statusPedido.getStatus().getId()) {
+            chaveDelecao = statusPedido.getStatus().getId();
+          }
+        }
 
-    } else {
-      Long idPedido = Long.parseLong(objR.getIdPedido());
-      PedidoPatchStatusDTO update = new PedidoPatchStatusDTO(idPedido, 1, null);
-      updateStatusDoPedido(update);
- 
-    }
+        // Pedidos com status do tipo: AGUARDANDO_PAGAMENTO ou PAGAMENTO_NÃO_AUTORIZADO podem ser deletados
+        if (chaveDelecao == 0) {
+          //Em caso de compras no cartão de crédito precisa primeiro comunicar a financeira antes de permitir essa deleção! Caso a financeira desfaça a ordem de pagamento, aí essa deleção será permitida. Caso a compra seja na forma de boleto ou pix o pedido poderá ser deletado imediatamente.
+          if (pedido.getFormaDePagamento().getModalidade().getId() != 0) {
+            // Pedido AGUARDANDO_PAGAMENTO foi excluído com sucesso! Em caso do pagamento escolhido tiver sido cartão de crédito é necessária comunicação com a financeira para concluir esta operação.
+
+            // Devolve o produto separado ao estoque
+            for (ItemDaVenda idv : pedido.getItemDaVenda()) {
+              EntityManager em1 = emf.createEntityManager();
+              EntityTransaction transaction = em1.getTransaction();
+
+              try {
+                transaction.begin();
+                String sql1 =
+                  "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
+                Query query = em1
+                  .createNativeQuery(sql1)
+                  .setParameter(1, idv.getProduto().getId());
+                Integer quantidade = (Integer) query.getSingleResult();
+                Integer quantFinal = quantidade + idv.getQuantidadeUnidades();
+
+                String sql4 =
+                  "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
+                em1
+                  .createNativeQuery(sql4)
+                  .setParameter(1, quantFinal)
+                  .setParameter(2, idv.getProduto().getId())
+                  .executeUpdate();
+                transaction.commit();
+              } catch (Exception e) {
+                if (transaction != null && transaction.isActive()) {
+                  transaction.rollback();
+                  throw new GeneralErrorException(
+                    "400",
+                    "Bad Resquest",
+                    "PedidoServiceImpl(insert)",
+                    "Não consegui gravar no banco. " + e.getMessage()
+                  );
+                }
+              } finally {
+                em1.close();
+              }
+            }
+            return true;
+          } else {
+            // IMPORTANTE!!!!! Chama função que comunica a financeira o desfazimento da negociação e aguarda a confirmação da financeira para deletar o pedido.
+
+            // Devolve o produto separado ao estoque
+            for (ItemDaVenda idv : pedido.getItemDaVenda()) {
+              EntityManager em2 = emf.createEntityManager();
+              EntityTransaction transaction = em2.getTransaction();
+
+              try {
+                transaction.begin();
+                String sql1 =
+                  "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
+                Query query = em2
+                  .createNativeQuery(sql1)
+                  .setParameter(1, idv.getProduto().getId());
+                Integer quantidade = (Integer) query.getSingleResult();
+                Integer quantFinal = quantidade + idv.getQuantidadeUnidades();
+
+                String sql4 =
+                  "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
+                em2
+                  .createNativeQuery(sql4)
+                  .setParameter(1, quantFinal)
+                  .setParameter(2, idv.getProduto().getId())
+                  .executeUpdate();
+                transaction.commit();
+              } catch (Exception e) {
+                if (transaction != null && transaction.isActive()) {
+                  transaction.rollback();
+                  throw new GeneralErrorException(
+                    "400",
+                    "Bad Resquest",
+                    "PedidoServiceImpl(insert)",
+                    "Não consegui gravar no banco. " + e.getMessage()
+                  );
+                }
+              } finally {
+                em2.close();
+              }
+            }
+            return true;
+          }
+        } else if (chaveDelecao == 1) {
+          // Pedido PAGAMENTO_NÃO_AUTORIZADO foi excluído com sucesso!
+          return true;
+          // Pedidos com status do tipo: PAGO, SEPARADO_DO_ESTOQUE, ENTREGUE_A_TRANSPORTADORA e ENTREGUE não podem ser deletados
+        } else if (chaveDelecao == 2) {
+          return false;
+        } else if (chaveDelecao == 3) {
+          return false;
+        } else if (chaveDelecao == 4) {
+          return false;
+        } else if (chaveDelecao == 5) {
+          return false;
+        }
+    // O pedido repassado ao método não pertence ao Cliente repassado ao método.
+    return false;
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // @Incoming("card-in")
+  //   @Transactional
+  //   public void alteraStatusCompraCredito(ObjetoRetorno objR) {
+
+  //   if(objR.getBoo()) {
+  //     Long idPedido = Long.parseLong(objR.getIdPedido());
+  //     PedidoPatchStatusDTO update = new PedidoPatchStatusDTO(idPedido, 2, null);
+  //     updateStatusDoPedido(update);
+
+  //   } else {
+  //     Long idPedido = Long.parseLong(objR.getIdPedido());
+  //     PedidoPatchStatusDTO update = new PedidoPatchStatusDTO(idPedido, 1, null);
+  //     updateStatusDoPedido(update);
+ 
+  //   }
+  // }
 
     @Override
     public PedidoResponseDTO findPedidoById(Long id) {
