@@ -62,6 +62,19 @@ public class Pedido extends DefaultEntity {
     @JoinColumn(name = "id_logistica")
     private Logistica logistica;
 
+    public Pedido() {}
+
+    public Pedido(Pedido pedido) {
+        this.codigoDeRastreamento = pedido.codigoDeRastreamento;
+        this.cliente = pedido.cliente;
+        this.statusDoPedido = pedido.statusDoPedido;
+        this.itemDaVenda = pedido.itemDaVenda;
+        this.endereco = pedido.endereco;
+        this.formaDePagamento = pedido.formaDePagamento;
+        this.logistica = pedido.logistica;
+    }
+
+
     public Cliente getCliente() {
         return this.cliente;
     }

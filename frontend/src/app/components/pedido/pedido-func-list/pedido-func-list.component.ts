@@ -9,12 +9,12 @@ import { ProdutoService } from "../../../services/produto.service";
 import { Observable, catchError, forkJoin, map, of } from "rxjs";
 import { ItemDaVenda } from "../../../models/itemDaVenda";
 import { NavigationService } from "../../../services/navigation.service";
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 
 @Component({
     selector: 'app-pedido-func-list',
     standalone: true,
-    imports: [HeaderHomeComponent, ReactiveFormsModule, CommonModule],
+    imports: [HeaderHomeComponent, ReactiveFormsModule, CommonModule, FormsModule],
     templateUrl: './pedido-func-list.component.html',
     styleUrls: ['./pedido-func-list.component.css'] // Correção de 'styleUrl' para 'styleUrls'
 })
@@ -24,6 +24,8 @@ export class PedidoFuncListComponent implements OnInit {
     statusPedidos: any[];
     statusPedidosForm: FormGroup;
     statusEscolhido: number | null;
+    codRastForm: FormGroup;
+  
    
     constructor(
       private pedidoService: PedidoService,
@@ -33,7 +35,10 @@ export class PedidoFuncListComponent implements OnInit {
     ) {
       this.statusPedidosForm = formBuilder.group({
         statusSelecionado: [null]
-      })
+      });
+      this.codRastForm = formBuilder.group({
+        codigoDeRastreamento: ['', Validators.required]
+      });
       this.statusPedidos = [];
       this.statusEscolhido = null;
     }
@@ -54,11 +59,9 @@ export class PedidoFuncListComponent implements OnInit {
     }
 
     onStatusChange(value: any) {
-      //console.log('Valor selecionado:', value);
       this.statusEscolhido = Number(value);
       console.log(this.statusEscolhido);
       this.carregarPedidosStatus(this.statusEscolhido);
-      // Aqui você pode adicionar lógica adicional para manipular o valor selecionado
     }
     
     getUltimoStatus(pedido: PedidoRecebe): string | null {
@@ -67,6 +70,10 @@ export class PedidoFuncListComponent implements OnInit {
 
     getDataHoraPedido(pedido: PedidoRecebe): string | null {
       return pedido.statusDoPedido.at(0)?.dataHora || null;
+    }
+
+    getCodRastreamento(pedido: PedidoRecebe): string | null {
+      return pedido.codigoDeRastreamento || null;
     }
 
     getTotalPedido(pedido: PedidoRecebe): number {
@@ -116,26 +123,6 @@ export class PedidoFuncListComponent implements OnInit {
         });
       });
     }
-            
-    // getProdutosOfPedido(pedido: PedidoRecebe): Observable<Produto[]> {
-    //   const observables = pedido.itemDaVenda
-    //       .filter(itemPedido => itemPedido.idProduto !== null && itemPedido.idProduto !== undefined)
-    //       .map(itemPedido => 
-    //           this.produtoService.findById(itemPedido.idProduto as number)
-    //             .pipe(
-    //               catchError(error => {
-    //                 console.error(`Erro ao buscar produto com id ${itemPedido.idProduto}:`, error);
-    //                 return of(null); // Retorna null em caso de erro
-    //               })
-    //             )
-    //       );
-
-    //     console.log(observables);
-
-    //   return forkJoin(observables).pipe(
-    //     map(produtos => produtos.filter(produto => produto !== null)) // Filtra produtos válidos
-    //   );
-    // }
 
     getProdutoOfPedido(id: number): Observable<Produto> {
       return this.produtoService.findById(id);
@@ -162,17 +149,50 @@ export class PedidoFuncListComponent implements OnInit {
     }
 
     entregueAtransportadora(index1: number): void{
-    //   this.pedidoService.updatePedidoEntregue(index1, 4, null, null).subscribe({
-    //     next: (response) => {
-    //         console.log(response);
-    //         window.location.reload();
-    //     },
-    //     error: (error) => {
-    //         // Este callback é executado quando ocorre um erro durante a emissão do valor
-    //         console.error('Erro:', error);
-    //         window.alert(error);
-    //     } 
-    // })
+      if (this.codRastForm.valid) {
+        const codigoDeRastreamento = this.codRastForm.get('codigoDeRastreamento')?.value;
+        this.pedidoService.updatePedidoEntregue(index1, 4, codigoDeRastreamento).subscribe({
+        next: (response) => {
+            //console.log(response);
+            window.location.reload();
+        },
+        error: (error) => {
+            // Este callback é executado quando ocorre um erro durante a emissão do valor
+           // console.error('Erro:', error);
+            window.alert(error);
+        } 
+    })
+      } else {
+        window.alert("Insira um Código de Rastreamento");
+      }
+    }
+
+    entregueAoCliente(index1: number): void{
+      this.pedidoService.updatePedidoEntregueCliente(index1, 5).subscribe({
+        next: (response) => {
+            console.log(response);
+            window.location.reload();
+        },
+        error: (error) => {
+            // Este callback é executado quando ocorre um erro durante a emissão do valor
+            console.error('Erro:', error);
+            window.alert(error);
+        } 
+    })
+    }
+
+    clienteDesistiu(index1: number): void{
+      this.pedidoService.updatePedidoDesistido(index1, 7).subscribe({
+        next: (response) => {
+            console.log(response);
+            window.location.reload();
+        },
+        error: (error) => {
+            // Este callback é executado quando ocorre um erro durante a emissão do valor
+            console.error('Erro:', error);
+            window.alert(error);
+        } 
+    })
     }
 
     deletarPedido(id: number): void {

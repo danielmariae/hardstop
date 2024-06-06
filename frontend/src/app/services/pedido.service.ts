@@ -166,12 +166,11 @@ export class PedidoService {
       // const params = new HttpParams()
       //           .set('idPedido', idPedido)
       //           .set('idStatus', idStatus);
-      // const body = JSON.stringify(params);
 
       const body = {
         idPedido: idPedido,
         idStatus: idStatus,
-        codigoDeRastreamento: null // Adicione aqui se precisar de um valor
+        codigoDeRastreamento: null 
       };
 
       if(headers) {
@@ -181,7 +180,7 @@ export class PedidoService {
       }
     }
 
-    updatePedidoEntregue(idPedido: number, idStatus: number, codRast: string, idLog: number): Observable<PedidoRecebe> {
+    updatePedidoEntregue(idPedido: number, idStatus: number, codRast: string): Observable<PedidoRecebe> {
       const url = 'http://localhost:8080/pedidos/patch/status/';
       const headers = this.sessionTokenService.getSessionHeader();
       // const params = new HttpParams()
@@ -193,7 +192,45 @@ export class PedidoService {
         idPedido: idPedido,
         idStatus: idStatus,
         codigoDeRastreamento: codRast,
-        idTransportadora: idLog
+        idTransportadora: null // Adicione aqui se tiver de um valor
+      };
+
+      if(headers) {
+      return this.httpClient.patch<PedidoRecebe>(url, body, { headers });
+      } else {
+        return this.httpClient.patch<PedidoRecebe>(url, body);
+      }
+    }
+
+    updatePedidoEntregueCliente(idPedido: number, idStatus: number): Observable<PedidoRecebe> {
+      const url = 'http://localhost:8080/pedidos/patch/status/';
+      const headers = this.sessionTokenService.getSessionHeader();
+      // const params = new HttpParams()
+      //           .set('idPedido', idPedido)
+      //           .set('idStatus', idStatus);
+
+      const body = {
+        idPedido: idPedido,
+        idStatus: idStatus,
+      };
+
+      if(headers) {
+      return this.httpClient.patch<PedidoRecebe>(url, body, { headers });
+      } else {
+        return this.httpClient.patch<PedidoRecebe>(url, body);
+      }
+    }
+
+    updatePedidoDesistido(idPedido: number, idStatus: number): Observable<PedidoRecebe> {
+      const url = 'http://localhost:8080/pedidos/patch/status/';
+      const headers = this.sessionTokenService.getSessionHeader();
+      // const params = new HttpParams()
+      //           .set('idPedido', idPedido)
+      //           .set('idStatus', idStatus);
+
+      const body = {
+        idPedido: idPedido,
+        idStatus: idStatus,
       };
 
       if(headers) {

@@ -25,6 +25,7 @@ import br.unitins.topicos1.model.utils.Endereco;
 import br.unitins.topicos1.repository.ClienteRepository;
 import br.unitins.topicos1.repository.EmpresaRepository;
 import br.unitins.topicos1.repository.EnderecoRepository;
+import br.unitins.topicos1.repository.LogisticaRepository;
 import br.unitins.topicos1.repository.PedidoRepository;
 import br.unitins.topicos1.repository.ProdutoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -78,6 +79,9 @@ public class PedidoServiceImpl implements PedidoService {
 
   @Inject
   CartaoDeCreditoRepository repositoryCartao;
+
+  @Inject
+  LogisticaRepository repositoryLogistica;
 
   @PersistenceUnit
   EntityManagerFactory emf;
@@ -631,8 +635,12 @@ public class PedidoServiceImpl implements PedidoService {
       return PedidoResponseDTO.valueOf(pedido);
     } else if (status == 3) {
       statusVenda.setStatus(Status.valueOf(ppsdto.idStatus()));
-      System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKk");
       pedido.getStatusDoPedido().add(statusVenda);
+      // IMPORTANTE!! Precisa gerar o cógigo de rastreamento via conexão com a empresa de logística.
+      pedido.setCodigoDeRastreamento(ppsdto.codigoDeRastreamento());
+      System.out.println(ppsdto.codigoDeRastreamento());
+      System.out.println(pedido.getCodigoDeRastreamento());
+      //pedido.setLogistica(logisticaRepository.findById(ppsdto.idTransportadora()));
       try {
         repositoryPedido.persist(pedido);
       } catch (Exception e) {
@@ -647,8 +655,6 @@ public class PedidoServiceImpl implements PedidoService {
     } else if (status == 4) {
       statusVenda.setStatus(Status.valueOf(ppsdto.idStatus()));
       pedido.getStatusDoPedido().add(statusVenda);
-      // IMPORTANTE!! Precisa gerar o cógigo de rastreamento via conexão com a empresa de logística.
-      pedido.setCodigoDeRastreamento(ppsdto.codigoDeRastreamento());
       try {
         repositoryPedido.persist(pedido);
       } catch (Exception e) {
@@ -672,8 +678,24 @@ public class PedidoServiceImpl implements PedidoService {
           "PedidoServiceImpl(updateStatusDoPedido)",
           "Não consegui persistir o pedido no banco de dados!"
         );
-      }
+      } 
       return PedidoResponseDTO.valueOf(pedido);
+      } else if (status == 7) {
+        statusVenda.setStatus(Status.valueOf(ppsdto.idStatus()));
+        pedido.getStatusDoPedido().add(statusVenda);
+        Pedido novoPedido = new Pedido(pedido);
+        deletePedidoByFunc(pedido.getId());
+        try {
+          repositoryPedido.persist(novoPedido);
+        } catch (Exception e) {
+          throw new GeneralErrorException(
+            "500",
+            "Server Error",
+            "PedidoServiceImpl(updateStatusDoPedido)",
+            "Não consegui persistir o pedido no banco de dados!"
+          );
+        }
+      return PedidoResponseDTO.valueOf(novoPedido);
     }
 
     throw new GeneralErrorException(
@@ -1110,7 +1132,7 @@ public class PedidoServiceImpl implements PedidoService {
               try {
                 transaction.begin();
                 String sql1 =
-                  "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
+                  "SELECT quantidadeunidades FROM produto WHERE id = ?1 FOR SHARE";
                 Query query = em1
                   .createNativeQuery(sql1)
                   .setParameter(1, idv.getProduto().getId());
@@ -1118,7 +1140,7 @@ public class PedidoServiceImpl implements PedidoService {
                 Integer quantFinal = quantidade + idv.getQuantidadeUnidades();
 
                 String sql4 =
-                  "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
+                  "UPDATE produto SET quantidadeunidades = ?1 WHERE id = ?2";
                 em1
                   .createNativeQuery(sql4)
                   .setParameter(1, quantFinal)
@@ -1151,7 +1173,7 @@ public class PedidoServiceImpl implements PedidoService {
               try {
                 transaction.begin();
                 String sql1 =
-                  "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
+                  "SELECT quantidadeunidades FROM produto WHERE id = ?1 FOR SHARE";
                 Query query = em2
                   .createNativeQuery(sql1)
                   .setParameter(1, idv.getProduto().getId());
@@ -1159,7 +1181,7 @@ public class PedidoServiceImpl implements PedidoService {
                 Integer quantFinal = quantidade + idv.getQuantidadeUnidades();
 
                 String sql4 =
-                  "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
+                  "UPDATE produto SET quantidadeunidades = ?1 WHERE id = ?2";
                 em2
                   .createNativeQuery(sql4)
                   .setParameter(1, quantFinal)
@@ -1235,7 +1257,7 @@ public class PedidoServiceImpl implements PedidoService {
         }
 
         // Pedidos com status do tipo: AGUARDANDO_PAGAMENTO ou PAGAMENTO_NÃO_AUTORIZADO podem ser deletados
-        if (chaveDelecao == 0) {
+        if (chaveDelecao == 0 || chaveDelecao == 1 || chaveDelecao == 5) {
           //Em caso de compras no cartão de crédito precisa primeiro comunicar a financeira antes de permitir essa deleção! Caso a financeira desfaça a ordem de pagamento, aí essa deleção será permitida. Caso a compra seja na forma de boleto ou pix o pedido poderá ser deletado imediatamente.
           if (pedido.getFormaDePagamento().getModalidade().getId() != 0) {
             // Pedido AGUARDANDO_PAGAMENTO foi excluído com sucesso! Em caso do pagamento escolhido tiver sido cartão de crédito é necessária comunicação com a financeira para concluir esta operação.
@@ -1248,7 +1270,7 @@ public class PedidoServiceImpl implements PedidoService {
               try {
                 transaction.begin();
                 String sql1 =
-                  "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
+                  "SELECT quantidadeunidades FROM produto WHERE id = ?1 FOR SHARE";
                 Query query = em1
                   .createNativeQuery(sql1)
                   .setParameter(1, idv.getProduto().getId());
@@ -1256,7 +1278,7 @@ public class PedidoServiceImpl implements PedidoService {
                 Integer quantFinal = quantidade + idv.getQuantidadeUnidades();
 
                 String sql4 =
-                  "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
+                  "UPDATE produto SET quantidadeunidades = ?1 WHERE id = ?2";
                 em1
                   .createNativeQuery(sql4)
                   .setParameter(1, quantFinal)
@@ -1289,7 +1311,7 @@ public class PedidoServiceImpl implements PedidoService {
               try {
                 transaction.begin();
                 String sql1 =
-                  "SELECT quantidade FROM produto WHERE id = ?1 FOR SHARE";
+                  "SELECT quantidadeunidades FROM produto WHERE id = ?1 FOR SHARE";
                 Query query = em2
                   .createNativeQuery(sql1)
                   .setParameter(1, idv.getProduto().getId());
@@ -1297,7 +1319,7 @@ public class PedidoServiceImpl implements PedidoService {
                 Integer quantFinal = quantidade + idv.getQuantidadeUnidades();
 
                 String sql4 =
-                  "UPDATE produto SET quantidade = ?1 WHERE id = ?2";
+                  "UPDATE produto SET quantidadeunidades = ?1 WHERE id = ?2";
                 em2
                   .createNativeQuery(sql4)
                   .setParameter(1, quantFinal)
@@ -1320,18 +1342,19 @@ public class PedidoServiceImpl implements PedidoService {
             }
             return true;
           }
-        } else if (chaveDelecao == 1) {
-          // Pedido PAGAMENTO_NÃO_AUTORIZADO foi excluído com sucesso!
-          return true;
-          // Pedidos com status do tipo: PAGO, SEPARADO_DO_ESTOQUE, ENTREGUE_A_TRANSPORTADORA e ENTREGUE não podem ser deletados
+        // } else if (chaveDelecao == 1) {
+        //   // Pedido PAGAMENTO_NÃO_AUTORIZADO foi excluído com sucesso!
+        //   return true;
+        //   // Pedidos com status do tipo: PAGO, SEPARADO_DO_ESTOQUE, ENTREGUE_A_TRANSPORTADORA não podem ser deletados. Pedido ENTREGUE pode ser deletado caso tenha sido devolvido pelo cliente.
+        
         } else if (chaveDelecao == 2) {
           return false;
         } else if (chaveDelecao == 3) {
           return false;
         } else if (chaveDelecao == 4) {
           return false;
-        } else if (chaveDelecao == 5) {
-          return false;
+        // } else if (chaveDelecao == 5) {
+        //   return true;
         }
     // O pedido repassado ao método não pertence ao Cliente repassado ao método.
     return false;

@@ -7,7 +7,7 @@ public enum Status {
   SEPARADO_DO_ESTOQUE(3, "Separado do estoque"),
   ENTREGUE_A_TRANSPORTADORA(4, "Entregue a transportadora"),
   ENTREGUE(5, "Entregue para o cliente"),
-  DESISTIDO(6, "Desistiu da compra antes da entrega para a transportadora"),
+  DESISTIDO(6, "Desistiu da compra antes da separação do estoque"),
   DEVOLVIDO(7, "Devolveu a compra após a entrega");
 
   private Integer id;
