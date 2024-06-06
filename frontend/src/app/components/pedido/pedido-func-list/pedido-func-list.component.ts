@@ -161,6 +161,20 @@ export class PedidoFuncListComponent implements OnInit {
       //this.navigationService.navigateTo('/home');
     }
 
+    entregueAtransportadora(index1: number): void{
+    //   this.pedidoService.updatePedidoEntregue(index1, 4, null, null).subscribe({
+    //     next: (response) => {
+    //         console.log(response);
+    //         window.location.reload();
+    //     },
+    //     error: (error) => {
+    //         // Este callback é executado quando ocorre um erro durante a emissão do valor
+    //         console.error('Erro:', error);
+    //         window.alert(error);
+    //     } 
+    // })
+    }
+
     deletarPedido(id: number): void {
 
       this.pedidoService.deletePedidoByFunc(id).subscribe({

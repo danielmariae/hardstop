@@ -207,6 +207,62 @@
           </div>  
         </div>
         <td>
+          <button class="button is-primary" type="button" (click)="entregueAtransportadora(item.id)">Entregue para transportadora</button>
+          </td>
+      </div>
+    </div>
+</ng-container>
+</div>
+
+<div class="form-group" *ngIf="statusEscolhido === 4"> <!-- Entregue a transportadora -->
+  <ng-container *ngIf="pedidoItens.length > 0">
+    <h1>Lista de pedidos</h1>
+
+  <div class="block" *ngFor="let item of pedidoItens; let i = index">
+      <div  class="box content">
+        <div class="columns">
+          <div class="column">
+            <h4>ID:</h4>
+            <p>{{item.id}}</p>
+          </div>
+          <div class="column">
+            <h4>Data/Hora da Compra:</h4>
+            <p>{{getDataHoraPedido(item)}}</p>
+          </div>
+          <div class="column">
+            <h4>Status atual:</h4>
+            <p>{{getUltimoStatus(item)}}</p>
+          </div>
+          <div class="column">
+            <h4>Total:</h4>
+            <p>{{formatValues(getTotalPedido(item))}}</p>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="item.id">
+        <div class="box content">
+          <h2>Produtos do pedido #{{item.id}}</h2>
+          <div class="table-container">
+            <table class="table is-fullwidth">
+              <thead>
+              </thead>
+              <tbody>
+                <tr *ngFor="let produto of item.itemDaVenda; let j = index">
+                  <td>
+                    <img [src]='this.produtoService.getUrlImagem(produto.imagemPrincipal)'
+                    style="max-width: 50px; max-height: 50px; object-fit: cover">  
+                  </td>
+                  <td>
+                    <h4>{{produto.nome}}</h4>
+                    <p>{{produto.quantidadeUnidades}} un.:
+                      {{produto.preco?.toLocaleString('PT-BR',{style:'currency', currency: 'BRL'})}} x {{produto.quantidadeUnidades}}</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>  
+        </div>
+        <td>
           <button class="button is-primary" type="button" (click)="separadoDoEstoque(item.id)">Entregue para transportadora</button>
           </td>
       </div>
