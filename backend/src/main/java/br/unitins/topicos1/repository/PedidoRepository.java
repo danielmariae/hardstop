@@ -74,7 +74,7 @@ public class PedidoRepository implements PanacheRepository<Pedido>{
             "where sp.status = :status " +
             "and sp.dataHora = (select max(spp.dataHora) " +
                                "from StatusDoPedido spp " +
-                               "where spp.pedido = p AND sp1.pedido = p)";
+                               "where spp.pedido = p)";
 
     
             TypedQuery<Pedido> query = entityManager.createQuery(queryString, Pedido.class);
