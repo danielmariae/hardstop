@@ -13,7 +13,7 @@ public class LoteRepository implements PanacheRepository<Lote> {
         return find("UPPER(lote) LIKE UPPER(?1) ", "%" + lote + "%").list();
     }
 
-    public List<Lote> findAll(int page, int pageSize) {
+    public List<Lote> findByAll(int page, int pageSize) {
         return findAll().page(page, pageSize).list();
     }
 

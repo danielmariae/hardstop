@@ -362,7 +362,7 @@ public class LoteServiceImpl implements LoteService {
     int pageSize
   ) {
       return repository
-      .findAll(page, pageSize)
+      .findByAll(page, pageSize)
       .stream()
       .map(LoteResponseCDTO::valueOf)
       .toList();
