@@ -127,9 +127,9 @@ export class ClienteThisEditComponent implements OnInit {
     const enderecoFormGroup = this.formBuilder.group({
       nome: [endereco && endereco.nome ? endereco.nome : '', Validators.required],
       logradouro: [endereco && endereco.logradouro ? endereco.logradouro : ''],
-      numeroLote: [endereco && endereco.numeroLote ? endereco.numeroLote : ''],
+      numeroLote: [endereco && endereco.numeroLote ? endereco.numeroLote : '', Validators.required],
       bairro: [endereco && endereco.bairro ? endereco.bairro : ''],
-      complemento: [endereco && endereco.complemento ? endereco.complemento : ''],
+      complemento: [endereco && endereco.complemento ? endereco.complemento : '', Validators.required],
       cep: [endereco && endereco.cep ? endereco.cep : ''],
       localidade: [endereco && endereco.localidade ? endereco.localidade : ''],
       uf: [endereco && endereco.uf ? endereco.uf : ''],

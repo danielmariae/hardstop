@@ -36,6 +36,7 @@
     </div>
     <div class="box content">
         <h1>Acompanhe seu pedido:</h1>
+        Última atualização: {{datePipe.transform(this.ultimoStatus?.dataHora, 'dd/MM/yyyy HH:mm:ss')}}
         <div class="columns is-centered">
             <div class="column">
                 <ul class="steps is-vertical" *ngIf="showStatus">
@@ -43,11 +44,10 @@
                         <span class="steps-marker"></span>
                         <div class="steps-content">
                             <p>{{status.descricao}}</p>
-                            <p>{{pedido.statusDoPedido.at(status.id)?.dataHora}}</p>
-                            <!-- <p>{{status.}}</p> -->
                         </div>          
                     </li>
                 </ul> 
+                <br><br>
                 <div class="notification is-warning" *ngIf="!showStatus">
                   <h2 class="has-text-black">Seu pedido teve o seguinte status:</h2>
                   <b>{{this.ultimoStatus?.descricaoStatus}}</b>
@@ -59,7 +59,6 @@
                   <br>
                   <a href="mailto:leandrogarcia@unitins.br">leandrogarcia&#64;unitins.br</a>
                   (Leandro Garcia)
-
                 </div>
             </div>
         </div>

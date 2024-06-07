@@ -83,8 +83,11 @@ public class LoteResource {
   @GET
   @RolesAllowed({ "Func", "Admin" })
   @Path("/search/all/")
-  public Response findAll() {
-    return Response.ok(service.findByAll()).build();
+  public Response findAll(
+    @QueryParam("page") @DefaultValue("0") int page,
+    @QueryParam("pageSize") @DefaultValue("100") int pageSize
+  ) {
+    return Response.ok(service.findByAll(page, pageSize)).build();
   }
 
   @GET

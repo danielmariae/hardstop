@@ -110,6 +110,9 @@
                     <div class="column">
                       <label class="field label">Nome do endereço:</label>
                       <input class="control input" formControlName="nome" placeholder="Nome para este endereço:">
+                      <div *ngIf="endereco.get('nome')?.touched && endereco.get('nome')?.hasError('required')">
+                        <p class="help is-danger">Campo obrigatório.</p>
+                      </div>
                     </div>
                     <div class="column is-one-quarter">
                       <label class="field label">CEP:</label>
@@ -130,10 +133,16 @@
                       <div class="column is-one-fifth">
                         <label class="field label">Número/Lote: </label>
                         <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
+                        <div *ngIf="endereco.get('numeroLote')?.touched && endereco.get('numeroLote')?.hasError('required')">
+                          <p class="help is-danger">Campo obrigatório. Por favor, usar S/N caso não tenha.</p>
+                        </div>
                       </div>
                       <div class="column">
                         <label class="field label">Complemento: </label>
                         <input class="control input" formControlName="complemento" placeholder="Complemento">
+                        <div *ngIf="endereco.get('complemento')?.touched && endereco.get('complemento')?.hasError('required')">
+                          <p class="help is-danger">Campo obrigatório. Por favor, usar S/C caso não tenha.</p>
+                        </div>  
                       </div>
                     </div>
                     <div class="columns">

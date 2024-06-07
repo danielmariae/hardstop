@@ -26,6 +26,12 @@ export class LoteService {
 
         return this.httpClient.get<number>(`${this.baseUrl}/count/${id}`);
     }
+    // Método para realizar contagens. Envolvido com a paginação
+    countAll(): Observable<number> {
+        const headers = this.sessionTokenService.getSessionHeader();
+
+        return this.httpClient.get<number>(`${this.baseUrl}/count/`);
+    }
 
     // Método para trazer todas as instâncias de Lote de um dado produto de acordo com a paginação
     // findByIdProduto(id: number, page?: number, pageSize?: number): Observable<LoteRecebe[]> {
@@ -109,6 +115,46 @@ export class LoteService {
             }
         }
         
+    }
+
+    findByAll(page?: number, pageSize?: number): Observable<LoteRecebeClass[]> {
+        const headers = this.sessionTokenService.getSessionHeader();
+        const url = `${this.baseUrl}/search/all`; // Concatena o ID à URL base
+
+        if (page !== undefined && pageSize !== undefined) {
+            const params = new HttpParams()
+                .set('page', page.toString())
+                .set('pageSize', pageSize.toString());
+
+            if (headers) {
+                // Faz a requisição HTTP com o token de autenticação no cabeçalho
+                return this.httpClient.get<LoteRecebeClass[]>(url, { headers: headers, params: params })
+                    .pipe(
+                        catchError(this.handleError)
+                    );
+            } else {
+                // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
+                return this.httpClient.get<LoteRecebeClass[]>(url, { params })
+                    .pipe(
+                        catchError(this.handleError)
+                    );
+            }
+        } else {
+            if (headers) {
+                // Faz a requisição HTTP com o token de autenticação no cabeçalho
+                return this.httpClient.get<LoteRecebeClass[]>(url, { headers })
+                    .pipe(
+                        catchError(this.handleError)
+                    );
+            } else {
+                // Se o token de sessão não estiver disponível, faz a requisição sem o token de autenticação
+                return this.httpClient.get<LoteRecebeClass[]>(url)
+                    .pipe(
+                        catchError(this.handleError)
+                    );
+            }
+        }
+
     }
 
 

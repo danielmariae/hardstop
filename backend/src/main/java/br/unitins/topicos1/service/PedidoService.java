@@ -63,5 +63,8 @@ public void deletePedidoByCliente(Long idCliente, Long idPedido);
 
   // Procurar stauts do pedido
   public StatusDoPedidoResponseDTO findByStatus(Long id);
+
+  // Procurar pedidos por CPF do cliente
+  public List<PedidoResponseDTO> findByCpf(String cpf);
   
 }

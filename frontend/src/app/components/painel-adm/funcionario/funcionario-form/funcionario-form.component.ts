@@ -214,7 +214,7 @@ export class FuncionarioFormComponent {
 
   cancelarInsercao(): void {
     // Redireciona o usuário para a rota anterior
-    this.navigationService.navigateTo('funcionarios');
+    this.navigationService.navigateTo('adm/funcionarios');
 }
 
   salvarFuncionario(): void {

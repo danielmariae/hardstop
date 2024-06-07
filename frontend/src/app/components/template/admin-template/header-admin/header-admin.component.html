@@ -1,23 +1,19 @@
 <nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <div class="navbar-item">
-        <button (click)="toggleSidebar()" type="button" class="button"><span class="icon"><i class="mdi mdi-menu"></i></span></button>
-      </div>
-      <a class="navbar-item" href="/">
-        <h1 id="hardstoplogo">HARDSTOP</h1>
+  <div class="navbar-brand">
+    <div class="navbar-item">
+      <button (click)="toggleSidebar()" type="button" class="button"><span class="icon"><i
+            class="mdi mdi-menu"></i></span></button>
+    </div>
+    <a class="navbar-item" href="/">
+      <h1 id="hardstoplogo">HARDSTOP</h1>
+    </a>
+  </div>
+
+  <div class="navbar-menu" id="navMenu" *ngIf="admLogado">
+    <div class="navbar-end">
+      <a *ngIf="admLogado" class="navbar-item">
+        {{funcionarioLogado?.nome || 'Funcionário desconhecido'}}
       </a>
     </div>
-
-      <div class="navbar-menu" id="navMenu" *ngIf="admLogado">
-        <div class="navbar-end">
-            <div *ngIf="admLogado">
-              <div class="navbar-item">
-                <div class="buttons">
-                  <a href='/adm/clientes' class="button is-light">Painel</a>
-                  <a href='/login/adm' (click)="deslogarUsuario()" class="button is-danger">Deslogar</a>
-                </div>
-              </div>
-            </div>
-          </div>  
-      </div>
-  </nav>
+  </div>
+</nav>

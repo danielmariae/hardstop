@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { PedidoService } from '../../../services/pedido.service';
 import { ActivatedRoute } from '@angular/router';
@@ -13,7 +13,8 @@ import { ItemDaVendaRecebe } from '../../../models/itemRecebe';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './pedido-user-view.component.html',
-  styleUrls: ['./pedido-user-view.component.css']
+  styleUrls: ['./pedido-user-view.component.css'],
+  providers: [DatePipe]
 })
 export class PedidoUserViewComponent implements OnInit {
   errorMessage: string | null = null;
@@ -33,7 +34,8 @@ export class PedidoUserViewComponent implements OnInit {
   constructor(
     private pedidoService: PedidoService,
     private route: ActivatedRoute, 
-    public produtoService: ProdutoService
+    public produtoService: ProdutoService,
+    public datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {

@@ -1,0 +1,119 @@
+<div class="container">
+  <div class="box content">
+    <div class="columns">
+        <div class="column">
+          <h2>Busca por CPF:</h2>
+                <form [formGroup]="cpfForm" (ngSubmit)="carregarPedidosCPF()" class="block">
+                    <div class="field has-addons">
+                        <p class="control">
+                          <input class="control input" type="numeric" id="cpf" formControlName="cpf" inputmode="numeric" mask="000.000.000-00">
+                        </p>
+                        <p>
+                            <button class="button" type="submit">Pesquisar</button>
+                        </p>
+                    </div>
+                    <div *ngIf="cpfForm.get('cpf')?.hasError('cpfInvalido') && cpfForm.get('cpf')?.touched">
+                      <p class="help is-danger">CPF inválido. Verifique se CPF está correto.</p>
+                    </div>
+                  </form>    
+            </div>
+        <div class="column">
+          
+        </div>
+      </div>
+    </div>
+    <div class="box" *ngIf="showResults">
+        <div class="block" *ngFor="let item of pedidoItens; let i = index">
+            <div class="box content">
+              <div class="columns">
+                <div class="column">
+                  <h4>ID:</h4>
+                  <p>{{item.id}}</p>
+                </div>
+                <div class="column">
+                  <h4>Data/Hora da Compra:</h4>
+                  <p>{{getDataHoraPedido(item)}}</p>
+                </div>
+                <div class="column">
+                  <h4>Status atual:</h4>
+                  <p>{{getUltimoStatus(item)}}</p>
+                </div>
+                <div class="column">
+                  <h4>Total:</h4>
+                  <p>{{formatValues(getTotalPedido(item))}}</p>
+                </div>
+                <div class="column" *ngIf="getUltimoStatusId(item) === 0">
+                  <h4>Avançar pedido:</h4>
+                  <div class="buttons">
+                    <button class="button is-primary" type="button" (click)="confirmarPagamento(item.id!)">Confirmar pagamento</button>
+                    <button class="button is-danger" type="button" (click)="rejeitarPagamento(item.id!)">Rejeitar pagamento</button>  
+                  </div>
+                </div>
+                <div class="column" *ngIf="getUltimoStatusId(item) === 1">
+                  <h4>Finalizar pedido:</h4>
+                  <button class="button is-danger" type="button" (click)="deletarPedido(item.id!)">Deletar Pedido</button>
+                </div>
+                <div class="column" *ngIf="getUltimoStatusId(item) === 2">
+                  <h4>Avançar pedido:</h4>
+                  <button *ngIf="item.id" class="button is-primary" type="button"
+                    (click)="separadoDoEstoque(item.id)">Separado do
+                    Estoque</button>
+                </div>
+                <div class="column" *ngIf="getUltimoStatusId(item) === 3 && item.id">
+                  <h4>Avançar pedido:</h4>
+                  <form [formGroup]="codRastForm" (ngSubmit)="entregueAtransportadora(item.id)" class="block">
+                    <input class="control input" type="text" id="codigoDeRastreamento"
+                        formControlName="codigoDeRastreamento" placeholder="Código de Rastreamento">
+                        <br>
+                        <button class="button is-primary" type="submit">Entregue para
+                          transportadora</button>    
+                    <div
+                        *ngIf="codRastForm.get('codigoDeRastreamento')?.hasError('required') && codRastForm.get('codigoDeRastreamento')?.touched">
+                        <p class="help is-danger">Campo obrigatório.</p>
+                    </div>
+                  </form>    
+                </div>  
+                <div class="column" *ngIf="getUltimoStatusId(item) === 4">
+                  <h4>Finalizar pedido:</h4>
+                  <button class="button is-primary" type="button" (click)="entregueAoCliente(item.id!)">Entregue para o
+                    Cliente</button>        
+                </div>
+                <div class="column" *ngIf="getUltimoStatusId(item) === 5">
+                  <h4>Retornar pedido:</h4>
+                  <button class="button is-primary" type="button" (click)="clienteDesistiu(item.id!)">Devolvido pelo
+                    Cliente</button>    
+                </div>
+    
+              </div>
+            </div>
+            <div *ngIf="item.id">
+              <div class="box content">
+                <h2>Produtos do pedido #{{item.id}}</h2>
+                <div class="table-container">
+                  <table class="table is-fullwidth">
+                    <thead>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let produto of item.itemDaVenda">
+                        <td>
+                          <img [src]='this.produtoService.getUrlImagem(produto.imagemPrincipal)'
+                            style="max-width: 50px; max-height: 50px; object-fit: cover">
+                        </td>
+                        <td>
+                          <h4>{{produto.nome}}</h4>
+                          <p>{{produto.quantidadeUnidades}} un.:
+                            {{produto.preco?.toLocaleString('PT-BR',{style:'currency', currency: 'BRL'})}} x
+                            {{produto.quantidadeUnidades}}</p>
+                        </td>
+                        <!-- <td>
+                        <button class="button is-primary" type="button" (click)="separarDoEstoque()">Separado do Estoque</button>
+                      </td> -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>    
+    </div>
+</div>

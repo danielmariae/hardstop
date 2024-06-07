@@ -1,29 +1,32 @@
-import { Component, OnInit } from "@angular/core";
-import { HeaderHomeComponent } from "../../template/home-template/header-home/header-home.component";
-import { PedidoService } from "../../../services/pedido.service";
-import { PedidoRecebe } from "../../../models/pedidoRecebe.model";
-import { CommonModule } from "@angular/common";
-import { getFormattedCurrency } from "../../../utils/formatValues";
-import { Produto } from "../../../models/produto.model";
-import { ProdutoService } from "../../../services/produto.service";
-import { Observable } from "rxjs";
-import { NavigationService } from "../../../services/navigation.service";
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { PedidoRecebe } from '../../../models/pedidoRecebe.model';
+import { Produto } from '../../../models/produto.model';
+import { NavigationService } from '../../../services/navigation.service';
+import { PedidoService } from '../../../services/pedido.service';
+import { ProdutoService } from '../../../services/produto.service';
+import { getFormattedCurrency } from '../../../utils/formatValues';
+import { HeaderHomeComponent } from '../../template/home-template/header-home/header-home.component';
+import { cpfValidator } from '../../../validators/cpf.validator';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
-  selector: 'app-pedido-func-list',
+  selector: 'app-pedido-func-view',
   standalone: true,
-  imports: [HeaderHomeComponent, ReactiveFormsModule, CommonModule, FormsModule],
-  templateUrl: './pedido-func-list.component.html',
-  styleUrls: ['./pedido-func-list.component.css'] // Correção de 'styleUrl' para 'styleUrls'
+  imports: [HeaderHomeComponent, ReactiveFormsModule, CommonModule, FormsModule, NgxMaskDirective],
+  templateUrl: './pedido-func-view.component.html',
+  styleUrl: './pedido-func-view.component.css',
+  providers:[provideNgxMask()]
 })
-export class PedidoFuncListComponent implements OnInit {
+export class PedidoFuncViewComponent implements OnInit {
+
   pedidoItens: PedidoRecebe[] = [];
   produtosPorPedido: { [pedidoId: number]: Produto[] } = {};
-  statusPedidos: any[];
-  statusPedidosForm: FormGroup;
-  statusEscolhido: number | null;
+  cpfForm: FormGroup;
   codRastForm: FormGroup;
+  showResults: boolean = false;
 
 
   constructor(
@@ -32,39 +35,31 @@ export class PedidoFuncListComponent implements OnInit {
     private navigationService: NavigationService,
     private formBuilder: FormBuilder
   ) {
-    this.statusPedidosForm = formBuilder.group({
-      statusSelecionado: [null]
+    this.cpfForm = this.formBuilder.group({
+      cpf: this.formBuilder.control('',{
+        validators:[
+          Validators.required,
+          cpfValidator()
+        ]
+      }
+      )
     });
-    this.codRastForm = formBuilder.group({
+
+    this.codRastForm = this.formBuilder.group({
       codigoDeRastreamento: ['', Validators.required]
-    });
-    this.statusPedidos = [];
-    this.statusEscolhido = null;
+    });   
   }
 
   ngOnInit(): void {
-    this.pedidoService.getStatusPedido().subscribe(data => {
-      this.statusPedidos = data;
-      console.log(this.statusPedidos);
-      for (let i = 0; i < this.statusPedidos.length; i++) {
-        console.log(this.statusPedidos[i]);
-      }
-    });
-
-    this.statusPedidosForm.get('statusSelecionado')?.valueChanges.subscribe(value => {
-      this.onStatusChange(value);
-    });
-
   }
 
-  onStatusChange(value: any) {
-    this.statusEscolhido = Number(value);
-    console.log(this.statusEscolhido);
-    this.carregarPedidosStatus(this.statusEscolhido);
-  }
 
   getUltimoStatus(pedido: PedidoRecebe): string | null {
     return pedido.statusDoPedido.at(pedido.statusDoPedido.length - 1)?.descricaoStatus || null;
+  }
+
+  getUltimoStatusId(pedido: PedidoRecebe): number | null {
+    return pedido.statusDoPedido.at(pedido.statusDoPedido.length - 1)?.idStatus || null;
   }
 
   getDataHoraPedido(pedido: PedidoRecebe): string | null {
@@ -84,21 +79,26 @@ export class PedidoFuncListComponent implements OnInit {
     }, 0);
   }
 
+  carregarPedidosCPF(): void {
+    const cpf = this.cpfForm.get('cpf')?.value;
+    if (this.cpfForm.valid) {
+      this.pedidoService.findByCpf(cpf).subscribe({
+        next: (response) => {
+          console.log(response);
+          this.pedidoItens = response;
+          this.showResults = true;
+          this.carregarProdutosParaPedidos();
+        },
+        error: (error) => {
+          // Este callback é executado quando ocorre um erro durante a emissão do valor
+          console.error('Erro:', error);
+          window.alert(error);
+        }
+      });
+    } else {
+      window.alert("Insira um CPF");
+    }
 
-
-  carregarPedidosStatus(status: number): void {
-    this.pedidoService.findAllFuncStatus(status).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.pedidoItens = response;
-        this.carregarProdutosParaPedidos();
-      },
-      error: (error) => {
-        // Este callback é executado quando ocorre um erro durante a emissão do valor
-        console.error('Erro:', error);
-        window.alert(error);
-      }
-    })
   }
 
   carregarProdutosParaPedidos(): void {
@@ -235,6 +235,4 @@ export class PedidoFuncListComponent implements OnInit {
       }
     });
   }
-
-
 }

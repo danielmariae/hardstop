@@ -111,6 +111,13 @@ FuncionarioService serviceF;
   }
 
   @GET
+  @Path("func/search/pedidos/{cpf}") // Aqui o id corresponde ao id de um pedido de um cliente
+  @RolesAllowed({"Func", "Admin"})
+  public Response findPedidosByCPF(@PathParam("cpf") String cpf) {
+    return Response.status(200).entity(service.findByCpf(cpf)).build();
+  }
+
+  @GET
   @Path("search/pedidos/{id}") // Aqui o id corresponde ao id de um pedido de um cliente
   @RolesAllowed({"User"})
   public Response findPedidoByIdUser(@PathParam("id") Long id) {

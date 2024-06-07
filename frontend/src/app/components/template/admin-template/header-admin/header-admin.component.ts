@@ -5,6 +5,8 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { SidebarService } from '../../../../services/sidebar.service';
+import { Funcionario } from '../../../../models/funcionario.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header-admin',
@@ -15,6 +17,8 @@ import { SidebarService } from '../../../../services/sidebar.service';
 })
 export class HeaderAdminComponent {
   admLogado: boolean = false;
+  funcionarioLogado: Funcionario | null = null;
+  private subscription = new Subscription();
 
   buscadorForm: FormControl;
 
@@ -23,17 +27,17 @@ export class HeaderAdminComponent {
     private navigationService: NavigationService,
     private formBuilder: FormBuilder,
     private sidebarService: SidebarService
-  ){
+  ) {
     this.buscadorForm = this.formBuilder.control('');
   }
 
-  
-  toggleSidebar() {
-    this.sidebarService.toggleSidebar();
-  }
 
-  ngOnInit(
-  ): void {
+  ngOnInit(): void {
+    this.funcionarioLogado = JSON.parse(localStorage.getItem('funcionarioLogado') || 'null');
+    if (!this.funcionarioLogado) {
+      this.obterFuncionarioLogado();
+    }
+
     // Get all "navbar-burger" elements
     const navbarBurgers = Array.from(document.querySelectorAll('.navbar-burger'));
 
@@ -67,26 +71,24 @@ export class HeaderAdminComponent {
     });
   }
 
-  deslogarUsuario(){
-        // Limpa o estado de login e remove os dados do sessionStorage
-        this.admLogado = false;
-        sessionStorage.removeItem('admLogado');
-    
-        // Limpa a sessão do token
-        this.sessionTokenService.clearSessionToken();
-        
-        // Limpa o Cliente Logado
-        this.sessionTokenService.removeFuncionarioLogado();
-        
+  toggleSidebar() {
+    this.sidebarService.toggleSidebar();
   }
 
-  buscarProduto(): void{
-    if(this.buscadorForm.value !== null){
+  buscarProduto(): void {
+    if (this.buscadorForm.value !== null) {
       console.log("Buscando por: ", this.buscadorForm.value);
-      this.navigationService.navigateTo('home/buscador/'+this.buscadorForm.value);  
-    }else{
+      this.navigationService.navigateTo('home/buscador/' + this.buscadorForm.value);
+    } else {
       this.navigationService.navigateTo('home/buscador/%');
     }
   }
+
+  obterFuncionarioLogado() {
+    this.subscription.add(this.sessionTokenService.getFuncionarioLogado().subscribe(
+    funcionario => this.funcionarioLogado = funcionario
+  ));
+  }
+
 
 }

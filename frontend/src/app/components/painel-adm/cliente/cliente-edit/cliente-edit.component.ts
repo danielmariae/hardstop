@@ -12,13 +12,13 @@ import { idadeValidator } from '../../../../validators/idade.validator';
 import { dataValidator } from '../../../../validators/data.validator';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { cpfValidator } from '../../../../validators/cpf.validator';
-import {CepService} from "../../../../services/cep.service";
+import { CepService } from "../../../../services/cep.service";
 
 
 @Component({
   selector: 'app-cliente-edit',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxMaskDirective],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgxMaskDirective, ],
   templateUrl: './cliente-edit.component.html',
   styleUrls: ['./cliente-edit.component.css'],
   providers: [provideNgxMask()]
@@ -51,7 +51,7 @@ export class ClienteEditComponent implements OnInit {
       nome: ['', Validators.required],
       dataNascimento: this.formBuilder.control('',
         {
-          validators:[
+          validators: [
             Validators.required,
             idadeValidator(),
             dataValidator()
@@ -60,7 +60,7 @@ export class ClienteEditComponent implements OnInit {
       ),
       cpf: this.formBuilder.control('',
         {
-          validators:[
+          validators: [
             Validators.required,
             cpfValidator()
           ]
@@ -69,13 +69,13 @@ export class ClienteEditComponent implements OnInit {
       //[''],
       sexo: ['', Validators.required],
       login: ['', Validators.required],
-      senha: this.formBuilder.control('',validarSenhaUpdate()),
+      senha: this.formBuilder.control('', validarSenhaUpdate()),
       email: ['', Validators.required],
       telefones: this.formBuilder.array([]),
       enderecos: this.formBuilder.array([]),
-  });
-}
-ngOnInit(): void {
+    });
+  }
+  ngOnInit(): void {
 
     this.id = Number(this.route.snapshot.paramMap.get('id'));
     //this.enderecoAnterior = this.navigationService
@@ -87,96 +87,96 @@ ngOnInit(): void {
     //const idParam = this.route.snapshot.paramMap.get('id');
     console.log(this.id);
     if (this.id !== null) {
-        this.clienteService.findById(this.id).subscribe(cliente => {
-          this.cliente = cliente;
+      this.clienteService.findById(this.id).subscribe(cliente => {
+        this.cliente = cliente;
 
-          // Inserindo valores nos campos de nome, cnpj e endSite
-          this.clienteForm.patchValue({
-            nome: cliente.nome,
-            dataNascimento: this.formatarData(cliente.dataNascimento),
-            cpf: this.formatarCPF(cliente.cpf),
-            sexo: cliente.sexo,
-            login: cliente.login,
-            senha: cliente.senha,
-            email: cliente.email,
-            });
-
-          // Populando o FormArray com os dados existentes de cliente.listaTelefone
-          cliente.listaTelefone.forEach(telefone => {
-            this.adicionarTelefone(telefone);
-          });
-
-          // Populando o FormArray com os dados existentes de cliente.listaEndereco
-          cliente.listaEndereco.forEach(endereco => {
-            this.adicionarEndereco(endereco);
-          });
-
-          console.log(this.cliente);
+        // Inserindo valores nos campos de nome, cnpj e endSite
+        this.clienteForm.patchValue({
+          nome: cliente.nome,
+          dataNascimento: this.formatarData(cliente.dataNascimento),
+          cpf: this.formatarCPF(cliente.cpf),
+          sexo: cliente.sexo,
+          login: cliente.login,
+          senha: cliente.senha,
+          email: cliente.email,
         });
-      } else {
-        console.error('O parâmetro "id" não foi fornecido ou é inválido.');
-      }
+
+        // Populando o FormArray com os dados existentes de cliente.listaTelefone
+        cliente.listaTelefone.forEach(telefone => {
+          this.adicionarTelefone(telefone);
+        });
+
+        // Populando o FormArray com os dados existentes de cliente.listaEndereco
+        cliente.listaEndereco.forEach(endereco => {
+          this.adicionarEndereco(endereco);
+        });
+
+        console.log(this.cliente);
+      });
+    } else {
+      console.error('O parâmetro "id" não foi fornecido ou é inválido.');
+    }
   }
 
-get telefones(): FormArray {
-  return this.clienteForm.get('telefones') as FormArray;
-}
-
-adicionarTelefone(telefone?: any): void {
-  const telefoneFormGroup = this.formBuilder.group({
-    ddd: [telefone ? telefone.ddd : '', Validators.required],
-    numeroTelefone: [telefone ? telefone.numeroTelefone : '', Validators.required],
-    tipo: [telefone ? telefone.tipo : '']
-  });
-
-  this.telefones.push(telefoneFormGroup);
-}
-
-removerTelefone(index: number): void {
-  this.telefones.removeAt(index);
-}
-
-formatarData(data: string): string {
-  const partesData = data.split('-');
-  return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
-}
-
-formatarCPF(cpf: string): string {
-  // Remove todos os caracteres não numéricos
-  const cpfDigits = cpf.replace(/\D/g, '');
-
-  // Verifica se o CPF possui 11 dígitos
-  if (cpfDigits.length === 11) {
-    // Formata o CPF no formato desejado
-    return cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-  } else {
-    // Retorna o CPF original se não possuir 11 dígitos
-    return cpf;
+  get telefones(): FormArray {
+    return this.clienteForm.get('telefones') as FormArray;
   }
-}
+
+  adicionarTelefone(telefone?: any): void {
+    const telefoneFormGroup = this.formBuilder.group({
+      ddd: [telefone ? telefone.ddd : '', Validators.required],
+      numeroTelefone: [telefone ? telefone.numeroTelefone : '', Validators.required],
+      tipo: [telefone ? telefone.tipo : '']
+    });
+
+    this.telefones.push(telefoneFormGroup);
+  }
+
+  removerTelefone(index: number): void {
+    this.telefones.removeAt(index);
+  }
+
+  formatarData(data: string): string {
+    const partesData = data.split('-');
+    return `${partesData[2]}/${partesData[1]}/${partesData[0]}`;
+  }
+
+  formatarCPF(cpf: string): string {
+    // Remove todos os caracteres não numéricos
+    const cpfDigits = cpf.replace(/\D/g, '');
+
+    // Verifica se o CPF possui 11 dígitos
+    if (cpfDigits.length === 11) {
+      // Formata o CPF no formato desejado
+      return cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    } else {
+      // Retorna o CPF original se não possuir 11 dígitos
+      return cpf;
+    }
+  }
 
 
-get enderecos(): FormArray {
-  return this.clienteForm.get('enderecos') as FormArray;
-}
+  get enderecos(): FormArray {
+    return this.clienteForm.get('enderecos') as FormArray;
+  }
 
-adicionarEndereco(endereco?: any): void {
-  const enderecoFormGroup = this.formBuilder.group({
-    nome: [endereco && endereco.nome ? endereco.nome : '', Validators.required],
-    logradouro: [endereco && endereco.logradouro ? endereco.logradouro : ''],
-    numeroLote: [endereco && endereco.numeroLote ? endereco.numeroLote : ''],
-    bairro: [endereco && endereco.bairro ? endereco.bairro : ''],
-    complemento: [endereco && endereco.complemento ? endereco.complemento : ''],
-    cep: [endereco && endereco.cep ? endereco.cep : ''],
-    localidade: [endereco && endereco.localidade ? endereco.localidade : ''],
-    uf: [endereco && endereco.uf ? endereco.uf : ''],
-    pais: [endereco && endereco.pais ? endereco.pais : ''],
-    cepInvalido: [false],
-  });
+  adicionarEndereco(endereco?: any): void {
+    const enderecoFormGroup = this.formBuilder.group({
+      nome: [endereco && endereco.nome ? endereco.nome : '', Validators.required],
+      logradouro: [endereco && endereco.logradouro ? endereco.logradouro : ''],
+      numeroLote: [endereco && endereco.numeroLote ? endereco.numeroLote : '', Validators.required],
+      bairro: [endereco && endereco.bairro ? endereco.bairro : '', Validators.required],
+      complemento: [endereco && endereco.complemento ? endereco.complemento : ''],
+      cep: [endereco && endereco.cep ? endereco.cep : ''],
+      localidade: [endereco && endereco.localidade ? endereco.localidade : ''],
+      uf: [endereco && endereco.uf ? endereco.uf : ''],
+      pais: [endereco && endereco.pais ? endereco.pais : ''],
+      cepInvalido: [false],
+    });
 
     // Adicionar um observador para o campo de CEP dentro do FormGroup
     enderecoFormGroup.get('cep')?.valueChanges.pipe(
-      debounceTime(300),
+      debounceTime(1000),
       distinctUntilChanged()
     ).subscribe((cep: string | null) => {
       if (cep !== null) {
@@ -184,28 +184,43 @@ adicionarEndereco(endereco?: any): void {
       }
     });
 
-  this.enderecos.push(enderecoFormGroup);
-}
+    this.enderecos.push(enderecoFormGroup);
+  }
 
-atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
-  const cepValue = cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+  atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
+    let cepValue = cep
+    if(typeof cep === 'string'){
+      cepValue.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+    }
 
-  if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
-    this.cepService.findByStringCep(cepValue).subscribe({
-      next: (endereco) => {
-        if (endereco && !endereco.erro) { // Verifica se o campo erro é false
-          // Atualizando os valores do formulário com os dados do endereço
-          enderecoFormGroup.patchValue({
-            cep: this.formatarCep(endereco.cep),
-            logradouro: endereco.logradouro,
-            bairro: endereco.bairro,
-            localidade: endereco.localidade,
-            uf: endereco.uf,
-            pais: 'Brasil',
-            cepInvalido: false // Adiciona uma propriedade para indicar que o CEP é válido
-          });
-        } else {
-          // Limpar campos de endereço se o CEP não for válido
+    if (cepValue.length === 8) { // Verifica se o CEP possui 8 dígitos
+      this.cepService.findByStringCep(cepValue).subscribe({
+        next: (endereco) => {
+          if (endereco && Object.keys(endereco).length > 0) { // Verifica se o objeto de endereço retornado não está vazio
+            // Atualizando os valores do formulário com os dados do endereço
+            enderecoFormGroup.patchValue({
+              cep: endereco.cep,
+              logradouro: endereco.logradouro,
+              bairro: endereco.bairro,
+              localidade: endereco.localidade,
+              uf: endereco.uf,
+              pais: 'Brasil',
+              cepInvalido: false // Adiciona uma propriedade para indicar que o CEP é válido
+            });
+          } else {
+            // Limpar campos de endereço se o CEP for inválido
+            enderecoFormGroup.patchValue({
+              logradouro: null,
+              bairro: null,
+              localidade: null,
+              uf: null,
+              cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Erro ao buscar endereço por CEP:', error);
+          // Limpar campos de endereço em caso de erro na busca
           enderecoFormGroup.patchValue({
             logradouro: null,
             bairro: null,
@@ -214,34 +229,21 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
             cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
           });
         }
-      },
-      error: (error) => {
-        console.error('Erro ao buscar endereço por CEP:', error);
-        // Limpar campos de endereço em caso de erro na busca
-        enderecoFormGroup.patchValue({
-          logradouro: null,
-          bairro: null,
-          localidade: null,
-          uf: null,
-          cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
-        });
-      }
-    });
-  } else {
-    // Limpar campos de endereço se o CEP não possuir 8 dígitos
-    enderecoFormGroup.patchValue({
-      logradouro: null,
-      bairro: null,
-      localidade: null,
-      uf: null,
-      cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
-    });
+      });
+    } else {
+      // Limpar campos de endereço se o CEP não possuir 8 dígitos
+      enderecoFormGroup.patchValue({
+        logradouro: null,
+        bairro: null,
+        localidade: null,
+        uf: null,
+        cepInvalido: true // Adiciona uma propriedade para indicar que o CEP é inválido
+      });
+    }
   }
-}
   // Método para converter o CEP para o formato desejado
   formatarCep(cep: string): string {
-    // Remove caracteres não numéricos do CEP
-    const cepDigits = cep.replace(/\D/g, '');
+    let cepDigits: string = cep.replace(/\D/g, '');
 
     // Verifica se o CEP possui 8 dígitos
     if (cepDigits.length === 8) {
@@ -252,10 +254,9 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
     }
   }
 
-
-removerEndereco(index: number): void {
-  this.enderecos.removeAt(index);
-}
+  removerEndereco(index: number): void {
+    this.enderecos.removeAt(index);
+  }
 
   cancelarEdicao(): void {
     // Redireciona o usuário para outra rota anterior
@@ -271,7 +272,6 @@ removerEndereco(index: number): void {
       return;
     }
 
-
     const novoCliente: Cliente = {
       id: this.clienteForm.value.id,
       nome: this.clienteForm.value.nome,
@@ -285,44 +285,46 @@ removerEndereco(index: number): void {
       listaEndereco: this.clienteForm.value.enderecos
     };
 
-    if(this.clienteForm.value.senha === undefined || this.clienteForm.value.senha === null){
+    console.log(this.clienteForm)
+
+    if (this.clienteForm.value.senha === undefined || this.clienteForm.value.senha === null) {
       this.clienteService.updateNS(novoCliente, this.cliente.id).subscribe({
         next: (response) => {
           console.log(novoCliente);
-          if(this.navigationService.getPreviousEndPoint() === 'clientes') {
+          if (this.navigationService.getPreviousEndPoint() === 'clientes') {
             this.clienteService.notificarClienteInserido(); // Notificar outros componentes
           } else {
             this.navigationService.navigateTo('/adm/clientes');
           }
         },
         error: (error) => {
-         // Este callback é executado quando ocorre um erro durante a emissão do valor
-         console.error('Erro ao editar cliente:', error);
-         //window.alert(error)
-         this.errorMessage = error.error.errorMessage;
-         this.errorDetails = error;
+          // Este callback é executado quando ocorre um erro durante a emissão do valor
+          console.error('Erro ao editar cliente:', error);
+          //window.alert(error)
+          this.errorMessage = error.error.errorMessage;
+          this.errorDetails = error;
         }
       });
 
-    }else{
-          // Lógica para salvar as alterações do cliente
-    this.clienteService.update(novoCliente, this.cliente.id).subscribe({
-      next: (response) => {
-        console.log(novoCliente);
-        if(this.navigationService.getPreviousEndPoint() === 'clientes') {
-          this.clienteService.notificarClienteInserido(); // Notificar outros componentes
-        } else {
-          this.navigationService.navigateTo('/adm/clientes');
+    } else {
+      // Lógica para salvar as alterações do cliente
+      this.clienteService.update(novoCliente, this.cliente.id).subscribe({
+        next: (response) => {
+          console.log(novoCliente);
+          if (this.navigationService.getPreviousEndPoint() === 'clientes') {
+            this.clienteService.notificarClienteInserido(); // Notificar outros componentes
+          } else {
+            this.navigationService.navigateTo('/adm/clientes');
+          }
+        },
+        error: (error) => {
+          // Este callback é executado quando ocorre um erro durante a emissão do valor
+          console.error('Erro:', error);
+          //window.alert(error)
+          this.errorMessage = error.error.errorMessage;
+          this.errorDetails = error;
         }
-      },
-      error: (error) => {
-       // Este callback é executado quando ocorre um erro durante a emissão do valor
-       console.error('Erro:', error);
-       //window.alert(error)
-       this.errorMessage = error.error.errorMessage;
-       this.errorDetails = error;
-     }
-    });
+      });
     }
 
 

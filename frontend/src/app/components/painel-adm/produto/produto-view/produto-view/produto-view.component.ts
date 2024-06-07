@@ -118,6 +118,7 @@ export class ProdutoViewComponent implements OnInit {
         this.arquivosSelecionados.splice(index, 1);
       }
     }
+
     
     ngOnInit(): void {
         this.id = Number(this.route.snapshot.params['id']);
@@ -151,6 +152,10 @@ export class ProdutoViewComponent implements OnInit {
             this.carregarImagens();
           });
           
+      }
+
+      carregarImagem(imagem: string): string{
+        return this.produtoService.getUrlImagem(imagem);
       }
 
       carregarImagens(): void{

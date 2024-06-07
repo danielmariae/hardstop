@@ -371,6 +371,9 @@ public class FileServiceImpl implements FileService {
       new ArrayList<String>()
     );
     produto.getNomeImagem().add(nomeImagem);
+    
+    if(produto.getImagemPrincipal() == null)
+      produto.setImagemPrincipal(nomeImagem);
     return ProdutoResponseDTO.valueOf(produto);
   }
 

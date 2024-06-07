@@ -1,16 +1,14 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, FormArray, Validators, FormControl, FormsModule, ValidationErrors } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, FormsModule } from '@angular/forms';
 import { LoteService } from '../../../../services/lote.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavigationService } from '../../../../services/navigation.service';
 import { Produto } from '../../../../models/produto.model';
 import { ProdutoService } from '../../../../services/produto.service';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { SessionTokenService } from '../../../../services/session-token.service';
 import { Observable } from 'rxjs';
 import { Fornecedor } from '../../../../models/fornecedor.model';
 import { FornecedorService } from '../../../../services/fornecedor.service';
-import { startWith, map, catchError, toArray } from 'rxjs/operators';
+import { startWith, map } from 'rxjs/operators';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -35,8 +33,8 @@ import { LoteEnvia } from '../../../../models/loteEnvia.model';
 })
 
 export class LoteFormComponent implements OnInit {
-    errorMessage: string | null = null;
-    errorDetails: any | null = null;
+  errorMessage: string | null = null;
+  errorDetails: any | null = null;
 
   @Input() lote: LoteEnvia = new LoteEnvia();
   loteForm: FormGroup;
@@ -44,8 +42,6 @@ export class LoteFormComponent implements OnInit {
   produto: Produto = new Produto();
   value1!: number;
   value2!: string;
-
-
 
   // Variáveis relacionadas com a caixa de busca
   myControl = new FormControl('');
@@ -80,7 +76,6 @@ export class LoteFormComponent implements OnInit {
     });
 
     this.adicionarObservadores();
-    //this.atualizaCampos();
 
     // Implementando o buscador para produto
     this.filteredOptions = this.myControl.valueChanges.pipe(
@@ -157,28 +152,24 @@ export class LoteFormComponent implements OnInit {
 
     this.loteForm.get('quantidadeNaoConvencional')?.valueChanges.subscribe(value1 => {
       this.value1 = value1;
-  });
+    });
 
 
-  this.loteForm.get('unidadeDeMedida')?.valueChanges.subscribe(value2 => {
-    this.value2 = value2;
-   
-  });
+    this.loteForm.get('unidadeDeMedida')?.valueChanges.subscribe(value2 => {
+      this.value2 = value2;
+
+    });
 
   }
 
-   // Garante que ao escrever no campo quantidadeUnidades, os campos quantidadeNaoConvencional e unidadeDeMedida não poderão ser acessados e vice-versa. O restante desta implementação encontr-se no arquivo html com o uso da função do método (ngModelChange)
+  // Garante que ao escrever no campo quantidadeUnidades, os campos quantidadeNaoConvencional e unidadeDeMedida não poderão ser acessados e vice-versa. O restante desta implementação encontr-se no arquivo html com o uso da função do método (ngModelChange)
   atualizaCampos() {
-    if(this.value1 || this.value2) {
+    if (this.value1 || this.value2) {
       this.loteForm.get('quantidadeUnidades')?.disable();
-    } else if(this.value1 == null && (this.value2 === null || this.value2 === undefined || this.value2 === '')) {
+    } else if (this.value1 == null && (this.value2 === null || this.value2 === undefined || this.value2 === '')) {
       this.loteForm.get('quantidadeUnidades')?.enable();
     }
-    }
-
-
-
-
+  }
 
   // Buscando todos os produtos para carregar na lista de buscador de produtos
   buscarTodosProdutos(): void {
@@ -203,41 +194,6 @@ export class LoteFormComponent implements OnInit {
       }
     });
   }
-
-  //   salvarLote(): void {
-  //     if (this.loteForm.invalid) {
-  //       return;
-  //     }
-
-  //     const data = new Date(this.loteForm.value.dataHoraChegadaLote);
-  //     const dataPipe = new DatePipe('en-US');
-  //     const dataEnviada = dataPipe.transform(data, 'yyyy-MM-dd HH:mm:ss');
-
-  //     console.log(dataEnviada);
-  //     const detalhesLote: LoteEnvia = {
-  //       id: this.loteForm.value.id,
-  //       lote: this.loteForm.value.lote,
-  //       dataHoraChegadaLote: dataEnviada,
-  //       fornecedor: this.fornecedor,
-  //       produto: this.produto,
-  //       quantidadeUnidades: this.loteForm.value.quantidadeUnidades,
-  //       quantidadeNaoConvencional: this.loteForm.value.quantidadeNaoConvencional,
-  //       unidadeDeMedida: this.loteForm.value.unidadeDeMedida,
-  //       custoCompra: this.loteForm.value.custoCompra,
-  //       valorVenda: this.loteForm.value.valorVenda,
-  //       garantiaMeses: this.loteForm.value.garantiaMeses,
-  //       status: this.loteForm.value.status, // Todo Lote recém cadastrado tem status 2 (EM ESPERA) por default. Esse valor será atribuído no backend. Aqui irá como null.
-  //     }
-  // console.log(detalhesLote);
-  //       this.loteService.insert(detalhesLote).subscribe ({
-  //                 next: (response) => {
-  //                 },
-  //                 error: (error) => {
-  //                   console.error('Erro:', error);
-  //                   window.alert(error);
-  //                 }
-  //             });
-  //   }
 
   salvarLote() {
     console.log(this.loteForm.errors);

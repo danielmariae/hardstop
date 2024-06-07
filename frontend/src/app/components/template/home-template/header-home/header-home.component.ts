@@ -126,6 +126,8 @@ export class HeaderHomeComponent {
 
     // Limpa o Cliente Logado
     this.sessionTokenService.removeClienteLogado();
+    // Limpa o Funcionario Logado
+    this.sessionTokenService.removeFuncionarioLogado();
   }
 }
 

@@ -101,6 +101,22 @@ export class PedidoService {
         
       }
     }
+    findByCpf(cpf: string): Observable<PedidoRecebe[]> {
+
+      const url = `http://localhost:8080/pedidos/func/search/pedidos/${cpf}`;
+      const headers = this.sessionTokenService.getSessionHeader();
+      // console.log(this.sessionTokenService.getSessionToken());
+      // console.log(headers);
+      // console.log(url);
+      if(headers) {
+        // console.log(headers);
+      return this.httpClient.get<PedidoRecebe[]>(url, { headers });
+      
+      } else {
+        return this.httpClient.get<PedidoRecebe[]>(url);
+        
+      }
+    }
 
     
     findAllFuncCliente(id: number): Observable<PedidoRecebe[]> {

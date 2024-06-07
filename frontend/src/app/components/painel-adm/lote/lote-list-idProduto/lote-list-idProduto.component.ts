@@ -7,16 +7,13 @@ import { RouterModule } from "@angular/router";
 import { Produto } from '../../../../models/produto.model';
 import { ProdutoService } from '../../../../services/produto.service';
 import { NgFor, CommonModule, AsyncPipe } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable, of } from 'rxjs';
-import { startWith, map, catchError, toArray } from 'rxjs/operators';
-import { NavigationService } from '../../../../services/navigation.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SessionTokenService } from '../../../../services/session-token.service';
 import { Fornecedor } from '../../../../models/fornecedor.model';
@@ -25,7 +22,6 @@ import { LoteService } from '../../../../services/lote.service';
 import { LoteRecebe } from '../../../../models/loteRecebe.model';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoteRecebeClass } from '../../../../models/loteRecebeClass.model';
-import { LoteTesteService } from '../../../../services/loteTeste.service';
 
 @Component({
     selector: 'app-lote-list-idProduto',
@@ -36,7 +32,7 @@ import { LoteTesteService } from '../../../../services/loteTeste.service';
     styleUrl: './lote-list-idProduto.component.css'
 })
 
-export class LoteListComponent implements OnInit {
+export class LoteListByProdutoComponent implements OnInit {
     errorMessage: string | null = null;
     errorDetails: any | null = null;
     id: number = 0;
@@ -56,11 +52,9 @@ export class LoteListComponent implements OnInit {
     constructor(private fornecedorService: FornecedorService,
         private produtoService: ProdutoService,
         private route: ActivatedRoute,
-        private navigationService: NavigationService,
         private http: HttpClient,
         private sessionTokenService: SessionTokenService,
         private loteService: LoteService,
-        private loteTesteService: LoteTesteService,
     ) {
         this.statusDoLote = [];
     }

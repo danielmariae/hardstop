@@ -97,21 +97,19 @@
             </label>
           </div> -->
         <!-- Lista de nomes dos arquivos selecionados -->
-        <div class="columns">
-          <div *ngFor="let imagemBase64 of imagensBase64; let i = index" class="column">
-            <div class="box">
-              <div class="columns">
+        <div class="box">
+          <div *ngFor="let imagem of produto.nomeImagem">
+                <div class="columns">
                 <div class="column">
                   <figure class="image is-128x128">
-                    <img [src]="imagemBase64" alt="Imagem do produto">
+                    <img [src]="this.carregarImagem(imagem)">
                   </figure>    
                 </div>
                 <div class="column is-two-thirds">
-                  <p *ngIf="produto && produto.nomeImagem"> {{ produto.nomeImagem[i] }}</p>
+                  <p *ngIf="produto && produto.nomeImagem"> {{ imagem }}</p>
                 </div>
               </div>
-            </div>
-          </div>
+    </div>
         </div>  
         </div>
       </div>

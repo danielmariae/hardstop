@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { NavigationService } from '../../../../services/navigation.service';
 import { SidebarService } from '../../../../services/sidebar.service';
+import { SessionTokenService } from '../../../../services/session-token.service';
 
 @Component({
   selector: 'app-sidebar-admin',
@@ -12,8 +13,11 @@ import { SidebarService } from '../../../../services/sidebar.service';
 })
 export class SidebarAdminComponent {
 
+  admLogado: boolean = false;
+
   constructor(
     private navigationService: NavigationService,
+    private sessionTokenService: SessionTokenService,
   ){}
 
 
@@ -33,4 +37,28 @@ export class SidebarAdminComponent {
     this.navigationService.navigateTo("/adm/clientes");
   }
   
+  navegarParaLotes(): void{
+    this.navigationService.navigateTo("/adm/lotes");
+  }
+
+  navegarParaPedidosFiltrados(): void{
+    this.navigationService.navigateTo("adm/pedidos");
+  }
+  
+  navegarParaPedidosStatus(): void {
+    this.navigationService.navigateTo("adm/pedidos/status");
+  }
+  deslogarUsuario(){
+    // Limpa o estado de login e remove os dados do sessionStorage
+    this.admLogado = false;
+    sessionStorage.removeItem('admLogado');
+
+    // Limpa a sessão do token
+    this.sessionTokenService.clearSessionToken();
+    
+    // Limpa o Funcionário Logado
+    this.sessionTokenService.removeFuncionarioLogado();
+    this.navigationService.navigateTo('login/adm');
+    
+}
 }

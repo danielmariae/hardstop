@@ -90,7 +90,7 @@
               </div> 
               <div class="column">
                 <label class="field label">Número:</label>
-                <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone">
+                <input class="control input" formControlName="numeroTelefone" placeholder="Número de Telefone" inputmode="numeric" mask="900000000">
               </div>
               <div class="column">
                 <label class="field label">Selecione tipo de telefone:</label>
@@ -107,8 +107,9 @@
                 <div class="button is-default is-danger">
                 <button type="button" (click)="removerTelefone(i)">Remover</button>
                 </div>
-              </div>
-        </div>
+                </div>
+                </div>
+              <br>
       </div>
       <div class="button is-primary is-default">
         <button type="button" (click)="adicionarTelefone()">Adicionar telefone</button>

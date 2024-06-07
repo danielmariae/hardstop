@@ -1,55 +1,63 @@
+<div class="notification is-success" *ngIf="sucessMessage">
+  <p>{{sucessMessage}}</p>
+</div>
+<div class="notification is-warning" *ngIf="errorMessage">
+  <p>{{errorMessage}}</p>
+</div>  
 <div class="fixed-grid has-4-cols-desktop has-3-cols-tablet has-1-cols-mobile">
-    <div class="grid">
-      <div *ngFor="let card of cards()">
-        <div class="cell">
-          <div class="box fixed-height">
-            <img [src]="card.urlImagem">  
-            <div class="content">
-              <h4 class="fixed-title">{{card.titulo}}</h4>
-              <p>Estoque: {{card.quantidade}}</p>
-              <p class="has-text-primary has-text-weight-bold is-size-4">{{this.formatValues(card.preco)}}</p>  
+  <div class="grid">
+    <div *ngFor="let card of cards()">
+      <div class="cell">
+        <div class="box fixed-height">
+          <img [src]="card.urlImagem">
+          <div class="content">
+            <h4 class="fixed-title">{{card.titulo}}</h4>
+            <p>Estoque: {{card.quantidade}}</p>
+            <p class="has-text-primary has-text-weight-bold is-size-4">{{this.formatValues(card.preco)}}</p>
+          </div>
+          <div class="buttons" *ngIf="!admLogado">
+            <div class="button is-primary is-default">
+              <button type="button" (click)="adicionarAoCarrinho(card)">Adicionar ao carrinho</button>
             </div>
-            <div class="buttons" *ngIf="!admLogado">
-              <div class="button is-primary is-default">
-                <button type="button" (click)="adicionarAoCarrinho(card)">Adicionar ao carrinho</button>
-              </div>
-              <div class="button is-text is-default">
-                <button type="button"><span class="icon is-nedium"><i class="mdi mdi-heart" (click)="adicionarAfavoritos(card)"></i></span></button>
-              </div>
-              </div>
+            <div class="button is-text is-default">
+              <button type="button"><span class="icon is-nedium"><i class="mdi mdi-heart"
+                    (click)="adicionarAfavoritos(card)"></i></span></button>
+            </div>
           </div>
         </div>
       </div>
+    </div>
   </div>
-  </div>
-    <div class="box">
-        <div>
-          <nav class="level">
-            <div class="level-left">
-              <div class="level-item">
-                <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalPages })">Anterior</a>
-                <a *ngIf="this.page+1 !== totalPages" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalPages})">Próxima</a>    
-              </div>
-            </div>
-            <div class="level-right">
-              <div class="level-item">Página atual:</div>
-              <div class="level-item"><a>{{this.page+1}}</a></div>
-              <div class="level-item">Total de páginas:</div>
-              <div class="level-item"><a>{{this.totalPages}}</a></div>
-              <div class="level-item">ㅤ</div>
-              <div class="level-item">Itens por página:</div>
-              <div class="level-item">
-                <div class="select">
-                  <select (change)="onChange($event)">
-                    <option value="2">2</option>
-                    <option selected value="4">4</option>
-                    <option value="8">8</option>
-                    <option value="16">16</option>
-                  </select>
-                </div>  
-              </div>
-            </div>
-          </nav>  
+</div>
+<div class="box">
+  <div>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item" >
+          <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right"
+            (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalPages })">Anterior</a>
+          <a *ngIf="this.page+1 !== totalPages" id="espacador-texto" (click)="this.page === totalPages-1"
+            (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalPages})">Próxima</a>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">Página atual:</div>
+        <div class="level-item"><a>{{this.page+1}}</a></div>
+        <div class="level-item">Total de páginas:</div>
+        <div class="level-item"><a>{{this.totalPages}}</a></div>
+        <div class="level-item">ㅤ</div>
+        <div class="level-item">Itens por página:</div>
+        <div class="level-item">
+          <div class="select">
+            <select (change)="onChange($event)">
+              <option value="2">2</option>
+              <option selected value="4">4</option>
+              <option value="8">8</option>
+              <option value="16">16</option>
+            </select>
           </div>
-      </div>     
-  
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>

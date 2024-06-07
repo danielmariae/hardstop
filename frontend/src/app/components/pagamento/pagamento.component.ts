@@ -15,6 +15,7 @@ import { Pedido } from "../../models/pedido.model";
 import { FormaDePagamento } from "../../models/formaDePagamento";
 import { ItemDaVenda } from "../../models/itemDaVenda";
 import { NavigationService } from "../../services/navigation.service";
+import { getFormattedCurrency } from "../../utils/formatValues";
 
 @Component({
     selector: 'app-pagamento',
@@ -283,6 +284,16 @@ import { NavigationService } from "../../services/navigation.service";
       }
     }
     
-
+    calcularTotal(): number {
+      let total = 0;
+    for (const item of this.carrinhoItens) {
+      total += item.quantidade * item.preco;
+    }
+    return total;
+    }
+    
+    formatValues(valor: number): String {
+      return getFormattedCurrency(valor);
+      }
   }
   

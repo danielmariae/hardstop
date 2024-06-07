@@ -20,10 +20,19 @@ export class CarrinhoService {
     const carrinhoAtual = this.carrinhoSubject.value;
     //console.log(this.carrinhoSubject.value);
     const itemExistente = carrinhoAtual.find(item => item.id === produto.id);
-   // console.log(consulta);
+    // console.log(consulta);
+    
     if (itemExistente) {
-      itemExistente.quantidade += produto.quantidade || 1;
-      //console.log(itemExistente);
+      if (itemExistente.quantidade >= itemExistente.quantidadeLimite) {
+        console.log("Quantidade no carrinho: ",itemExistente.quantidade,"\nQuantidade disponível no estoque: ",itemExistente.quantidadeLimite)
+        console.error("Limite atingido!")
+        return;
+        } else {
+        console.log("Quantidade no carrinho: ",itemExistente.quantidade,"\nQuantidade disponível no estoque: ",itemExistente.quantidadeLimite)
+        // console.log(itemExistente);
+        itemExistente.quantidade += produto.quantidade || 1;
+      }
+
     } else {
       carrinhoAtual.push({ ...produto });
     }
@@ -39,6 +48,7 @@ export class CarrinhoService {
   remover(item: ItemCarrinho): void {
     const carrinhoAtual = this.carrinhoSubject.value;
     const carrinhoAtualizado = carrinhoAtual.filter(itemCarrinho => itemCarrinho !== item);
+    console.log("Quantidade no carrinho: ",item.quantidade,"\nQuantidade disponível no estoque: ",item.quantidadeLimite)
 
     this.carrinhoSubject.next(carrinhoAtualizado);
     this.atualizarArmazenamentoLocal();

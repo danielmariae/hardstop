@@ -88,7 +88,7 @@
               <div class="column">
                 <label class="field label">Número:</label>
                 <input class="control input" mask="" inputmode="numeric" formControlName="numeroTelefone" placeholder="Número de Telefone"
-                mask="z90000-0000" [showMaskTyped] = "true">
+                mask="900000000" [showMaskTyped] = "true">
                 <div *ngIf="telefone.get('numeroTelefone')?.hasError('required') && telefone.get('numeroTelefone')?.touched">
                   <p class="help is-danger">Campo obrigatório.</p>
                 </div>        
@@ -127,7 +127,7 @@
           </div>
           <div class="column is-one-quarter">
             <label class="field label">CEP:</label>
-            <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
+            <input class="control input" formControlName="cep" inputmode="text" mask="00000-000" placeholder="Ex: 00000-000">
             <div *ngIf="endereco.get('cep')?.touched && endereco.get('cepInvalido')?.value">
               <p class="help is-danger">CEP inválido.</p>    
             </div>    

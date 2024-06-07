@@ -1,0 +1,73 @@
+<div class="box">
+    <h1 class="title is-1">Ver lotes do produto</h1>
+    <div class="table-container">
+      <table class="table">
+        <tr>
+          <th>ID</th>
+          <th>Lote</th>
+          <th>Status</th>
+          <th>Quantidade</th>
+          <th>Custo</th>
+          <th>Valor</th>
+          <th>Garantia</th>
+          <th>Chegada</th>
+          <th>Ativação</th>
+          <th>Desativação</th>
+          <th>Ação</th>
+        </tr>
+        <tr *ngFor="let loteTeste of lotesTeste">
+          <td>{{loteTeste.id}}</td>
+          <td>{{loteTeste.lote}}</td>
+          <td>{{loteTeste.statusDoLote.descricao}}</td>
+          <td>{{loteTeste.quantidadeUnidades}}</td>
+          <td>{{loteTeste.custoCompra}}</td>
+          <td>{{loteTeste.valorVenda}}</td>
+          <td>{{loteTeste.garantiaMeses}}</td>
+          <td>{{loteTeste.dataHoraChegadaLote}}</td>
+          <td>{{loteTeste.dataHoraAtivacaoLote}}</td>
+          <td>{{loteTeste.dataHoraUltimoVendido}}</td>
+          <td>
+            <button (click)="ativarLote(loteTeste.id)"><span class="icon is-small"><i class="mdi mdi-check-circle-outline"></i></span></button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div class="box">
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <a *ngIf="this.page !== 0" id="espacador-texto" class="is-right" (click)="paginar({ pageIndex: page - 1, pageSize: pageSize, length: totalPages })">Anterior</a>
+          <a *ngIf="this.page+1 !== totalPages" id="espacador-texto" (click)="this.page === totalPages-1" (click)="paginar({ pageIndex: page + 1, pageSize: pageSize, length: totalPages})">Próxima</a>    
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">Página atual:</div>
+        <div class="level-item"><a>{{this.page+1}}</a></div>
+        <div class="level-item">Total de páginas:</div>
+        <div class="level-item"><a>{{this.totalPages}}</a></div>
+        <div class="level-item">ㅤ</div>
+        <div class="level-item">Itens por página:</div>
+        <div class="level-item">
+          <div class="select">
+            <select (change)="onChange($event)">
+              <option selected value="2">2</option>
+              <option value="4">4</option>
+              <option value="8">8</option>
+              <option value="16">16</option>
+            </select>
+          </div>  
+        </div>
+      </div>
+    </nav>  
+    <div *ngIf="errorDetails">
+      <div class="box notification is-danger">
+        <div class="columns">
+          <div class="column">
+            <div>
+              <p><b>{{errorDetails.code}}:</b> {{errorDetails.subjectError.message}}</p>
+            </div>    
+          </div>
+        </div>
+      </div>   
+    </div>

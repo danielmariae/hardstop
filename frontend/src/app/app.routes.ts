@@ -14,7 +14,7 @@ import { FuncionarioListComponent } from './components/painel-adm/funcionario/fu
 import { FuncionarioViewComponent } from './components/painel-adm/funcionario/funcionario-view/funcionario-view.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoteFormComponent } from './components/painel-adm/lote/lote-form/lote-form.component';
-import { LoteListComponent } from './components/painel-adm/lote/lote-list-idProduto/lote-list-idProduto.component';
+import { LoteListByProdutoComponent } from './components/painel-adm/lote/lote-list-idProduto/lote-list-idProduto.component';
 import { ProdutoEditComponent } from './components/painel-adm/produto/produto-edit/produto-edit.component';
 import { ProdutoFormComponent } from './components/painel-adm/produto/produto-form/produto-form/produto-form.component';
 import { ProdutoGarantiaComponent } from './components/painel-adm/produto/produto-garantia/produto-garantia.component';
@@ -37,6 +37,8 @@ import { PedidoUserListComponent } from './components/pedido/pedido-user-list/pe
 import { FavoritosComponent } from './components/favoritos/favoritos.component';
 import { PedidoUserViewComponent } from './components/pedido/pedido-user-view/pedido-user-view.component';
 import { PedidoFuncListComponent } from './components/pedido/pedido-func-list/pedido-func-list.component';
+import { LoteListComponent } from './components/painel-adm/lote/lote-list/lote-list.component';
+import { PedidoFuncViewComponent } from './components/pedido/pedido-func-view/pedido-func-view.component';
 
 
 export const routes: Routes = [
@@ -118,13 +120,16 @@ export const routes: Routes = [
             {
                 path:'lotes',
                 children:[
+                    {path: '', component: LoteListComponent, title: 'Listar todos os lotes'},
                     {path: 'new', component: LoteFormComponent, title: 'Insercao de Lotes' },
-                    {path: 'produto/:id', component: LoteListComponent, title: 'Lista de Lotes por Produto'},                
+                    {path: 'produto/:id', component: LoteListByProdutoComponent, title: 'Lista de Lotes por Produto'},                
                 ]
             },
             {
                 path:'pedidos',
                 children:[
+                    {path: '',  pathMatch:'full', redirectTo:'find'},
+                    {path:'find', component: PedidoFuncViewComponent},
                     {path: 'status', component: PedidoFuncListComponent}
                 ]
             }

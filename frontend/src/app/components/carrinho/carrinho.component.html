@@ -1,139 +1,163 @@
 <div class="container">
   <app-header-home></app-header-home>
   <ng-container *ngIf="carrinhoItens.length > 0; else carrinhoVazio">
-  <div class="columns">
-    <div class="column is-three-quarters">
-      <div class="box">
-      <h1 class="is-size-3 has-text-white has-text-weight-bold">Carrinho</h1>
-      <br>
-      <div class="table-container">
-        <table class="table is-fullwidth">
-          <thead>
-            <tr>
-              <th>Imagem</th>
-              <th>Nome do produto</th>
-              <th>Preço (un.)</th>
-              <th>Quantidade</th>
-              <th>Total</th>
-              <th>Ações</th>
-              </tr>
-          </thead>    
-          <tbody>
-          <tr *ngFor="let item of carrinhoItens">
-              <td>
-                <img
-                  [src]="item.urlImagem"
-                  style="max-width: 50px; max-height: 50px; object-fit: cover">
-              </td>
-              <td>{{ item.nome }}</td>
-              <td>{{ formatValues(item.preco) }}</td>
-              <td>
-                <div class="columns is-mobile">
-                  <div class="column">
-                    <a (click)="diminuirQuantidade(item)">-</a>
-                  </div>
-                  <div class="column">
-                    {{item.quantidade}}
-                  </div>
-                  <div class="column">
-                    <a (click)="aumentarQuantidade(item)">+</a>
-                  </div>
-                </div>
-              </td>
-              <td>{{ formatValues(item.quantidade * item.preco) }}</td>
-              <td><button (click)="removerItem(item)"><span class="icon is-small"><i class="mdi mdi-delete" title="Remover do carrinho"></i></span></button></td>  
-            </tr>    
-          </tbody>
-        </table>
+    <div class="notification is-success" *ngIf="sucessMessage && !showNewAddressForm">
+      <p>{{sucessMessage}}</p>
+    </div>
+    <div class="notification is-warning" *ngIf="errorMessage && !showNewAddressForm">
+      <p>{{errorMessage}}</p>
+    </div>
+    <div class="columns">
+      <div class="column is-three-quarters">
+        <div class="box">
+          <h1 class="is-size-3 has-text-white has-text-weight-bold">Carrinho</h1>
+          <br>
+          <div class="table-container">
+            <table class="table is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Imagem</th>
+                  <th>Nome do produto</th>
+                  <th>Preço (un.)</th>
+                  <th>Quantidade</th>
+                  <th>Total</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of carrinhoItens">
+                  <td>
+                    <img [src]="item.urlImagem" style="max-width: 50px; max-height: 50px; object-fit: cover">
+                  </td>
+                  <td>{{ item.nome }}</td>
+                  <td>{{ formatValues(item.preco) }}</td>
+                  <td>
+                    <div class="columns is-mobile">
+                      <div class="column">
+                        <a (click)="diminuirQuantidade(item)">-</a>
+                      </div>
+                      <div class="column">
+                        {{item.quantidade}}
+                      </div>
+                      <div class="column">
+                        <a (click)="aumentarQuantidade(item)">+</a>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{ formatValues(item.quantidade * item.preco) }}</td>
+                  <td><button (click)="removerItem(item)"><span class="icon is-small"><i class="mdi mdi-delete"
+                          title="Remover do carrinho"></i></span></button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>  
-      <div class="box">
-        <h2 class="title is-3">Endereço de Entrega</h2>
-        <h4 class="title is-4">Escolha um endereço de entrega ou adicione um novo endereço</h4>
-      
-        <div class="columns">
+        <div class="box">
+          <h2 class="title is-3">Endereço de Entrega</h2>
+          <h4 class="title is-4">Escolha um endereço de entrega ou adicione um novo endereço</h4>
+          <div class="columns">
             <div *ngFor="let endereco of enderecos.controls; let i = index">
               <div class="column">
                 <div>
-                  <input [disabled]="addressesAdded"  class="select-input" type="radio" id="control_0{{i}}" name="selectedAddress" [(ngModel)]="selectedAddress" [value]="i" checked>
+                  <input [disabled]="addressesAdded" class="select-input" type="radio" id="control_0{{i}}"
+                    name="selectedAddress" [(ngModel)]="selectedAddress" [value]="i" checked>
                   <label class="select-label" for="control_0{{i}}">
                     <h1>Nome: {{endereco.get('nome')?.value}}</h1>
-                    <p>{{endereco.get('logradouro')?.value}}, {{endereco.get('numeroLote')?.value}}, {{endereco.get('complemento')?.value}}, {{endereco.get('bairro')?.value}},
+                    <p>{{endereco.get('logradouro')?.value}}, {{endereco.get('numeroLote')?.value}},
+                      {{endereco.get('complemento')?.value}}, {{endereco.get('bairro')?.value}},
                       {{endereco.get('localidade')?.value}}/{{endereco.get('uf')?.value}}</p>
-                      <p>{{endereco.get('cep')?.value}} </p>
-                    </label>
-                  </div>      
+                    <p>{{endereco.get('cep')?.value}} </p>
+                  </label>
                 </div>
               </div>
             </div>
+          </div>
+          <div class="buttons">
+            <button class="button is-default" type="button" (click)="adicionarEndereco()"
+              [disabled]="addressesAdded">Adicionar endereço</button>
+            <button *ngIf="!showNewAddressForm && !enderecoSalvo" class="button is-link" type="button" (click)="salvarEndereco()"
+              [disabled]="enderecoSalvo">Salvar Endereço</button>
+            <button *ngIf="enderecoSalvo" class="button is-danger" type="button" (click)="cancelarEndereco()">Cancelar seleção</button>
+          </div>
+        </div>
+        <!-- Seção para Adicionar Novo Endereço -->
+        <div class="box content" *ngIf="showNewAddressForm">
+          <h2>Adicionar novo endereço</h2>
+          <form [formGroup]="enderecoFormGroup">
+            <div class="columns">
+              <div class="column">
+                <label class="field label">Nome do endereço:</label>
+                <input class="control input" formControlName="nome" placeholder="Nome para este endereço:">
+              </div>
+              <div class="column is-one-quarter">
+                <label class="field label">CEP:</label>
+                <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000"
+                  placeholder="Ex: 00000-000">
+                <div *ngIf="enderecoFormGroup.get('cep')?.touched && enderecoFormGroup.get('cepInvalido')?.value">
+                    <p class="help is-danger">CEP inválido.</p>    
+                </div>          
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column">
+                <label class="field label">Logradouro:</label>
+                <input class="control input" formControlName="logradouro"
+                  placeholder="Logradouro (será preenchido automaticamente)">
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column is-one-fifth">
+                <label class="field label">Número/Lote:</label>
+                <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
+              </div>
+              <div class="column">
+                <label class="field label">Complemento:</label>
+                <input class="control input" formControlName="complemento" placeholder="Complemento">
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column">
+                <label class="field label">Bairro:</label>
+                <input class="control input" formControlName="bairro" placeholder="Bairro" readonly>
+              </div>
+              <div class="column">
+                <label class="field label">Localidade:</label>
+                <input class="control input" formControlName="localidade" placeholder="Localidade" readonly>
+              </div>
+              <div class="column is-one-fifth">
+                <label class="field label">UF:</label>
+                <input class="control input" formControlName="uf" placeholder="UF" readonly>
+              </div>
+              <div class="column">
+                <label class="field label">País:</label>
+                <input class="control input" formControlName="pais" placeholder="País" readonly>
+              </div>
+            </div>
             <div class="buttons">
-              <button class="button is-link is-default" type="button" (click)="adicionarEndereco()" [disabled]="addressesAdded">Adicionar endereço</button>
+              <button class="button is-secondary" type="button" (click)="cancelarEndereco()">Cancelar</button>
+              <button *ngIf="showNewAddressForm" class="button is-link" type="button" (click)="salvarEndereco()"
+                [disabled]="enderecoSalvo">Salvar Endereço</button>
+            </div>
+          </form>
+          <br>
+          <div class="notification is-success" *ngIf="sucessMessage && showNewAddressForm">
+            <p>{{sucessMessage}}</p>
           </div>
-            <button *ngIf="!showNewAddressForm" class="button is-link" type="button" (click)="salvarEndereco()"[disabled]="enderecoSalvo">Salvar Endereço</button>
+          <div *ngIf="errorDetails" class="notification is-danger">
+            <div *ngFor="let error of errorDetails.error.errors">
+              <p><b>{{error.fieldName}}:</b> {{error.message}}</p>
+            </div>
           </div>
-          <!-- Seção para Adicionar Novo Endereço -->
-          <div class="box" *ngIf="showNewAddressForm">
-            <h4 class="title is-4">Adicionar novo endereço</h4>
-            <form [formGroup]="enderecoFormGroup">
-              <div class="columns">
-                      <div class="column">
-                        <label class="field label">Nome do endereço:</label>
-                        <input class="control input" formControlName="nome" placeholder="Nome para este endereço:">
-                      </div>
-                      <div class="column is-one-quarter">
-                        <label class="field label">CEP:</label>
-                        <input class="control input" formControlName="cep" inputmode="numeric" mask="00000-000" placeholder="Ex: 00000-000">
-                      </div>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <label class="field label">Logradouro:</label>
-                        <input class="control input" formControlName="logradouro" placeholder="Logradouro (será preenchido automaticamente)">
-                      </div>
-                    </div>
-                    <div class="columns">
-                      <div class="column is-one-fifth">
-                        <label class="field label">Número/Lote:</label>
-                        <input class="control input" formControlName="numeroLote" placeholder="Número/Lote">
-                      </div>
-                      <div class="column">
-                        <label class="field label">Complemento:</label>
-                        <input class="control input" formControlName="complemento" placeholder="Complemento">
-                      </div>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <label class="field label">Bairro:</label>
-                        <input class="control input" formControlName="bairro" placeholder="Bairro">
-                      </div>
-                      <div class="column">
-                        <label class="field label">Localidade:</label>
-                        <input class="control input" formControlName="localidade" placeholder="Localidade">
-                      </div>
-                      <div class="column is-one-fifth">
-                        <label class="field label">UF:</label>
-                        <input class="control input" formControlName="uf" placeholder="UF">
-                      </div>
-                      <div class="column">
-                        <label class="field label">País:</label>
-                        <input class="control input" formControlName="pais" placeholder="País">
-                      </div>
-                    </div>
-                    <div class="buttons">
-                      <button class="button is-secondary" type="button" (click)="cancelarEndereco()">Cancelar</button>
-                      <button *ngIf="showNewAddressForm" class="button is-link" type="button" (click)="salvarEndereco()"[disabled]="enderecoSalvo">Salvar Endereço</button>
-                    </div>
-                  </form>
+        </div>
+      </div>
+      <div class="column">
+        <div class="box content">
+          <h2>Resumo</h2>
+          <p>Total: {{ formatValues(calcularTotal()) }}</p>
+          <button class="button is-primary" type="button" (click)="finalizarCompra()">Ir para Pagamento</button>
+        </div>
       </div>
     </div>
-    <div class="column">
-      <div class="box content">
-        <h2>Resumo</h2>
-        <p>Total: {{ formatValues(calcularTotal()) }}</p>
-        <button class="button is-primary" type="button" (click)="finalizarCompra()" >Ir para Pagamento</button>
-      </div>
-    </div>
-  </div>
     <!-- <div class="box">
       <h2 class="title is-3">Endereço de Entrega</h2>
       <h4 class="title is-4">Escolha um endereço de entrega ou adicione um novo endereço</h4>

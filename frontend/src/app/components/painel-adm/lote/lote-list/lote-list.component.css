@@ -1,0 +1,17 @@
+   .toolbar-title {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .flex-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between; 
+      width: 100%;
+    } 
+    
+  
+    .mat-column-acao {
+      text-align: center;
+      min-width: 10em;
+    }

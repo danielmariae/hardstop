@@ -13,11 +13,15 @@ public class LoteRepository implements PanacheRepository<Lote> {
         return find("UPPER(lote) LIKE UPPER(?1) ", "%" + lote + "%").list();
     }
 
-    public List<Lote> findAll(Long idProduto) {
-        return find("produto.id = ?1", idProduto).list();
+    public List<Lote> findAll(int page, int pageSize) {
+        return findAll().page(page, pageSize).list();
     }
 
-    public Long countProdutos(Long idProduto){
+    public List<Lote> findByIdProduto(Long idProduto, int page, int pageSize) {
+        return find("produto.id = ?1", idProduto).page(page, pageSize).list();
+    }
+
+    public Long countByIdProduto(Long idProduto){
         return find("produto.id = ?1", idProduto).count();
     }
 }

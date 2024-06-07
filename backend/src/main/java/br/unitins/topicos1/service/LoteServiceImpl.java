@@ -349,34 +349,29 @@ public class LoteServiceImpl implements LoteService {
     int page,
     int pageSize
   ) {
-    List<Lote> temp = repository.listAll();
-    List<Lote> temp2 = new ArrayList<Lote>();
-    List<LoteResponseCDTO> loteResponse = new ArrayList<LoteResponseCDTO>();
-    Integer count = 0;
-    for (Lote lote : temp) {
-      if (lote.getProduto().getId().equals(idProduto)) {
-        temp2.add(lote);
-        count++;
-      }
-    }
-    // Calcula o índice inicial e final para a página atual
-    int startIndex = page * pageSize;
-    int endIndex = Math.min(startIndex + pageSize, temp2.size());
-    // Obtém a lista paginada usando subList
-    List<Lote> listaPaginada = temp2.subList(startIndex, endIndex);
-  
-    // Transforma a lista paginada em lista de DTOs
-    for (Lote lote : listaPaginada) {
-      LoteResponseCDTO dto = LoteResponseCDTO.valueOf(lote);
-      loteResponse.add(dto);
-    }
-    return loteResponse;
+      return repository
+      .findByIdProduto(idProduto, page, pageSize)
+      .stream()
+      .map(LoteResponseCDTO::valueOf)
+      .toList();
+  }
+
+  @Override
+  public List<LoteResponseCDTO> findByAll(
+    int page,
+    int pageSize
+  ) {
+      return repository
+      .findAll(page, pageSize)
+      .stream()
+      .map(LoteResponseCDTO::valueOf)
+      .toList();
   }
 
 
   @Override
   public Long count2(Long id) {
-    return repository.countProdutos(id);
+    return repository.countByIdProduto(id);
   }
 
   @Override
@@ -403,10 +398,6 @@ public class LoteServiceImpl implements LoteService {
       .toList();
   }
 
-  @Override
-  public List<LoteResponseDTO> findByAll() {
-    return repository.listAll().stream().map(LoteResponseDTO::valueOf).toList();
-  }
 
   @Override
   @Transactional

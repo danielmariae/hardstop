@@ -39,7 +39,7 @@ public interface LoteService {
     List<LoteResponseDTO> findByName(String lote);
 
     // LISTAR TODOS:
-    List<LoteResponseDTO> findByAll();
+    List<LoteResponseCDTO> findByAll(int page,int pageSize);
 
     // ATIVA UM LOTE PRÉ CADASTRADO
     LoteResponseDTO ativaLote(Long idLote);

@@ -17,13 +17,15 @@ import { ListaEndereco } from '../../models/endereco.model';
 import { PedidoService } from '../../services/pedido.service';
 import { CepService } from '../../services/cep.service';
 import { getFormattedCurrency } from '../../utils/formatValues';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-carrinho',
   standalone: true,
-  imports: [NgFor, NgIf, HeaderHomeComponent, FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [NgFor, NgIf, HeaderHomeComponent, FormsModule, CommonModule, ReactiveFormsModule, NgxMaskDirective],
   templateUrl: './carrinho.component.html',
-  styleUrl: './carrinho.component.css'
+  styleUrl: './carrinho.component.css',
+  providers: [provideNgxMask()]
 })
 export class CarrinhoComponent implements OnInit {
 
@@ -37,6 +39,10 @@ export class CarrinhoComponent implements OnInit {
   showNewAddressForm = false; // usado para esconder o formulário para novo endereço
   addressesAdded = false; // usado para desabilitar o botão Adicionar endereço após seu uso
   enderecoSalvo = false; // usado para desabilitar o botão de Salvar Endereço após clicado
+
+  errorMessage: string = '';
+  sucessMessage: string = '';
+  errorDetails: any;
 
   constructor(private carrinhoService: CarrinhoService,
               private clienteService: ClienteService,
@@ -60,8 +66,8 @@ export class CarrinhoComponent implements OnInit {
     nome: ['', Validators.required],
     cep: [''],
     logradouro: [''],
-    numeroLote: [''],
-    bairro: [''],
+    numeroLote: ['', Validators.required],
+    bairro: ['', Validators.required],
     complemento: [''],
     localidade: [''],
     uf: [''],
@@ -70,7 +76,6 @@ export class CarrinhoComponent implements OnInit {
   });
 
   this.setupCepObserver();
-
   }
 
   ngOnInit(): void {
@@ -131,7 +136,7 @@ export class CarrinhoComponent implements OnInit {
   aumentarQuantidade(item: ItemCarrinho) {
     console.log(item.quantidadeLimite);
     if(item.quantidade < item.quantidadeLimite) {
-    item.quantidade++;
+      item.quantidade++;
     this.calcularTotal(); // Atualizar o total do carrinho
     }
   }
@@ -194,6 +199,7 @@ export class CarrinhoComponent implements OnInit {
       this.addressesAdded = true; // bloqueia o botão Adicionar endereço
       this.enderecoSalvo = true; // desabilita o botão Salvar Endereço
       this.localStorageService.setItem('enderecoEscolhido', selectedEndereco);
+      this.criarMensagemSucesso('Endereço salvo com sucesso!');
     } else if(this.addressesAdded == true) { // significa que o usuário clicou no botão Adicionar endereço
       const selectedEndereco = this.enderecoFormGroup.value;
       //console.log("Selected Endereço:", selectedEndereco);
@@ -204,16 +210,19 @@ export class CarrinhoComponent implements OnInit {
       this.pedidoService.insertEndereco(selectedEndereco).subscribe({
         next: (response) => {
         this.localStorageService.setItem('enderecoEscolhido', response);
+        this.criarMensagemSucesso('Endereço salvo com sucesso!');
         //console.log('Endereco:', response);
         },
         error: (error) => {
           // Este callback é executado quando ocorre um erro durante a emissão do valor
           console.error('Erro ao inserir novo endereço para este pedido:', error);
+          this.criarMensagemErroEnderecos(error);
+          this.enderecoSalvo = false;
           //window.alert(error)
         }
     });
     } else { // O usuário clicou no botão Salvar Endereço sem escolher nenhuma opção de endereço
-        alert("Escolha uma opção de Endereço primeiro");
+        this.criarMensagemDeErro("Escolha uma opção de endereço e aperte em 'Salvar Endereço'.")
     }
   }
 
@@ -221,6 +230,8 @@ export class CarrinhoComponent implements OnInit {
   cancelarEndereco(): void {
     this.showNewAddressForm = false;
     this.addressesAdded = false;
+    this.enderecoSalvo = false;
+    this.localStorageService.removeItem('enderecoEscolhido');
     this.enderecoFormGroup.reset();
   }
 
@@ -292,6 +303,7 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
       },
       error: (error) => {
         console.error('Erro ao buscar endereço por CEP:', error);
+        this.criarMensagemDeErro(error.message);
         // Limpar campos de endereço em caso de erro na busca
         enderecoFormGroup.patchValue({
           logradouro: null,
@@ -348,5 +360,26 @@ atualizarEndereco(cep: string, enderecoFormGroup: FormGroup): void {
     
   voltarAoMenuPrincipal() {
     this.navigationService.navigateTo('home')
+  }
+  
+  criarMensagemDeErro(erro: string) {
+    this.errorMessage = erro;
+    setTimeout(() => {
+      this.errorMessage = '';
+    }, 5000);
+  }
+  criarMensagemErroEnderecos(erro: any) {
+    this.errorDetails = erro;
+    console.log(this.errorDetails)
+    setTimeout(() => {
+      this.errorDetails = '';
+    }, 10000);
+  }
+  
+  criarMensagemSucesso(sucess: string) {
+    this.sucessMessage = sucess;
+    setTimeout(() => {
+      this.sucessMessage = '';
+    }, 5000);
   } 
 }
