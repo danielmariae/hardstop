@@ -41,7 +41,7 @@
 //         String tokenAdm = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJoYXJkc3RvcC1qd3QiLCJzdWIiOiJtYXJ0YWNlc2FyZSIsImdyb3VwcyI6WyJBZG1pbiJdLCJleHAiOjE3MDE1NDI3NTEsImlhdCI6MTcwMTQ1NjM1MSwianRpIjoiZTBjMTAwZjctMGVhOS00MzAzLWE4YWEtNTIzZjE1ZDBjYmFjIn0.GzZw4ud9dDxdJMU0fWVp5BNyhCVqukRK7YvZxu1Wf8bt2R3XLZQRaGYlSPbbjFgDeJuyV001OlUitsm09rECExrhRw5tCi9lT-XmHYxA7AH96r_QvVfGDs29CUDBvC1756BtIdtaoP3sWlBVGvzzPKGMnHcR7CKNMgwuVnHGtrTX0HZBUD3w8XqFqk_2SXvmCpVbqEljHYjwfItkavuTRHUrSfXK4_femzRIhwusME-knG0BTCKvuQoaMDxes-pWa3hQf6ZpJLpTmiaJnSGp5CyMcMwVN09DPG2gL9G_vcJ-3H6YsFu5iAhFNR2nqO79PTqBqeDwRIO78CIyP22s2A";
 
 
-//         // Fazer a requisição POST para um endpoint fictício (substitua pelo endpoint real)
+//         Fazer a requisição POST para um endpoint fictício (substitua pelo endpoint real)
 //         given()
 //             .headers("Authorization", "Bearer " + tokenAdm)
 //             .contentType(ContentType.JSON)
@@ -56,7 +56,7 @@
 //             .body("sexo", equalTo("M"))
 //             .body("login", equalTo("joao123"))
 //             .body("email", equalTo("joao@example.com"));
-//             // Adicione verificações para outras propriedades conforme necessário
+//             Adicione verificações para outras propriedades conforme necessário
 //     }
 
 
