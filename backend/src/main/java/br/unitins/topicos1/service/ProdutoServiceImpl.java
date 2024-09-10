@@ -383,6 +383,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     return repository.count();
   }
 
+  @Override
   public FornecedorResponseDTO encontraFornecedor(ProdutoFornecedorPatch dto) {
 
     LocalDateTime agora = LocalDateTime.now();
@@ -393,7 +394,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     LocalDateTime novoDateTime = LocalDateTime.parse(dto.dataHoraVenda(), formatter);
 
-    for (Lote lt : repositoryLote.findAll(dto.idProduto())) {
+    for (Lote lt : repositoryLote.findByIdProduto(dto.idProduto())) {
 
       if (lt.getDataHoraUltimoVendido() == null) {
         if (lt.getDataHoraChegadaLote().isBefore(novoDateTime) && tempDateTime.isAfter(novoDateTime))
