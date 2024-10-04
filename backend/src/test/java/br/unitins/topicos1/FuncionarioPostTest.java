@@ -6,11 +6,16 @@
 // import java.util.ArrayList;
 // import java.util.List;
 
+// import org.jrimum.domkee.pessoa.UnidadeFederativa;
 // import org.junit.jupiter.api.Test;
 
-// import br.unitins.topicos1.dto.FuncionarioDTO;
-// import br.unitins.topicos1.dto.TelefoneDTO;
+// import br.unitins.topicos1.dto.funcionario.EnderecoFuncDTO;
+// import br.unitins.topicos1.dto.funcionario.FuncionarioDTO;
+// import br.unitins.topicos1.dto.funcionario.FuncionarioResponseDTO;
+// import br.unitins.topicos1.dto.telefone.TelefoneDTO;
 // import br.unitins.topicos1.service.FuncionarioService;
+// import br.unitins.topicos1.service.HashService;
+// import br.unitins.topicos1.service.JwtService;
 // import io.quarkus.test.junit.QuarkusTest;
 // import io.restassured.http.ContentType;
 // import jakarta.inject.Inject;
@@ -19,6 +24,14 @@
 // public class FuncionarioPostTest{
 //     @Inject
 //     FuncionarioService funcionarioService;
+    
+//     @Inject 
+//     JwtService jwtService;
+
+//     @Inject
+//     HashService hashService;
+
+
 
 //         @Test
 //         public void testFuncionarioDTO() {
@@ -33,31 +46,32 @@
 //             "joao123",
 //             "Senha@123",
 //             "joao@example.com",
-//             null,
-//             null,
+//             new EnderecoFuncDTO("ARSE 51 Alameda 10", "34", "Plano Diretor Sul",
+//              "Comunidade Shalom", "77021-686", "Palmas", UnidadeFederativa.TO, "Brasil"),
+//             1,
 //             telefones 
 //         );
             
-//         String tokenAdm = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJoYXJkc3RvcC1qd3QiLCJzdWIiOiJtYXJ0YWNlc2FyZSIsImdyb3VwcyI6WyJBZG1pbiJdLCJleHAiOjE3MDE1NDI3NTEsImlhdCI6MTcwMTQ1NjM1MSwianRpIjoiZTBjMTAwZjctMGVhOS00MzAzLWE4YWEtNTIzZjE1ZDBjYmFjIn0.GzZw4ud9dDxdJMU0fWVp5BNyhCVqukRK7YvZxu1Wf8bt2R3XLZQRaGYlSPbbjFgDeJuyV001OlUitsm09rECExrhRw5tCi9lT-XmHYxA7AH96r_QvVfGDs29CUDBvC1756BtIdtaoP3sWlBVGvzzPKGMnHcR7CKNMgwuVnHGtrTX0HZBUD3w8XqFqk_2SXvmCpVbqEljHYjwfItkavuTRHUrSfXK4_femzRIhwusME-knG0BTCKvuQoaMDxes-pWa3hQf6ZpJLpTmiaJnSGp5CyMcMwVN09DPG2gL9G_vcJ-3H6YsFu5iAhFNR2nqO79PTqBqeDwRIO78CIyP22s2A";
+//         String senha = hashService.getHashSenha("GfT12-");
+//         FuncionarioResponseDTO admin = funcionarioService.findByLoginAndSenha("martacesare", senha);
 
+//         String jwt = jwtService.generateJwt(admin);
 
 //         // Fazer a requisição POST para um endpoint fictício (substitua pelo endpoint real)
 //         given()
-//             .headers("Authorization", "Bearer " + tokenAdm)
+//             .headers("Authorization", "Bearer " + jwt)
 //             .contentType(ContentType.JSON)
 //             .body(funcionarioDTO)
 //         .when()
-//             .post("/funcionariologado/insert/funcionario")  // Substitua pelo seu endpoint real
+//             .post("/funcionario")  // Substitua pelo seu endpoint real
 //         .then()
-//             .statusCode(200)
+//             .statusCode(201)
 //             .body("nome", equalTo("João Silva"))
 //             .body("dataNascimento", equalTo("1990-01-01"))
-//             .body("cpf", equalTo("123.456.789-09"))
+//             .body("cpf", equalTo("12345678909"))
 //             .body("sexo", equalTo("M"))
 //             .body("login", equalTo("joao123"))
 //             .body("email", equalTo("joao@example.com"));
-//             // Adicione verificações para outras propriedades conforme necessário
+//         // Adicione verificações para outras propriedades conforme necessário
 //     }
-
-
 // }
