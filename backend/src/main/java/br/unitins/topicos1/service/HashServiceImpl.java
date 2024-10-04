@@ -8,10 +8,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class HashServiceImpl implements HashService {
 
-    private String salt = "#b_l-ah+xyz-22%";
-    private Integer iterationCount = 400;
-    private Integer keyLength = 512;
+    private final String salt = "#b_l-ah+xyz-22%";
+    private final Integer iterationCount = 400;
+    private final Integer keyLength = 512;
 
+    @Override
     public String getHashSenha(String senha) {
 
         try {

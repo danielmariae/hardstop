@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import br.unitins.topicos1.application.GeneralErrorException;
 import br.unitins.topicos1.dto.fornecedor.FornecedorResponseDTO;
 import br.unitins.topicos1.dto.produto.ProdutoDTO;
@@ -64,6 +65,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Transactional
+    @Override
     public PlacaMaeResponseDTO insertPlacaMae(PlacaMaeDTO dto) {
       PlacaMae produto = new PlacaMae();
       produto.setNome(dto.nome());
@@ -92,6 +94,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 
       @Transactional
      // Primeiro cadastro o produto. Em seguida cadastro o lote.
+    @Override
      public ProcessadorResponseDTO insertProcessador(ProcessadorDTO dto) {
       Processador produto = new Processador();
       produto.setNome(dto.nome());
@@ -143,6 +146,7 @@ public class ProdutoServiceImpl implements ProdutoService {
   }
 
   @Transactional
+    @Override
   public void updatePlacaMae(PlacaMaeDTO dto, Long id) {
     PlacaMae produto = (PlacaMae) repository.findById(id);
     produto.setNome(dto.nome());
@@ -169,6 +173,7 @@ public class ProdutoServiceImpl implements ProdutoService {
   }
 
     @Transactional
+    @Override
    public void updateProcessador(ProcessadorDTO dto, Long id) {
     Processador produto = (Processador) repository.findById(id);
     produto.setNome(dto.nome());
@@ -316,6 +321,7 @@ public class ProdutoServiceImpl implements ProdutoService {
       return repository.findById(id);
     }
 
+    @Override
     public long countByName(String nome){
       return repository.countByName(nome);
     }
@@ -335,6 +341,7 @@ public class ProdutoServiceImpl implements ProdutoService {
         .toList();
     }
 
+    @Override
     public List<ProdutoResponseDTO> findByClassificacao(Long idClassificacao) {
       return repository
       .findByClassificacao(idClassificacao)
@@ -343,11 +350,13 @@ public class ProdutoServiceImpl implements ProdutoService {
       .toList();
   }
 
+    @Override
   public List<Classificacao> retornaClassificacao() {
     return repositoryClassificacao
                 .listAll();
                 
   }
+    @Override
      public List<ProdutoResponseDTO> findTodos() {
        return repository
                 .listAll()
@@ -374,6 +383,7 @@ public class ProdutoServiceImpl implements ProdutoService {
         return repository.count();
     }
 
+    @Override
     public FornecedorResponseDTO encontraFornecedor(ProdutoFornecedorPatch dto) {
       
       LocalDateTime agora = LocalDateTime.now();
@@ -384,18 +394,18 @@ public class ProdutoServiceImpl implements ProdutoService {
       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
       LocalDateTime novoDateTime = LocalDateTime.parse(dto.dataHoraVenda(), formatter);
 
-      for(Lote lt : repositoryLote.findAll(dto.idProduto())) {
+      // for(Lote lt : repositoryLote.findById(dto.idProduto())) {
 
-        if(lt.getDataHoraUltimoVendido() == null) {
-          if(lt.getDataHoraChegadaLote().isBefore(novoDateTime) && tempDateTime.isAfter(novoDateTime))
-          System.out.println(lt.getFornecedor());
-            return FornecedorResponseDTO.valueOf(lt.getFornecedor());
-        } else {
-          if(lt.getDataHoraChegadaLote().isBefore(novoDateTime) && tempDateTime.isAfter(novoDateTime))
-          System.out.println(lt.getFornecedor());
-            return FornecedorResponseDTO.valueOf(lt.getFornecedor());
-        }
-      }
+      //   if(lt.getDataHoraUltimoVendido() == null) {
+      //     if(lt.getDataHoraChegadaLote().isBefore(novoDateTime) && tempDateTime.isAfter(novoDateTime))
+      //     System.out.println(lt.getFornecedor());
+      //       return FornecedorResponseDTO.valueOf(lt.getFornecedor());
+      //   } else {
+      //     if(lt.getDataHoraChegadaLote().isBefore(novoDateTime) && tempDateTime.isAfter(novoDateTime))
+      //     System.out.println(lt.getFornecedor());
+      //       return FornecedorResponseDTO.valueOf(lt.getFornecedor());
+      //   }
+      // }
       throw new GeneralErrorException(
             "400",
             "Bad Resquest",

@@ -1,0 +1,18 @@
+<div>
+    <h2>Buscar Pontos de Interesse (POIs)</h2>
+
+    <!-- Pesquisa por Nome -->
+    <input formValue="searchName" placeholder="Digite um nome de POI (e.g., McDonald's)" />
+    <button (click)="searchByName()">Buscar por Nome</button>
+  
+    <!-- Lista de POIs -->
+    <div *ngIf="pois.length > 0">
+      <h3>Resultados da Busca</h3>
+      <ul>
+        <li *ngFor="let poi of pois">
+          {{ poi.title }} - {{ poi.address.label }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  

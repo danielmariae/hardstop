@@ -27,6 +27,7 @@
     "angular-ng-autocomplete": "^2.0.12",
     "bulma": "^1.0.0",
     "bulma-o-steps": "^1.1.0",
+    "frontend": "file:",
     "ngx-mask": "^17.0.7",
     "rxjs": "~7.8.0",
     "sass": "^1.72.0",

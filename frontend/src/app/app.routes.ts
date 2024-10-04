@@ -39,6 +39,7 @@ import { PedidoUserViewComponent } from './components/pedido/pedido-user-view/pe
 import { PedidoFuncListComponent } from './components/pedido/pedido-func-list/pedido-func-list.component';
 import { LoteListComponent } from './components/painel-adm/lote/lote-list/lote-list.component';
 import { PedidoFuncViewComponent } from './components/pedido/pedido-func-view/pedido-func-view.component';
+import { SearchPoiComponent } from './components/search-poi/search-poi.component';
 
 
 export const routes: Routes = [
@@ -150,6 +151,11 @@ export const routes: Routes = [
             {path: 'user', component: CreateUserAccountComponent, title: 'Cadastre no melhor site de hardware!'},
             // {path: 'adm', component: }
         ]
+    },
+    {
+        path: 'localizador',
+        component: SearchPoiComponent,
+        title: 'Pesquisar localizações'
     }
 ];
 
